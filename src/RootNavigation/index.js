@@ -3,6 +3,10 @@ import {createSharedElementStackNavigator} from 'react-navigation-shared-element
 import ScreenName from '../constants/ScreenName';
 import Navigation from '../Navigation';
 import PreferenceScreen from '../screens/PreferenceScreen';
+import AsyncStorage from '../services/AsyncStorage';
+import {StoreKeys} from '../services/AsyncStorage/StoreConstants';
+import Cache from '../services/Cache';
+import {CacheKey} from '../services/Cache/CacheStoreConstants';
 
 const AppStack = createSharedElementStackNavigator();
 const PreferenceStack = createSharedElementStackNavigator();
@@ -12,7 +16,10 @@ function RootNavigation() {
   useEffect(() => {
     if (!isAppLoaded) {
       function loadApp() {
-        setAppLoaded(true);
+        AsyncStorage.getItem(StoreKeys.AreInitialPreferencesSet).then(isSet => {
+          Cache.setValue(CacheKey.AreInitialPreferencesSet, isSet);
+          setAppLoaded(true);
+        });
       }
       loadApp();
     }
@@ -20,7 +27,8 @@ function RootNavigation() {
   }, []);
   useEffect(() => {
     if (isAppLoaded) {
-      if (true) {
+      const arePrefsSet = Cache.getValue(CacheKey.AreInitialPreferencesSet);
+      if (arePrefsSet) {
         return setCurrentStack(HomeAppStack());
       } else {
         return setCurrentStack(LaunchStack());
@@ -57,29 +65,16 @@ const HomeAppStack = () => {
     </AppStack.Navigator>
   );
 };
-const LaunchStack = () => {
+const LaunchStack = () => (
   <PreferenceStack.Navigator>
     <PreferenceStack.Screen
       name={ScreenName.PreferenceScreen}
       component={PreferenceScreen}
       options={{
-        detachPreviousScreen: true,
         headerShown: false,
-        gestureEnabled: false,
-        cardOverlayEnabled: false,
-        transitionSpec: {
-          open: {animation: 'timing'},
-          close: {animation: 'timing'},
-        },
-        cardStyleInterpolator: ({current}) => {
-          return {
-            cardStyle: {
-              opacity: current.progress,
-            },
-          };
-        },
       }}
     />
-  </PreferenceStack.Navigator>;
-};
+  </PreferenceStack.Navigator>
+);
+
 export default React.memo(RootNavigation);

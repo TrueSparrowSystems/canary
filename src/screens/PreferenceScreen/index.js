@@ -1,6 +1,15 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {View} from 'react-native';
+import PreferenceSelector from '../../components/PreferenceSelector';
+import {usePreferenceScreenData} from './usePreferenceScreenData';
 
-export default React.memo(function PreferenceScreen() {
-  return <Text>This is Preference Screen</Text>;
-});
+function PreferenceScreen() {
+  const {} = usePreferenceScreenData();
+
+  return (
+    <View>
+      <PreferenceSelector />
+    </View>
+  );
+}
+export default React.memo(PreferenceScreen);

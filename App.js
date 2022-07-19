@@ -18,7 +18,7 @@ function App() {
 }
 const styles = {
   container: {
-    height: '100%',
+    flex: 1,
     backgroundColor: colors.DodgerBlue,
   },
 };

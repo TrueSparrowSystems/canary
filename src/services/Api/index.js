@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {networkConnection} from '../NetworkConnection';
 import {RequestType} from './RequestObject';
 export class APIService {
   /**
@@ -17,6 +18,7 @@ export class APIService {
     this.getApiCall.bind(this);
     this.postApiCall.bind(this);
     this.urlBuilder(apiConfig);
+    this.config.cancelToken = APIService.cancelTokenSource.token;
     this.axios = axios.create(this.config);
     this.addRequestInterceptors();
     this.addResponseInterceptors();
@@ -36,7 +38,6 @@ export class APIService {
    */
   urlBuilder(config) {
     // TODO: add check if the / are present in the params, otherwise add them.
-    this.config.baseURL = config.baseURL + config.basePath + config.version;
   }
   /**
    * Function to add the custom headers.
@@ -44,7 +45,11 @@ export class APIService {
   addRequestInterceptors() {
     this.axios.interceptors.request.use(
       config => {
-        config.headers = {...this.apiConfig.headers};
+        config.headers = {
+          ...this.apiConfig.headers,
+          Authorization:
+            'Bearer AAAAAAAAAAAAAAAAAAAAAIH3egEAAAAAIQfPGH9lYLoQEZqHuUzU4xE0M9s%3DiqNWbg7BUtayrTUz9Gx025z7BIJRhg0oe0SWrgUAFyxOPhLAy1',
+        };
         this.apiConfig?.logger?.info('config: ', config);
         return config;
       },
@@ -60,9 +65,9 @@ export class APIService {
     this.axios.interceptors.response.use(
       response => {
         this.handleResponseStatus(`${response.status}`);
-        if (!response.data.success) {
-          return Promise.reject(response.data.error);
-        }
+        // if (!response.data.success) {
+        //   return Promise.reject(response.data.error);
+        // }
         return response;
       },
       error => {
@@ -76,16 +81,16 @@ export class APIService {
     );
   }
   handleResponseStatus(statusCode) {
-    if (statusCode && this.apiConfig.statusCallbacks[statusCode]) {
-      this.apiConfig.statusCallbacks[statusCode]();
-    }
+    // if (statusCode && this?.apiConfig?.statusCallbacks[statusCode]) {
+    //   this?.apiConfig?.statusCallbacks[statusCode]();
+    // }
   }
   /**
    * This function checks if internet connection is enabled or not.
    * @returns boolean
    */
   isInternetConnected() {
-    return this.apiConfig.networkService.isInternetAvailable();
+    return networkConnection().isConnected;
   }
   /**
    * This function gets the reponse object when internet is not connected.
@@ -135,17 +140,12 @@ export class APIService {
         if (this.isInternetConnected()) {
           this.axios
             .get(url, {
-              params: {
-                ...params,
-                _dli: this.apiConfig.deviceLogIdentifier || 0,
-              },
+              params,
             })
             .then(response => {
-              this.apiConfig?.logger?.info('Response: ', url, response.data);
               resolve(response);
             })
             .catch(error => {
-              this.apiConfig?.logger?.error('[get] error: ', url, error);
               reject(error);
             });
         } else {
@@ -190,16 +190,15 @@ export class APIService {
   postApiCall(url, data) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        const _url = `${url}?_dli=${this.apiConfig.deviceLogIdentifier || 0}`;
         if (this.isInternetConnected()) {
           this.axios
-            .post(_url, data)
+            .post(url, data)
             .then(response => {
               this.apiConfig?.logger?.info('Response: ', response.data);
               resolve(response);
             })
             .catch(error => {
-              this.apiConfig?.logger?.error('[post] error: ', _url, error);
+              this.apiConfig?.logger?.error('[post] error: ', url, error);
               reject(error);
             });
         } else {

@@ -1,6 +1,12 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {View} from 'react-native';
+import TimelineList from '../../components/TimelineList';
 
-export default React.memo(function TimelineScreen() {
-  return <Text>This is Timeline Screen</Text>;
-});
+function TimelineScreen() {
+  return (
+    <View style={{flex: 1}}>
+      <TimelineList refreshData={false} reloadData={false} />
+    </View>
+  );
+}
+export default React.memo(TimelineScreen);

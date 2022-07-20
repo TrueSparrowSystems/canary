@@ -20,7 +20,9 @@ const PreferenceOptionButton = ({
   const localButtonTextStyle = textStyle || localStyle.preferenceButtonText;
 
   const buttonBorderColor = colors.DodgerBlue;
-  const buttonBackgroundColor = selected ? colors.DodgerBlue : colors.White;
+  const buttonBackgroundColor = selected
+    ? colors.DodgerBlue
+    : colors.Transparent;
   const buttonTextColor = selected ? colors.White : colors.DodgerBlue;
 
   const buttonStyle = {
@@ -70,7 +72,7 @@ const styles = {
     paddingHorizontal: layoutPtToPx(8),
     paddingVertical: layoutPtToPx(5),
     marginVertical: layoutPtToPx(5),
-    marginHorizontal: layoutPtToPx(5),
+    marginRight: layoutPtToPx(10),
   },
   preferenceButtonText: {
     marginRight: -2,

@@ -63,7 +63,7 @@ const styles = {
   },
   btnText: {
     textTransform: 'uppercase',
-    fontFamily: 'OpenSans-SemiBold',
+    // fontFamily: 'OpenSans-SemiBold',
     fontSize: fontPtToPx(10),
     justifyContent: 'center',
     alignItems: 'center',

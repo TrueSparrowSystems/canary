@@ -1,4 +1,4 @@
-import {TextInput, View} from 'react-native';
+import {ScrollView, TextInput, View} from 'react-native';
 import React from 'react';
 import PreferenceOptionButton from '../PreferenceOptionButton';
 import {usePreferenceSelectorData} from './usePreferenceSelectorData';
@@ -22,7 +22,10 @@ function PreferenceSelector(props) {
           onChangeText={fnOnSearchInput}
         />
       </View>
-      <View style={localStyle.optionsContainer}>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={localStyle.optionsContainer}>
         {aPreferences.map(pref => (
           <PreferenceOptionButton
             text={pref.title}
@@ -32,7 +35,7 @@ function PreferenceSelector(props) {
             isSelected={pref.isSelected}
           />
         ))}
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -43,6 +46,7 @@ const styles = {
   optionsContainer: {
     flexWrap: 'wrap',
     flexDirection: 'row',
+    paddingBottom: layoutPtToPx(200),
   },
   searchBar: {
     color: colors.SherpaBlue,
@@ -55,7 +59,6 @@ const styles = {
     borderRadius: layoutPtToPx(15),
   },
   searchBarContainer: {
-    paddingHorizontal: layoutPtToPx(5),
     marginVertical: layoutPtToPx(20),
   },
 };

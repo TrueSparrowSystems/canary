@@ -7,24 +7,43 @@ import AsyncStorage from '../services/AsyncStorage';
 import {StoreKeys} from '../services/AsyncStorage/StoreConstants';
 import Cache from '../services/Cache';
 import {CacheKey} from '../services/Cache/CacheStoreConstants';
+import {EventTypes, LocalEvent} from '../utils/LocalEvent';
 
 const AppStack = createSharedElementStackNavigator();
 const PreferenceStack = createSharedElementStackNavigator();
 function RootNavigation() {
   const [isAppLoaded, setAppLoaded] = useState(false);
-  const [currentStack, setCurrentStack] = useState(LaunchStack());
-  useEffect(() => {
-    if (!isAppLoaded) {
-      function loadApp() {
-        AsyncStorage.getItem(StoreKeys.AreInitialPreferencesSet).then(isSet => {
-          Cache.setValue(CacheKey.AreInitialPreferencesSet, isSet);
+  const [currentStack, setCurrentStack] = useState();
+
+  function switchToHomeStack() {
+    setCurrentStack(HomeAppStack());
+  }
+
+  function loadApp() {
+    AsyncStorage.getItem(StoreKeys.AreInitialPreferencesSet).then(isSet => {
+      Cache.setValue(CacheKey.AreInitialPreferencesSet, isSet);
+      if (isSet) {
+        AsyncStorage.getItem(StoreKeys.PreferenceList).then(list => {
+          Cache.setValue(CacheKey.PreferenceList, list);
           setAppLoaded(true);
         });
+      } else {
+        setAppLoaded(true);
       }
+    });
+  }
+
+  useEffect(() => {
+    if (!isAppLoaded) {
       loadApp();
     }
+    LocalEvent.on(EventTypes.SwitchToHomeStack, switchToHomeStack);
+    return () => {
+      LocalEvent.off(EventTypes.SwitchToHomeStack, switchToHomeStack);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   useEffect(() => {
     if (isAppLoaded) {
       const arePrefsSet = Cache.getValue(CacheKey.AreInitialPreferencesSet);

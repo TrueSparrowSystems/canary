@@ -1,12 +1,15 @@
 import {useCallback, useMemo, useState} from 'react';
-import {PreferencesData} from '../../constants/PreferencesData';
+
+import PreferencesDataHelper from '../../services/PreferencesDataHelper';
 
 export function usePreferenceSelectorData(props) {
+  const {onSelectedItemsUpdate} = props;
+
   const originalDataArray = useMemo(() => {
     const arr = [];
 
-    PreferencesData.items.map(pref => {
-      const data = PreferencesData.data?.[pref];
+    PreferencesDataHelper.getItemsArray().map(pref => {
+      const data = PreferencesDataHelper.getItemData(pref);
       if (data) {
         arr.push(data);
       }
@@ -43,19 +46,22 @@ export function usePreferenceSelectorData(props) {
     [originalDataArray],
   );
 
-  const onItemSelect = useCallback((id, isSelected) => {
-    if (isSelected) {
-      setSelectedPrefs(prevPrefs => {
-        prevPrefs.push(id);
-        return [...prevPrefs];
-      });
-    } else {
-      setSelectedPrefs(prevPrefs => {
-        prevPrefs.splice(prevPrefs.indexOf(id), 1);
-        return [...prevPrefs];
-      });
-    }
-  }, []);
+  const onItemSelect = useCallback(
+    (id, isSelected) => {
+      const arr = [...selectedPref];
+
+      if (isSelected) {
+        arr.push(id);
+      } else {
+        arr.splice(arr.indexOf(id), 1);
+      }
+
+      onSelectedItemsUpdate?.(arr);
+
+      setSelectedPrefs([...arr]);
+    },
+    [onSelectedItemsUpdate, selectedPref],
+  );
 
   return {
     aPreferences: preferencesArray,

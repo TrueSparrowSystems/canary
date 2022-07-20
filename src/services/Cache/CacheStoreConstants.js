@@ -1,6 +1,4 @@
 export const CacheKey = {
-  isBottomSheetOpen: 'is_bottom_sheet_open',
-  tabPressCount: {
-    //Add Tab name here
-  },
+  AreInitialPreferencesSet: 'cache_key_are_initial_preferences_set',
+  PreferenceList: 'cache_key_preference_list',
 };

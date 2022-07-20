@@ -1,6 +1,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import {SafeAreaView, StatusBar} from 'react-native';
+import AddCollectionModal from './src/components/AddCollectionModal';
 import {useStyleProcessor} from './src/hooks/useStyleProcessor';
 import RootNavigation from './src/RootNavigation';
 
@@ -11,13 +12,15 @@ function App() {
       <StatusBar barStyle={'light-content'} />
       <NavigationContainer>
         <RootNavigation />
+        <AddCollectionModal />
       </NavigationContainer>
     </SafeAreaView>
   );
 }
 const styles = {
   container: {
-    height: '100%',
+    flex: 1,
+    backgroundColor: colors.DodgerBlue,
   },
 };
 

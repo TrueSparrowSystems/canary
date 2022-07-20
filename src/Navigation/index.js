@@ -10,14 +10,21 @@ import TimelineScreen from '../screens/TimelineScreen';
 import CollectionScreen from '../screens/CollectionScreen';
 import SettingScreen from '../screens/SettingScreen';
 import BottomNavigationText from '../components/common/BottomNavigationText';
+import {Image} from 'react-native';
+import {HomeIcon, CollectionsIcon} from '../assets/common';
+import {layoutPtToPx} from '../utils/responsiveUI';
+import {useStyleProcessor} from '../hooks/useStyleProcessor';
+import colors from '../utils/colors';
 // import BottomNavigationIcon from '../components/common/BottomNavigationIcon';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
+  const localStyle = useStyleProcessor(styles, 'Navigation');
+
   const Tab = createBottomTabNavigator();
   const TimelineStack = createSharedElementStackNavigator();
   const CollectionStack = createSharedElementStackNavigator();
-  const SettingStack = createSharedElementStackNavigator();
+
   const {bottom} = useSafeAreaInsets();
 
   function TimelineTabStack() {
@@ -30,6 +37,17 @@ const Navigation = props => {
             headerShown: false,
             headerMode: 'none',
             detachPreviousScreen: true,
+          }}
+        />
+        <TimelineStack.Screen
+          name={ScreenName.SettingScreen}
+          component={SettingScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
           }}
         />
       </TimelineStack.Navigator>
@@ -50,17 +68,20 @@ const Navigation = props => {
       <Tab.Navigator
         detachInactiveScreens={true}
         initialRouteName={ScreenName.HomeScreen}
-        screenOptions={{tabBarHideOnKeyboard: true}}>
+        screenOptions={{tabBarHideOnKeyboard: true, tabBarShowLabel: false}}>
         <Tab.Screen
           options={({route}) => {
             return {
-              // tabBarIcon: ({focused}) => (
-              //   <BottomNavigationIcon image={focused ? HomeActive : Home} />
-              // ),
-              tabBarLabel: ({focused}) => (
-                <BottomNavigationText focused={focused} text={'Timeline'} />
+              tabBarIcon: ({focused}) => (
+                <Image
+                  source={HomeIcon}
+                  style={[
+                    localStyle.bottomTabIcons,
+                    {tintColor: focused ? colors.DodgerBlue : colors.Black},
+                  ]}
+                />
               ),
-              tabBarLabelPosition: isTablet() ? 'beside-icon' : 'below-icon',
+
               tabBarStyle: getTabBarVisibility(route)
                 ? tabbarStyle
                 : {display: 'none'},
@@ -68,21 +89,20 @@ const Navigation = props => {
             };
           }}
           name={ScreenName.TimelineTab}
-          title={'Timeline'}
           component={TimelineTabStack}
         />
         <Tab.Screen
           options={({route}) => {
             return {
-              // tabBarIcon: ({focused}) => (
-              //   <BottomNavigationIcon
-              //     image={focused ? WorkoutsActive : Workouts}
-              //   />
-              // ),
-              tabBarLabel: ({focused}) => (
-                <BottomNavigationText focused={focused} text={'Collection'} />
+              tabBarIcon: ({focused}) => (
+                <Image
+                  source={CollectionsIcon}
+                  style={[
+                    localStyle.bottomTabIcons,
+                    {tintColor: focused ? colors.DodgerBlue : colors.Black},
+                  ]}
+                />
               ),
-              tabBarLabelPosition: isTablet() ? 'beside-icon' : 'below-icon',
               tabBarStyle: getTabBarVisibility(route)
                 ? tabbarStyle
                 : {display: 'none'},
@@ -94,26 +114,9 @@ const Navigation = props => {
           title={'Collection'}
           component={CollectionTabStack}
         />
-        <Tab.Screen
-          options={({route}) => ({
-            // tabBarIcon: ({focused}) => (
-            //   <BottomNavigationIcon image={focused ? SearchActive : Search} />
-            // ),
-            tabBarLabel: ({focused}) => (
-              <BottomNavigationText focused={focused} text={'Settings'} />
-            ),
-            tabBarLabelPosition: isTablet() ? 'beside-icon' : 'below-icon',
-            tabBarStyle: getTabBarVisibility(route)
-              ? tabbarStyle
-              : {display: 'none'},
-            headerShown: false,
-          })}
-          name={ScreenName.SettingTab}
-          title={'Settings'}
-          component={SettingTabStack}
-        />
       </Tab.Navigator>
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function CollectionTabStack() {
@@ -132,25 +135,14 @@ const Navigation = props => {
     );
   }
 
-  function SettingTabStack() {
-    return (
-      <SettingStack.Navigator>
-        <SettingStack.Screen
-          name={ScreenName.SettingScreen}
-          component={SettingScreen}
-          options={{
-            gestureEnabled: true,
-            headerShown: false,
-            tabBarVisible: false,
-            detachPreviousScreen: true,
-            ...TransitionPresets.SlideFromRightIOS,
-          }}
-        />
-      </SettingStack.Navigator>
-    );
-  }
-
   return bottomStack(bottom);
 };
 
 export default Navigation;
+
+const styles = {
+  bottomTabIcons: {
+    height: layoutPtToPx(25),
+    width: layoutPtToPx(25),
+  },
+};

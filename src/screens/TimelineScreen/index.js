@@ -1,11 +1,12 @@
 import React from 'react';
-import {SafeAreaView, View, Text} from 'react-native';
+import {View} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {SettingsIcon} from '../../assets/common';
 import useTimelineScreenData from './useTimelineScreenData';
 import Header from '../../components/common/Header';
 import colors from '../../utils/colors';
+import TimelineList from '../../components/TimelineList';
 
 function TimelineScreen() {
   const localStyle = useStyleProcessor(styles, 'TimelineScreen');
@@ -13,22 +14,22 @@ function TimelineScreen() {
   const {fnOnSettingsPress} = useTimelineScreenData();
 
   return (
-    <SafeAreaView>
-      <View style={localStyle.container}>
-        <View>
-          <Header
-            enableRightButton={true}
-            onRightButtonClick={fnOnSettingsPress}
-            rightButtonImage={SettingsIcon}
-            text="Twitter.me"
-            textStyle={localStyle.appNameText}
-          />
-        </View>
+    <View>
+      <View>
+        <Header
+          enableRightButton={true}
+          onRightButtonClick={fnOnSettingsPress}
+          rightButtonImage={SettingsIcon}
+          text="Twitter.me"
+          textStyle={localStyle.appNameText}
+        />
       </View>
-    </SafeAreaView>
+      <View style={{flex: 1}}>
+        <TimelineList refreshData={false} reloadData={false} />
+      </View>
+    </View>
   );
 }
-
 export default React.memo(TimelineScreen);
 
 const styles = {

@@ -25,7 +25,7 @@ const BottomNavigationText = ({style, focused, text}) => {
 
 const styles = {
   text: {
-    fontFamily: 'OpenSans-SemiBold',
+    // fontFamily: 'OpenSans-SemiBold',
     fontSize: 10,
     letterSpacing: 1.6,
     marginBottom: 10,
@@ -34,7 +34,7 @@ const styles = {
     textAlign: 'center',
   },
   inactiveText: {
-    fontFamily: 'OpenSans-Regular',
+    // fontFamily: 'OpenSans-Regular',
     color: colors.DodgerBlue,
   },
 };

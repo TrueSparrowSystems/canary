@@ -3,7 +3,6 @@ import React from 'react';
 import {SafeAreaView, StatusBar} from 'react-native';
 import {useStyleProcessor} from './src/hooks/useStyleProcessor';
 import RootNavigation from './src/RootNavigation';
-import colors from './src/utils/colors';
 
 function App() {
   const localStyle = useStyleProcessor(styles, 'App');
@@ -19,7 +18,6 @@ function App() {
 const styles = {
   container: {
     height: '100%',
-    backgroundColor: colors.DodgerBlue,
   },
 };
 

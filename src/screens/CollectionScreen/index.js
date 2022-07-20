@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, Text, TouchableHighlight} from 'react-native';
+import {View, Text, TouchableHighlight, ActivityIndicator} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionCard from '../../components/CollectionCard';
@@ -13,7 +13,8 @@ function CollectionScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const collectionDataRef = useRef({});
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
+    setIsLoading(true);
     const _collectionService = collectionService();
     _collectionService.getAllCollections().then(list => {
       collectionDataRef.current = JSON.parse(list);
@@ -21,9 +22,19 @@ function CollectionScreen() {
     });
   }, []);
 
-  const onAddCollectionPress = useCallback(() => {
-    LocalEvent.emit(EventTypes.ShowAddCollectionModal);
+  useEffect(() => {
+    fetchData();
   }, []);
+
+  const onCollectionAddSuccess = useCallback(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const onAddCollectionPress = useCallback(() => {
+    LocalEvent.emit(EventTypes.ShowAddCollectionModal, {
+      onCollectionAddSuccess,
+    });
+  }, [onCollectionAddSuccess]);
 
   return (
     <SafeAreaView style={localStyle.container}>
@@ -37,7 +48,11 @@ function CollectionScreen() {
           <Text>Add</Text>
         </TouchableHighlight>
       </View>
-      {isLoading ? null : (
+      {isLoading ? (
+        <View style={localStyle.loaderStyle}>
+          <ActivityIndicator animating={isLoading} />
+        </View>
+      ) : (
         <ScrollView style={localStyle.scrollViewStyle}>
           {collectionDataRef.current == null
             ? null
@@ -86,6 +101,11 @@ const styles = {
     paddingHorizontal: 20,
     position: 'absolute',
     right: 20,
+  },
+  loaderStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 };
 

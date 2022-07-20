@@ -5,9 +5,11 @@ import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 function useAddCollectionModalData() {
   const [isVisible, setIsVisible] = useState(false);
   const collectionNameRef = useRef('');
+  const [modalData, setModalData] = useState(null);
 
   useEffect(() => {
-    const onShowModal = () => {
+    const onShowModal = payload => {
+      setModalData(payload);
       setIsVisible(true);
     };
 
@@ -41,6 +43,7 @@ function useAddCollectionModalData() {
       .then(() => {
         // TODO: Show success toast
         closeModal();
+        modalData?.onCollectionAddSuccess();
       })
       .catch(() => {
         // TODO: Show error toast
@@ -48,7 +51,7 @@ function useAddCollectionModalData() {
       .finally(() => {
         _collectionService.getAllCollections();
       });
-  }, [closeModal]);
+  }, [closeModal, modalData]);
 
   return {
     bIsVisible: isVisible,

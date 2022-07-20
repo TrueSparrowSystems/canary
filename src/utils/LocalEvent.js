@@ -11,4 +11,5 @@ export const EventTypes = {
     Connected: 'event_types_internet_connected',
     Disconnected: 'event_types_internet_disconnected',
   },
+  ShowAddCollectionModal: 'show_add_collection_modal',
 };

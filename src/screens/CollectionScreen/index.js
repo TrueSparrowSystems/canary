@@ -53,7 +53,10 @@ function CollectionScreen() {
           <ActivityIndicator animating={isLoading} />
         </View>
       ) : (
-        <ScrollView style={localStyle.scrollViewStyle}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={localStyle.scrollViewContainer}
+          style={localStyle.scrollViewStyle}>
           {collectionDataRef.current == null
             ? null
             : Object.keys(collectionDataRef.current).map(key => {
@@ -79,10 +82,11 @@ function CollectionScreen() {
 }
 
 const styles = {
-  container: {flex: 1},
+  container: {backgroundColor: 'white', flex: 1},
   headerView: {
+    backgroundColor: 'white',
     flexDirection: 'row',
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.8,
     borderColor: colors.SherpaBlue,
     width: '100%',
     alignItems: 'center',
@@ -106,6 +110,9 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  scrollViewContainer: {
+    paddingBottom: 20,
   },
 };
 

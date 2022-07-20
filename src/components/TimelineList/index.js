@@ -135,7 +135,6 @@ function TimelineList({reloadData, refreshData, onDataAvailable}) {
     localStyle.flatListPropsStyle,
     renderItem,
   ]);
-  console.log({bIsLoading});
 
   return (
     <View style={localStyle.container}>

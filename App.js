@@ -4,6 +4,7 @@ import {SafeAreaView, StatusBar} from 'react-native';
 import AddCollectionModal from './src/components/AddCollectionModal';
 import {useStyleProcessor} from './src/hooks/useStyleProcessor';
 import RootNavigation from './src/RootNavigation';
+import colors from './src/utils/colors';
 
 function App() {
   const localStyle = useStyleProcessor(styles, 'App');

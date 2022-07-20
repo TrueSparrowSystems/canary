@@ -1,6 +1,7 @@
 import React, {useCallback} from 'react';
 import {Text, View, Image, TouchableWithoutFeedback} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
+import {collectionService} from '../../services/CollectionService';
 import colors from '../../utils/colors';
 
 function CollectionCard(props) {
@@ -10,7 +11,11 @@ function CollectionCard(props) {
 
   const onCollectionPress = useCallback(() => {
     // TODO: Navigate to collection screen
-  }, []);
+    const _collectionService = collectionService();
+    _collectionService.getCollectionDetails(collectionId).then(details => {
+      console.log({details});
+    });
+  }, [collectionId]);
 
   return (
     <TouchableWithoutFeedback onPress={onCollectionPress}>

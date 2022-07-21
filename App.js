@@ -6,6 +6,7 @@ import AddToCollectionModal from './src/components/AddToCollectionModal';
 import {useStyleProcessor} from './src/hooks/useStyleProcessor';
 import RootNavigation from './src/RootNavigation';
 import colors from './src/utils/colors';
+import Toast from 'react-native-toast-message';
 
 function App() {
   const localStyle = useStyleProcessor(styles, 'App');
@@ -17,6 +18,7 @@ function App() {
         <AddCollectionModal />
         <AddToCollectionModal />
       </NavigationContainer>
+      <Toast />
     </SafeAreaView>
   );
 }

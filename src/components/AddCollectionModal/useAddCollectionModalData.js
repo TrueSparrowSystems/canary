@@ -1,6 +1,8 @@
 import {useState, useEffect, useCallback, useRef} from 'react';
 import {collectionService} from '../../services/CollectionService';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import Toast from 'react-native-toast-message';
+import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 
 function useAddCollectionModalData() {
   const [isVisible, setIsVisible] = useState(false);
@@ -34,14 +36,22 @@ function useAddCollectionModalData() {
 
   const onCreateCollectionPress = useCallback(() => {
     if (collectionNameRef.current.length === 0) {
-      // TODO: Show empty collection name message
+      Toast.show({
+        type: ToastType.Error,
+        text1: 'Collection name cannot be empty.',
+        position: ToastPosition.Top,
+      });
       return;
     }
     const _collectionService = collectionService();
     _collectionService
       .addCollection(collectionNameRef.current)
       .then(({collectionId}) => {
-        // TODO: Show success toast
+        Toast.show({
+          type: ToastType.Success,
+          text1: 'Collection created successfully.',
+          position: ToastPosition.Top,
+        });
         if (modalData?.tweetId) {
           LocalEvent.emit(EventTypes.UpdateCollection);
           _collectionService
@@ -56,7 +66,11 @@ function useAddCollectionModalData() {
         }
       })
       .catch(() => {
-        // TODO: Show error toast
+        Toast.show({
+          type: ToastType.Error,
+          text1: 'Collection could not be created. Please try again',
+          position: ToastPosition.Top,
+        });
       })
       .finally(() => {
         _collectionService.getAllCollections();

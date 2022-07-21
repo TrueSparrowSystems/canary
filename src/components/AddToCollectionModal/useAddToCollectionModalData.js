@@ -1,6 +1,9 @@
 import {useState, useEffect, useCallback, useRef} from 'react';
 import {collectionService} from '../../services/CollectionService';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import Toast from 'react-native-toast-message';
+import {ToastPosition, ToastType} from '../../constants/ToastConstants';
+import {replace} from '../../utils/Strings';
 
 function useAddToCollectionModalData() {
   const [isVisible, setIsVisible] = useState(false);
@@ -41,12 +44,22 @@ function useAddToCollectionModalData() {
     closeModal();
   }, [closeModal]);
 
+  const showAddToCollectionToast = useCallback(collectionName => {
+    Toast.show({
+      type: ToastType.Success,
+      text1: replace('Added tweet to {{collectionName}}', {
+        collectionName,
+      }),
+      position: ToastPosition.Top,
+    });
+  }, []);
+
   const onAddToCollectionSuccess = useCallback(
     collectionName => {
+      showAddToCollectionToast(collectionName);
       closeModal();
-      console.log('Tweet Added to collection :', collectionName);
     },
-    [closeModal],
+    [closeModal, showAddToCollectionToast],
   );
 
   const onAddCollectionPress = useCallback(() => {
@@ -54,10 +67,10 @@ function useAddToCollectionModalData() {
     LocalEvent.emit(EventTypes.ShowAddCollectionModal, {
       tweetId: modalData?.tweetId,
       onCollectionAddSuccess: collectionName => {
-        console.log('Tweet Added to collection :', collectionName);
+        showAddToCollectionToast(collectionName);
       },
     });
-  }, [modalData]);
+  }, [modalData?.tweetId, showAddToCollectionToast]);
 
   return {
     bIsVisible: isVisible,

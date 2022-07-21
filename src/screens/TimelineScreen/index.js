@@ -11,10 +11,10 @@ import TimelineList from '../../components/TimelineList';
 function TimelineScreen() {
   const localStyle = useStyleProcessor(styles, 'TimelineScreen');
 
-  const {fnOnSettingsPress} = useTimelineScreenData();
+  const {fnOnSettingsPress, bRefreshing} = useTimelineScreenData();
 
   return (
-    <View>
+    <View style={localStyle.container}>
       <View>
         <Header
           enableRightButton={true}
@@ -24,16 +24,19 @@ function TimelineScreen() {
           textStyle={localStyle.appNameText}
         />
       </View>
-      <View style={{height: '100%'}}>
-        <TimelineList refreshData={false} reloadData={false} />
-      </View>
+
+      <TimelineList refreshData={bRefreshing} reloadData={false} />
     </View>
   );
 }
 export default React.memo(TimelineScreen);
 
 const styles = {
-  container: {paddingHorizontal: layoutPtToPx(10)},
+  container: {
+    flex: 1,
+    paddingHorizontal: layoutPtToPx(10),
+    backgroundColor: colors.White,
+  },
   appNameText: {
     color: colors.DodgerBlue,
     fontSize: fontPtToPx(35),

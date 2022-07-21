@@ -40,10 +40,20 @@ function useAddCollectionModalData() {
     const _collectionService = collectionService();
     _collectionService
       .addCollection(collectionNameRef.current)
-      .then(() => {
+      .then(({collectionId}) => {
         // TODO: Show success toast
-        closeModal();
-        modalData?.onCollectionAddSuccess();
+        if (modalData?.tweetId) {
+          LocalEvent.emit(EventTypes.UpdateCollection);
+          _collectionService
+            .addTweetToCollection(collectionId, modalData.tweetId)
+            .then(() => {
+              closeModal();
+              modalData?.onCollectionAddSuccess(collectionNameRef.current);
+            });
+        } else {
+          closeModal();
+          modalData?.onCollectionAddSuccess();
+        }
       })
       .catch(() => {
         // TODO: Show error toast

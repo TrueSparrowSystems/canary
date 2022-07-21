@@ -1,12 +1,5 @@
-import React, {useCallback, useMemo} from 'react';
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Image,
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useMemo} from 'react';
+import {View, Text, SafeAreaView, Image, TouchableOpacity} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import CustomModal from '../common/CustomModal';
 import colors from '../../utils/colors';
@@ -44,33 +37,37 @@ function AddToCollectionModal() {
               <View style={localStyle.titleContainer}>
                 <Text style={localStyle.titleText}>Add To Collection</Text>
               </View>
-              {/* <TouchableOpacity onPress={fnOnAddCollectionPress}>
+              <TouchableOpacity onPress={fnOnAddCollectionPress}>
                 <Image source={AddIcon} />
-              </TouchableOpacity> */}
+              </TouchableOpacity>
             </View>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              {oCollectionList == null
-                ? null
-                : Object.keys(oCollectionList).map(key => {
-                    const collection = oCollectionList[key];
-                    const collectionData = {
-                      collectionId: collection?.id,
-                      collectionName: collection?.name,
-                      // TODO: change image url
-                      imageUrl: 'https://picsum.photos/200/300',
-                    };
-                    return (
-                      <MiniCollectionCard
-                        key={collection.id}
-                        data={collectionData}
-                        tweetId={sTweetId}
-                        onAddToCollectionSuccess={fnOnAddToCollectionSuccess}
-                      />
-                    );
-                  })}
-            </ScrollView>
+            {bIsLoading ? (
+              <Text>Loading</Text>
+            ) : (
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                {oCollectionList == null
+                  ? null
+                  : Object.keys(oCollectionList).map(key => {
+                      const collection = oCollectionList[key];
+                      const collectionData = {
+                        collectionId: collection?.id,
+                        collectionName: collection?.name,
+                        // TODO: change image url
+                        imageUrl: 'https://picsum.photos/200/300',
+                      };
+                      return (
+                        <MiniCollectionCard
+                          key={collection.id}
+                          data={collectionData}
+                          tweetId={sTweetId}
+                          onAddToCollectionSuccess={fnOnAddToCollectionSuccess}
+                        />
+                      );
+                    })}
+              </ScrollView>
+            )}
           </View>
         </SafeAreaView>
       </View>

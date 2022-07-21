@@ -10,8 +10,6 @@ function MiniCollectionCard(props) {
   const localStyle = useStyleProcessor(styles, 'MiniCollectionCard');
 
   const onAddToCollectionPress = useCallback(() => {
-    // TODO: Navigate to collection screen
-    console.log({tweetId, collectionId});
     collectionService()
       .addTweetToCollection(collectionId, tweetId)
       .then(() => {

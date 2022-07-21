@@ -13,4 +13,5 @@ export const EventTypes = {
   ShowAddToCollectionModal: 'event_types_show_add_to_collection_modal',
   ShowAddCollectionModal: 'event_types_show_add_collection_modal',
   UpdateTimeline: 'event_types_update_timeline',
+  UpdateCollection: 'event_types_update_collection',
 };

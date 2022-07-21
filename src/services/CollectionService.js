@@ -26,7 +26,7 @@ class CollectionService {
           this.collections = collectionObj;
           Store.set(StoreKeys.CollectionsList, collectionObj)
             .then(() => {
-              return resolve();
+              return resolve({collectionId: 1});
             })
             .catch(() => {
               return reject('Could not add collection. Please try again');
@@ -50,7 +50,7 @@ class CollectionService {
           this.collections = _list;
           Store.set(StoreKeys.CollectionsList, _list)
             .then(() => {
-              return resolve();
+              return resolve({collectionId: newId});
             })
             .catch(() => {
               return reject('Could not add collection. Please try again');

@@ -52,6 +52,9 @@ function useAddToCollectionModalData() {
     setIsVisible(false);
     LocalEvent.emit(EventTypes.ShowAddCollectionModal, {
       tweetId: modalData?.tweetId,
+      onCollectionAddSuccess: collectionName => {
+        console.log('Tweet Added to collection :', collectionName);
+      },
     });
   }, [modalData]);
 

@@ -30,6 +30,14 @@ function CollectionScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    LocalEvent.on(EventTypes.UpdateCollection, fetchData);
+    return () => {
+      LocalEvent.off(EventTypes.UpdateCollection, fetchData);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const onCollectionAddSuccess = useCallback(() => {
     fetchData();
   }, [fetchData]);

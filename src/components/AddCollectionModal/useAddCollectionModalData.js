@@ -43,10 +43,12 @@ function useAddCollectionModalData() {
       .then(({collectionId}) => {
         // TODO: Show success toast
         if (modalData?.tweetId) {
+          LocalEvent.emit(EventTypes.UpdateCollection);
           _collectionService
             .addTweetToCollection(collectionId, modalData.tweetId)
             .then(() => {
               closeModal();
+              modalData?.onCollectionAddSuccess(collectionNameRef.current);
             });
         } else {
           closeModal();

@@ -48,15 +48,12 @@ function useAddToCollectionModalData() {
     [closeModal],
   );
 
-  const onAddCollectionSuccess = useCallback(() => {
-    getCollectionsList();
-  }, [getCollectionsList]);
-
   const onAddCollectionPress = useCallback(() => {
+    setIsVisible(false);
     LocalEvent.emit(EventTypes.ShowAddCollectionModal, {
-      onAddCollectionSuccess,
+      tweetId: modalData?.tweetId,
     });
-  }, [onAddCollectionSuccess]);
+  }, [modalData]);
 
   return {
     bIsVisible: isVisible,

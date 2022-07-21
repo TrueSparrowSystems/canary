@@ -27,7 +27,7 @@ class TwitterApi {
   timelineFeed(nextPageIdentifier) {
     const data = {
       max_results: 10,
-      query: `(${this.getContexts()}) (lang:EN) (-is:retweet)`,
+      query: `(${this.getContexts()}) (lang:EN) (-is:retweet -is:reply -is:quote)`,
       expansions:
         'attachments.media_keys,author_id,in_reply_to_user_id,geo.place_id,referenced_tweets.id',
 

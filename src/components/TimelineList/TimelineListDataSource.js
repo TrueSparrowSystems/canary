@@ -1,15 +1,10 @@
 import PaginatedListDataSource from '../PaginatedList/PaginatedListDataSource';
-import {DataProvider} from 'recyclerlistview';
 import TwitterAPI from '../../api/helpers/TwitterAPI';
 import {getTweetData} from '../utils/ViewData';
 
 class TimelineListDataSource extends PaginatedListDataSource {
-  constructor(layoutProvider) {
+  constructor() {
     super();
-    this.layoutProvider = layoutProvider;
-    this.dataProvider = new DataProvider(
-      (tweetId1, tweetId2) => tweetId1 !== tweetId2,
-    );
   }
   // Endpoint which is to be called for fetching list data.
   apiCall(...args) {

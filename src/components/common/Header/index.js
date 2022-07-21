@@ -49,6 +49,7 @@ export default React.memo(Header);
 
 const styles = {
   header: {
+    marginHorizontal: 20,
     height: layoutPtToPx(50),
     flexDirection: 'row',
     justifyContent: 'space-between',

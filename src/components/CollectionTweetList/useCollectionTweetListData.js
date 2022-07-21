@@ -14,15 +14,8 @@ function useCollectionTweetListData(props) {
     _collectionService
       .getCollectionDetails(collectionId)
       .then(collectionData => {
-        var tweetIds = '';
-        var ids = collectionData?.tweetIds;
-        ids.forEach((tweetId, index) => {
-          tweetIds += tweetId.toString();
-          if (index !== ids.length - 1) {
-            tweetIds += ',';
-          }
-        });
-        TwitterAPI.multipleTweetLookup(tweetIds)
+        var ids = collectionData?.tweetIds.join(',');
+        TwitterAPI.multipleTweetLookup(ids)
           .then(apiResponse => {
             var array = [];
             const {data} = apiResponse;

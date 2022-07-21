@@ -9,10 +9,12 @@ import {
 } from 'react-native';
 import {BinIcon} from '../../assets/common';
 import ScreenName from '../../constants/ScreenName';
+import {ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
 import colors from '../../utils/colors';
 import {layoutPtToPx} from '../../utils/responsiveUI';
+import Toast from 'react-native-toast-message';
 
 function CollectionCard(props) {
   const {data, onCollectionRemoved} = props;
@@ -31,11 +33,17 @@ function CollectionCard(props) {
     collectionService()
       .removeCollection(collectionId)
       .then(() => {
-        // TODO: show toast
         onCollectionRemoved();
+        Toast.show({
+          type: ToastType.Success,
+          text1: 'Removed collection.',
+        });
       })
       .catch(() => {
-        // TODO: show error toast
+        Toast.show({
+          type: ToastType.Error,
+          text1: 'Error in removing collection.',
+        });
       });
   }, [collectionId, onCollectionRemoved]);
 

@@ -1,14 +1,32 @@
+import {isArray} from 'lodash';
 import {APIService} from '../../services/Api';
+import PreferencesDataHelper from '../../services/PreferencesDataHelper';
 
 const EndPoints = {
   timelineFeed: 'https://api.twitter.com/2/tweets/search/recent',
 };
 class TwitterApi {
+  getContexts() {
+    let contexts = [];
+    const preferredTopics =
+      PreferencesDataHelper.getSelectedPreferencesListFromCache();
+
+    if (isArray(preferredTopics) && preferredTopics?.length > 0) {
+      preferredTopics.map(topic => {
+        const currentTopicContext =
+          PreferencesDataHelper.getItemContextQuery(topic);
+        contexts.push(currentTopicContext);
+      });
+    }
+    const contextString = contexts.join(' OR ');
+
+    return contextString;
+  }
+
   timelineFeed(nextPageIdentifier) {
     const data = {
       max_results: 10,
-      query:
-        '(context:11.847900493514891265 OR context:152.825047692124442624) (lang:EN) (-is:retweet)',
+      query: `(${this.getContexts()}) (lang:EN) (-is:retweet)`,
       expansions:
         'attachments.media_keys,author_id,in_reply_to_user_id,geo.place_id,referenced_tweets.id',
 

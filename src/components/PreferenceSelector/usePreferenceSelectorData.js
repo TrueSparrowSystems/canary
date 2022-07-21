@@ -20,7 +20,9 @@ export function usePreferenceSelectorData(props) {
 
   const [mainArray, setMainArray] = useState(originalDataArray);
 
-  const [selectedPref, setSelectedPrefs] = useState([]);
+  const [selectedPref, setSelectedPrefs] = useState(
+    PreferencesDataHelper.getSelectedPreferencesListFromCache(),
+  );
 
   const preferencesArray = useMemo(() => {
     const arr = [];

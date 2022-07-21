@@ -3,10 +3,13 @@ import {View, Text, TouchableHighlight, ActivityIndicator} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionCard from '../../components/CollectionCard';
+import Header from '../../components/common/Header';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
 import colors from '../../utils/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import {AddIcon} from '../../assets/common';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 
 function CollectionScreen() {
   const localStyle = useStyleProcessor(styles, 'CollectionScreen');
@@ -24,6 +27,7 @@ function CollectionScreen() {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onCollectionAddSuccess = useCallback(() => {
@@ -38,16 +42,15 @@ function CollectionScreen() {
 
   return (
     <SafeAreaView style={localStyle.container}>
-      <View style={localStyle.headerView}>
-        <Text style={localStyle.headerText}>Collections</Text>
-        <TouchableHighlight
-          activeOpacity={1}
-          underlayColor={'transparent'}
-          style={localStyle.add}
-          onPress={onAddCollectionPress}>
-          <Text>Add</Text>
-        </TouchableHighlight>
-      </View>
+      <Header
+        enableBackButton={false}
+        enableRightButton={true}
+        onRightButtonClick={onAddCollectionPress}
+        rightButtonImage={AddIcon}
+        text="Collections"
+        textStyle={localStyle.headerText}
+      />
+
       {isLoading ? (
         <View style={localStyle.loaderStyle}>
           <ActivityIndicator animating={isLoading} />
@@ -82,7 +85,11 @@ function CollectionScreen() {
 }
 
 const styles = {
-  container: {backgroundColor: 'white', flex: 1},
+  container: {
+    backgroundColor: 'white',
+    flex: 1,
+    paddingHorizontal: layoutPtToPx(10),
+  },
   headerView: {
     backgroundColor: 'white',
     flexDirection: 'row',
@@ -93,9 +100,8 @@ const styles = {
     justifyContent: 'center',
   },
   headerText: {
-    fontSize: 20,
-    paddingVertical: 10,
-    color: colors.SherpaBlue,
+    color: colors.DodgerBlue,
+    fontSize: fontPtToPx(35),
   },
   scrollViewStyle: {
     paddingTop: 20,

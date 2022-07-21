@@ -34,7 +34,6 @@ export default React.memo(TimelineScreen);
 const styles = {
   container: {
     flex: 1,
-    paddingHorizontal: layoutPtToPx(10),
     backgroundColor: colors.White,
   },
   appNameText: {

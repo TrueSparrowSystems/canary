@@ -88,7 +88,6 @@ const styles = {
   container: {
     backgroundColor: 'white',
     flex: 1,
-    paddingHorizontal: layoutPtToPx(10),
   },
   headerView: {
     backgroundColor: 'white',

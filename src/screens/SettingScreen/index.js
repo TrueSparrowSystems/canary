@@ -41,7 +41,6 @@ export default SettingScreen;
 
 const styles = {
   container: {
-    paddingHorizontal: layoutPtToPx(10),
     flex: 1,
   },
   titleText: {

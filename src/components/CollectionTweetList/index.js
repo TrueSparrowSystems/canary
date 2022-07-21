@@ -1,5 +1,6 @@
 import React from 'react';
 import {ScrollView, ActivityIndicator} from 'react-native';
+import TweetCard from '../TweetCard';
 import useCollectionTweetListData from './useCollectionTweetListData';
 
 function CollectionTweetList(props) {
@@ -10,7 +11,7 @@ function CollectionTweetList(props) {
   ) : (
     <ScrollView>
       {aDataSource?.map(data => {
-        // Show Tweet card with this data
+        return <TweetCard dataSource={data} />;
       })}
     </ScrollView>
   );

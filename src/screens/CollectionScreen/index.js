@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, Text, TouchableHighlight, ActivityIndicator} from 'react-native';
+import {View, ActivityIndicator} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionCard from '../../components/CollectionCard';
@@ -9,7 +9,7 @@ import {collectionService} from '../../services/CollectionService';
 import colors from '../../utils/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {AddIcon} from '../../assets/common';
-import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import {fontPtToPx} from '../../utils/responsiveUI';
 
 function CollectionScreen() {
   const localStyle = useStyleProcessor(styles, 'CollectionScreen');

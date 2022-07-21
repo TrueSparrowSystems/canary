@@ -1,21 +1,22 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useCallback} from 'react';
 import {Text, View, Image, TouchableWithoutFeedback} from 'react-native';
+import ScreenName from '../../constants/ScreenName';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import {collectionService} from '../../services/CollectionService';
 import colors from '../../utils/colors';
 
 function CollectionCard(props) {
   const {data} = props;
   const {imageUrl, collectionName, collectionId} = data;
   const localStyle = useStyleProcessor(styles, 'CollectionCard');
+  const navigation = useNavigation();
 
   const onCollectionPress = useCallback(() => {
-    // TODO: Navigate to collection screen
-    const _collectionService = collectionService();
-    _collectionService.getCollectionDetails(collectionId).then(details => {
-      console.log({details});
+    navigation.navigate(ScreenName.CollectionTweetScreen, {
+      collectionId,
+      collectionName,
     });
-  }, [collectionId]);
+  }, [collectionId, collectionName, navigation]);
 
   return (
     <TouchableWithoutFeedback onPress={onCollectionPress}>

@@ -30,7 +30,8 @@ function useAddToCollectionModalData() {
     return () => {
       LocalEvent.off(EventTypes.ShowAddToCollectionModal, onShowModal);
     };
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const closeModal = useCallback(() => {
     setIsVisible(false);

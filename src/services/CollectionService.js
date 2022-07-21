@@ -1,5 +1,6 @@
 import {StoreKeys} from './AsyncStorage/StoreConstants';
 import Store from './AsyncStorage';
+import uuid from 'react-native-uuid';
 
 const COLLECTION_LIMIT = 30;
 
@@ -16,13 +17,14 @@ class CollectionService {
     return new Promise((resolve, reject) => {
       Store.get(StoreKeys.CollectionsList).then(list => {
         if (list == null) {
-          const collectionObj = {
-            1: {
-              id: 1,
-              name: collectionName,
-              tweetIds: [],
-            },
+          const id = uuid.v4();
+          var collectionObj = {};
+          collectionObj[id] = {
+            id: id,
+            name: collectionName,
+            tweetIds: [],
           };
+
           this.collections = collectionObj;
           Store.set(StoreKeys.CollectionsList, collectionObj)
             .then(() => {
@@ -38,7 +40,8 @@ class CollectionService {
             return reject('Collection Limit exceeded');
           }
 
-          const newId = listLength + 1;
+          const newId = uuid.v4();
+
           const newCollection = {};
           newCollection[newId] = {
             id: newId,
@@ -47,6 +50,7 @@ class CollectionService {
           };
 
           _list = {..._list, ...newCollection};
+          console.log('.......', _list);
           this.collections = _list;
           Store.set(StoreKeys.CollectionsList, _list)
             .then(() => {
@@ -123,6 +127,19 @@ class CollectionService {
         });
       }
       return resolve();
+    });
+  }
+
+  async removeCollection(collectionId) {
+    return new Promise((resolve, reject) => {
+      delete this.collections[collectionId];
+      Store.set(StoreKeys.CollectionsList, this.collections)
+        .then(() => {
+          return resolve();
+        })
+        .catch(() => {
+          return reject();
+        });
     });
   }
 }

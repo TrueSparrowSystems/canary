@@ -2,20 +2,18 @@ import React, {useCallback} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
-import {isTablet} from 'react-native-device-info';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TransitionPresets} from '@react-navigation/stack';
 import ScreenName from '../constants/ScreenName';
 import TimelineScreen from '../screens/TimelineScreen';
 import CollectionScreen from '../screens/CollectionScreen';
 import SettingScreen from '../screens/SettingScreen';
-import BottomNavigationText from '../components/common/BottomNavigationText';
 import {Image} from 'react-native';
 import {HomeIcon, CollectionsIcon} from '../assets/common';
 import {layoutPtToPx} from '../utils/responsiveUI';
 import {useStyleProcessor} from '../hooks/useStyleProcessor';
 import colors from '../utils/colors';
-// import BottomNavigationIcon from '../components/common/BottomNavigationIcon';
+import PreferenceScreen from '../screens/PreferenceScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -42,6 +40,17 @@ const Navigation = props => {
         <TimelineStack.Screen
           name={ScreenName.SettingScreen}
           component={SettingScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <TimelineStack.Screen
+          name={ScreenName.PreferenceScreen}
+          component={PreferenceScreen}
           options={{
             gestureEnabled: true,
             headerShown: false,

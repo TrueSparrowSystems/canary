@@ -7,6 +7,7 @@ import AsyncStorage from '../services/AsyncStorage';
 import {StoreKeys} from '../services/AsyncStorage/StoreConstants';
 import Cache from '../services/Cache';
 import {CacheKey} from '../services/Cache/CacheStoreConstants';
+import {networkConnection} from '../services/NetworkConnection';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
 
 const AppStack = createSharedElementStackNavigator();
@@ -20,6 +21,7 @@ function RootNavigation() {
   }
 
   function loadApp() {
+    networkConnection();
     AsyncStorage.getItem(StoreKeys.AreInitialPreferencesSet).then(isSet => {
       Cache.setValue(CacheKey.AreInitialPreferencesSet, isSet);
       if (isSet) {

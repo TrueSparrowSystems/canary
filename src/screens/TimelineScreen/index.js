@@ -24,7 +24,7 @@ function TimelineScreen() {
           textStyle={localStyle.appNameText}
         />
       </View>
-      <View style={{flex: 1}}>
+      <View style={{height: '100%'}}>
         <TimelineList refreshData={false} reloadData={false} />
       </View>
     </View>

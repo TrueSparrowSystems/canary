@@ -9,4 +9,5 @@ export default {
   Gothic20: '#65898D33',
   Gothic: '#65898D',
   Transparent: '#FFFFFF00',
+  LightGrey: '#D1D1D1',
 };

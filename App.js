@@ -2,6 +2,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import {SafeAreaView, StatusBar} from 'react-native';
 import AddCollectionModal from './src/components/AddCollectionModal';
+import AddToCollectionModal from './src/components/AddToCollectionModal';
 import {useStyleProcessor} from './src/hooks/useStyleProcessor';
 import RootNavigation from './src/RootNavigation';
 import colors from './src/utils/colors';
@@ -14,6 +15,7 @@ function App() {
       <NavigationContainer>
         <RootNavigation />
         <AddCollectionModal />
+        <AddToCollectionModal />
       </NavigationContainer>
     </SafeAreaView>
   );

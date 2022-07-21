@@ -9,14 +9,17 @@ import {
 } from '../../assets/common';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import colors from '../../utils/colors';
+import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
 function TweetCard({dataSource}) {
   const localStyle = useStyleProcessor(styles, 'TweetCard');
   const {user, text} = dataSource;
 
   const onAddToCollectionPress = useCallback(() => {
-    console.log('Add to collection Pressed');
-  }, []);
+    LocalEvent.emit(EventTypes.ShowAddToCollectionModal, {
+      tweetId: dataSource.id,
+    });
+  }, [dataSource]);
   return (
     <View style={localStyle.cardContainer}>
       <Image

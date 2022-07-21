@@ -8,3 +8,4 @@ export const likeIcon = require('./heart.png');
 export const commentIcon = require('./comment.png');
 export const retweetIcon = require('./retweet.png');
 export const bookmarkIcon = require('./bookmark.png');
+export const addIcon = require('./add.png');

@@ -14,6 +14,7 @@ import {layoutPtToPx} from '../utils/responsiveUI';
 import {useStyleProcessor} from '../hooks/useStyleProcessor';
 import colors from '../utils/colors';
 import PreferenceScreen from '../screens/PreferenceScreen';
+import CollectionTweetScreen from '../screens/CollectionTweetScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -134,6 +135,15 @@ const Navigation = props => {
         <CollectionStack.Screen
           name={ScreenName.CollectionScreen}
           component={CollectionScreen}
+          options={{
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+          }}
+        />
+        <CollectionStack.Screen
+          name={ScreenName.CollectionTweetScreen}
+          component={CollectionTweetScreen}
           options={{
             headerShown: false,
             tabBarVisible: false,

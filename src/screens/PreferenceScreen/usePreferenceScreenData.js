@@ -4,16 +4,21 @@ import AsyncStorage from '../../services/AsyncStorage';
 import {StoreKeys} from '../../services/AsyncStorage/StoreConstants';
 import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
+import PreferencesDataHelper from '../../services/PreferencesDataHelper';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
 const MINIMUM_TOPICS_COUNT = 3;
 
 export function usePreferenceScreenData() {
-  const [isDoneButtonEnabled, setIsDoneButtonEnabled] = useState(false);
-
   const navigation = useNavigation();
 
-  const selectedItemsList = useRef([]);
+  const selectedItemsList = useRef(
+    PreferencesDataHelper.getSelectedPreferencesListFromCache() || [],
+  );
+
+  const [isDoneButtonEnabled, setIsDoneButtonEnabled] = useState(
+    selectedItemsList.current.length >= MINIMUM_TOPICS_COUNT,
+  );
 
   const onSelectedItemsUpdate = useCallback(
     (list = []) => {
@@ -33,9 +38,8 @@ export function usePreferenceScreenData() {
   );
 
   const onDonePress = useCallback(() => {
-    const areInitialPrefsSet = Cache.getValue(
-      CacheKey.AreInitialPreferencesSet,
-    );
+    const areInitialPrefsSet =
+      PreferencesDataHelper.areInitialPreferencesSetInCache();
 
     Cache.setValue(CacheKey.PreferenceList, selectedItemsList.current);
     AsyncStorage.setItem(
@@ -43,7 +47,10 @@ export function usePreferenceScreenData() {
       selectedItemsList.current,
     ).then(() => {
       if (areInitialPrefsSet) {
-        navigation.goBack();
+        LocalEvent.emit(EventTypes.UpdateTimeline);
+        setTimeout(() => {
+          navigation.goBack();
+        }, 200);
       } else {
         AsyncStorage.setItem(StoreKeys.AreInitialPreferencesSet, true).then(
           () => {

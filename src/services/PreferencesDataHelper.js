@@ -1,4 +1,6 @@
 import {PreferencesData} from '../constants/PreferencesData';
+import Cache from './Cache';
+import {CacheKey} from './Cache/CacheStoreConstants';
 
 class PreferencesDataHelper {
   constructor() {
@@ -45,9 +47,22 @@ class PreferencesDataHelper {
 
   getItemContextQuery(key) {
     if (key) {
-      return `${this.getItemDomainId(key)}.${this.getItemEntityId(key)}`;
+      return `context:${this.getItemDomainId(key)}.${this.getItemEntityId(
+        key,
+      )}`;
     }
     return null;
+  }
+
+  areInitialPreferencesSetInCache() {
+    return !!Cache.getValue(CacheKey.AreInitialPreferencesSet);
+  }
+
+  getSelectedPreferencesListFromCache() {
+    if (this.areInitialPreferencesSetInCache()) {
+      return Cache.getValue(CacheKey.PreferenceList);
+    }
+    return [];
   }
 }
 export default new PreferencesDataHelper();

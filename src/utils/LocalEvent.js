@@ -10,6 +10,7 @@ export const EventTypes = {
     Connected: 'event_types_internet_connected',
     Disconnected: 'event_types_internet_disconnected',
   },
-  ShowAddCollectionModal: 'show_add_collection_modal',
-  ShowAddToCollectionModal: 'show_add_to_collection_modal',
+  ShowAddToCollectionModal: 'event_types_show_add_to_collection_modal',
+  ShowAddCollectionModal: 'event_types_show_add_collection_modal',
+  UpdateTimeline: 'event_types_update_timeline',
 };

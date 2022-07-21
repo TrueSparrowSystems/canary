@@ -98,7 +98,7 @@ const styles = {
     alignItems: 'flex-start',
     overflow: 'hidden',
     paddingTop: layoutPtToPx(20),
-    backgroundColor: colors.White,
+    backgroundColor: colors.Transparent,
   },
   headerText: {
     color: colors.SherpaBlue,

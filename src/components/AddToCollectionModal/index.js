@@ -13,7 +13,7 @@ import colors from '../../utils/colors';
 import useAddToCollectionModalData from './useAddToCollectionModalData';
 import MiniCollectionCard from '../MiniCollectionCard';
 import {ScrollView} from 'react-native-gesture-handler';
-import {addIcon} from '../../assets/common';
+import {AddIcon} from '../../assets/common';
 
 function AddToCollectionModal() {
   const localStyle = useStyleProcessor(styles, 'AddToCollectionModal');
@@ -45,7 +45,7 @@ function AddToCollectionModal() {
                 <Text style={localStyle.titleText}>Add To Collection</Text>
               </View>
               {/* <TouchableOpacity onPress={fnOnAddCollectionPress}>
-                <Image source={addIcon} />
+                <Image source={AddIcon} />
               </TouchableOpacity> */}
             </View>
             <ScrollView

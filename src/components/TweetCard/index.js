@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useRef} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {
   BookmarkedIcon,
@@ -19,23 +19,25 @@ function TweetCard({dataSource}) {
   const localStyle = useStyleProcessor(styles, 'TweetCard');
   const {collectionId, user, text, id} = dataSource;
   var {isBookmarked} = dataSource;
+  const collectionIdRef = useRef(collectionId);
   const [isBookmarkedState, setIsBookmarkedState] = useState(isBookmarked);
 
-  const onAddToCollectionSuccess = useCallback(() => {
+  const onAddToCollectionSuccess = useCallback(_collectionId => {
+    collectionIdRef.current = _collectionId;
     setIsBookmarkedState(true);
   }, []);
 
   const onBookmarkButtonPress = useCallback(() => {
     if (isBookmarkedState) {
       collectionService()
-        .removeTweetFromCollection(collectionId, id)
+        .removeTweetFromCollection(collectionIdRef.current, id)
         .then(() => {
           setIsBookmarkedState(false);
         })
         .catch(error => {
           Toast.show({
             text1: error,
-            type: ToastType.error,
+            type: ToastType.Error,
             position: ToastPosition.Top,
           });
         });
@@ -45,7 +47,7 @@ function TweetCard({dataSource}) {
         onAddToCollectionSuccess: onAddToCollectionSuccess,
       });
     }
-  }, [collectionId, id, isBookmarkedState, onAddToCollectionSuccess]);
+  }, [id, isBookmarkedState, onAddToCollectionSuccess]);
 
   return (
     <View style={localStyle.cardContainer}>

@@ -144,7 +144,7 @@ class CollectionService {
 
   async removeTweetFromCollection(collectionId, tweetId) {
     return new Promise((resolve, reject) => {
-      const tweetIds = this.collections[collectionId].tweetIds;
+      const tweetIds = this.collections[collectionId]?.tweetIds;
       const index = tweetIds.indexOf(tweetId);
       if (index > -1) {
         tweetIds.splice(index, 1);

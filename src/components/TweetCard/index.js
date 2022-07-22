@@ -1,3 +1,4 @@
+import {unescape} from 'lodash';
 import React, {useCallback, useState, useRef} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {
@@ -13,11 +14,13 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
 import colors from '../../utils/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+
 import Toast from 'react-native-toast-message';
+import ImageCard from '../ImageCard';
 
 function TweetCard({dataSource}) {
   const localStyle = useStyleProcessor(styles, 'TweetCard');
-  const {collectionId, user, text, id} = dataSource;
+  const {collectionId, user, text, id, public_metrics, media} = dataSource;
   var {isBookmarked} = dataSource;
   const collectionIdRef = useRef(collectionId);
   const [isBookmarkedState, setIsBookmarkedState] = useState(isBookmarked);
@@ -58,23 +61,34 @@ function TweetCard({dataSource}) {
       <View style={localStyle.tweetDetailContainer}>
         <View style={localStyle.flexRow}>
           <Text style={localStyle.nameText} numberOfLines={1}>
-            {user?.name}
+            {unescape(user?.name)}
           </Text>
           {user?.verified ? (
             <Image source={verifiedIcon} style={localStyle.verifiedIcon} />
           ) : null}
           <Text style={localStyle.userNameText} numberOfLines={1}>
-            @{user?.username}
+            @{unescape(user?.username)}
           </Text>
         </View>
-        <Text>{text}</Text>
+        <Text style={localStyle.tweetText}>{unescape(text)}</Text>
+        {media && media?.length !== 0 ? <ImageCard mediaArray={media} /> : null}
         <View style={localStyle.likeCommentStrip}>
           <Image source={commentIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.flex1}>13</Text>
+          <Text style={localStyle.flex1}>
+            {public_metrics?.reply_count === 0
+              ? ''
+              : public_metrics?.reply_count}
+          </Text>
           <Image source={retweetIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.flex1}>20</Text>
+          <Text style={localStyle.flex1}>
+            {public_metrics?.retweet_count === 0
+              ? ''
+              : public_metrics?.retweet_count}
+          </Text>
           <Image source={likeIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.flex1}>123</Text>
+          <Text style={localStyle.flex1}>
+            {public_metrics?.like_count === 0 ? '' : public_metrics?.like_count}
+          </Text>
           <TouchableOpacity onPress={onBookmarkButtonPress}>
             <Image
               source={isBookmarkedState ? BookmarkedIcon : bookmarkIcon}
@@ -108,6 +122,9 @@ const styles = {
     flex: 1,
     marginHorizontal: 10,
     justifyContent: 'center',
+  },
+  tweetText: {
+    marginBottom: 10,
   },
   flexRow: {flexDirection: 'row'},
   nameText: {fontWeight: '600', fontSize: 15, flexShrink: 1},

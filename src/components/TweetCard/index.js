@@ -1,25 +1,54 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState, useRef} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {
+  BookmarkedIcon,
   bookmarkIcon,
   commentIcon,
   likeIcon,
   retweetIcon,
   verifiedIcon,
 } from '../../assets/common';
+import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
+import {collectionService} from '../../services/CollectionService';
 import colors from '../../utils/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import Toast from 'react-native-toast-message';
 
 function TweetCard({dataSource}) {
   const localStyle = useStyleProcessor(styles, 'TweetCard');
-  const {user, text} = dataSource;
+  const {collectionId, user, text, id} = dataSource;
+  var {isBookmarked} = dataSource;
+  const collectionIdRef = useRef(collectionId);
+  const [isBookmarkedState, setIsBookmarkedState] = useState(isBookmarked);
 
-  const onAddToCollectionPress = useCallback(() => {
-    LocalEvent.emit(EventTypes.ShowAddToCollectionModal, {
-      tweetId: dataSource.id,
-    });
-  }, [dataSource]);
+  const onAddToCollectionSuccess = useCallback(_collectionId => {
+    collectionIdRef.current = _collectionId;
+    setIsBookmarkedState(true);
+  }, []);
+
+  const onBookmarkButtonPress = useCallback(() => {
+    if (isBookmarkedState) {
+      collectionService()
+        .removeTweetFromCollection(collectionIdRef.current, id)
+        .then(() => {
+          setIsBookmarkedState(false);
+        })
+        .catch(error => {
+          Toast.show({
+            text1: error,
+            type: ToastType.Error,
+            position: ToastPosition.Top,
+          });
+        });
+    } else {
+      LocalEvent.emit(EventTypes.ShowAddToCollectionModal, {
+        tweetId: id,
+        onAddToCollectionSuccess: onAddToCollectionSuccess,
+      });
+    }
+  }, [id, isBookmarkedState, onAddToCollectionSuccess]);
+
   return (
     <View style={localStyle.cardContainer}>
       <Image
@@ -46,8 +75,11 @@ function TweetCard({dataSource}) {
           <Text style={localStyle.flex1}>20</Text>
           <Image source={likeIcon} style={localStyle.iconStyle} />
           <Text style={localStyle.flex1}>123</Text>
-          <TouchableOpacity onPress={onAddToCollectionPress}>
-            <Image source={bookmarkIcon} style={localStyle.iconStyle} />
+          <TouchableOpacity onPress={onBookmarkButtonPress}>
+            <Image
+              source={isBookmarkedState ? BookmarkedIcon : bookmarkIcon}
+              style={localStyle.iconStyle}
+            />
           </TouchableOpacity>
         </View>
       </View>

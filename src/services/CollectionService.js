@@ -50,7 +50,6 @@ class CollectionService {
           };
 
           _list = {..._list, ...newCollection};
-          console.log('.......', _list);
           this.collections = _list;
           Store.set(StoreKeys.CollectionsList, _list)
             .then(() => {
@@ -139,6 +138,24 @@ class CollectionService {
         })
         .catch(() => {
           return reject();
+        });
+    });
+  }
+
+  async removeTweetFromCollection(collectionId, tweetId) {
+    return new Promise((resolve, reject) => {
+      const tweetIds = this.collections[collectionId]?.tweetIds;
+      const index = tweetIds.indexOf(tweetId);
+      if (index > -1) {
+        tweetIds.splice(index, 1);
+      }
+      this.collections[collectionId].tweetIds = tweetIds;
+      Store.set(StoreKeys.CollectionsList, this.collections)
+        .then(() => {
+          return resolve();
+        })
+        .catch(() => {
+          return reject('Unable to remove tweet from collection');
         });
     });
   }

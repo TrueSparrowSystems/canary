@@ -13,7 +13,7 @@ function MiniCollectionCard(props) {
     collectionService()
       .addTweetToCollection(collectionId, tweetId)
       .then(() => {
-        onAddToCollectionSuccess(collectionName);
+        onAddToCollectionSuccess(collectionName, collectionId);
       });
   }, [collectionId, collectionName, onAddToCollectionSuccess, tweetId]);
 

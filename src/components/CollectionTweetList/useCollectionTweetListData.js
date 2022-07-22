@@ -20,10 +20,15 @@ function useCollectionTweetListData(props) {
             var array = [];
             const {data} = apiResponse;
             const newData = data?.data;
-            newData.forEach(tweet => {
-              const tweetData = getTweetData(tweet, apiResponse);
-              array.push(tweetData);
-            });
+            if (newData && newData.length > 0) {
+              newData.forEach(tweet => {
+                const tweetData = getTweetData(tweet, apiResponse);
+                tweetData.collectionId = collectionId;
+                tweetData.isBookmarked = true;
+                array.push(tweetData);
+              });
+            }
+
             listDataRef.current = array;
           })
           .finally(() => {

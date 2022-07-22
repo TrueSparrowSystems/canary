@@ -58,8 +58,9 @@ function useAddToCollectionModalData() {
     collectionName => {
       showAddToCollectionToast(collectionName);
       closeModal();
+      modalData?.onAddToCollectionSuccess();
     },
-    [closeModal, showAddToCollectionToast],
+    [closeModal, modalData, showAddToCollectionToast],
   );
 
   const onAddCollectionPress = useCallback(() => {

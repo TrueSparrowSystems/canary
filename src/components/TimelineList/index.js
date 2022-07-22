@@ -13,21 +13,31 @@ import TweetCard from '../TweetCard';
 const _isTablet = isTablet();
 const ITEM_WIDTH = 276;
 
-function TimelineList({reloadData, refreshData, onDataAvailable}) {
+function TimelineList({
+  reloadData,
+  refreshData,
+  onDataAvailable,
+  timelineListDataSource = null,
+  listHeaderComponent = null,
+  disableTweetPress = false,
+}) {
   const {bIsLoading, fnOnRefresh, fnOnDataChange} = useTimelineListData({
     onDataAvailable,
   });
 
-  const listDataSource = useRef(null);
+  const listDataSource = useRef(timelineListDataSource);
   if (listDataSource.current === null) {
     listDataSource.current = new TimelineListDataSource();
   }
 
   const localStyle = useStyleProcessor(styles, 'ClassList');
 
-  const renderItem = useCallback(({item}) => {
-    return <TweetCard dataSource={item} />;
-  }, []);
+  const renderItem = useCallback(
+    ({item}) => {
+      return <TweetCard dataSource={item} isDisabled={disableTweetPress} />;
+    },
+    [disableTweetPress],
+  );
 
   const keyExtractor = useCallback(item => {
     return item.id;
@@ -53,6 +63,7 @@ function TimelineList({reloadData, refreshData, onDataAvailable}) {
       maxToRenderPerBatch: _isTablet ? 30 : 20,
       scrollEnabled: true,
       contentContainerStyle: localStyle.contentContainerStyle,
+      ListHeaderComponent: listHeaderComponent,
       refreshControl: (
         <RefreshControl
           refreshing={bIsLoading}
@@ -65,6 +76,7 @@ function TimelineList({reloadData, refreshData, onDataAvailable}) {
     bIsLoading,
     fnOnRefresh,
     keyExtractor,
+    listHeaderComponent,
     localStyle.contentContainerStyle,
     localStyle.flatListPropsStyle,
     renderItem,
@@ -97,7 +109,6 @@ const styles = {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     overflow: 'hidden',
-    paddingTop: layoutPtToPx(20),
     backgroundColor: colors.Transparent,
   },
   headerText: {

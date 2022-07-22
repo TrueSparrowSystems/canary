@@ -13,12 +13,16 @@ import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
 import colors from '../../utils/colors';
-import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import useTweetCardData from './useTweetCardData';
 
 import Toast from 'react-native-toast-message';
 import ImageCard from '../ImageCard';
+import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
-function TweetCard({dataSource}) {
+function TweetCard(props) {
+  const {dataSource, isDisabled = false} = props;
+
+  const {fnOnAddToCollectionPress, fnOnCardPress} = useTweetCardData(props);
   const localStyle = useStyleProcessor(styles, 'TweetCard');
   const {collectionId, user, text, id, public_metrics, media} = dataSource;
   var {isBookmarked} = dataSource;
@@ -53,7 +57,11 @@ function TweetCard({dataSource}) {
   }, [id, isBookmarkedState, onAddToCollectionSuccess]);
 
   return (
-    <View style={localStyle.cardContainer}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={fnOnCardPress}
+      style={localStyle.cardContainer}
+      disabled={isDisabled}>
       <Image
         source={{uri: user?.profile_image_url}}
         style={localStyle.userProfileImage}
@@ -76,18 +84,18 @@ function TweetCard({dataSource}) {
           <Image source={commentIcon} style={localStyle.iconStyle} />
           <Text style={localStyle.flex1}>
             {public_metrics?.reply_count === 0
-              ? ''
+              ? 0
               : public_metrics?.reply_count}
           </Text>
           <Image source={retweetIcon} style={localStyle.iconStyle} />
           <Text style={localStyle.flex1}>
             {public_metrics?.retweet_count === 0
-              ? ''
+              ? 0
               : public_metrics?.retweet_count}
           </Text>
           <Image source={likeIcon} style={localStyle.iconStyle} />
           <Text style={localStyle.flex1}>
-            {public_metrics?.like_count === 0 ? '' : public_metrics?.like_count}
+            {public_metrics?.like_count === 0 ? 0 : public_metrics?.like_count}
           </Text>
           <TouchableOpacity onPress={onBookmarkButtonPress}>
             <Image
@@ -97,7 +105,7 @@ function TweetCard({dataSource}) {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

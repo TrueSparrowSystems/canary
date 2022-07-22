@@ -70,12 +70,13 @@ function ImageCard({mediaArray}) {
         <TouchableWithoutFeedback
           onPress={() => {
             onImagePress(3);
-          }}
-          style={
-            mediaArray?.length >= 4 ? localStyle.flex1 : localStyle.hideImage
-          }>
+          }}>
           <Image
-            style={localStyle.showImage}
+            style={
+              mediaArray?.length >= 4
+                ? localStyle.showImage
+                : localStyle.hideImage
+            }
             source={mediaArray?.length >= 4 ? {uri: mediaArray[3]?.url} : null}
             resizeMode={'cover'}
           />
@@ -96,7 +97,7 @@ function ImageCard({mediaArray}) {
       <TouchableWithoutFeedback
         onPress={() => {
           Toast.show({
-            type: ToastType.Error,
+            type: ToastType.Info,
             text1: 'This video is not playable',
             position: ToastPosition.Top,
           });

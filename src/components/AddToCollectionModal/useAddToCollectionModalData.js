@@ -55,19 +55,20 @@ function useAddToCollectionModalData() {
   }, []);
 
   const onAddToCollectionSuccess = useCallback(
-    collectionName => {
+    (collectionName, collectionId) => {
       showAddToCollectionToast(collectionName);
       closeModal();
+      modalData?.onAddToCollectionSuccess(collectionId);
     },
-    [closeModal, showAddToCollectionToast],
+    [closeModal, modalData, showAddToCollectionToast],
   );
 
   const onAddCollectionPress = useCallback(() => {
     setIsVisible(false);
     LocalEvent.emit(EventTypes.ShowAddCollectionModal, {
       tweetId: modalData?.tweetId,
-      onCollectionAddSuccess: collectionName => {
-        showAddToCollectionToast(collectionName);
+      onCollectionAddSuccess: (collectionName, collectionId) => {
+        showAddToCollectionToast(collectionName, collectionId);
       },
     });
   }, [modalData?.tweetId, showAddToCollectionToast]);

@@ -58,7 +58,10 @@ function useAddCollectionModalData() {
             .addTweetToCollection(collectionId, modalData.tweetId)
             .then(() => {
               closeModal();
-              modalData?.onCollectionAddSuccess(collectionNameRef.current);
+              modalData?.onCollectionAddSuccess(
+                collectionNameRef.current,
+                collectionId,
+              );
             });
         } else {
           closeModal();

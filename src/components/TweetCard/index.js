@@ -1,27 +1,57 @@
 import {unescape} from 'lodash';
-import React, {useCallback} from 'react';
+import React, {useCallback, useState, useRef} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {
+  BookmarkedIcon,
   bookmarkIcon,
   commentIcon,
   likeIcon,
   retweetIcon,
   verifiedIcon,
 } from '../../assets/common';
+import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
+import {collectionService} from '../../services/CollectionService';
 import colors from '../../utils/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+
+import Toast from 'react-native-toast-message';
 import ImageCard from '../ImageCard';
 
 function TweetCard({dataSource}) {
   const localStyle = useStyleProcessor(styles, 'TweetCard');
-  const {user, text, public_metrics, media} = dataSource;
+  const {collectionId, user, text, id, public_metrics, media} = dataSource;
+  var {isBookmarked} = dataSource;
+  const collectionIdRef = useRef(collectionId);
+  const [isBookmarkedState, setIsBookmarkedState] = useState(isBookmarked);
 
-  const onAddToCollectionPress = useCallback(() => {
-    LocalEvent.emit(EventTypes.ShowAddToCollectionModal, {
-      tweetId: dataSource.id,
-    });
-  }, [dataSource]);
+  const onAddToCollectionSuccess = useCallback(_collectionId => {
+    collectionIdRef.current = _collectionId;
+    setIsBookmarkedState(true);
+  }, []);
+
+  const onBookmarkButtonPress = useCallback(() => {
+    if (isBookmarkedState) {
+      collectionService()
+        .removeTweetFromCollection(collectionIdRef.current, id)
+        .then(() => {
+          setIsBookmarkedState(false);
+        })
+        .catch(error => {
+          Toast.show({
+            text1: error,
+            type: ToastType.Error,
+            position: ToastPosition.Top,
+          });
+        });
+    } else {
+      LocalEvent.emit(EventTypes.ShowAddToCollectionModal, {
+        tweetId: id,
+        onAddToCollectionSuccess: onAddToCollectionSuccess,
+      });
+    }
+  }, [id, isBookmarkedState, onAddToCollectionSuccess]);
+
   return (
     <View style={localStyle.cardContainer}>
       <Image
@@ -40,7 +70,7 @@ function TweetCard({dataSource}) {
             @{unescape(user?.username)}
           </Text>
         </View>
-        <Text>{unescape(text)}</Text>
+        <Text style={localStyle.tweetText}>{unescape(text)}</Text>
         {media && media?.length !== 0 ? <ImageCard mediaArray={media} /> : null}
         <View style={localStyle.likeCommentStrip}>
           <Image source={commentIcon} style={localStyle.iconStyle} />
@@ -59,8 +89,11 @@ function TweetCard({dataSource}) {
           <Text style={localStyle.flex1}>
             {public_metrics?.like_count === 0 ? '' : public_metrics?.like_count}
           </Text>
-          <TouchableOpacity onPress={onAddToCollectionPress}>
-            <Image source={bookmarkIcon} style={localStyle.iconStyle} />
+          <TouchableOpacity onPress={onBookmarkButtonPress}>
+            <Image
+              source={isBookmarkedState ? BookmarkedIcon : bookmarkIcon}
+              style={localStyle.iconStyle}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -89,6 +122,9 @@ const styles = {
     flex: 1,
     marginHorizontal: 10,
     justifyContent: 'center',
+  },
+  tweetText: {
+    marginBottom: 10,
   },
   flexRow: {flexDirection: 'row'},
   nameText: {fontWeight: '600', fontSize: 15, flexShrink: 1},

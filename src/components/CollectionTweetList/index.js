@@ -11,7 +11,7 @@ function CollectionTweetList(props) {
   ) : (
     <ScrollView>
       {aDataSource?.map(data => {
-        return <TweetCard dataSource={data} />;
+        return <TweetCard key={data?.id} dataSource={data} />;
       })}
     </ScrollView>
   );

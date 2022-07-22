@@ -30,6 +30,10 @@ function CollectionScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const reloadList = useCallback(() => {
+    fetchData();
+  }, [fetchData]);
+
   useEffect(() => {
     LocalEvent.on(EventTypes.UpdateCollection, fetchData);
     return () => {
@@ -82,6 +86,7 @@ function CollectionScreen() {
                   <CollectionCard
                     key={singleCollectionData.collectionId}
                     data={singleCollectionData}
+                    onCollectionRemoved={reloadList}
                   />
                 );
               })}

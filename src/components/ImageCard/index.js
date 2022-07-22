@@ -72,11 +72,10 @@ function ImageCard({mediaArray}) {
             onImagePress(3);
           }}
           style={
-            mediaArray?.length >= 3
-              ? localStyle.showImage
-              : localStyle.hideImage
+            mediaArray?.length >= 4 ? localStyle.flex1 : localStyle.hideImage
           }>
           <Image
+            style={localStyle.showImage}
             source={mediaArray?.length >= 4 ? {uri: mediaArray[3]?.url} : null}
             resizeMode={'cover'}
           />
@@ -120,8 +119,14 @@ const styles = {
     height: '100%',
     width: '100%',
   },
+  flex1: {
+    flex: 1,
+  },
   showImage: {
     flex: 1,
+    borderWidth: 0.5,
+    borderColor: 'white',
+    borderRadius: 4,
   },
   flexRow: {
     flex: 1,

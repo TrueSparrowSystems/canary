@@ -1,3 +1,4 @@
+import {unescape} from 'lodash';
 import React, {useCallback} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {
@@ -10,10 +11,11 @@ import {
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import colors from '../../utils/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import ImageCard from '../ImageCard';
 
 function TweetCard({dataSource}) {
   const localStyle = useStyleProcessor(styles, 'TweetCard');
-  const {user, text} = dataSource;
+  const {user, text, public_metrics, media} = dataSource;
 
   const onAddToCollectionPress = useCallback(() => {
     LocalEvent.emit(EventTypes.ShowAddToCollectionModal, {
@@ -29,23 +31,34 @@ function TweetCard({dataSource}) {
       <View style={localStyle.tweetDetailContainer}>
         <View style={localStyle.flexRow}>
           <Text style={localStyle.nameText} numberOfLines={1}>
-            {user?.name}
+            {unescape(user?.name)}
           </Text>
           {user?.verified ? (
             <Image source={verifiedIcon} style={localStyle.verifiedIcon} />
           ) : null}
           <Text style={localStyle.userNameText} numberOfLines={1}>
-            @{user?.username}
+            @{unescape(user?.username)}
           </Text>
         </View>
-        <Text>{text}</Text>
+        <Text>{unescape(text)}</Text>
+        {media && media?.length !== 0 ? <ImageCard mediaArray={media} /> : null}
         <View style={localStyle.likeCommentStrip}>
           <Image source={commentIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.flex1}>13</Text>
+          <Text style={localStyle.flex1}>
+            {public_metrics?.reply_count === 0
+              ? ''
+              : public_metrics?.reply_count}
+          </Text>
           <Image source={retweetIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.flex1}>20</Text>
+          <Text style={localStyle.flex1}>
+            {public_metrics?.retweet_count === 0
+              ? ''
+              : public_metrics?.retweet_count}
+          </Text>
           <Image source={likeIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.flex1}>123</Text>
+          <Text style={localStyle.flex1}>
+            {public_metrics?.like_count === 0 ? '' : public_metrics?.like_count}
+          </Text>
           <TouchableOpacity onPress={onAddToCollectionPress}>
             <Image source={bookmarkIcon} style={localStyle.iconStyle} />
           </TouchableOpacity>

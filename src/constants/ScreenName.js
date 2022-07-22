@@ -8,4 +8,5 @@ export default {
   CollectionTweetScreen: 'CollectionTweetScreen',
   SettingScreen: 'SettingScreen',
   SettingTab: 'SettingTab',
+  ImageViewScreen: 'ImageViewScreen',
 };

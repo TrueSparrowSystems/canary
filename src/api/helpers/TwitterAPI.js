@@ -36,7 +36,7 @@ class TwitterApi {
       'place.fields':
         'contained_within,country,country_code,full_name,geo,id,name,place_type',
       'tweet.fields':
-        'attachments,conversation_id,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,referenced_tweets,source,text',
+        'attachments,conversation_id,author_id,context_annotations,created_at,entities,geo,id,in_reply_to_user_id,referenced_tweets,source,text,public_metrics',
       'user.fields': 'id,name,profile_image_url,username,verified',
     };
     if (nextPageIdentifier) {

@@ -15,6 +15,7 @@ import {useStyleProcessor} from '../hooks/useStyleProcessor';
 import colors from '../utils/colors';
 import PreferenceScreen from '../screens/PreferenceScreen';
 import CollectionTweetScreen from '../screens/CollectionTweetScreen';
+import ImageViewScreen from '../screens/ImageViewScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -60,12 +61,26 @@ const Navigation = props => {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         />
+        <TimelineStack.Screen
+          name={ScreenName.ImageViewScreen}
+          component={ImageViewScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
       </TimelineStack.Navigator>
     );
   }
 
   const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route);
+    if (routeName === ScreenName.ImageViewScreen) {
+      return false;
+    }
     if (routeName === ScreenName.PreferenceScreen) {
       return false;
     }
@@ -148,6 +163,17 @@ const Navigation = props => {
             headerShown: false,
             tabBarVisible: false,
             detachPreviousScreen: true,
+          }}
+        />
+        <CollectionStack.Screen
+          name={ScreenName.ImageViewScreen}
+          component={ImageViewScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
           }}
         />
       </CollectionStack.Navigator>

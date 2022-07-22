@@ -50,7 +50,6 @@ class CollectionService {
           };
 
           _list = {..._list, ...newCollection};
-          console.log('.......', _list);
           this.collections = _list;
           Store.set(StoreKeys.CollectionsList, _list)
             .then(() => {

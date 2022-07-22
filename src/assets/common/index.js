@@ -10,3 +10,4 @@ export const retweetIcon = require('./retweet.png');
 export const bookmarkIcon = require('./bookmark.png');
 export const AddIcon = require('./add.png');
 export const BinIcon = require('./trash-bin.png');
+export const PlayIcon = require('./play-icon.png');

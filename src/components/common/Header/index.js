@@ -14,6 +14,7 @@ function Header(props) {
     rightButtonImage,
     text,
     textStyle,
+    style,
   } = props;
 
   const navigation = useNavigation();
@@ -27,7 +28,7 @@ function Header(props) {
   const localStyle = useStyleProcessor(styles, 'Header');
 
   return (
-    <View style={localStyle.header}>
+    <View style={style || localStyle.header}>
       {enableBackButton ? (
         <TouchableOpacity activeOpacity={1} onPress={onBackPress}>
           <Image source={BackIcon} style={localStyle.backIcon} />
@@ -53,7 +54,6 @@ const styles = {
     height: layoutPtToPx(50),
     flexDirection: 'row',
     justifyContent: 'space-between',
-
     alignItems: 'center',
   },
   backIcon: {

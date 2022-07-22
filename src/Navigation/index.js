@@ -16,6 +16,7 @@ import colors from '../utils/colors';
 import PreferenceScreen from '../screens/PreferenceScreen';
 import CollectionTweetScreen from '../screens/CollectionTweetScreen';
 import ImageViewScreen from '../screens/ImageViewScreen';
+import ThreadScreen from '../screens/ThreadScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -65,6 +66,29 @@ const Navigation = props => {
           name={ScreenName.ImageViewScreen}
           component={ImageViewScreen}
           options={{
+            detachPreviousScreen: false,
+            headerShown: false,
+            gestureEnabled: false,
+            presentation: 'card',
+            cardOverlayEnabled: false,
+            cardStyle: {backgroundColor: 'transparent'},
+            transitionSpec: {
+              open: {animation: 'spring'},
+              close: {animation: 'spring'},
+            },
+            cardStyleInterpolator: ({current}) => {
+              return {
+                cardStyle: {
+                  opacity: current.progress,
+                },
+              };
+            },
+          }}
+        />
+        <TimelineStack.Screen
+          name={ScreenName.ThreadScreen}
+          component={ThreadScreen}
+          options={{
             gestureEnabled: true,
             headerShown: false,
             tabBarVisible: false,
@@ -78,13 +102,15 @@ const Navigation = props => {
 
   const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route);
-    if (routeName === ScreenName.ImageViewScreen) {
-      return false;
+
+    switch (routeName) {
+      case ScreenName.PreferenceScreen:
+      case ScreenName.ThreadScreen:
+      case ScreenName.ImageViewScreen:
+        return false;
+      default:
+        return true;
     }
-    if (routeName === ScreenName.PreferenceScreen) {
-      return false;
-    }
-    return true;
   };
 
   const bottomStack = useCallback(bottomHeight => {
@@ -160,14 +186,41 @@ const Navigation = props => {
           name={ScreenName.CollectionTweetScreen}
           component={CollectionTweetScreen}
           options={{
+            gestureEnabled: true,
             headerShown: false,
             tabBarVisible: false,
             detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
           }}
         />
+
         <CollectionStack.Screen
           name={ScreenName.ImageViewScreen}
           component={ImageViewScreen}
+          options={{
+            detachPreviousScreen: false,
+            headerShown: false,
+            gestureEnabled: false,
+            presentation: 'card',
+            cardOverlayEnabled: false,
+            cardStyle: {backgroundColor: 'transparent'},
+            transitionSpec: {
+              open: {animation: 'spring'},
+              close: {animation: 'spring'},
+            },
+            cardStyleInterpolator: ({current}) => {
+              return {
+                cardStyle: {
+                  opacity: current.progress,
+                },
+              };
+            },
+          }}
+        />
+
+        <CollectionStack.Screen
+          name={ScreenName.ThreadScreen}
+          component={ThreadScreen}
           options={{
             gestureEnabled: true,
             headerShown: false,

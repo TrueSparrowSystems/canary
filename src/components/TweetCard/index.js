@@ -1,6 +1,6 @@
 import {unescape} from 'lodash';
 import React, {useCallback, useState, useRef} from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {
   BookmarkedIcon,
   bookmarkIcon,
@@ -19,6 +19,7 @@ import Toast from 'react-native-toast-message';
 import ImageCard from '../ImageCard';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {getFormattedStat} from '../utils/TextUtils';
+import Image from 'react-native-fast-image';
 
 function TweetCard(props) {
   const {dataSource, isDisabled = false} = props;

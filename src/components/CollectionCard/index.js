@@ -3,7 +3,6 @@ import React, {useCallback} from 'react';
 import {
   Text,
   View,
-  Image,
   TouchableWithoutFeedback,
   TouchableHighlight,
 } from 'react-native';
@@ -15,6 +14,7 @@ import {collectionService} from '../../services/CollectionService';
 import colors from '../../utils/colors';
 import {layoutPtToPx} from '../../utils/responsiveUI';
 import Toast from 'react-native-toast-message';
+import Image from 'react-native-fast-image';
 
 function CollectionCard(props) {
   const {data, onCollectionRemoved} = props;

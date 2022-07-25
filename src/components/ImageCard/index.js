@@ -1,11 +1,12 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback} from 'react';
-import {Image, TouchableWithoutFeedback, View} from 'react-native';
+import {TouchableWithoutFeedback, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {PlayIcon} from '../../assets/common';
 import ScreenName from '../../constants/ScreenName';
 import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
+import Image from 'react-native-fast-image';
 
 function ImageCard({mediaArray}) {
   const localStyle = useStyleProcessor(styles, 'ImageCard');

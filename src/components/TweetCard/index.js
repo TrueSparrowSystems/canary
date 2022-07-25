@@ -18,6 +18,7 @@ import useTweetCardData from './useTweetCardData';
 import Toast from 'react-native-toast-message';
 import ImageCard from '../ImageCard';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import {getFormattedStat} from '../utils/TextUtils';
 
 function TweetCard(props) {
   const {dataSource, isDisabled = false} = props;
@@ -85,17 +86,19 @@ function TweetCard(props) {
           <Text style={localStyle.flex1}>
             {public_metrics?.reply_count === 0
               ? 0
-              : public_metrics?.reply_count}
+              : getFormattedStat(public_metrics?.reply_count)}
           </Text>
           <Image source={retweetIcon} style={localStyle.iconStyle} />
           <Text style={localStyle.flex1}>
             {public_metrics?.retweet_count === 0
               ? 0
-              : public_metrics?.retweet_count}
+              : getFormattedStat(public_metrics?.retweet_count)}
           </Text>
           <Image source={likeIcon} style={localStyle.iconStyle} />
           <Text style={localStyle.flex1}>
-            {public_metrics?.like_count === 0 ? 0 : public_metrics?.like_count}
+            {public_metrics?.like_count === 0
+              ? 0
+              : getFormattedStat(public_metrics?.like_count)}
           </Text>
           <TouchableOpacity onPress={onBookmarkButtonPress}>
             <Image

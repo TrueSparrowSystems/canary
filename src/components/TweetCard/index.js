@@ -6,6 +6,7 @@ import {
   bookmarkIcon,
   commentIcon,
   likeIcon,
+  ListIcon,
   retweetIcon,
   verifiedIcon,
 } from '../../assets/common';
@@ -58,6 +59,17 @@ function TweetCard(props) {
     }
   }, [id, isBookmarkedState, onAddToCollectionSuccess]);
 
+  const onAddToListSuccess = useCallback(() => {
+    //TODO: handle on add to list success
+  }, []);
+
+  const onAddToListPress = useCallback(() => {
+    LocalEvent.emit(EventTypes.ShowAddToListModal, {
+      userName: user.username,
+      onAddToListSuccess: onAddToListSuccess,
+    });
+  }, [onAddToListSuccess, user]);
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -106,6 +118,9 @@ function TweetCard(props) {
               source={isBookmarkedState ? BookmarkedIcon : bookmarkIcon}
               style={localStyle.iconStyle}
             />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onAddToListPress}>
+            <Image source={ListIcon} style={localStyle.iconStyle} />
           </TouchableOpacity>
         </View>
       </View>

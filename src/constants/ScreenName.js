@@ -12,4 +12,7 @@ export default {
   DiscoverScreen: 'DiscoverScreen',
   DiscoverTab: 'DiscoverTab',
   SearchResultScreen: 'SearchResultScreen',
+  ListTab: 'ListTab',
+  ListScreen: 'ListScreen',
+  ListTweetsScreen: 'ListTweetsScreen',
 };

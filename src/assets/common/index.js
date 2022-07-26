@@ -13,3 +13,4 @@ export const AddIcon = require('./add.png');
 export const BinIcon = require('./trash-bin.png');
 export const PlayIcon = require('./play-icon.png');
 export const SearchIcon = require('./search.png');
+export const ListIcon = require('./list.png');

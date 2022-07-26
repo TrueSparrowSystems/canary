@@ -11,12 +11,14 @@ import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 function SearchBar({searchQuery = '', onSearchPressCallback}) {
   const navigation = useNavigation();
   const localStyle = useStyleProcessor(styles, 'SearchBar');
-  const [query, setQuery] = useState(searchQuery);
+  const queryRef = useRef(searchQuery);
+  const [query, setQuery] = useState(queryRef.current);
   const textInputRef = useRef(null);
 
   useEffect(() => {
     const OnTrendingTopicClicked = term => {
-      setQuery(unescape(term));
+      queryRef.current = unescape(term);
+      setQuery(queryRef.current);
       onSearchPress();
     };
     LocalEvent.on(EventTypes.OnTrendingTopicClick, OnTrendingTopicClicked);
@@ -39,21 +41,25 @@ function SearchBar({searchQuery = '', onSearchPressCallback}) {
   }, []);
 
   const onSearchPress = useCallback(() => {
-    onSearchPressCallback?.(query);
-  }, [onSearchPressCallback, query]);
+    onSearchPressCallback?.(queryRef.current);
+  }, [onSearchPressCallback]);
 
   const clearQuery = useCallback(() => {
-    setQuery('');
+    queryRef.current = '';
+    setQuery(queryRef.current);
   }, []);
 
-  const updateQuery = useCallback(text => setQuery(text), []);
+  const updateQuery = useCallback(text => {
+    queryRef.current = text;
+    setQuery(queryRef.current);
+  }, []);
 
   return (
     <View style={localStyle.searchContainer}>
       <TextInput
         ref={textInputRef}
         style={localStyle.input}
-        value={query}
+        value={queryRef.current}
         cursorColor={colors.SherpaBlue}
         placeholder={'Enter Search Text'}
         placeholderTextColor={'#003C43'}

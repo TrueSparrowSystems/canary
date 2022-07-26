@@ -4,7 +4,7 @@ import ScreenName from '../../constants/ScreenName';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
 function useDiscoverScreenData() {
-  const trendingTopics = ['#Trends', 'Trend', 'Cricket'];
+  const trendingTopics = ['#WorldCup2022', 'Politics', 'Cricket'];
   const navigation = useNavigation();
   const onSearchPress = useCallback(
     query => {

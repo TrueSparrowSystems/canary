@@ -14,6 +14,7 @@ const _isTablet = isTablet();
 const ITEM_WIDTH = 276;
 
 function TimelineList({
+  style,
   reloadData,
   refreshData,
   onDataAvailable,
@@ -83,7 +84,7 @@ function TimelineList({
   ]);
 
   return (
-    <View style={localStyle.container}>
+    <View style={style || localStyle.container}>
       <PaginatedList
         useRecyclerView={false}
         flatListProps={flatListProps}

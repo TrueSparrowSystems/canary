@@ -30,7 +30,7 @@ function TimelineList({
     listDataSource.current = new TimelineListDataSource();
   }
 
-  const localStyle = useStyleProcessor(styles, 'ClassList');
+  const localStyle = useStyleProcessor(styles, 'TimelineList');
 
   const renderItem = useCallback(
     ({item}) => {

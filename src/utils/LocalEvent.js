@@ -14,4 +14,5 @@ export const EventTypes = {
   ShowAddCollectionModal: 'event_types_show_add_collection_modal',
   UpdateTimeline: 'event_types_update_timeline',
   UpdateCollection: 'event_types_update_collection',
+  OnTrendingTopicClick: 'on_trending_topic_click',
 };

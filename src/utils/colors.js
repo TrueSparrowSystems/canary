@@ -2,7 +2,7 @@ export default {
   DodgerBlue: '#1DA1F2',
   Mandy: '#EF515A',
   White: '#FFFFFF',
-  SherpaBlue: '#003c43',
+  SherpaBlue: '#003C43',
   SherpaBlue70: '#003C43B3',
   MandyShade: '#D9444D',
   Black: '#000000',
@@ -10,5 +10,5 @@ export default {
   Gothic: '#65898D',
   Transparent: '#FFFFFF00',
   LightGrey: '#D1D1D1',
-  CuriousBlue: '#2980b9',
+  CuriousBlue: '#2980B9',
 };

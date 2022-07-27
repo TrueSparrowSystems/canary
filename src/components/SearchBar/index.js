@@ -62,8 +62,8 @@ function SearchBar({searchQuery = '', onSearchPressCallback}) {
         value={queryRef.current}
         cursorColor={colors.SherpaBlue}
         placeholder={'Enter Search Text'}
-        placeholderTextColor={'#003C43'}
-        selectionColor={'#003C43'}
+        placeholderTextColor={colors.SherpaBlue70}
+        selectionColor={colors.SherpaBlue70}
         onChangeText={updateQuery}
       />
       {query.length > 0 && (
@@ -109,7 +109,7 @@ const styles = {
     paddingTop: 0,
     paddingBottom: 0,
     height: '100%',
-    color: '#003C43',
+    color: colors.SherpaBlue,
     fontSize: fontPtToPx(14),
     letterSpacing: 0.32,
     flex: 1,

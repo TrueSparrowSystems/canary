@@ -8,7 +8,7 @@ import colors from '../../utils/colors';
 import ListTweetDataSource from './ListTweetDataSource';
 
 function ListTweetsScreen(props) {
-  const localStyle = useStyleProcessor(styles, 'CollectionTweetScreen');
+  const localStyle = useStyleProcessor(styles, 'ListTweetsScreen');
   const {listId, listName} = props?.route?.params;
   const _listService = listService();
   const [isLoading, setIsLoading] = useState(true);

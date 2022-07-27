@@ -105,19 +105,19 @@ function TweetCard(props) {
         {media && media?.length !== 0 ? <ImageCard mediaArray={media} /> : null}
         <View style={localStyle.likeCommentStrip}>
           <Image source={commentIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.flex1}>
+          <Text style={localStyle.publicMetricText}>
             {public_metrics?.reply_count === 0
               ? 0
               : getFormattedStat(public_metrics?.reply_count)}
           </Text>
           <Image source={retweetIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.flex1}>
+          <Text style={localStyle.publicMetricText}>
             {public_metrics?.retweet_count === 0
               ? 0
               : getFormattedStat(public_metrics?.retweet_count)}
           </Text>
           <Image source={likeIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.flex1}>
+          <Text style={localStyle.publicMetricText}>
             {public_metrics?.like_count === 0
               ? 0
               : getFormattedStat(public_metrics?.like_count)}
@@ -165,17 +165,41 @@ const styles = {
   },
   tweetText: {
     marginBottom: 10,
+    color: colors.Black,
   },
-  flexRow: {flexDirection: 'row'},
-  nameText: {fontWeight: '600', fontSize: 15, flexShrink: 1},
-  verifiedIcon: {height: 20, width: 20},
-  userNameText: {fontSize: 12, padding: 2, flexShrink: 1},
+  flexRow: {
+    flexDirection: 'row',
+  },
+  nameText: {
+    fontWeight: '600',
+    fontSize: 15,
+    flexShrink: 1,
+    color: colors.Black,
+  },
+  verifiedIcon: {
+    height: 20,
+    width: 20,
+  },
+  userNameText: {
+    fontSize: 12,
+    padding: 2,
+    flexShrink: 1,
+    color: colors.Black,
+  },
   likeCommentStrip: {
     flexDirection: 'row',
     paddingTop: 10,
   },
-  iconStyle: {height: 15, width: 15, marginRight: 10, marginTop: 1},
-  flex1: {flex: 1},
+  iconStyle: {
+    height: 15,
+    width: 15,
+    marginRight: 10,
+    marginTop: 1,
+  },
+  publicMetricText: {
+    flex: 1,
+    color: colors.Black,
+  },
 };
 
 export default React.memo(TweetCard);

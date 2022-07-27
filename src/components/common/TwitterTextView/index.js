@@ -100,7 +100,9 @@ function TwitterTextView({
             children={text}
           />
         ) : (
-          <Text key={i}>{text}</Text>
+          <Text key={i} style={localStyle.textStyle}>
+            {text}
+          </Text>
         );
       })}
     </Text>
@@ -109,6 +111,9 @@ function TwitterTextView({
 const styles = {
   linkStyle: {
     color: colors.CuriousBlue,
+  },
+  textStyle: {
+    color: colors.Black,
   },
 };
 

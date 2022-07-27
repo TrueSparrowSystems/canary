@@ -46,12 +46,13 @@ const styles = {
   optionsContainer: {
     flexWrap: 'wrap',
     flexDirection: 'row',
-    paddingBottom: layoutPtToPx(200),
+    paddingBottom: layoutPtToPx(70),
   },
   searchBar: {
     color: colors.SherpaBlue,
     backgroundColor: 'white',
     fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(17),
     letterSpacing: 0.32,
     height: layoutPtToPx(30),
     width: '100%',

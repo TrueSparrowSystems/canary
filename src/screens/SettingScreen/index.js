@@ -9,7 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import ScreenName from '../../constants/ScreenName';
 
 function SettingScreen() {
-  const localStyle = useStyleProcessor(styles, 'TimelineScreen');
+  const localStyle = useStyleProcessor(styles, 'SettingScreen');
 
   const navigation = useNavigation();
 
@@ -57,7 +57,6 @@ const styles = {
     justifyContent: 'center',
     borderRadius: layoutPtToPx(25),
     alignItems: 'center',
-
     backgroundColor: colors.DodgerBlue,
   },
   image: {

@@ -34,7 +34,9 @@ function Header(props) {
           <Image source={BackIcon} style={localStyle.backIcon} />
         </TouchableOpacity>
       ) : null}
-      {text ? <Text style={textStyle}>{text}</Text> : null}
+      {text ? (
+        <Text style={textStyle || localStyle.textStyle}>{text}</Text>
+      ) : null}
       {enableRightButton && rightButtonImage ? (
         <TouchableOpacity activeOpacity={1} onPress={onRightButtonClick}>
           <Image source={rightButtonImage} style={localStyle.rightIcon} />
@@ -60,6 +62,9 @@ const styles = {
     height: layoutPtToPx(20),
     width: layoutPtToPx(20),
     tintColor: colors.DodgerBlue,
+  },
+  textStyle: {
+    color: colors.Black,
   },
   rightIcon: {
     height: layoutPtToPx(25),

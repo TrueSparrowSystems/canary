@@ -13,12 +13,13 @@ function DiscoverScreen() {
   return (
     <View>
       <SearchBar onSearchPressCallback={fnOnSearchPress} />
-      {aTrendingTopics.map(text => {
+      {aTrendingTopics.map((text, i) => {
         return (
           <Pressable
             onPress={() => {
               fnOnTopicClick(text);
             }}
+            key={i}
             style={localStyle.trendingTopicBox}>
             <Text style={localStyle.topicText}>{text}</Text>
           </Pressable>
@@ -37,6 +38,7 @@ const styles = {
   },
   topicText: {
     fontSize: fontPtToPx(14),
+    color: colors.Black,
   },
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView} from 'react-native';
+import {ActivityIndicator, SafeAreaView, View} from 'react-native';
 import Header from '../../components/common/Header';
 import SearchBar from '../../components/SearchBar';
 import TimelineList from '../../components/TimelineList';
@@ -20,8 +20,13 @@ function SearchResultScreen(props) {
   });
   return (
     <SafeAreaView style={localStyle.flex1}>
-      <Header enableBackButton={true} text={'Search Result Screen'} />
+      <Header enableBackButton={true} text={'Tweet Screen'} />
       <SearchBar searchQuery={query} onSearchPressCallback={fnOnSearchPress} />
+      {bIsLoading ? (
+        <View style={localStyle.loaderView}>
+          <ActivityIndicator animating={bIsLoading} />
+        </View>
+      ) : null}
       <TimelineList
         style={localStyle.listStyle}
         timelineListDataSource={searchResultListDataSource}
@@ -33,7 +38,17 @@ function SearchResultScreen(props) {
 }
 
 const styles = {
-  flex1: {flex: 1, backgroundColor: colors.White},
-  listStyle: {flex: 1, marginTop: 10},
+  flex1: {
+    flex: 1,
+    backgroundColor: colors.White,
+  },
+  listStyle: {
+    flex: 1,
+    marginTop: 10,
+  },
+  loaderView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 };
 export default React.memo(SearchResultScreen);

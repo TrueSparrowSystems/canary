@@ -31,9 +31,16 @@ function useTweetCardData(props) {
     }
   }, [dataSource, navigation, public_metrics?.reply_count]);
 
+  const onUserNamePress = useCallback(() => {
+    navigation.push(ScreenName.SearchResultScreen, {
+      query: `from:${dataSource.user?.username}`,
+    });
+  }, [dataSource, navigation]);
+
   return {
     fnOnAddToCollectionPress: onAddToCollectionPress,
     fnOnCardPress: onCardPress,
+    fnOnUserNamePress: onUserNamePress,
   };
 }
 

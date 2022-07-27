@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import {fontPtToPx} from '../../utils/responsiveUI';
 import {SettingsIcon} from '../../assets/common';
 import useTimelineScreenData from './useTimelineScreenData';
 import Header from '../../components/common/Header';

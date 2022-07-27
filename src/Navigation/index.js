@@ -107,6 +107,18 @@ const Navigation = props => {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         />
+
+        <TimelineStack.Screen
+          name={ScreenName.SearchResultScreen}
+          component={SearchResultScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
       </TimelineStack.Navigator>
     );
   }
@@ -343,6 +355,18 @@ const Navigation = props => {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         />
+
+        <ListStack.Screen
+          name={ScreenName.SearchResultScreen}
+          component={SearchResultScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
       </ListStack.Navigator>
     );
   }
@@ -398,6 +422,18 @@ const Navigation = props => {
         <CollectionStack.Screen
           name={ScreenName.ThreadScreen}
           component={ThreadScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+
+        <CollectionStack.Screen
+          name={ScreenName.SearchResultScreen}
+          component={SearchResultScreen}
           options={{
             gestureEnabled: true,
             headerShown: false,

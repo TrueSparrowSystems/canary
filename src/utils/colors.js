@@ -10,4 +10,5 @@ export default {
   Gothic: '#65898D',
   Transparent: '#FFFFFF00',
   LightGrey: '#D1D1D1',
+  CuriousBlue: '#2980b9',
 };

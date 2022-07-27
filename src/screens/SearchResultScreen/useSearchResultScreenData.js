@@ -3,7 +3,7 @@ import SearchResultListDataSource from './SearchResultListDataSource';
 
 function useSearchResultScreenData({searchQuery = ''}) {
   const [query, setQuery] = useState(searchQuery);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const listDataSource = useRef(null);
   if (listDataSource.current === null) {
     listDataSource.current = new SearchResultListDataSource(query);

@@ -1,5 +1,12 @@
 import React, {useCallback, useMemo, useRef} from 'react';
-import {View, Text, TouchableOpacity, Keyboard, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Keyboard,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {usePaginatedListData, PLACE_HOLDER_CELL} from './usePaginatedListData';
@@ -96,12 +103,11 @@ function PaginatedList(props) {
     return (
       props.loaderView || (
         <View style={localStyle.loaderViewContainer}>
-          <Text>Loading</Text>
-          {/* <PaginationLoader style={localStyle.loaderView} /> */}
+          <ActivityIndicator animating={bIsLoading} />
         </View>
       )
     );
-  }, [props.loaderView, localStyle.loaderViewContainer]);
+  }, [props.loaderView, localStyle.loaderViewContainer, bIsLoading]);
 
   /**
    * Function that returns the loader view. Preference is given to the loader
@@ -116,11 +122,9 @@ function PaginatedList(props) {
     return (
       <View style={loadMoreContainerStyle}>
         {bHasNextPageData && bIsFirstPageReceived ? (
-          // <PaginationLoader
-          //   loaderRef={fnSetNextPageLoadMoreViewRef}
-          //   style={props.loadMoreView || localStyle.loaderMoreView}
-          // />
-          <Text>Loading</Text>
+          <ActivityIndicator
+            animating={bHasNextPageData && bIsFirstPageReceived}
+          />
         ) : null}
       </View>
     );

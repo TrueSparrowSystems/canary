@@ -15,17 +15,18 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
 import colors from '../../utils/colors';
 import useTweetCardData from './useTweetCardData';
-
 import Toast from 'react-native-toast-message';
 import ImageCard from '../ImageCard';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
-import {getFormattedStat} from '../utils/TextUtils';
+import {getFormattedStat} from '../../utils/TextUtils';
 import Image from 'react-native-fast-image';
+import TwitterTextView from '../common/TwitterTextView';
+import {layoutPtToPx} from '../../utils/responsiveUI';
 
 function TweetCard(props) {
   const {dataSource, isDisabled = false} = props;
 
-  const {fnOnCardPress} = useTweetCardData(props);
+  const {fnOnCardPress, fnOnUserNamePress} = useTweetCardData(props);
   const localStyle = useStyleProcessor(styles, 'TweetCard');
   const {collectionId, user, text, id, public_metrics, media} = dataSource;
   var {isBookmarked} = dataSource;
@@ -76,23 +77,31 @@ function TweetCard(props) {
       onPress={fnOnCardPress}
       style={localStyle.cardContainer}
       disabled={isDisabled}>
-      <Image
-        source={{uri: user?.profile_image_url}}
-        style={localStyle.userProfileImage}
-      />
+      <TouchableOpacity
+        onPress={fnOnUserNamePress}
+        style={localStyle.profileImageContainer}>
+        <Image
+          source={{uri: user?.profile_image_url}}
+          style={localStyle.userProfileImage}
+        />
+      </TouchableOpacity>
       <View style={localStyle.tweetDetailContainer}>
-        <View style={localStyle.flexRow}>
-          <Text style={localStyle.nameText} numberOfLines={1}>
-            {unescape(user?.name)}
-          </Text>
-          {user?.verified ? (
-            <Image source={verifiedIcon} style={localStyle.verifiedIcon} />
-          ) : null}
-          <Text style={localStyle.userNameText} numberOfLines={1}>
-            @{unescape(user?.username)}
-          </Text>
-        </View>
-        <Text style={localStyle.tweetText}>{unescape(text)}</Text>
+        <TouchableOpacity onPress={fnOnUserNamePress}>
+          <View style={localStyle.flexRow}>
+            <Text style={localStyle.nameText} numberOfLines={1}>
+              {unescape(user?.name)}
+            </Text>
+            {user?.verified ? (
+              <Image source={verifiedIcon} style={localStyle.verifiedIcon} />
+            ) : null}
+            <Text style={localStyle.userNameText} numberOfLines={1}>
+              @{unescape(user?.username)}
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TwitterTextView style={localStyle.tweetText}>
+          {unescape(text)}
+        </TwitterTextView>
         {media && media?.length !== 0 ? <ImageCard mediaArray={media} /> : null}
         <View style={localStyle.likeCommentStrip}>
           <Image source={commentIcon} style={localStyle.iconStyle} />
@@ -140,9 +149,13 @@ const styles = {
     flexDirection: 'row',
     flex: 1,
   },
+  profileImageContainer: {
+    height: layoutPtToPx(50),
+    width: layoutPtToPx(50),
+  },
   userProfileImage: {
-    height: 50,
-    width: 50,
+    height: '100%',
+    width: '100%',
     borderRadius: 25,
   },
   tweetDetailContainer: {

@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef} from 'react';
-import {RefreshControl, Text, View} from 'react-native';
+import {ActivityIndicator, RefreshControl, View} from 'react-native';
 import PaginatedList from '../PaginatedList';
 import colors from '../../utils/colors';
 import TimelineListDataSource from './TimelineListDataSource';
@@ -47,11 +47,10 @@ function TimelineList({
   const loaderView = useMemo(() => {
     return (
       <View style={localStyle.loaderViewContainer}>
-        <Text>Loading</Text>
-        {/* <PaginationLoader style={localStyle.loaderView} /> */}
+        <ActivityIndicator animating={bIsLoading} />
       </View>
     );
-  }, [localStyle.loaderViewContainer]);
+  }, [bIsLoading, localStyle.loaderViewContainer]);
 
   const flatListProps = useMemo(() => {
     return {

@@ -1,5 +1,12 @@
 import React, {useMemo} from 'react';
-import {View, Text, SafeAreaView, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import CustomModal from '../common/CustomModal';
 import colors from '../../utils/colors';
@@ -42,7 +49,7 @@ function AddToListModal() {
               </TouchableOpacity>
             </View>
             {bIsLoading ? (
-              <Text>Loading</Text>
+              <ActivityIndicator animating={bIsLoading} />
             ) : (
               <ScrollView
                 horizontal={true}

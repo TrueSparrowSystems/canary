@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Text, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import Header from '../../components/common/Header';
 import TimelineList from '../../components/TimelineList';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -37,7 +37,7 @@ function ListTweetsScreen(props) {
     <View style={localStyle.container}>
       <Header enableBackButton={true} text={listName} />
       {isLoading ? (
-        <Text>Loading...</Text>
+        <ActivityIndicator animating={isLoading} />
       ) : (
         <TimelineList timelineListDataSource={listDataSource.current} />
       )}

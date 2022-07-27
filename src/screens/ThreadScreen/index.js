@@ -6,6 +6,7 @@ import TimelineList from '../../components/TimelineList';
 import ThreadTweetListDataSource from './ThreadTweetList/ThreadTweetListDataSource';
 import Header from '../../components/common/Header';
 import {layoutPtToPx} from '../../utils/responsiveUI';
+import colors from '../../utils/colors';
 
 function ThreadScreen(props) {
   const {tweetData} = props?.route?.params;
@@ -42,6 +43,7 @@ export default React.memo(ThreadScreen);
 const styles = {
   container: {
     flex: 1,
+    backgroundColor: colors.White,
   },
   header: {
     marginHorizontal: layoutPtToPx(20),

@@ -99,11 +99,11 @@ function CollectionScreen() {
 
 const styles = {
   container: {
-    backgroundColor: 'white',
+    backgroundColor: colors.White,
     flex: 1,
   },
   headerView: {
-    backgroundColor: 'white',
+    backgroundColor: colors.White,
     flexDirection: 'row',
     borderBottomWidth: 0.8,
     borderColor: colors.SherpaBlue,

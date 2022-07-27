@@ -4,6 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionTweetList from '../../components/CollectionTweetList';
 import Header from '../../components/common/Header';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
+import colors from '../../utils/colors';
 import {layoutPtToPx} from '../../utils/responsiveUI';
 
 function CollectionTweetScreen(props) {
@@ -23,6 +24,7 @@ function CollectionTweetScreen(props) {
 const styles = {
   container: {
     height: '100%',
+    backgroundColor: colors.White,
   },
   headerStyle: {
     alignItems: 'center',

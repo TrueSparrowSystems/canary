@@ -25,7 +25,7 @@ import Image from 'react-native-fast-image';
 function TweetCard(props) {
   const {dataSource, isDisabled = false} = props;
 
-  const {fnOnAddToCollectionPress, fnOnCardPress} = useTweetCardData(props);
+  const {fnOnCardPress} = useTweetCardData(props);
   const localStyle = useStyleProcessor(styles, 'TweetCard');
   const {collectionId, user, text, id, public_metrics, media} = dataSource;
   var {isBookmarked} = dataSource;
@@ -40,7 +40,7 @@ function TweetCard(props) {
   const onBookmarkButtonPress = useCallback(() => {
     if (isBookmarkedState) {
       collectionService()
-        .removeTweetFromCollection(collectionIdRef.current, id)
+        .removeTweetFromCollection(id)
         .then(() => {
           setIsBookmarkedState(false);
         })

@@ -16,6 +16,7 @@ function AddToCollectionModal() {
     bIsVisible,
     fnOnBackdropPress,
     fnOnAddToCollectionSuccess,
+    fnOnAddToCollectionFailure,
     fnOnAddCollectionPress,
     oCollectionList,
     sTweetId,
@@ -63,6 +64,7 @@ function AddToCollectionModal() {
                           data={collectionData}
                           tweetId={sTweetId}
                           onAddToCollectionSuccess={fnOnAddToCollectionSuccess}
+                          onAddToCollectionFailure={fnOnAddToCollectionFailure}
                         />
                       );
                     })}

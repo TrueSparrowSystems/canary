@@ -26,6 +26,14 @@ function RootNavigation() {
       Cache.setValue(CacheKey.AreInitialPreferencesSet, isSet);
       if (isSet) {
         AsyncStorage.getItem(StoreKeys.PreferenceList).then(list => {
+          AsyncStorage.get(StoreKeys.BookmarkedTweetsList).then(
+            bookmarkedTweetList => {
+              Cache.setValue(
+                CacheKey.BookmarkedTweetsList,
+                JSON.parse(bookmarkedTweetList),
+              );
+            },
+          );
           Cache.setValue(CacheKey.PreferenceList, list);
           setAppLoaded(true);
         });

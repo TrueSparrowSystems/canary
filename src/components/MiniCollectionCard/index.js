@@ -6,7 +6,8 @@ import colors from '../../utils/colors';
 import Image from 'react-native-fast-image';
 
 function MiniCollectionCard(props) {
-  const {data, tweetId, onAddToCollectionSuccess} = props;
+  const {data, tweetId, onAddToCollectionSuccess, onAddToCollectionFailure} =
+    props;
   const {imageUrl, collectionName, collectionId} = data;
   const localStyle = useStyleProcessor(styles, 'MiniCollectionCard');
 
@@ -15,8 +16,17 @@ function MiniCollectionCard(props) {
       .addTweetToCollection(collectionId, tweetId)
       .then(() => {
         onAddToCollectionSuccess(collectionName, collectionId);
+      })
+      .catch(() => {
+        onAddToCollectionFailure();
       });
-  }, [collectionId, collectionName, onAddToCollectionSuccess, tweetId]);
+  }, [
+    collectionId,
+    collectionName,
+    onAddToCollectionFailure,
+    onAddToCollectionSuccess,
+    tweetId,
+  ]);
 
   return (
     <TouchableWithoutFeedback onPress={onAddToCollectionPress}>

@@ -24,7 +24,6 @@ function useCollectionTweetListData(props) {
               newData.forEach(tweet => {
                 const tweetData = getTweetData(tweet, apiResponse);
                 tweetData.collectionId = collectionId;
-                tweetData.isBookmarked = true;
                 array.push(tweetData);
               });
             }

@@ -63,6 +63,14 @@ function useAddToCollectionModalData() {
     [closeModal, modalData, showAddToCollectionToast],
   );
 
+  const onAddToCollectionFailure = useCallback(() => {
+    closeModal();
+    Toast.show({
+      type: ToastType.Error,
+      text1: 'Could not add tweet to collection',
+    });
+  }, [closeModal]);
+
   const onAddCollectionPress = useCallback(() => {
     setIsVisible(false);
     LocalEvent.emit(EventTypes.ShowAddCollectionModal, {
@@ -80,6 +88,7 @@ function useAddToCollectionModalData() {
     oCollectionList: collectionListRef.current,
     fnOnBackdropPress: onBackdropPress,
     fnOnAddToCollectionSuccess: onAddToCollectionSuccess,
+    fnOnAddToCollectionFailure: onAddToCollectionFailure,
     fnOnAddCollectionPress: onAddCollectionPress,
   };
 }

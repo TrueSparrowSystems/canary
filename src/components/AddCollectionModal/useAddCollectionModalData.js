@@ -62,7 +62,8 @@ function useAddCollectionModalData() {
                 collectionNameRef.current,
                 collectionId,
               );
-            });
+            })
+            .catch(() => {});
         } else {
           closeModal();
           modalData?.onCollectionAddSuccess();

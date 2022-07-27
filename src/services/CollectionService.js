@@ -1,8 +1,10 @@
 import {StoreKeys} from './AsyncStorage/StoreConstants';
 import Store from './AsyncStorage';
 import uuid from 'react-native-uuid';
+import Cache from './Cache';
+import {CacheKey} from './Cache/CacheStoreConstants';
 
-const COLLECTION_LIMIT = 30;
+const COLLECTION_TWEET_LIMIT = 25;
 
 class CollectionService {
   constructor() {
@@ -35,11 +37,6 @@ class CollectionService {
             });
         } else {
           var _list = JSON.parse(list);
-          const listLength = Object.keys(_list).length;
-          if (listLength > COLLECTION_LIMIT) {
-            return reject('Collection Limit exceeded');
-          }
-
           const newId = uuid.v4();
 
           const newCollection = {};
@@ -95,10 +92,35 @@ class CollectionService {
 
   async _addTweet(collectionId, tweetId) {
     return new Promise((resolve, reject) => {
+      if (
+        this.collections[collectionId].tweetIds.length > COLLECTION_TWEET_LIMIT
+      ) {
+        return reject(
+          'This collection is full. Try adding it to a different collection or create a new one.',
+        );
+      }
+      var bookmarkedTweets =
+        Cache.getValue(CacheKey.BookmarkedTweetsList) || {};
+      var newArray = [];
+      if (bookmarkedTweets[tweetId]) {
+        // Add same tweet to multiple collections case
+        newArray = bookmarkedTweets[tweetId];
+      }
+      // TODO : check for existing collection id
+      newArray.push(collectionId);
+      bookmarkedTweets[tweetId] = newArray;
       this.collections[collectionId].tweetIds.push(tweetId);
+
       Store.set(StoreKeys.CollectionsList, this.collections)
         .then(() => {
-          return resolve();
+          Cache.setValue(CacheKey.BookmarkedTweetsList, bookmarkedTweets);
+          Store.set(StoreKeys.BookmarkedTweetsList, bookmarkedTweets)
+            .then(() => {
+              return resolve();
+            })
+            .catch(() => {
+              return reject();
+            });
         })
         .catch(() => {
           return reject();
@@ -112,20 +134,27 @@ class CollectionService {
         // If local copy is not populated, populate and then add tweet
         this.getAllCollections()
           .then(() => {
-            this._addTweet(collectionId, tweetId).catch(() => {
-              return reject();
-            });
+            this._addTweet(collectionId, tweetId)
+              .then(() => {
+                return resolve();
+              })
+              .catch(error => {
+                return reject(error);
+              });
           })
           .catch(() => {
             return reject();
           });
       } else {
         // If local copy is populated, add tweet
-        this._addTweet(collectionId, tweetId).catch(() => {
-          return reject();
-        });
+        this._addTweet(collectionId, tweetId)
+          .then(() => {
+            return resolve();
+          })
+          .catch(error => {
+            return reject(error);
+          });
       }
-      return resolve();
     });
   }
 
@@ -142,16 +171,29 @@ class CollectionService {
     });
   }
 
-  async removeTweetFromCollection(collectionId, tweetId) {
+  async removeTweetFromCollection(tweetId) {
     return new Promise((resolve, reject) => {
-      const tweetIds = this.collections[collectionId]?.tweetIds;
-      const index = tweetIds.indexOf(tweetId);
-      if (index > -1) {
-        tweetIds.splice(index, 1);
-      }
-      this.collections[collectionId].tweetIds = tweetIds;
+      const bookmarkedIds = Cache.getValue(CacheKey.BookmarkedTweetsList) || [];
+      const collectionIds = bookmarkedIds[tweetId];
+      collectionIds.forEach(collectionId => {
+        const tweetIds = this.collections[collectionId]?.tweetIds;
+        const index = tweetIds.indexOf(tweetId);
+        if (index > -1) {
+          tweetIds.splice(index, 1);
+        }
+        this.collections[collectionId].tweetIds = tweetIds;
+      });
       Store.set(StoreKeys.CollectionsList, this.collections)
         .then(() => {
+          delete bookmarkedIds[tweetId];
+          Cache.setValue(CacheKey.BookmarkedTweetsList, bookmarkedIds);
+          Store.set(StoreKeys.BookmarkedTweetsList, bookmarkedIds)
+            .then(() => {
+              return resolve();
+            })
+            .catch(() => {
+              return reject();
+            });
           return resolve();
         })
         .catch(() => {

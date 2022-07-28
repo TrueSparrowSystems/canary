@@ -61,7 +61,6 @@ const style = {
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-
     width: layoutPtToPx(50),
     height: layoutPtToPx(50),
     borderRadius: layoutPtToPx(25),

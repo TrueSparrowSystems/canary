@@ -4,6 +4,7 @@ import {Linking, Text} from 'react-native';
 import ScreenName from '../../../constants/ScreenName';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import colors from '../../../utils/colors';
+import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
 
 const PATTERN_HASHTAG = /(^|\s)(#[a-z\d-_]+)/gi;
 const PATTERN_MENTION = /(^|\s)(@[a-z\d-_]+)/gi;
@@ -111,9 +112,13 @@ function TwitterTextView({
 const styles = {
   linkStyle: {
     color: colors.CuriousBlue,
+    lineHeight: layoutPtToPx(17),
+    fontSize: fontPtToPx(14),
   },
   textStyle: {
     color: colors.Black,
+    lineHeight: layoutPtToPx(17),
+    fontSize: fontPtToPx(14),
   },
 };
 

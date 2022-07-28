@@ -1,5 +1,5 @@
 import {unescape} from 'lodash';
-import React, {useCallback, useState, useRef} from 'react';
+import React, {useCallback, useState, useRef, useMemo} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {
   BookmarkedIcon,
@@ -28,11 +28,11 @@ function TweetCard(props) {
 
   const {fnOnCardPress, fnOnUserNamePress} = useTweetCardData(props);
   const localStyle = useStyleProcessor(styles, 'TweetCard');
-  const {collectionId, user, text, id, public_metrics, media} = dataSource;
+  const {collectionId, user, text, id, public_metrics, media, entities} =
+    dataSource;
   var {isBookmarked} = dataSource;
   const collectionIdRef = useRef(collectionId);
   const [isBookmarkedState, setIsBookmarkedState] = useState(isBookmarked);
-
   const onAddToCollectionSuccess = useCallback(_collectionId => {
     collectionIdRef.current = _collectionId;
     setIsBookmarkedState(true);
@@ -71,6 +71,10 @@ function TweetCard(props) {
     });
   }, [onAddToListSuccess, user]);
 
+  const hasMedia = useMemo(() => {
+    return media && media?.length !== 0;
+  }, [media]);
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -99,10 +103,13 @@ function TweetCard(props) {
             </Text>
           </View>
         </TouchableOpacity>
-        <TwitterTextView style={localStyle.tweetText}>
+        <TwitterTextView
+          style={localStyle.tweetText}
+          hasMedia={hasMedia}
+          urls={entities?.urls}>
           {unescape(text)}
         </TwitterTextView>
-        {media && media?.length !== 0 ? <ImageCard mediaArray={media} /> : null}
+        {hasMedia ? <ImageCard mediaArray={media} /> : null}
         <View style={localStyle.likeCommentStrip}>
           <Image source={commentIcon} style={localStyle.iconStyle} />
           <Text style={localStyle.publicMetricText}>

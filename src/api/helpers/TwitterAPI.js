@@ -13,7 +13,7 @@ const EndPoints = {
 
 const API_REQUEST_PARAMETERS = {
   expansions:
-    'attachments.media_keys,author_id,in_reply_to_user_id,geo.place_id,referenced_tweets.id',
+    'attachments.media_keys,author_id,in_reply_to_user_id,geo.place_id',
   'media.fields':
     'media_key,duration_ms,height,preview_image_url,type,url,width',
   'place.fields':

@@ -45,6 +45,8 @@ function TwitterTextView({
   mentionStyle,
   extractLinks = true,
   linkStyle,
+  hasMedia = false,
+  urls = [],
   ...extraProps
 }) {
   const localStyle = useStyleProcessor(styles, 'TwitterTextView');
@@ -87,18 +89,52 @@ function TwitterTextView({
     [PATTERN_URL]: onPressLink,
   };
 
+  const splitStringArray = splitStringByMatches(str, matches);
+  if (hasMedia) {
+    splitStringArray.pop();
+  }
+
+  const extractUrls = useCallback(
+    text => {
+      var urlObject = {};
+      for (let index = 0; index < urls.length; index++) {
+        const urlItem = urls[index];
+        if (urlItem.url.trim() === text.trim()) {
+          urlObject = {
+            displayUrl: urlItem.display_url,
+            expandedUrl: urlItem.expanded_url,
+          };
+          break;
+        }
+      }
+      return urlObject;
+    },
+    [urls],
+  );
+
   return (
     <Text {...extraProps}>
-      {splitStringByMatches(str, matches).map(([text, pattern], i) => {
+      {splitStringArray.map(([text, pattern], i) => {
+        const isLink = pattern === PATTERN_URL;
+        var displayText = text;
+        var expandedLink = null;
+        if (isLink) {
+          const {displayUrl, expandedUrl} = extractUrls(text);
+          displayText = displayUrl;
+          expandedLink = expandedUrl;
+        }
         const handle = onPress[pattern];
         return handle ? (
           <Text
             key={i}
             style={localStyle.linkStyle}
             onPress={e => {
-              return handle(e, text);
+              return handle(
+                e,
+                expandedLink ? expandedLink : displayText.trim(),
+              );
             }}
-            children={text}
+            children={displayText}
           />
         ) : (
           <Text key={i} style={localStyle.textStyle}>

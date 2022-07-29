@@ -1,5 +1,5 @@
 import {unescape} from 'lodash';
-import React, {useCallback, useState, useRef} from 'react';
+import React, {useCallback, useState, useRef, useMemo} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {
   BookmarkedIcon,
@@ -21,18 +21,27 @@ import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {getFormattedStat} from '../../utils/TextUtils';
 import Image from 'react-native-fast-image';
 import TwitterTextView from '../common/TwitterTextView';
-import {layoutPtToPx} from '../../utils/responsiveUI';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import {getDisplayDate} from '../../utils/TimeUtils';
 
 function TweetCard(props) {
   const {dataSource, isDisabled = false} = props;
 
   const {fnOnCardPress, fnOnUserNamePress} = useTweetCardData(props);
   const localStyle = useStyleProcessor(styles, 'TweetCard');
-  const {collectionId, user, text, id, public_metrics, media} = dataSource;
+  const {
+    collectionId,
+    user,
+    text,
+    id,
+    public_metrics,
+    media,
+    entities,
+    created_at,
+  } = dataSource;
   var {isBookmarked} = dataSource;
   const collectionIdRef = useRef(collectionId);
   const [isBookmarkedState, setIsBookmarkedState] = useState(isBookmarked);
-
   const onAddToCollectionSuccess = useCallback(_collectionId => {
     collectionIdRef.current = _collectionId;
     setIsBookmarkedState(true);
@@ -71,6 +80,11 @@ function TweetCard(props) {
     });
   }, [onAddToListSuccess, user]);
 
+  const hasMedia = useMemo(() => {
+    return media && media?.length !== 0;
+  }, [media]);
+
+  const displayDate = getDisplayDate(created_at);
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -86,23 +100,31 @@ function TweetCard(props) {
         />
       </TouchableOpacity>
       <View style={localStyle.tweetDetailContainer}>
-        <TouchableOpacity onPress={fnOnUserNamePress}>
-          <View style={localStyle.flexRow}>
-            <Text style={localStyle.nameText} numberOfLines={1}>
-              {unescape(user?.name)}
-            </Text>
-            {user?.verified ? (
-              <Image source={verifiedIcon} style={localStyle.verifiedIcon} />
-            ) : null}
-            <Text style={localStyle.userNameText} numberOfLines={1}>
-              @{unescape(user?.username)}
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <TwitterTextView style={localStyle.tweetText}>
+        <View style={localStyle.flexRow}>
+          <TouchableOpacity
+            onPress={fnOnUserNamePress}
+            style={localStyle.flexShrink}>
+            <View style={localStyle.flexRow}>
+              <Text style={localStyle.nameText} numberOfLines={1}>
+                {unescape(user?.name)}
+              </Text>
+              {user?.verified ? (
+                <Image source={verifiedIcon} style={localStyle.verifiedIcon} />
+              ) : null}
+              <Text style={localStyle.userNameText} numberOfLines={1}>
+                @{unescape(user?.username)}
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <Text style={localStyle.displayDateText}> • {displayDate}</Text>
+        </View>
+        <TwitterTextView
+          style={localStyle.tweetText}
+          hasMedia={hasMedia}
+          urls={entities?.urls}>
           {unescape(text)}
         </TwitterTextView>
-        {media && media?.length !== 0 ? <ImageCard mediaArray={media} /> : null}
+        {hasMedia ? <ImageCard mediaArray={media} /> : null}
         <View style={localStyle.likeCommentStrip}>
           <Image source={commentIcon} style={localStyle.iconStyle} />
           <Text style={localStyle.publicMetricText}>
@@ -170,20 +192,29 @@ const styles = {
   flexRow: {
     flexDirection: 'row',
   },
+  flexShrink: {
+    flexShrink: 1,
+  },
+  displayDateText: {
+    flexGrow: 1,
+    fontSize: fontPtToPx(12),
+    lineHeight: layoutPtToPx(20),
+  },
   nameText: {
     fontWeight: '600',
-    fontSize: 15,
+    fontSize: fontPtToPx(15),
+    lineHeight: layoutPtToPx(20),
     flexShrink: 1,
     color: colors.Black,
   },
   verifiedIcon: {
-    height: 20,
-    width: 20,
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(20),
   },
   userNameText: {
-    fontSize: 12,
-    padding: 2,
-    flexShrink: 1,
+    fontSize: fontPtToPx(12),
+    lineHeight: layoutPtToPx(20),
+    paddingHorizontal: layoutPtToPx(2),
     color: colors.Black,
   },
   likeCommentStrip: {

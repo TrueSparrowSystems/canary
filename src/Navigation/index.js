@@ -229,7 +229,6 @@ const Navigation = props => {
             };
           }}
           name={ScreenName.CollectionTab}
-          title={'Collection'}
           component={CollectionTabStack}
         />
       </Tab.Navigator>

@@ -1,9 +1,9 @@
 import React from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {Pressable, Text, View, ScrollView} from 'react-native';
 import SearchBar from '../../components/SearchBar';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import colors from '../../utils/colors';
-import {fontPtToPx} from '../../utils/responsiveUI';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useDiscoverScreenData from './useDiscoverScreenData';
 
 function DiscoverScreen() {
@@ -13,18 +13,24 @@ function DiscoverScreen() {
   return (
     <View>
       <SearchBar onSearchPressCallback={fnOnSearchPress} />
-      {aTrendingTopics.map((text, i) => {
-        return (
-          <Pressable
-            onPress={() => {
-              fnOnTopicClick(text);
-            }}
-            key={i}
-            style={localStyle.trendingTopicBox}>
-            <Text style={localStyle.topicText}>{text}</Text>
-          </Pressable>
-        );
-      })}
+      <ScrollView
+        contentContainerStyle={localStyle.trendingTopicList}
+        showsVerticalScrollIndicator={false}>
+        {aTrendingTopics.map((text, i) => {
+          return (
+            <Pressable
+              onPress={() => {
+                fnOnTopicClick(text);
+              }}
+              key={i}
+              style={localStyle.trendingTopicBox}>
+              <Text style={localStyle.topicText}>
+                {i + 1}. {text}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
     </View>
   );
 }
@@ -32,13 +38,16 @@ const styles = {
   trendingTopicBox: {
     borderBottomWidth: 1,
     borderColor: colors.LightGrey,
-    padding: 10,
-    margin: 10,
+    padding: layoutPtToPx(10),
+    margin: layoutPtToPx(10),
     marginBottom: 0,
   },
   topicText: {
     fontSize: fontPtToPx(14),
     color: colors.Black,
+  },
+  trendingTopicList: {
+    paddingBottom: layoutPtToPx(50),
   },
 };
 

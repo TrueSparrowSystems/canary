@@ -26,6 +26,7 @@ import DiscoverScreen from '../screens/DiscoverScreen';
 import SearchResultScreen from '../screens/SearchResultScreen';
 import ListScreen from '../screens/ListScreen';
 import ListTweetsScreen from '../screens/ListTweetsScreen';
+import VideoPlayerScreen from '../screens/VideoPlayerScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -111,6 +112,17 @@ const Navigation = props => {
         <TimelineStack.Screen
           name={ScreenName.SearchResultScreen}
           component={SearchResultScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <TimelineStack.Screen
+          name={ScreenName.VideoPlayerScreen}
+          component={VideoPlayerScreen}
           options={{
             gestureEnabled: true,
             headerShown: false,
@@ -294,6 +306,17 @@ const Navigation = props => {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         />
+        <DiscoverStack.Screen
+          name={ScreenName.VideoPlayerScreen}
+          component={VideoPlayerScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
       </DiscoverStack.Navigator>
     );
   }
@@ -358,6 +381,17 @@ const Navigation = props => {
         <ListStack.Screen
           name={ScreenName.SearchResultScreen}
           component={SearchResultScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <ListStack.Screen
+          name={ScreenName.VideoPlayerScreen}
+          component={VideoPlayerScreen}
           options={{
             gestureEnabled: true,
             headerShown: false,
@@ -433,6 +467,17 @@ const Navigation = props => {
         <CollectionStack.Screen
           name={ScreenName.SearchResultScreen}
           component={SearchResultScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <CollectionStack.Screen
+          name={ScreenName.VideoPlayerScreen}
+          component={VideoPlayerScreen}
           options={{
             gestureEnabled: true,
             headerShown: false,

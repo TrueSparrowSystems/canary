@@ -11,6 +11,7 @@ const EndPoints = {
   getSingleTweet: tweetId => `https://api.twitter.com/2/tweets/${tweetId}`,
   getAvailableWoeids: 'https://api.twitter.com/1.1/trends/available.json',
   getTrendsFromWoeid: 'https://api.twitter.com/1.1/trends/place.json',
+  getTweetStatus: 'https://api.twitter.com/1.1/statuses/show.json',
 };
 
 const API_REQUEST_PARAMETERS = {
@@ -138,6 +139,15 @@ class TwitterApi {
     };
     const apiService = new APIService({});
     return apiService.get(EndPoints.getTrendsFromWoeid, data);
+  }
+  getTweetStatusfromTweetId(tweetId) {
+    const data = {
+      id: tweetId,
+      includes_entities: true,
+      tweet_mode: 'extended',
+    };
+    const apiService = new APIService({});
+    return apiService.get(EndPoints.getTweetStatus, data);
   }
 }
 export default new TwitterApi();

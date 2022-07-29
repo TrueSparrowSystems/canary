@@ -10,24 +10,23 @@ import {
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import CustomModal from '../common/CustomModal';
 import colors from '../../utils/colors';
-import useAddToCollectionModalData from './useAddToCollectionModalData';
-import MiniCollectionCard from '../MiniCollectionCard';
+import useAddToListModalData from './useAddToListModalData';
 import {ScrollView} from 'react-native-gesture-handler';
 import {AddIcon} from '../../assets/common';
+import MiniListCard from '../MiniListCard';
 
-function AddToCollectionModal() {
-  const localStyle = useStyleProcessor(styles, 'AddToCollectionModal');
+function AddToListModal() {
+  const localStyle = useStyleProcessor(styles, 'AddToListModal');
 
   const {
     bIsLoading,
     bIsVisible,
     fnOnBackdropPress,
-    fnOnAddToCollectionSuccess,
-    fnOnAddToCollectionFailure,
-    fnOnAddCollectionPress,
-    oCollectionList,
-    sTweetId,
-  } = useAddToCollectionModalData();
+    fnOnAddToListSuccess,
+    fnOnAddListPress,
+    oList,
+    sUserName,
+  } = useAddToListModalData();
 
   const getBackdrop = useMemo(() => {
     return <View style={localStyle.blur} />;
@@ -43,9 +42,9 @@ function AddToCollectionModal() {
           <View style={localStyle.view}>
             <View style={localStyle.flexRow}>
               <View style={localStyle.titleContainer}>
-                <Text style={localStyle.titleText}>Add To Collection</Text>
+                <Text style={localStyle.titleText}>Add To List</Text>
               </View>
-              <TouchableOpacity onPress={fnOnAddCollectionPress}>
+              <TouchableOpacity onPress={fnOnAddListPress}>
                 <Image source={AddIcon} />
               </TouchableOpacity>
             </View>
@@ -55,23 +54,22 @@ function AddToCollectionModal() {
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
-                {oCollectionList == null
+                {oList == null
                   ? null
-                  : Object.keys(oCollectionList).map(key => {
-                      const collection = oCollectionList[key];
-                      const collectionData = {
-                        collectionId: collection?.id,
-                        collectionName: collection?.name,
+                  : Object.keys(oList).map(key => {
+                      const list = oList[key];
+                      const listData = {
+                        listId: list?.id,
+                        listName: list?.name,
                         // TODO: change image url
                         imageUrl: 'https://picsum.photos/200/300',
                       };
                       return (
-                        <MiniCollectionCard
-                          key={collection.id}
-                          data={collectionData}
-                          tweetId={sTweetId}
-                          onAddToCollectionSuccess={fnOnAddToCollectionSuccess}
-                          onAddToCollectionFailure={fnOnAddToCollectionFailure}
+                        <MiniListCard
+                          key={list.id}
+                          data={listData}
+                          userName={sUserName}
+                          onAddToListSuccess={fnOnAddToListSuccess}
                         />
                       );
                     })}
@@ -126,4 +124,4 @@ const styles = {
   },
 };
 
-export default React.memo(AddToCollectionModal);
+export default React.memo(AddToListModal);

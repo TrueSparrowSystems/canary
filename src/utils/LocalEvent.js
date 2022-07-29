@@ -11,7 +11,11 @@ export const EventTypes = {
     Disconnected: 'event_types_internet_disconnected',
   },
   ShowAddToCollectionModal: 'event_types_show_add_to_collection_modal',
+  ShowAddToListModal: 'event_types_show_add_to_list_modal',
   ShowAddCollectionModal: 'event_types_show_add_collection_modal',
+  ShowAddListModal: 'event_types_show_add_list_modal',
   UpdateTimeline: 'event_types_update_timeline',
   UpdateCollection: 'event_types_update_collection',
+  UpdateList: 'event_types_update_list',
+  OnTrendingTopicClick: 'on_trending_topic_click',
 };

@@ -1,11 +1,12 @@
 import {unescape} from 'lodash';
-import React, {useCallback, useState, useRef} from 'react';
+import React, {useCallback, useState, useRef, useMemo} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {
   BookmarkedIcon,
   bookmarkIcon,
   commentIcon,
   likeIcon,
+  ListIcon,
   retweetIcon,
   verifiedIcon,
 } from '../../assets/common';
@@ -14,23 +15,33 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
 import colors from '../../utils/colors';
 import useTweetCardData from './useTweetCardData';
-
 import Toast from 'react-native-toast-message';
 import ImageCard from '../ImageCard';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
-import {getFormattedStat} from '../utils/TextUtils';
+import {getFormattedStat} from '../../utils/TextUtils';
 import Image from 'react-native-fast-image';
+import TwitterTextView from '../common/TwitterTextView';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import {getDisplayDate} from '../../utils/TimeUtils';
 
 function TweetCard(props) {
   const {dataSource, isDisabled = false} = props;
 
-  const {fnOnCardPress} = useTweetCardData(props);
+  const {fnOnCardPress, fnOnUserNamePress} = useTweetCardData(props);
   const localStyle = useStyleProcessor(styles, 'TweetCard');
-  const {collectionId, user, text, id, public_metrics, media} = dataSource;
+  const {
+    collectionId,
+    user,
+    text,
+    id,
+    public_metrics,
+    media,
+    entities,
+    created_at,
+  } = dataSource;
   var {isBookmarked} = dataSource;
   const collectionIdRef = useRef(collectionId);
   const [isBookmarkedState, setIsBookmarkedState] = useState(isBookmarked);
-
   const onAddToCollectionSuccess = useCallback(_collectionId => {
     collectionIdRef.current = _collectionId;
     setIsBookmarkedState(true);
@@ -58,45 +69,77 @@ function TweetCard(props) {
     }
   }, [id, isBookmarkedState, onAddToCollectionSuccess]);
 
+  const onAddToListSuccess = useCallback(() => {
+    //TODO: handle on add to list success
+  }, []);
+
+  const onAddToListPress = useCallback(() => {
+    LocalEvent.emit(EventTypes.ShowAddToListModal, {
+      userName: user.username,
+      onAddToListSuccess: onAddToListSuccess,
+    });
+  }, [onAddToListSuccess, user]);
+
+  const hasMedia = useMemo(() => {
+    return media && media?.length !== 0;
+  }, [media]);
+
+  const displayDate = getDisplayDate(created_at);
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={fnOnCardPress}
       style={localStyle.cardContainer}
       disabled={isDisabled}>
-      <Image
-        source={{uri: user?.profile_image_url}}
-        style={localStyle.userProfileImage}
-      />
+      <TouchableOpacity
+        onPress={fnOnUserNamePress}
+        style={localStyle.profileImageContainer}>
+        <Image
+          source={{uri: user?.profile_image_url}}
+          style={localStyle.userProfileImage}
+        />
+      </TouchableOpacity>
       <View style={localStyle.tweetDetailContainer}>
         <View style={localStyle.flexRow}>
-          <Text style={localStyle.nameText} numberOfLines={1}>
-            {unescape(user?.name)}
-          </Text>
-          {user?.verified ? (
-            <Image source={verifiedIcon} style={localStyle.verifiedIcon} />
-          ) : null}
-          <Text style={localStyle.userNameText} numberOfLines={1}>
-            @{unescape(user?.username)}
-          </Text>
+          <TouchableOpacity
+            onPress={fnOnUserNamePress}
+            style={localStyle.flexShrink}>
+            <View style={localStyle.flexRow}>
+              <Text style={localStyle.nameText} numberOfLines={1}>
+                {unescape(user?.name)}
+              </Text>
+              {user?.verified ? (
+                <Image source={verifiedIcon} style={localStyle.verifiedIcon} />
+              ) : null}
+              <Text style={localStyle.userNameText} numberOfLines={1}>
+                @{unescape(user?.username)}
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <Text style={localStyle.displayDateText}> • {displayDate}</Text>
         </View>
-        <Text style={localStyle.tweetText}>{unescape(text)}</Text>
-        {media && media?.length !== 0 ? <ImageCard mediaArray={media} /> : null}
+        <TwitterTextView
+          style={localStyle.tweetText}
+          hasMedia={hasMedia}
+          urls={entities?.urls}>
+          {unescape(text)}
+        </TwitterTextView>
+        {hasMedia ? <ImageCard mediaArray={media} /> : null}
         <View style={localStyle.likeCommentStrip}>
           <Image source={commentIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.flex1}>
+          <Text style={localStyle.publicMetricText}>
             {public_metrics?.reply_count === 0
               ? 0
               : getFormattedStat(public_metrics?.reply_count)}
           </Text>
           <Image source={retweetIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.flex1}>
+          <Text style={localStyle.publicMetricText}>
             {public_metrics?.retweet_count === 0
               ? 0
               : getFormattedStat(public_metrics?.retweet_count)}
           </Text>
           <Image source={likeIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.flex1}>
+          <Text style={localStyle.publicMetricText}>
             {public_metrics?.like_count === 0
               ? 0
               : getFormattedStat(public_metrics?.like_count)}
@@ -106,6 +149,9 @@ function TweetCard(props) {
               source={isBookmarkedState ? BookmarkedIcon : bookmarkIcon}
               style={localStyle.iconStyle}
             />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onAddToListPress}>
+            <Image source={ListIcon} style={localStyle.iconStyle} />
           </TouchableOpacity>
         </View>
       </View>
@@ -125,9 +171,13 @@ const styles = {
     flexDirection: 'row',
     flex: 1,
   },
+  profileImageContainer: {
+    height: layoutPtToPx(50),
+    width: layoutPtToPx(50),
+  },
   userProfileImage: {
-    height: 50,
-    width: 50,
+    height: '100%',
+    width: '100%',
     borderRadius: 25,
   },
   tweetDetailContainer: {
@@ -137,17 +187,50 @@ const styles = {
   },
   tweetText: {
     marginBottom: 10,
+    color: colors.Black,
   },
-  flexRow: {flexDirection: 'row'},
-  nameText: {fontWeight: '600', fontSize: 15, flexShrink: 1},
-  verifiedIcon: {height: 20, width: 20},
-  userNameText: {fontSize: 12, padding: 2, flexShrink: 1},
+  flexRow: {
+    flexDirection: 'row',
+  },
+  flexShrink: {
+    flexShrink: 1,
+  },
+  displayDateText: {
+    flexGrow: 1,
+    fontSize: fontPtToPx(12),
+    lineHeight: layoutPtToPx(20),
+  },
+  nameText: {
+    fontWeight: '600',
+    fontSize: fontPtToPx(15),
+    lineHeight: layoutPtToPx(20),
+    flexShrink: 1,
+    color: colors.Black,
+  },
+  verifiedIcon: {
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(20),
+  },
+  userNameText: {
+    fontSize: fontPtToPx(12),
+    lineHeight: layoutPtToPx(20),
+    paddingHorizontal: layoutPtToPx(2),
+    color: colors.Black,
+  },
   likeCommentStrip: {
     flexDirection: 'row',
     paddingTop: 10,
   },
-  iconStyle: {height: 15, width: 15, marginRight: 10, marginTop: 1},
-  flex1: {flex: 1},
+  iconStyle: {
+    height: 15,
+    width: 15,
+    marginRight: 10,
+    marginTop: 1,
+  },
+  publicMetricText: {
+    flex: 1,
+    color: colors.Black,
+  },
 };
 
 export default React.memo(TweetCard);

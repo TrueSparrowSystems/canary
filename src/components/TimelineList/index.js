@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef} from 'react';
-import {RefreshControl, Text, View} from 'react-native';
+import {ActivityIndicator, RefreshControl, View} from 'react-native';
 import PaginatedList from '../PaginatedList';
 import colors from '../../utils/colors';
 import TimelineListDataSource from './TimelineListDataSource';
@@ -14,6 +14,7 @@ const _isTablet = isTablet();
 const ITEM_WIDTH = 276;
 
 function TimelineList({
+  style,
   reloadData,
   refreshData,
   onDataAvailable,
@@ -30,7 +31,7 @@ function TimelineList({
     listDataSource.current = new TimelineListDataSource();
   }
 
-  const localStyle = useStyleProcessor(styles, 'ClassList');
+  const localStyle = useStyleProcessor(styles, 'TimelineList');
 
   const renderItem = useCallback(
     ({item}) => {
@@ -46,11 +47,10 @@ function TimelineList({
   const loaderView = useMemo(() => {
     return (
       <View style={localStyle.loaderViewContainer}>
-        <Text>Loading</Text>
-        {/* <PaginationLoader style={localStyle.loaderView} /> */}
+        <ActivityIndicator animating={bIsLoading} />
       </View>
     );
-  }, [localStyle.loaderViewContainer]);
+  }, [bIsLoading, localStyle.loaderViewContainer]);
 
   const flatListProps = useMemo(() => {
     return {
@@ -83,7 +83,7 @@ function TimelineList({
   ]);
 
   return (
-    <View style={localStyle.container}>
+    <View style={style || localStyle.container}>
       <PaginatedList
         useRecyclerView={false}
         flatListProps={flatListProps}

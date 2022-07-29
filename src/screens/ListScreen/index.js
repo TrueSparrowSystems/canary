@@ -1,26 +1,23 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, ActivityIndicator} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import CollectionCard from '../../components/CollectionCard';
+import {ActivityIndicator, SafeAreaView, ScrollView, View} from 'react-native';
+import {AddIcon} from '../../assets/common';
+import ListCard from '../../components/ListCard';
 import Header from '../../components/common/Header';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import {collectionService} from '../../services/CollectionService';
+import {listService} from '../../services/ListService';
 import colors from '../../utils/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
-import {AddIcon} from '../../assets/common';
 import {fontPtToPx} from '../../utils/responsiveUI';
-
-function CollectionScreen() {
-  const localStyle = useStyleProcessor(styles, 'CollectionScreen');
+function ListScreen() {
+  const localStyle = useStyleProcessor(styles, 'ListScreen');
   const [isLoading, setIsLoading] = useState(true);
-  const collectionDataRef = useRef({});
+  const listDataRef = useRef({});
 
   const fetchData = useCallback(() => {
     setIsLoading(true);
-    const _collectionService = collectionService();
-    _collectionService.getAllCollections().then(list => {
-      collectionDataRef.current = JSON.parse(list);
+    const _listService = listService();
+    _listService.getAllLists().then(list => {
+      listDataRef.current = JSON.parse(list);
       setIsLoading(false);
     });
   }, []);
@@ -35,31 +32,31 @@ function CollectionScreen() {
   }, [fetchData]);
 
   useEffect(() => {
-    LocalEvent.on(EventTypes.UpdateCollection, fetchData);
+    LocalEvent.on(EventTypes.UpdateList, fetchData);
     return () => {
-      LocalEvent.off(EventTypes.UpdateCollection, fetchData);
+      LocalEvent.off(EventTypes.UpdateList, fetchData);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onCollectionAddSuccess = useCallback(() => {
+  const onListAddSuccess = useCallback(() => {
     fetchData();
   }, [fetchData]);
 
-  const onAddCollectionPress = useCallback(() => {
-    LocalEvent.emit(EventTypes.ShowAddCollectionModal, {
-      onCollectionAddSuccess,
+  const onAddListPress = useCallback(() => {
+    LocalEvent.emit(EventTypes.ShowAddListModal, {
+      onListAddSuccess,
     });
-  }, [onCollectionAddSuccess]);
+  }, [onListAddSuccess]);
 
   return (
     <SafeAreaView style={localStyle.container}>
       <Header
         enableBackButton={false}
         enableRightButton={true}
-        onRightButtonClick={onAddCollectionPress}
+        onRightButtonClick={onAddListPress}
         rightButtonImage={AddIcon}
-        text="Collections"
+        text="Lists"
         textStyle={localStyle.headerText}
       />
 
@@ -72,21 +69,21 @@ function CollectionScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={localStyle.scrollViewContainer}
           style={localStyle.scrollViewStyle}>
-          {collectionDataRef.current == null
+          {listDataRef.current == null
             ? null
-            : Object.keys(collectionDataRef.current).map(key => {
-                const collection = collectionDataRef.current[key];
-                const singleCollectionData = {
-                  collectionId: collection?.id,
-                  collectionName: collection?.name,
+            : Object.keys(listDataRef.current).map(key => {
+                const list = listDataRef.current[key];
+                const singleListData = {
+                  listId: list?.id,
+                  listName: list?.name,
                   // TODO: change image url
                   imageUrl: 'https://picsum.photos/200/300',
                 };
                 return (
-                  <CollectionCard
-                    key={singleCollectionData.collectionId}
-                    data={singleCollectionData}
-                    onCollectionRemoved={reloadList}
+                  <ListCard
+                    key={singleListData.listId}
+                    data={singleListData}
+                    onListRemoved={reloadList}
                   />
                 );
               })}
@@ -99,11 +96,11 @@ function CollectionScreen() {
 
 const styles = {
   container: {
-    backgroundColor: colors.White,
+    backgroundColor: 'white',
     flex: 1,
   },
   headerView: {
-    backgroundColor: colors.White,
+    backgroundColor: 'white',
     flexDirection: 'row',
     borderBottomWidth: 0.8,
     borderColor: colors.SherpaBlue,
@@ -134,4 +131,4 @@ const styles = {
   },
 };
 
-export default React.memo(CollectionScreen);
+export default React.memo(ListScreen);

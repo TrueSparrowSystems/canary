@@ -9,7 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import ScreenName from '../../constants/ScreenName';
 
 function SettingScreen() {
-  const localStyle = useStyleProcessor(styles, 'TimelineScreen');
+  const localStyle = useStyleProcessor(styles, 'SettingScreen');
 
   const navigation = useNavigation();
 
@@ -31,7 +31,7 @@ function SettingScreen() {
           onPress={onEditPress}>
           <Image source={EditIcon} style={localStyle.image} />
         </TouchableOpacity>
-        <Text style={{marginTop: layoutPtToPx(10)}}>Edit preferences</Text>
+        <Text style={localStyle.textStyle}>Edit preferences</Text>
       </View>
     </View>
   );
@@ -45,6 +45,7 @@ const styles = {
   },
   titleText: {
     fontSize: fontPtToPx(20),
+    color: colors.Black,
   },
   settingsContainer: {
     flex: 1,
@@ -57,7 +58,6 @@ const styles = {
     justifyContent: 'center',
     borderRadius: layoutPtToPx(25),
     alignItems: 'center',
-
     backgroundColor: colors.DodgerBlue,
   },
   image: {
@@ -65,4 +65,5 @@ const styles = {
     width: layoutPtToPx(25),
     tintColor: colors.White,
   },
+  textStyle: {marginTop: layoutPtToPx(10), color: colors.Black},
 };

@@ -160,9 +160,20 @@ class CollectionService {
 
   async removeCollection(collectionId) {
     return new Promise((resolve, reject) => {
+      const tweetIdsOfThisCollection = this.collections[collectionId].tweetIds;
+      const bookmarkedIds = Cache.getValue(CacheKey.BookmarkedTweetsList) || [];
       delete this.collections[collectionId];
       Store.set(StoreKeys.CollectionsList, this.collections)
         .then(() => {
+          tweetIdsOfThisCollection.forEach(tweetId => {
+            delete bookmarkedIds[tweetId];
+          });
+          Cache.setValue(CacheKey.BookmarkedTweetsList, bookmarkedIds);
+          Store.set(StoreKeys.BookmarkedTweetsList, bookmarkedIds)
+            .then(() => {
+              return resolve();
+            })
+            .catch(() => {});
           return resolve();
         })
         .catch(() => {

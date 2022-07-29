@@ -9,4 +9,10 @@ export default {
   CollectionTweetScreen: 'CollectionTweetScreen',
   SettingScreen: 'SettingScreen',
   ImageViewScreen: 'ImageViewScreen',
+  DiscoverScreen: 'DiscoverScreen',
+  DiscoverTab: 'DiscoverTab',
+  SearchResultScreen: 'SearchResultScreen',
+  ListTab: 'ListTab',
+  ListScreen: 'ListScreen',
+  ListTweetsScreen: 'ListTweetsScreen',
 };

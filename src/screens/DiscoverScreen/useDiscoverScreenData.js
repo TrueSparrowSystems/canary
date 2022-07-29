@@ -1,11 +1,21 @@
 import {useNavigation} from '@react-navigation/native';
-import {useCallback} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import ScreenName from '../../constants/ScreenName';
+import {getTrendingTopicsForCountry} from '../../utils/CountryWoeidUtils';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
 function useDiscoverScreenData() {
-  const trendingTopics = ['#WorldCup2022', 'Politics', 'Cricket'];
+  const [trendingTopics, setTrendingTopics] = useState([]);
   const navigation = useNavigation();
+  useEffect(() => {
+    getTrendingTopicsForCountry('India')
+      .then(trendingTopicArray => {
+        setTrendingTopics(trendingTopicArray);
+      })
+      .catch(() => {
+        //Handle Error
+      });
+  }, []);
   const onSearchPress = useCallback(
     query => {
       navigation.navigate(ScreenName.SearchResultScreen, {query});

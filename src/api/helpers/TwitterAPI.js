@@ -9,6 +9,8 @@ const EndPoints = {
   multipleTweetsLookup: 'https://api.twitter.com/2/tweets',
   conversationThread: 'https://api.twitter.com/2/tweets/search/recent',
   getSingleTweet: tweetId => `https://api.twitter.com/2/tweets/${tweetId}`,
+  getAvailableWoeids: 'https://api.twitter.com/1.1/trends/available.json',
+  getTrendsFromWoeid: 'https://api.twitter.com/1.1/trends/place.json',
 };
 
 const API_REQUEST_PARAMETERS = {
@@ -69,7 +71,7 @@ class TwitterApi {
   searchResultFeed(query, nextPageIdentifier) {
     const data = {
       max_results: 10,
-      query: `${query} (lang:EN) (-is:retweet -is:reply -is:quote)`,
+      query: `${query} (-is:retweet -is:reply -is:quote)`,
       ...API_REQUEST_PARAMETERS,
     };
     if (nextPageIdentifier) {
@@ -84,7 +86,7 @@ class TwitterApi {
       max_results: 10,
       query: `(${this.getUserNameQueryFromArray(
         userNameArray,
-      )}) (lang:EN) (-is:retweet -is:reply -is:quote)`,
+      )}) (-is:retweet -is:reply -is:quote)`,
       ...API_REQUEST_PARAMETERS,
     };
     if (nextPageIdentifier) {
@@ -111,7 +113,7 @@ class TwitterApi {
   getConversationThread(conversationId, nextPageIdentifier) {
     const data = {
       max_results: 10,
-      query: `(conversation_id:${conversationId}) (lang:EN) (-is:retweet)`,
+      query: `(conversation_id:${conversationId}) (-is:retweet)`,
       ...API_REQUEST_PARAMETERS,
     };
     if (nextPageIdentifier) {
@@ -125,6 +127,17 @@ class TwitterApi {
     const data = {...API_REQUEST_PARAMETERS};
     const apiService = new APIService({});
     return apiService.get(EndPoints.getSingleTweet(tweetId), data);
+  }
+  getAvailableWoeids() {
+    const apiService = new APIService({});
+    return apiService.get(EndPoints.getAvailableWoeids);
+  }
+  getTrendsFromWoeid(woeid) {
+    const data = {
+      id: woeid,
+    };
+    const apiService = new APIService({});
+    return apiService.get(EndPoints.getTrendsFromWoeid, data);
   }
 }
 export default new TwitterApi();

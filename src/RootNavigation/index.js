@@ -3,11 +3,9 @@ import {createSharedElementStackNavigator} from 'react-navigation-shared-element
 import ScreenName from '../constants/ScreenName';
 import Navigation from '../Navigation';
 import PreferenceScreen from '../screens/PreferenceScreen';
-import AsyncStorage from '../services/AsyncStorage';
-import {StoreKeys} from '../services/AsyncStorage/StoreConstants';
+import BootService from '../services/BootService';
 import Cache from '../services/Cache';
 import {CacheKey} from '../services/Cache/CacheStoreConstants';
-import {networkConnection} from '../services/NetworkConnection';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
 
 const AppStack = createSharedElementStackNavigator();
@@ -20,32 +18,11 @@ function RootNavigation() {
     setCurrentStack(HomeAppStack());
   }
 
-  function loadApp() {
-    networkConnection();
-    AsyncStorage.getItem(StoreKeys.AreInitialPreferencesSet).then(isSet => {
-      Cache.setValue(CacheKey.AreInitialPreferencesSet, isSet);
-      if (isSet) {
-        AsyncStorage.getItem(StoreKeys.PreferenceList).then(list => {
-          AsyncStorage.get(StoreKeys.BookmarkedTweetsList).then(
-            bookmarkedTweetList => {
-              Cache.setValue(
-                CacheKey.BookmarkedTweetsList,
-                JSON.parse(bookmarkedTweetList),
-              );
-            },
-          );
-          Cache.setValue(CacheKey.PreferenceList, list);
-          setAppLoaded(true);
-        });
-      } else {
-        setAppLoaded(true);
-      }
-    });
-  }
-
   useEffect(() => {
     if (!isAppLoaded) {
-      loadApp();
+      BootService.initialize().then(() => {
+        setAppLoaded(true);
+      });
     }
     LocalEvent.on(EventTypes.SwitchToHomeStack, switchToHomeStack);
     return () => {

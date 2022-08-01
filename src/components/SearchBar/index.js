@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {TouchableOpacity, View, Image, TextInput} from 'react-native';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {BinIcon, SearchIcon} from '../../assets/common';

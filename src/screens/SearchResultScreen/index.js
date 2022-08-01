@@ -4,7 +4,7 @@ import Header from '../../components/common/Header';
 import SearchBar from '../../components/SearchBar';
 import TimelineList from '../../components/TimelineList';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import useSearchResultScreenData from './useSearchResultScreenData';
 
 function SearchResultScreen(props) {

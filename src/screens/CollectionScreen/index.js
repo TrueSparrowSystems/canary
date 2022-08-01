@@ -6,7 +6,7 @@ import CollectionCard from '../../components/CollectionCard';
 import Header from '../../components/common/Header';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {AddIcon} from '../../assets/common';
 import {fontPtToPx} from '../../utils/responsiveUI';

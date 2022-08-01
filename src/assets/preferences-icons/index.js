@@ -1,0 +1,15 @@
+export const anc = require('./anc.png');
+export const bnf = require('./bnf.png');
+export const careers = require('./careers.png');
+export const food = require('./food.png');
+export const gaming = require('./gaming.png');
+export const entertainment = require('./entertainment.png');
+export const mnts = require('./mnts.png');
+export const fitness = require('./fitness.png');
+export const music = require('./music.png');
+export const outdoors = require('./outdoors.png');
+export const technology = require('./technology.png');
+export const weather = require('./weather.png');
+export const travel = require('./travel.png');
+export const sports = require('./sports.png');
+export const science = require('./science.png');

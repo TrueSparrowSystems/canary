@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
-import colors from '../../../utils/colors';
+import colors from '../../../constants/colors';
 import {layoutPtToPx} from '../../../utils/responsiveUI';
 import {BackIcon} from '../../../assets/common';
 import {useNavigation} from '@react-navigation/native';

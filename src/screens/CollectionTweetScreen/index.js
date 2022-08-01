@@ -4,7 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionTweetList from '../../components/CollectionTweetList';
 import Header from '../../components/common/Header';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import {layoutPtToPx} from '../../utils/responsiveUI';
 
 function CollectionTweetScreen(props) {

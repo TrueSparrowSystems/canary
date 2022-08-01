@@ -17,7 +17,7 @@ import {
 } from '../assets/common';
 import {layoutPtToPx} from '../utils/responsiveUI';
 import {useStyleProcessor} from '../hooks/useStyleProcessor';
-import colors from '../utils/colors';
+import colors from '../constants/colors';
 import PreferenceScreen from '../screens/PreferenceScreen';
 import CollectionTweetScreen from '../screens/CollectionTweetScreen';
 import ImageViewScreen from '../screens/ImageViewScreen';

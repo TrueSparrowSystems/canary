@@ -5,7 +5,7 @@ import ListCard from '../../components/ListCard';
 import Header from '../../components/common/Header';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {listService} from '../../services/ListService';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {fontPtToPx} from '../../utils/responsiveUI';
 function ListScreen() {

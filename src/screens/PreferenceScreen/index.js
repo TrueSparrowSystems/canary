@@ -41,6 +41,7 @@ export default React.memo(PreferenceScreen);
 const style = {
   container: {
     padding: layoutPtToPx(15),
+    height: '100%',
   },
   titleText: {
     color: colors.DodgerBlue,

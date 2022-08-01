@@ -9,7 +9,7 @@ import {
 import {Portal} from 'react-native-paper';
 import {useOrientationState} from '../../../hooks/useOrientation';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
-import colors from '../../../utils/colors';
+import colors from '../../../constants/colors';
 
 /**
  * @param {Boolean} visible Boolean to indicate if the modal is open or not.

@@ -4,7 +4,7 @@ import Header from '../../components/common/Header';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {EditIcon} from '../../assets/common';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import {useNavigation} from '@react-navigation/native';
 import ScreenName from '../../constants/ScreenName';
 

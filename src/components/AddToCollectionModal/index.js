@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import CustomModal from '../common/CustomModal';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import useAddToCollectionModalData from './useAddToCollectionModalData';
 import MiniCollectionCard from '../MiniCollectionCard';
 import {ScrollView} from 'react-native-gesture-handler';

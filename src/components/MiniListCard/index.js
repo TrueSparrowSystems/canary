@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import {Text, View, TouchableWithoutFeedback} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {listService} from '../../services/ListService';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import Image from 'react-native-fast-image';
 
 function MiniListCard(props) {

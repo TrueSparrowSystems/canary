@@ -2,7 +2,7 @@ import React from 'react';
 import {Pressable, Text, View, ScrollView} from 'react-native';
 import SearchBar from '../../components/SearchBar';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useDiscoverScreenData from './useDiscoverScreenData';
 

@@ -3,7 +3,7 @@ import React, {useCallback} from 'react';
 import {Linking, Text} from 'react-native';
 import ScreenName from '../../../constants/ScreenName';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
-import colors from '../../../utils/colors';
+import colors from '../../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
 
 const PATTERN_HASHTAG = /(?:^|\s)(#[^\s#]+|[^\s#]+#)(?=$|\s)/gi;

@@ -18,8 +18,6 @@ export function usePreferenceSelectorData(props) {
     return arr;
   }, []);
 
-  const [mainArray, setMainArray] = useState(originalDataArray);
-
   const [selectedPref, setSelectedPrefs] = useState(
     PreferencesDataHelper.getSelectedPreferencesListFromCache(),
   );
@@ -27,26 +25,12 @@ export function usePreferenceSelectorData(props) {
   const preferencesArray = useMemo(() => {
     const arr = [];
 
-    mainArray.map(pref => {
+    originalDataArray.map(pref => {
       arr.push({...pref, isSelected: selectedPref.includes(pref.id)});
     });
 
     return arr;
-  }, [mainArray, selectedPref]);
-
-  const onSearchInput = useCallback(
-    searchText => {
-      if (searchText === '') {
-        setMainArray([...originalDataArray]);
-      } else {
-        let filteredData = originalDataArray.filter(item => {
-          return item.title.includes(searchText);
-        });
-        setMainArray([...filteredData]);
-      }
-    },
-    [originalDataArray],
-  );
+  }, [originalDataArray, selectedPref]);
 
   const onItemSelect = useCallback(
     (id, isSelected) => {
@@ -68,6 +52,5 @@ export function usePreferenceSelectorData(props) {
   return {
     aPreferences: preferencesArray,
     fnOnItemSelect: onItemSelect,
-    fnOnSearchInput: onSearchInput,
   };
 }

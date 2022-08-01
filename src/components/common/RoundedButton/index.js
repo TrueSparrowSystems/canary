@@ -2,16 +2,16 @@ import React from 'react';
 import {Text, TouchableHighlight, View, Image} from 'react-native';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
-import Colors from '../../../utils/colors';
+import Colors from '../../../constants/colors';
 
 /**
  * @param {Function} onPress Callback function which is called when button is pressed.
  * @param {Boolean} disabled Boolean flag which show the disabled view for button.
  * @param {String} text Text for the button.
- * @param {String} image Image for the button.
+ * @param {String} leftImage Image for the button.
  * @param {Object} style Object containing info about styling of container.
  * @param {Object} textStyle Object containing info about styling of button text.
- * @param {Object} imageStyle Object containing info about styling of image.
+ * @param {Object} leftImageStyle Object containing info about styling of image.
  * @param {String} underlayColor Color to be displayed when button is pressed.
  * @returns {JSX} Rounded Button View.
  */
@@ -19,11 +19,13 @@ function RoundedButton({
   onPress,
   disabled,
   text,
-  image,
+  leftImage,
   style,
   textStyle,
-  imageStyle,
+  leftImageStyle,
   underlayColor,
+  rightImage,
+  rightImageStyle,
 }) {
   const localStyle = useStyleProcessor(styles, 'RoundedButton');
   const containerStyle = style || localStyle.container;
@@ -34,15 +36,22 @@ function RoundedButton({
       style={[containerStyle, disabled ? {opacity: 0.5} : {}]}
       onPress={onPress}>
       <View style={localStyle.buttonContainer}>
-        {image ? (
+        {leftImage ? (
           <Image
             resizeMode={'contain'}
-            style={imageStyle || localStyle.btnImage}
-            source={image}
+            style={leftImageStyle || localStyle.btnLeftImage}
+            source={leftImage}
           />
         ) : null}
         {text ? (
           <Text style={textStyle || localStyle.btnText}>{text}</Text>
+        ) : null}
+        {rightImage ? (
+          <Image
+            resizeMode={'contain'}
+            style={rightImageStyle || localStyle.btnRightImage}
+            source={rightImage}
+          />
         ) : null}
       </View>
     </TouchableHighlight>
@@ -63,15 +72,17 @@ const styles = {
   },
   btnText: {
     textTransform: 'uppercase',
-    // fontFamily: 'OpenSans-SemiBold',
     fontSize: fontPtToPx(10),
     justifyContent: 'center',
     alignItems: 'center',
     letterSpacing: 2,
     color: Colors.WildWaterMelon,
   },
-  btnImage: {
+  btnLeftImage: {
     marginRight: layoutPtToPx(2),
+  },
+  btnRightImage: {
+    marginLeft: layoutPtToPx(2),
   },
   buttonContainer: {
     flex: 1,

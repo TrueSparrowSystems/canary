@@ -8,14 +8,14 @@ import ScreenName from '../constants/ScreenName';
 import TimelineScreen from '../screens/TimelineScreen';
 import CollectionScreen from '../screens/CollectionScreen';
 import SettingScreen from '../screens/SettingScreen';
-import {Image} from 'react-native';
+import {Image, Text} from 'react-native';
 import {
   HomeIcon,
   CollectionsIcon,
   SearchIcon,
   ListIcon,
 } from '../assets/common';
-import {layoutPtToPx} from '../utils/responsiveUI';
+import {fontPtToPx, layoutPtToPx} from '../utils/responsiveUI';
 import {useStyleProcessor} from '../hooks/useStyleProcessor';
 import colors from '../constants/colors';
 import PreferenceScreen from '../screens/PreferenceScreen';
@@ -26,6 +26,8 @@ import DiscoverScreen from '../screens/DiscoverScreen';
 import SearchResultScreen from '../screens/SearchResultScreen';
 import ListScreen from '../screens/ListScreen';
 import ListTweetsScreen from '../screens/ListTweetsScreen';
+import fonts from '../constants/fonts';
+import BottomNavigationText from '../components/BottomNavigationText';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -137,12 +139,12 @@ const Navigation = props => {
   };
 
   const bottomStack = useCallback(bottomHeight => {
-    const tabbarStyle = {height: 40 + bottomHeight};
+    const tabbarStyle = {height: 60 + bottomHeight};
     return (
       <Tab.Navigator
         detachInactiveScreens={true}
         initialRouteName={ScreenName.HomeScreen}
-        screenOptions={{tabBarHideOnKeyboard: true, tabBarShowLabel: false}}>
+        screenOptions={{tabBarHideOnKeyboard: true}}>
         <Tab.Screen
           options={({route}) => {
             return {
@@ -151,11 +153,15 @@ const Navigation = props => {
                   source={HomeIcon}
                   style={[
                     localStyle.bottomTabIcons,
-                    {tintColor: focused ? colors.DodgerBlue : colors.Black},
+                    {
+                      opacity: focused ? 1 : 0.5,
+                    },
                   ]}
                 />
               ),
-
+              tabBarLabel: ({focused}) => (
+                <BottomNavigationText focused={focused} text={'Home'} />
+              ),
               tabBarStyle: getTabBarVisibility(route)
                 ? tabbarStyle
                 : {display: 'none'},
@@ -173,11 +179,15 @@ const Navigation = props => {
                   source={SearchIcon}
                   style={[
                     localStyle.bottomTabIcons,
-                    {tintColor: focused ? colors.DodgerBlue : colors.Black},
+                    {
+                      opacity: focused ? 1 : 0.5,
+                    },
                   ]}
                 />
               ),
-
+              tabBarLabel: ({focused}) => (
+                <BottomNavigationText focused={focused} text={'Search'} />
+              ),
               tabBarStyle: getTabBarVisibility(route)
                 ? tabbarStyle
                 : {display: 'none'},
@@ -195,11 +205,15 @@ const Navigation = props => {
                   source={ListIcon}
                   style={[
                     localStyle.bottomTabIcons,
-                    {tintColor: focused ? colors.DodgerBlue : colors.Black},
+                    {
+                      opacity: focused ? 1 : 0.5,
+                    },
                   ]}
                 />
               ),
-
+              tabBarLabel: ({focused}) => (
+                <BottomNavigationText focused={focused} text={'Lists'} />
+              ),
               tabBarStyle: getTabBarVisibility(route)
                 ? tabbarStyle
                 : {display: 'none'},
@@ -217,9 +231,14 @@ const Navigation = props => {
                   source={CollectionsIcon}
                   style={[
                     localStyle.bottomTabIcons,
-                    {tintColor: focused ? colors.DodgerBlue : colors.Black},
+                    {
+                      opacity: focused ? 1 : 0.5,
+                    },
                   ]}
                 />
+              ),
+              tabBarLabel: ({focused}) => (
+                <BottomNavigationText focused={focused} text={'Archive'} />
               ),
               tabBarStyle: getTabBarVisibility(route)
                 ? tabbarStyle
@@ -452,7 +471,11 @@ export default Navigation;
 
 const styles = {
   bottomTabIcons: {
-    height: layoutPtToPx(25),
-    width: layoutPtToPx(25),
+    height: layoutPtToPx(16),
+    width: layoutPtToPx(16),
+  },
+  bottomTabLabel: {
+    fontFamily: fonts.SoraRegular,
+    color: colors.BlackPearl,
   },
 };

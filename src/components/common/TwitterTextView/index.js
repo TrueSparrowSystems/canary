@@ -5,6 +5,7 @@ import ScreenName from '../../../constants/ScreenName';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import colors from '../../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
+import fonts from '../../../constants/fonts';
 
 const PATTERN_HASHTAG = /(?:^|\s)(#[^\s#]+|[^\s#]+#)(?=$|\s)/gi;
 const PATTERN_MENTION = /(^|\s)(@[a-z\d-_]+)/gi;
@@ -138,7 +139,7 @@ function TwitterTextView({
             children={displayText}
           />
         ) : (
-          <Text key={i} style={style}>
+          <Text key={i} style={style || localStyle.textStyle}>
             {text}
           </Text>
         );
@@ -148,12 +149,13 @@ function TwitterTextView({
 }
 const styles = {
   linkStyle: {
-    // TODO: add inter font
+    fontFamily: fonts.InterRegular,
     color: colors.GoldenTainoi,
     lineHeight: layoutPtToPx(19),
     fontSize: fontPtToPx(14),
   },
   textStyle: {
+    fontFamily: fonts.InterRegular,
     color: colors.Black,
     lineHeight: layoutPtToPx(19),
     fontSize: fontPtToPx(14),

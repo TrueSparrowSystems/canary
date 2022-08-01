@@ -9,21 +9,24 @@ import colors from './src/constants/colors';
 import Toast from 'react-native-toast-message';
 import AddListModal from './src/components/AddListModal';
 import AddToListModal from './src/components/AddToListModal';
+import {ThemeProvider} from './src/themes/ThemeContext';
 
 function App() {
   const localStyle = useStyleProcessor(styles, 'App');
   return (
-    <SafeAreaView style={localStyle.container}>
-      <StatusBar barStyle={'dark-content'} />
-      <NavigationContainer>
-        <RootNavigation />
-        <AddCollectionModal />
-        <AddToCollectionModal />
-        <AddListModal />
-        <AddToListModal />
-      </NavigationContainer>
-      <Toast />
-    </SafeAreaView>
+    <ThemeProvider shouldUseDeviceTheme={false}>
+      <SafeAreaView style={localStyle.container}>
+        <StatusBar barStyle={'dark-content'} />
+        <NavigationContainer>
+          <RootNavigation />
+          <AddCollectionModal />
+          <AddToCollectionModal />
+          <AddListModal />
+          <AddToListModal />
+        </NavigationContainer>
+        <Toast />
+      </SafeAreaView>
+    </ThemeProvider>
   );
 }
 const styles = {

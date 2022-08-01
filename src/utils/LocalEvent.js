@@ -18,4 +18,8 @@ export const EventTypes = {
   UpdateCollection: 'event_types_update_collection',
   UpdateList: 'event_types_update_list',
   OnTrendingTopicClick: 'on_trending_topic_click',
+  Themes: {
+    SwitchToDark: 'event_types_themes_switch_to_dark',
+    SwitchToLight: 'event_types_themes_switch_to_light',
+  },
 };

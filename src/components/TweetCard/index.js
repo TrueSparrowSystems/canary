@@ -8,6 +8,7 @@ import {
   likeIcon,
   ListIcon,
   retweetIcon,
+  ShareIcon,
   verifiedIcon,
 } from '../../assets/common';
 import {ToastPosition, ToastType} from '../../constants/ToastConstants';
@@ -23,6 +24,7 @@ import Image from 'react-native-fast-image';
 import TwitterTextView from '../common/TwitterTextView';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {getDisplayDate} from '../../utils/TimeUtils';
+import fonts from '../../constants/fonts';
 
 function TweetCard(props) {
   const {dataSource, isDisabled = false} = props;
@@ -102,7 +104,6 @@ function TweetCard(props) {
           <TouchableOpacity
             onPress={fnOnUserNamePress}
             style={localStyle.flexShrink}>
-            {/* <View style={localStyle.flexRow}> */}
             <View>
               <Text style={localStyle.nameText} numberOfLines={1}>
                 {unescape(user?.name)}
@@ -134,33 +135,37 @@ function TweetCard(props) {
         </TwitterTextView>
         {hasMedia ? <ImageCard mediaArray={media} /> : null}
         <View style={localStyle.likeCommentStrip}>
-          <Image source={commentIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.publicMetricText}>
-            {public_metrics?.reply_count === 0
-              ? 0
-              : getFormattedStat(public_metrics?.reply_count)}
-          </Text>
-          <Image source={retweetIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.publicMetricText}>
-            {public_metrics?.retweet_count === 0
-              ? 0
-              : getFormattedStat(public_metrics?.retweet_count)}
-          </Text>
-          <Image source={likeIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.publicMetricText}>
-            {public_metrics?.like_count === 0
-              ? 0
-              : getFormattedStat(public_metrics?.like_count)}
-          </Text>
-          <TouchableOpacity onPress={onBookmarkButtonPress}>
-            <Image
-              source={isBookmarkedState ? BookmarkedIcon : bookmarkIcon}
-              style={localStyle.iconStyle}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onAddToListPress}>
-            <Image source={ListIcon} style={localStyle.iconStyle} />
-          </TouchableOpacity>
+          <View style={localStyle.flexRow}>
+            <Image source={likeIcon} style={localStyle.iconStyle} />
+            <Text style={localStyle.publicMetricText}>
+              {public_metrics?.like_count === 0
+                ? 0
+                : getFormattedStat(public_metrics?.like_count)}
+            </Text>
+            <Image source={commentIcon} style={localStyle.iconStyle} />
+            <Text style={localStyle.publicMetricText}>
+              {public_metrics?.reply_count === 0
+                ? 0
+                : getFormattedStat(public_metrics?.reply_count)}
+            </Text>
+          </View>
+          <View style={localStyle.optionsView}>
+            <TouchableOpacity
+              onPress={() => {
+                // TODO: add share feature
+              }}>
+              <Image source={ShareIcon} style={localStyle.shareIconStyle} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onBookmarkButtonPress}>
+              <Image
+                source={isBookmarkedState ? BookmarkedIcon : bookmarkIcon}
+                style={localStyle.bookmarkIconStyle}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onAddToListPress}>
+              <Image source={ListIcon} style={localStyle.listIconStyle} />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -202,7 +207,7 @@ const styles = {
     justifyContent: 'center',
   },
   tweetText: {
-    // TODO: add inter font
+    fontFamily: fonts.InterRegular,
     marginBottom: 10,
     color: colors.BlackPearl,
   },
@@ -215,7 +220,7 @@ const styles = {
     justifyContent: 'center',
   },
   displayDateText: {
-    // TODO: add inter font
+    fontFamily: fonts.InterRegular,
     flexGrow: 1,
     color: colors.BlackPearl50,
     fontSize: fontPtToPx(12),
@@ -223,7 +228,7 @@ const styles = {
     marginTop: layoutPtToPx(8),
   },
   nameText: {
-    // TODO: add inter font
+    fontFamily: fonts.InterSemiBold,
     fontSize: fontPtToPx(16),
     lineHeight: layoutPtToPx(19),
     flexShrink: 1,
@@ -235,24 +240,43 @@ const styles = {
     marginLeft: layoutPtToPx(2),
   },
   userNameText: {
-    // TODO: add inter font
+    fontFamily: fonts.InterRegular,
     fontSize: fontPtToPx(12),
     lineHeight: layoutPtToPx(15),
     color: colors.Black,
   },
   likeCommentStrip: {
     flexDirection: 'row',
-    paddingTop: 10,
+    paddingTop: layoutPtToPx(10),
   },
   iconStyle: {
-    height: 15,
-    width: 15,
-    marginRight: 10,
+    height: layoutPtToPx(15),
+    width: layoutPtToPx(17),
+    marginRight: layoutPtToPx(4),
     marginTop: 1,
   },
+  bookmarkIconStyle: {
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(17),
+    marginRight: layoutPtToPx(20),
+  },
+  shareIconStyle: {
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(20),
+    marginRight: layoutPtToPx(20),
+  },
+  listIconStyle: {
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(15),
+  },
   publicMetricText: {
-    flex: 1,
     color: colors.Black,
+    marginRight: layoutPtToPx(12),
+  },
+  optionsView: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'flex-end',
   },
 };
 

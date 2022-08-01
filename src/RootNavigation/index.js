@@ -7,6 +7,7 @@ import BootService from '../services/BootService';
 import Cache from '../services/Cache';
 import {CacheKey} from '../services/Cache/CacheStoreConstants';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
+import SplashScreen from 'react-native-splash-screen';
 
 const AppStack = createSharedElementStackNavigator();
 const PreferenceStack = createSharedElementStackNavigator();
@@ -22,6 +23,7 @@ function RootNavigation() {
     if (!isAppLoaded) {
       BootService.initialize().then(() => {
         setAppLoaded(true);
+        SplashScreen.hide();
       });
     }
     LocalEvent.on(EventTypes.SwitchToHomeStack, switchToHomeStack);

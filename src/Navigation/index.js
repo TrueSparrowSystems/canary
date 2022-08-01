@@ -8,16 +8,15 @@ import ScreenName from '../constants/ScreenName';
 import TimelineScreen from '../screens/TimelineScreen';
 import CollectionScreen from '../screens/CollectionScreen';
 import SettingScreen from '../screens/SettingScreen';
-import {Image, Text} from 'react-native';
+import {Image} from 'react-native';
 import {
   HomeIcon,
   CollectionsIcon,
   SearchIcon,
   ListIcon,
 } from '../assets/common';
-import {fontPtToPx, layoutPtToPx} from '../utils/responsiveUI';
+import {layoutPtToPx} from '../utils/responsiveUI';
 import {useStyleProcessor} from '../hooks/useStyleProcessor';
-import colors from '../constants/colors';
 import PreferenceScreen from '../screens/PreferenceScreen';
 import CollectionTweetScreen from '../screens/CollectionTweetScreen';
 import ImageViewScreen from '../screens/ImageViewScreen';
@@ -26,7 +25,6 @@ import DiscoverScreen from '../screens/DiscoverScreen';
 import SearchResultScreen from '../screens/SearchResultScreen';
 import ListScreen from '../screens/ListScreen';
 import ListTweetsScreen from '../screens/ListTweetsScreen';
-import fonts from '../constants/fonts';
 import BottomNavigationText from '../components/BottomNavigationText';
 
 // TODO: Please correct he screen names.
@@ -473,9 +471,5 @@ const styles = {
   bottomTabIcons: {
     height: layoutPtToPx(16),
     width: layoutPtToPx(16),
-  },
-  bottomTabLabel: {
-    fontFamily: fonts.SoraRegular,
-    color: colors.BlackPearl,
   },
 };

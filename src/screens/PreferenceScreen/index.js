@@ -23,19 +23,19 @@ function PreferenceScreen() {
           <Text style={localStyle.subText}>minimum 3</Text>
         </View>
         <PreferenceSelector onSelectedItemsUpdate={fnOnSelectedItemsUpdate} />
-        {bIsDoneButtonEnabled ? (
-          <View style={localStyle.continueButtonContainer}>
-            <RoundedButton
-              style={localStyle.continueButton}
-              text="Continue"
-              textStyle={localStyle.continueButtonText}
-              onPress={fnOnDonePress}
-              rightImage={rightArrowIcon}
-              rightImageStyle={localStyle.continueButtonIcon}
-              underlayColor={colors.GoldenTainoi80}
-            />
-          </View>
-        ) : null}
+
+        <View style={localStyle.continueButtonContainer}>
+          <RoundedButton
+            style={localStyle.continueButton}
+            text="Continue"
+            disabled={!bIsDoneButtonEnabled}
+            textStyle={localStyle.continueButtonText}
+            onPress={fnOnDonePress}
+            rightImage={rightArrowIcon}
+            rightImageStyle={localStyle.continueButtonIcon}
+            underlayColor={colors.GoldenTainoi80}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

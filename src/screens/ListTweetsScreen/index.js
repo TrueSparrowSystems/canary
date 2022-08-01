@@ -4,7 +4,7 @@ import Header from '../../components/common/Header';
 import TimelineList from '../../components/TimelineList';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {listService} from '../../services/ListService';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import ListTweetDataSource from './ListTweetDataSource';
 
 function ListTweetsScreen(props) {

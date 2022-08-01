@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import CustomModal from '../common/CustomModal';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import useAddToListModalData from './useAddToListModalData';
 import {ScrollView} from 'react-native-gesture-handler';
 import {AddIcon} from '../../assets/common';

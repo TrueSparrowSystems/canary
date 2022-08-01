@@ -8,7 +8,7 @@ import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import Image from 'react-native-fast-image';
 import {layoutPtToPx} from '../../utils/responsiveUI';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 
 function ImageCard({mediaArray}) {
   const localStyle = useStyleProcessor(styles, 'ImageCard');

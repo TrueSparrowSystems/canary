@@ -5,7 +5,7 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {layoutPtToPx} from '../../utils/responsiveUI';
 import ImageViewing from 'react-native-image-viewing/dist/ImageViewing';
 import {useNavigation} from '@react-navigation/native';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 
 function ImageViewScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ImageViewScreen');

@@ -5,7 +5,7 @@ import {fontPtToPx} from '../../utils/responsiveUI';
 import {SettingsIcon} from '../../assets/common';
 import useTimelineScreenData from './useTimelineScreenData';
 import Header from '../../components/common/Header';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import TimelineList from '../../components/TimelineList';
 
 function TimelineScreen() {

@@ -1,41 +1,30 @@
-import {ScrollView, TextInput, View} from 'react-native';
+import {View} from 'react-native';
 import React from 'react';
 import PreferenceOptionButton from '../PreferenceOptionButton';
 import {usePreferenceSelectorData} from './usePreferenceSelectorData';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 
 function PreferenceSelector(props) {
   const localStyle = useStyleProcessor(styles, 'PreferenceSelector');
 
-  const {aPreferences, fnOnItemSelect, fnOnSearchInput} =
-    usePreferenceSelectorData(props);
+  const {aPreferences, fnOnItemSelect} = usePreferenceSelectorData(props);
 
   return (
     <View>
-      <View style={localStyle.searchBarContainer}>
-        <TextInput
-          cursorColor={colors.DodgerBlue}
-          style={localStyle.searchBar}
-          placeholder="Search topics"
-          onChangeText={fnOnSearchInput}
-        />
-      </View>
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={localStyle.optionsContainer}>
+      <View style={localStyle.optionsContainer}>
         {aPreferences.map(pref => (
           <PreferenceOptionButton
             text={pref.title}
             id={pref.id}
             key={pref.id}
+            icon={pref.icon}
             onPress={fnOnItemSelect}
             isSelected={pref.isSelected}
           />
         ))}
-      </ScrollView>
+      </View>
     </View>
   );
 }
@@ -46,7 +35,8 @@ const styles = {
   optionsContainer: {
     flexWrap: 'wrap',
     flexDirection: 'row',
-    paddingBottom: layoutPtToPx(70),
+    marginTop: layoutPtToPx(20),
+    marginBottom: layoutPtToPx(30),
   },
   searchBar: {
     color: colors.SherpaBlue,

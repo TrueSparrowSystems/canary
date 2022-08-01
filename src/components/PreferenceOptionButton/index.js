@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import RoundedButton from '../common/RoundedButton';
+import fonts from '../../constants/fonts';
 
 const PreferenceOptionButton = ({
   id,
@@ -12,26 +13,23 @@ const PreferenceOptionButton = ({
   text,
   onPress,
   isSelected,
+  icon,
 }) => {
   const localStyle = useStyleProcessor(styles, 'PreferenceOptionButton');
   const [selected, setSelected] = useState(isSelected ? isSelected : false);
 
   const localButtonStyle = style || localStyle.preferenceButton;
-  const localButtonTextStyle = textStyle || localStyle.preferenceButtonText;
 
-  const buttonBorderColor = colors.DodgerBlue;
+  const buttonBorderColor = selected ? colors.BlackPearl20 : colors.BlackPearl;
   const buttonBackgroundColor = selected
-    ? colors.DodgerBlue
+    ? colors.GoldenTainoi
     : colors.Transparent;
-  const buttonTextColor = selected ? colors.White : colors.DodgerBlue;
 
   const buttonStyle = {
     ...localButtonStyle,
     borderColor: buttonBorderColor,
     backgroundColor: buttonBackgroundColor,
   };
-
-  const buttonTextStyle = {...localButtonTextStyle, color: buttonTextColor};
 
   useEffect(() => {
     if (isSelected) {
@@ -49,10 +47,12 @@ const PreferenceOptionButton = ({
     <View>
       <RoundedButton
         text={text}
+        leftImage={icon}
+        leftImageStyle={localStyle.iconStyle}
         style={buttonStyle}
-        textStyle={buttonTextStyle}
+        textStyle={textStyle || localStyle.preferenceButtonText}
         onPress={onSelect}
-        underlayColor={colors.Gothic20}
+        underlayColor={colors.GoldenTainoi20}
       />
     </View>
   );
@@ -76,12 +76,15 @@ const styles = {
   },
   preferenceButtonText: {
     marginRight: -2,
-    textTransform: 'uppercase',
-    // fontFamily: 'OpenSans-SemiBold',
-    fontSize: fontPtToPx(10),
-    lineHeight: fontPtToPx(14),
+    fontFamily: fonts.InterSemiBold,
+    fontSize: fontPtToPx(12),
+    lineHeight: fontPtToPx(15),
     alignItems: 'center',
-    letterSpacing: 0.8,
-    color: colors.SherpaBlue70,
+    color: colors.BlackPearl,
+  },
+  iconStyle: {
+    height: layoutPtToPx(12),
+    width: layoutPtToPx(12),
+    marginRight: layoutPtToPx(8),
   },
 };

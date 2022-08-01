@@ -11,7 +11,7 @@ import ScreenName from '../../constants/ScreenName';
 import {ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import {layoutPtToPx} from '../../utils/responsiveUI';
 import Toast from 'react-native-toast-message';
 import Image from 'react-native-fast-image';

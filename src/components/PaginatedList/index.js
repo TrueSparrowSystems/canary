@@ -11,7 +11,7 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {usePaginatedListData, PLACE_HOLDER_CELL} from './usePaginatedListData';
 import {RecyclerListView} from 'recyclerlistview';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 
 function PaginatedList(props) {
   // Component style
@@ -369,7 +369,6 @@ const styles = {
     aspectRatio: 1,
   },
   heading: {
-    // fontFamily: 'VarelaRound-Regular',
     fontSize: fontPtToPx(18),
     lineHeight: 22,
     textAlign: 'center',
@@ -380,7 +379,6 @@ const styles = {
     },
   },
   subHeading: {
-    // fontFamily: 'OpenSans-Regular',
     fontSize: fontPtToPx(12),
     lineHeight: 16,
     textAlign: 'center',

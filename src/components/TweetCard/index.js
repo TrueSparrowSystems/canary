@@ -13,7 +13,7 @@ import {
 import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import useTweetCardData from './useTweetCardData';
 import Toast from 'react-native-toast-message';
 import ImageCard from '../ImageCard';

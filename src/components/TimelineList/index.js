@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo, useRef} from 'react';
 import {ActivityIndicator, RefreshControl, View} from 'react-native';
 import PaginatedList from '../PaginatedList';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import TimelineListDataSource from './TimelineListDataSource';
 import useTimelineListData from './useTimelineListData';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';

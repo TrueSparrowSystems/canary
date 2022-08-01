@@ -93,31 +93,39 @@ function TweetCard(props) {
       disabled={isDisabled}>
       <TouchableOpacity
         onPress={fnOnUserNamePress}
-        style={localStyle.profileImageContainer}>
-        <Image
-          source={{uri: user?.profile_image_url}}
-          style={localStyle.userProfileImage}
-        />
-      </TouchableOpacity>
-      <View style={localStyle.tweetDetailContainer}>
-        <View style={localStyle.flexRow}>
+        style={localStyle.userProfileContainer}>
+        <View style={localStyle.userNameView}>
+          <Image
+            source={{uri: user?.profile_image_url}}
+            style={localStyle.userProfileImage}
+          />
           <TouchableOpacity
             onPress={fnOnUserNamePress}
             style={localStyle.flexShrink}>
-            <View style={localStyle.flexRow}>
+            {/* <View style={localStyle.flexRow}> */}
+            <View>
               <Text style={localStyle.nameText} numberOfLines={1}>
                 {unescape(user?.name)}
               </Text>
-              {user?.verified ? (
-                <Image source={verifiedIcon} style={localStyle.verifiedIcon} />
-              ) : null}
-              <Text style={localStyle.userNameText} numberOfLines={1}>
-                @{unescape(user?.username)}
-              </Text>
+              <View style={localStyle.flexRow}>
+                <Text style={localStyle.userNameText} numberOfLines={1}>
+                  @{unescape(user?.username)}
+                </Text>
+                {true ? (
+                  <Image
+                    source={verifiedIcon}
+                    style={localStyle.verifiedIcon}
+                  />
+                ) : null}
+              </View>
             </View>
           </TouchableOpacity>
-          <Text style={localStyle.displayDateText}> • {displayDate}</Text>
         </View>
+        <View style={localStyle.timeView}>
+          <Text style={localStyle.displayDateText}>{displayDate}</Text>
+        </View>
+      </TouchableOpacity>
+      <View style={localStyle.tweetDetailContainer}>
         <TwitterTextView
           style={localStyle.tweetText}
           hasMedia={hasMedia}
@@ -161,60 +169,75 @@ function TweetCard(props) {
 
 const styles = {
   cardContainer: {
-    borderTopWidth: 1,
-    borderColor: colors.LightGrey,
-    marginBottom: 10,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    paddingBottom: 5,
-    flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: colors.BlackPearl20,
+    marginHorizontal: layoutPtToPx(8),
+    marginBottom: layoutPtToPx(12),
+    borderRadius: layoutPtToPx(8),
+    padding: layoutPtToPx(12),
     flex: 1,
   },
-  profileImageContainer: {
-    height: layoutPtToPx(50),
-    width: layoutPtToPx(50),
+  userProfileContainer: {
+    flex: 1,
+    flexDirection: 'row',
   },
   userProfileImage: {
-    height: '100%',
-    width: '100%',
-    borderRadius: 25,
+    height: layoutPtToPx(40),
+    width: layoutPtToPx(40),
+    marginRight: layoutPtToPx(8),
+    borderRadius: layoutPtToPx(20),
+  },
+  userNameView: {
+    flexShrink: 1,
+    flexDirection: 'row',
+    paddingRight: layoutPtToPx(10),
+  },
+  timeView: {
+    flexGrow: 1,
+    alignItems: 'flex-end',
   },
   tweetDetailContainer: {
     flex: 1,
-    marginHorizontal: 10,
+    marginTop: layoutPtToPx(8),
     justifyContent: 'center',
   },
   tweetText: {
+    // TODO: add inter font
     marginBottom: 10,
-    color: colors.Black,
+    color: colors.BlackPearl,
   },
   flexRow: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   flexShrink: {
     flexShrink: 1,
+    justifyContent: 'center',
   },
   displayDateText: {
+    // TODO: add inter font
     flexGrow: 1,
+    color: colors.BlackPearl50,
     fontSize: fontPtToPx(12),
-    lineHeight: layoutPtToPx(20),
+    lineHeight: layoutPtToPx(16),
+    marginTop: layoutPtToPx(8),
   },
   nameText: {
-    fontWeight: '600',
-    fontSize: fontPtToPx(15),
-    lineHeight: layoutPtToPx(20),
+    // TODO: add inter font
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(19),
     flexShrink: 1,
-    color: colors.Black,
+    color: colors.BlackPearl,
   },
   verifiedIcon: {
-    height: layoutPtToPx(20),
-    width: layoutPtToPx(20),
+    height: layoutPtToPx(12),
+    width: layoutPtToPx(12),
+    marginLeft: layoutPtToPx(2),
   },
   userNameText: {
+    // TODO: add inter font
     fontSize: fontPtToPx(12),
-    lineHeight: layoutPtToPx(20),
-    paddingHorizontal: layoutPtToPx(2),
+    lineHeight: layoutPtToPx(15),
     color: colors.Black,
   },
   likeCommentStrip: {

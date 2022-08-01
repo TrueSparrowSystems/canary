@@ -47,6 +47,7 @@ function TwitterTextView({
   linkStyle,
   hasMedia = false,
   urls = [],
+  style,
   ...extraProps
 }) {
   const localStyle = useStyleProcessor(styles, 'TwitterTextView');
@@ -137,7 +138,7 @@ function TwitterTextView({
             children={displayText}
           />
         ) : (
-          <Text key={i} style={localStyle.textStyle}>
+          <Text key={i} style={style}>
             {text}
           </Text>
         );
@@ -147,7 +148,8 @@ function TwitterTextView({
 }
 const styles = {
   linkStyle: {
-    color: colors.CuriousBlue,
+    // TODO: add inter font
+    color: colors.GoldenTainoi,
     lineHeight: layoutPtToPx(19),
     fontSize: fontPtToPx(14),
   },

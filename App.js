@@ -29,7 +29,7 @@ function App() {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: colors.DodgerBlue,
+    backgroundColor: colors.GoldenTainoi,
   },
 };
 

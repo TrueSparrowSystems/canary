@@ -11,4 +11,8 @@ export default {
   Transparent: '#FFFFFF00',
   LightGrey: '#D1D1D1',
   CuriousBlue: '#2980B9',
+  BlackPearl: '#141819',
+  BlackPearl20: '#14181933',
+  BlackPearl50: '#14181980',
+  GoldenTainoi: '#fec244',
 };

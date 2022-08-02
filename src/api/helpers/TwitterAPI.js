@@ -110,10 +110,10 @@ class TwitterApi {
     return apiService.get(EndPoints.multipleTweetsLookup, data);
   }
 
-  getConversationThread(conversationId, nextPageIdentifier) {
+  getConversationThread(conversationId, username, nextPageIdentifier) {
     const data = {
       max_results: 10,
-      query: `(conversation_id:${conversationId}) (-is:retweet)`,
+      query: `(conversation_id:${conversationId}) (to:${username}) (-is:retweet)`,
       ...API_REQUEST_PARAMETERS,
     };
     if (nextPageIdentifier) {

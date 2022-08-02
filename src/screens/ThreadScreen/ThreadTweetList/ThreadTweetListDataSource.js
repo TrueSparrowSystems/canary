@@ -7,15 +7,20 @@ const ReferencedTweetTypes = {
 };
 
 class ThreadTweetListDataSource extends PaginatedListDataSource {
-  constructor({tweetId, conversationId}) {
+  constructor({tweetId, conversationId, username}) {
     super();
 
     this.tweetId = tweetId;
+    this.username = username;
     this.conversationId = conversationId;
   }
   // Endpoint which is to be called for fetching list data.
   apiCall(...args) {
-    return TwitterAPI.getConversationThread(this.conversationId, ...args);
+    return TwitterAPI.getConversationThread(
+      this.conversationId,
+      this.username,
+      ...args,
+    );
   }
 
   processData({data, response}) {

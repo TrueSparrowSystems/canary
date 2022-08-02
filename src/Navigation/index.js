@@ -8,7 +8,7 @@ import ScreenName from '../constants/ScreenName';
 import TimelineScreen from '../screens/TimelineScreen';
 import CollectionScreen from '../screens/CollectionScreen';
 import SettingScreen from '../screens/SettingScreen';
-import {Image} from 'react-native';
+import {Image, View} from 'react-native';
 import {
   HomeIcon,
   CollectionsIcon,
@@ -26,6 +26,8 @@ import SearchResultScreen from '../screens/SearchResultScreen';
 import ListScreen from '../screens/ListScreen';
 import ListTweetsScreen from '../screens/ListTweetsScreen';
 import BottomNavigationText from '../components/BottomNavigationText';
+import LocationSelectionScreen from '../screens/LocationSelectionScreen';
+import colors from '../constants/colors';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -137,7 +139,9 @@ const Navigation = props => {
   };
 
   const bottomStack = useCallback(bottomHeight => {
-    const tabbarStyle = {height: 60 + bottomHeight};
+    const tabbarStyle = {
+      height: 60 + bottomHeight,
+    };
     return (
       <Tab.Navigator
         detachInactiveScreens={true}
@@ -146,17 +150,26 @@ const Navigation = props => {
         <Tab.Screen
           options={({route}) => {
             return {
-              tabBarIcon: ({focused}) => (
-                <Image
-                  source={HomeIcon}
-                  style={[
-                    localStyle.bottomTabIcons,
-                    {
-                      opacity: focused ? 1 : 0.5,
-                    },
-                  ]}
-                />
-              ),
+              tabBarIcon: ({focused}) => {
+                return (
+                  <View
+                    style={[
+                      localStyle.tabIconContainer,
+                      focused ? localStyle.selectedTabContainer : null,
+                    ]}>
+                    <Image
+                      source={HomeIcon}
+                      style={[
+                        localStyle.bottomTabIcons,
+                        {
+                          opacity: focused ? 1 : 0.5,
+                        },
+                      ]}
+                    />
+                  </View>
+                );
+              },
+
               tabBarLabel: ({focused}) => (
                 <BottomNavigationText focused={focused} text={'Home'} />
               ),
@@ -173,15 +186,21 @@ const Navigation = props => {
           options={({route}) => {
             return {
               tabBarIcon: ({focused}) => (
-                <Image
-                  source={SearchIcon}
+                <View
                   style={[
-                    localStyle.bottomTabIcons,
-                    {
-                      opacity: focused ? 1 : 0.5,
-                    },
-                  ]}
-                />
+                    localStyle.tabIconContainer,
+                    focused ? localStyle.selectedTabContainer : null,
+                  ]}>
+                  <Image
+                    source={SearchIcon}
+                    style={[
+                      localStyle.bottomTabIcons,
+                      {
+                        opacity: focused ? 1 : 0.5,
+                      },
+                    ]}
+                  />
+                </View>
               ),
               tabBarLabel: ({focused}) => (
                 <BottomNavigationText focused={focused} text={'Search'} />
@@ -199,15 +218,21 @@ const Navigation = props => {
           options={({route}) => {
             return {
               tabBarIcon: ({focused}) => (
-                <Image
-                  source={ListIcon}
+                <View
                   style={[
-                    localStyle.bottomTabIcons,
-                    {
-                      opacity: focused ? 1 : 0.5,
-                    },
-                  ]}
-                />
+                    localStyle.tabIconContainer,
+                    focused ? localStyle.selectedTabContainer : null,
+                  ]}>
+                  <Image
+                    source={ListIcon}
+                    style={[
+                      localStyle.bottomTabIcons,
+                      {
+                        opacity: focused ? 1 : 0.5,
+                      },
+                    ]}
+                  />
+                </View>
               ),
               tabBarLabel: ({focused}) => (
                 <BottomNavigationText focused={focused} text={'Lists'} />
@@ -225,15 +250,21 @@ const Navigation = props => {
           options={({route}) => {
             return {
               tabBarIcon: ({focused}) => (
-                <Image
-                  source={CollectionsIcon}
+                <View
                   style={[
-                    localStyle.bottomTabIcons,
-                    {
-                      opacity: focused ? 1 : 0.5,
-                    },
-                  ]}
-                />
+                    localStyle.tabIconContainer,
+                    focused ? localStyle.selectedTabContainer : null,
+                  ]}>
+                  <Image
+                    source={CollectionsIcon}
+                    style={[
+                      localStyle.bottomTabIcons,
+                      {
+                        opacity: focused ? 1 : 0.5,
+                      },
+                    ]}
+                  />
+                </View>
               ),
               tabBarLabel: ({focused}) => (
                 <BottomNavigationText focused={focused} text={'Archive'} />
@@ -303,6 +334,17 @@ const Navigation = props => {
         <DiscoverStack.Screen
           name={ScreenName.SearchResultScreen}
           component={SearchResultScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <DiscoverStack.Screen
+          name={ScreenName.LocationSelectionScreen}
+          component={LocationSelectionScreen}
           options={{
             gestureEnabled: true,
             headerShown: false,
@@ -471,5 +513,15 @@ const styles = {
   bottomTabIcons: {
     height: layoutPtToPx(16),
     width: layoutPtToPx(16),
+  },
+  tabIconContainer: {
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  selectedTabContainer: {
+    borderTopColor: colors.BlackPearl,
+    borderTopWidth: 2,
   },
 };

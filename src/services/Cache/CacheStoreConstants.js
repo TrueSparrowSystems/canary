@@ -3,4 +3,5 @@ export const CacheKey = {
   PreferenceList: 'cache_key_preference_list',
   BookmarkedTweetsList: 'bookmarked_tweets_list',
   AvailableWoeidsList: 'available_woeids_list',
+  SelectedLocation: 'selected_location',
 };

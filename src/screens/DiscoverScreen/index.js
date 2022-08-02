@@ -1,18 +1,38 @@
 import React from 'react';
-import {Pressable, Text, View, ScrollView} from 'react-native';
+import {
+  Pressable,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import SearchBar from '../../components/SearchBar';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import colors from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useDiscoverScreenData from './useDiscoverScreenData';
+import fonts from '../../constants/fonts';
 
 function DiscoverScreen() {
   const localStyle = useStyleProcessor(styles, 'DiscoverScreen');
-  const {aTrendingTopics, fnOnSearchPress, fnOnTopicClick} =
-    useDiscoverScreenData();
+  const {
+    aTrendingTopics,
+    sSelectedCountryName,
+    fnOnSearchPress,
+    fnOnTopicClick,
+    fnNavigateToLocationSelectionScreen,
+  } = useDiscoverScreenData();
   return (
     <View>
       <SearchBar onSearchPressCallback={fnOnSearchPress} />
+      <View style={localStyle.trendingCountryContainer}>
+        <Text style={localStyle.trendingCountryText}>
+          Trending {sSelectedCountryName}
+        </Text>
+        <TouchableOpacity onPress={fnNavigateToLocationSelectionScreen}>
+          <Text style={localStyle.changeLocationText}>Change location</Text>
+        </TouchableOpacity>
+      </View>
       <ScrollView
         contentContainerStyle={localStyle.trendingTopicList}
         showsVerticalScrollIndicator={false}>
@@ -48,6 +68,21 @@ const styles = {
   },
   trendingTopicList: {
     paddingBottom: layoutPtToPx(50),
+  },
+  trendingCountryContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: layoutPtToPx(20),
+    marginTop: layoutPtToPx(20),
+  },
+  trendingCountryText: {
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(18),
+  },
+  changeLocationText: {
+    fontFamily: fonts.InterSemiBold,
+    fontSize: fontPtToPx(14),
+    color: colors.GoldenTainoi,
   },
 };
 

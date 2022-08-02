@@ -61,7 +61,7 @@ const styles = {
   backIcon: {
     height: layoutPtToPx(20),
     width: layoutPtToPx(20),
-    tintColor: colors.DodgerBlue,
+    tintColor: colors.GoldenTainoi,
   },
   textStyle: {
     color: colors.Black,

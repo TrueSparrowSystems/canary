@@ -1,13 +1,14 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, SafeAreaView, ScrollView, View} from 'react-native';
-import {AddIcon} from '../../assets/common';
+import {BottomBarListIcon} from '../../assets/common';
 import ListCard from '../../components/ListCard';
-import Header from '../../components/common/Header';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {listService} from '../../services/ListService';
 import colors from '../../constants/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
-import {fontPtToPx} from '../../utils/responsiveUI';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
+
 function ListScreen() {
   const localStyle = useStyleProcessor(styles, 'ListScreen');
   const [isLoading, setIsLoading] = useState(true);
@@ -51,42 +52,40 @@ function ListScreen() {
 
   return (
     <SafeAreaView style={localStyle.container}>
-      <Header
-        enableBackButton={false}
-        enableRightButton={true}
-        onRightButtonClick={onAddListPress}
-        rightButtonImage={AddIcon}
-        text="Lists"
-        textStyle={localStyle.headerText}
-      />
-
       {isLoading ? (
         <View style={localStyle.loaderStyle}>
           <ActivityIndicator animating={isLoading} />
         </View>
+      ) : listDataRef.current == null ? (
+        <EmptyScreenComponent
+          emptyImage={BottomBarListIcon}
+          buttonText={'Create a new List'}
+          onButtonPress={onAddListPress}
+          descriptionText={
+            'Stay up-to-date on the favorite topics by tweeters you love'
+          }
+        />
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={localStyle.scrollViewContainer}
           style={localStyle.scrollViewStyle}>
-          {listDataRef.current == null
-            ? null
-            : Object.keys(listDataRef.current).map(key => {
-                const list = listDataRef.current[key];
-                const singleListData = {
-                  listId: list?.id,
-                  listName: list?.name,
-                  // TODO: change image url
-                  imageUrl: 'https://picsum.photos/200/300',
-                };
-                return (
-                  <ListCard
-                    key={singleListData.listId}
-                    data={singleListData}
-                    onListRemoved={reloadList}
-                  />
-                );
-              })}
+          {Object.keys(listDataRef.current).map(key => {
+            const list = listDataRef.current[key];
+            const singleListData = {
+              listId: list?.id,
+              listName: list?.name,
+              // TODO: change image url
+              imageUrl: 'https://picsum.photos/200/300',
+            };
+            return (
+              <ListCard
+                key={singleListData.listId}
+                data={singleListData}
+                onListRemoved={reloadList}
+              />
+            );
+          })}
           <View />
         </ScrollView>
       )}
@@ -113,13 +112,13 @@ const styles = {
     fontSize: fontPtToPx(35),
   },
   scrollViewStyle: {
-    paddingTop: 20,
+    paddingTop: layoutPtToPx(20),
   },
   add: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: layoutPtToPx(10),
+    paddingHorizontal: layoutPtToPx(20),
     position: 'absolute',
-    right: 20,
+    right: layoutPtToPx(20),
   },
   loaderStyle: {
     flex: 1,
@@ -127,7 +126,7 @@ const styles = {
     alignItems: 'center',
   },
   scrollViewContainer: {
-    paddingBottom: 20,
+    paddingBottom: layoutPtToPx(20),
   },
 };
 

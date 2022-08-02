@@ -1,12 +1,13 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {TouchableOpacity, View, Image, TextInput} from 'react-native';
-import colors from '../../constants/colors';
+import colors, {getColorWithOpacity} from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import {BinIcon, SearchIcon} from '../../assets/common';
+import {CrossIcon, SearchIcon} from '../../assets/common';
 import {useNavigation} from '@react-navigation/native';
 import {unescape} from 'lodash';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import fonts from '../../constants/fonts';
 
 function SearchBar({searchQuery = '', onSearchPressCallback, onQueryChange}) {
   const navigation = useNavigation();
@@ -60,29 +61,24 @@ function SearchBar({searchQuery = '', onSearchPressCallback, onQueryChange}) {
 
   return (
     <View style={localStyle.searchContainer}>
+      <Image source={SearchIcon} style={localStyle.searchIconStyle} />
       <TextInput
         ref={textInputRef}
         style={localStyle.input}
         value={queryRef.current}
-        cursorColor={colors.SherpaBlue}
-        placeholder={'Enter Search Text'}
-        placeholderTextColor={colors.SherpaBlue70}
-        selectionColor={colors.SherpaBlue70}
+        cursorColor={colors.BlackPearl}
+        placeholder={'Search Tweets'}
+        placeholderTextColor={getColorWithOpacity(colors.BlackPearl, 0.5)}
+        selectionColor={getColorWithOpacity(colors.BlackPearl, 0.5)}
         onChangeText={updateQuery}
+        onSubmitEditing={onSearchPress}
       />
-      {query.length > 0 && (
-        <TouchableOpacity
-          onPress={onSearchPress}
-          style={localStyle.crossContainer}>
-          <Image source={SearchIcon} style={localStyle.crossButtonStyle} />
-        </TouchableOpacity>
-      )}
 
       {query.length > 0 && (
         <TouchableOpacity
           onPress={clearQuery}
           style={localStyle.crossContainer}>
-          <Image source={BinIcon} style={localStyle.crossButtonStyle} />
+          <Image source={CrossIcon} style={localStyle.crossButtonStyle} />
         </TouchableOpacity>
       )}
     </View>
@@ -96,7 +92,7 @@ const styles = {
     borderWidth: 1,
     borderRadius: layoutPtToPx(4),
     paddingHorizontal: layoutPtToPx(10),
-    borderColor: '003C434D',
+    borderColor: getColorWithOpacity(colors.BlackPearl, 0.5),
     backgroundColor: colors.White,
     flexDirection: 'row',
     alignItems: 'center',
@@ -108,15 +104,26 @@ const styles = {
   crossContainer: {
     padding: layoutPtToPx(5),
   },
-  crossButtonStyle: {height: layoutPtToPx(12), width: layoutPtToPx(12)},
+  crossButtonStyle: {
+    height: layoutPtToPx(16),
+    width: layoutPtToPx(16),
+  },
   input: {
+    fontFamily: fonts.SoraRegular,
     paddingTop: 0,
     paddingBottom: 0,
     height: '100%',
-    color: colors.SherpaBlue,
+    color: colors.BlackPearl,
     fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(18),
     letterSpacing: 0.32,
     flex: 1,
+  },
+  searchIconStyle: {
+    tintColor: getColorWithOpacity(colors.BlackPearl, 0.2),
+    height: layoutPtToPx(16),
+    width: layoutPtToPx(16),
+    marginRight: layoutPtToPx(8),
   },
 };
 

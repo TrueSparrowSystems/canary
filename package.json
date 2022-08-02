@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-community/netinfo": "9.3.0",
+    "@react-native-community/slider": "^4.2.4",
     "@react-navigation/bottom-tabs": "6.3.2",
     "@react-navigation/native": "6.0.11",
     "@react-navigation/stack": "6.2.2",
@@ -20,6 +21,8 @@
     "lodash-es": "4.17.21",
     "moment": "2.29.4",
     "moment-timezone": "0.5.33",
+    "patch-package": "^6.4.7",
+    "postinstall-postinstall": "^2.1.0",
     "react": "18.0.0",
     "react-native": "0.69.1",
     "react-native-device-info": "10.0.1",
@@ -33,8 +36,10 @@
     "react-native-shared-element": "0.8.4",
     "react-native-splash-screen": "3.3.0",
     "react-native-toast-message": "2.1.5",
-    "react-native-video": "6.0.0-alpha.1",
+    "react-native-true-sight": "^2.0.0",
     "react-native-uuid": "2.0.1",
+    "react-native-vector-icons": "^9.2.0",
+    "react-native-video": "6.0.0-alpha.1",
     "react-navigation-shared-element": "3.1.3",
     "recyclerlistview": "4.1.1",
     "recyclerlistview-gridlayoutprovider": "1.0.1"

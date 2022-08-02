@@ -8,6 +8,7 @@ import {
 } from 'react-native-true-sight';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {useNavigation} from '@react-navigation/native';
+import {CrossIcon} from '../../assets/common';
 
 function VideoPlayerScreen(props) {
   const {videoUrl, aspectRatio} = props?.route?.params;
@@ -31,6 +32,7 @@ function VideoPlayerScreen(props) {
         onClose={() => {
           navigation.goBack();
         }}
+        crossIcon={CrossIcon}
         bottomControl={args => <DefaultBottomControlsBar {...args} />}>
         {args => (
           <Video

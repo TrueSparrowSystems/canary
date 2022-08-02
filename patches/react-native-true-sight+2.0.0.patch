@@ -1,18 +1,135 @@
-diff --git a/node_modules/react-native-true-sight/assets/icons/crossIcon.png b/node_modules/react-native-true-sight/assets/icons/crossIcon.png
-new file mode 100644
-index 0000000..9969548
-Binary files /dev/null and b/node_modules/react-native-true-sight/assets/icons/crossIcon.png differ
-diff --git a/node_modules/react-native-true-sight/src/images/index.ts b/node_modules/react-native-true-sight/src/images/index.ts
-index 08b4813..04b8bb2 100644
---- a/node_modules/react-native-true-sight/src/images/index.ts
-+++ b/node_modules/react-native-true-sight/src/images/index.ts
-@@ -1,3 +1,4 @@
- export const playerPause = require('../../assets/icons/player-pause.png')
- export const playerPlay = require('../../assets/icons/player-play.png')
- export const playerRestart = require('../../assets/icons/player-restart.png')
-+export const crossIcon = require('../../assets/icons/crossIcon.png');
+diff --git a/node_modules/react-native-true-sight/build/modules/video-player/components/DefaultBottomControlsBar.js b/node_modules/react-native-true-sight/build/modules/video-player/components/DefaultBottomControlsBar.js
+index 838692b..eff9655 100644
+--- a/node_modules/react-native-true-sight/build/modules/video-player/components/DefaultBottomControlsBar.js
++++ b/node_modules/react-native-true-sight/build/modules/video-player/components/DefaultBottomControlsBar.js
+@@ -9,15 +9,15 @@ export const DefaultBottomControlsBar = (props) => {
+         {secondsToMS(props.playCursorTime)}
+       </Text>
+       <Slider pointerEvents={props.navigationDisabled ? "none" : undefined} style={styles.loadingBar} maximumValue={props.videoTotalTime} minimumTrackTintColor={props.barColor} thumbTintColor={props.joyStickColor} value={props.playCursorTime} onSlidingStart={() => {
+-        wasPausedBeforeSliding.current = props.videoPaused; // To know if we need to play after sliding.
+-        props.setPaused();
+-    }} onSlidingComplete={(val) => {
+-        props.setPosition(Math.round(val));
+-        // Mark playing again if not paused before sliding
+-        if (!wasPausedBeforeSliding.current) {
+-            props.setPlaying();
+-        }
+-    }}/>
++            wasPausedBeforeSliding.current = props.videoPaused; // To know if we need to play after sliding.
++            props.setPaused();
++        }} onSlidingComplete={(val) => {
++            props.setPosition(Math.round(val));
++            // Mark playing again if not paused before sliding
++            if (!wasPausedBeforeSliding.current) {
++                props.setPlaying();
++            }
++        }}/>
+       <Text style={styles.totalTime}>{secondsToMS(props.videoTotalTime)}</Text>
+     </View>);
+ };
+diff --git a/node_modules/react-native-true-sight/build/modules/video-player/components/VideoPlayer.d.ts b/node_modules/react-native-true-sight/build/modules/video-player/components/VideoPlayer.d.ts
+index 767ce49..fe7d0f6 100644
+--- a/node_modules/react-native-true-sight/build/modules/video-player/components/VideoPlayer.d.ts
++++ b/node_modules/react-native-true-sight/build/modules/video-player/components/VideoPlayer.d.ts
+@@ -5,6 +5,8 @@ interface PlayerProps {
+     children(props: InjectedPlayerProps): React.ReactNode;
+     mainControl(data: InjectedControlProps): React.ReactNode;
+     bottomControl(data: InjectedControlProps): React.ReactNode;
++    onClose(): void;
++    crossIcon: any;
+ }
+ export declare const VideoPlayer: React.FC<PlayerProps>;
+ export {};
+diff --git a/node_modules/react-native-true-sight/build/modules/video-player/components/VideoPlayer.js b/node_modules/react-native-true-sight/build/modules/video-player/components/VideoPlayer.js
+index a1c23f6..5f51f20 100644
+--- a/node_modules/react-native-true-sight/build/modules/video-player/components/VideoPlayer.js
++++ b/node_modules/react-native-true-sight/build/modules/video-player/components/VideoPlayer.js
+@@ -2,9 +2,10 @@ import React, { useRef, useState, useEffect } from "react";
+ import { TouchableWithoutFeedback, View, Animated, StyleSheet, } from "react-native";
+ import { useVideoState } from "../hooks/useVideoState";
+ import { PlayerLoader } from "./PlayerLoader";
++import { PlayerIcon } from './PlayerIcon';
+ export const VideoPlayer = (props) => {
+     const playerRef = useRef(null);
+-    const controlsHider = useRef(0);
++    const controlsHider = useRef();
+     const controlsFadeValue = useRef(new Animated.Value(1)).current;
+     const { videoLoading, videoPaused, setVideoLoading, setVideoNotLoading, setVideoPlaying, setVideoPaused, } = useVideoState(props.autoStart);
+     const [showVideoControls, setShowVideoControls] = useState(false);
+@@ -71,36 +72,39 @@ export const VideoPlayer = (props) => {
+           {videoLoading ? <PlayerLoader /> : null}
+         </View>
+         <Animated.View style={[styles.controls, { opacity: controlsFadeValue }]} pointerEvents={showVideoControls ? undefined : "none"}>
++        {props?.crossIcon ? <View style={styles.closeIconContainer}>
++         <PlayerIcon iconSource={props?.crossIcon} onPress={props?.onClose}/>
++        </View> : null}
+           <View style={styles.middleControlsBar}>
+             {props.mainControl({
+-        videoPaused,
+-        videoLoading,
+-        playCursorTime,
+-        videoTotalTime,
+-        setPlaying: setVideoPlaying,
+-        setPaused: setVideoPaused,
+-        setPosition: setCursorPosition,
+-    })}
++            videoPaused,
++            videoLoading,
++            playCursorTime,
++            videoTotalTime,
++            setPlaying: setVideoPlaying,
++            setPaused: setVideoPaused,
++            setPosition: setCursorPosition,
++        })}
+           </View>
+           <View style={styles.bottomControlsBar}>
+             {props.bottomControl({
+-        videoPaused,
+-        videoLoading,
+-        playCursorTime,
+-        videoTotalTime,
+-        setPlaying: setVideoPlaying,
+-        setPaused: setVideoPaused,
+-        setPosition: setCursorPosition,
+-    })}
++            videoPaused,
++            videoLoading,
++            playCursorTime,
++            videoTotalTime,
++            setPlaying: setVideoPlaying,
++            setPaused: setVideoPaused,
++            setPosition: setCursorPosition,
++        })}
+           </View>
+         </Animated.View>
+         {props.children({
+-        videoPaused,
+-        playerRef,
+-        onLoad,
+-        onProgress,
+-        onEnd,
+-    })}
++            videoPaused,
++            playerRef,
++            onLoad,
++            onProgress,
++            onEnd,
++        })}
+       </View>
+     </TouchableWithoutFeedback>);
+ };
+@@ -137,4 +141,9 @@ const styles = StyleSheet.create({
+         left: 0,
+         right: 0,
+     },
++    closeIconContainer: {
++        zIndex: 100,
++        height: 50,
++        width: 50
++    }
+ });
 diff --git a/node_modules/react-native-true-sight/src/modules/video-player/components/VideoPlayer.tsx b/node_modules/react-native-true-sight/src/modules/video-player/components/VideoPlayer.tsx
-index 8a2fb3a..fd3cd79 100644
+index 8a2fb3a..2889a00 100644
 --- a/node_modules/react-native-true-sight/src/modules/video-player/components/VideoPlayer.tsx
 +++ b/node_modules/react-native-true-sight/src/modules/video-player/components/VideoPlayer.tsx
 @@ -9,12 +9,15 @@ import Video from "react-native-video";
@@ -20,7 +137,6 @@ index 8a2fb3a..fd3cd79 100644
  import { InjectedControlProps, InjectedPlayerProps } from "../types";
  import { PlayerLoader } from "./PlayerLoader";
 +import {PlayerIcon} from './PlayerIcon';
-+import { crossIcon } from "../../../images";
  
  interface PlayerProps {
    autoStart: boolean;
@@ -28,16 +144,26 @@ index 8a2fb3a..fd3cd79 100644
    mainControl(data: InjectedControlProps): React.ReactNode;
    bottomControl(data: InjectedControlProps): React.ReactNode;
 +  onClose(): void;
++  crossIcon: any;
  }
  
  interface ProgressStatus {
+@@ -24,7 +27,7 @@ interface ProgressStatus {
+ 
+ export const VideoPlayer: React.FC<PlayerProps> = (props) => {
+   const playerRef = useRef<Video>(null);
+-  const controlsHider = useRef(0);
++  const controlsHider = useRef<NodeJS.Timeout>();
+   const controlsFadeValue = useRef(new Animated.Value(1)).current;
+   const {
+     videoLoading,
 @@ -115,6 +118,9 @@ export const VideoPlayer: React.FC<PlayerProps> = (props) => {
            style={[styles.controls, { opacity: controlsFadeValue }]}
            pointerEvents={showVideoControls ? undefined : "none"}
          >
-+        <View style={styles.closeIconContainer}>
-+         <PlayerIcon iconSource={crossIcon} onPress={props?.onClose}/>
-+        </View>
++        {props?.crossIcon ?<View style={styles.closeIconContainer}>
++         <PlayerIcon iconSource={props?.crossIcon} onPress={props?.onClose}/>
++        </View> : null}
            <View style={styles.middleControlsBar}>
              {props.mainControl({
                videoPaused,

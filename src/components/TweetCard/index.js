@@ -8,12 +8,13 @@ import {
   likeIcon,
   ListIcon,
   retweetIcon,
+  ShareIcon,
   verifiedIcon,
 } from '../../assets/common';
 import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import useTweetCardData from './useTweetCardData';
 import Toast from 'react-native-toast-message';
 import ImageCard from '../ImageCard';
@@ -23,6 +24,7 @@ import Image from 'react-native-fast-image';
 import TwitterTextView from '../common/TwitterTextView';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {getDisplayDate} from '../../utils/TimeUtils';
+import fonts from '../../constants/fonts';
 
 function TweetCard(props) {
   const {dataSource, isDisabled = false} = props;
@@ -93,31 +95,38 @@ function TweetCard(props) {
       disabled={isDisabled}>
       <TouchableOpacity
         onPress={fnOnUserNamePress}
-        style={localStyle.profileImageContainer}>
-        <Image
-          source={{uri: user?.profile_image_url}}
-          style={localStyle.userProfileImage}
-        />
-      </TouchableOpacity>
-      <View style={localStyle.tweetDetailContainer}>
-        <View style={localStyle.flexRow}>
+        style={localStyle.userProfileContainer}>
+        <View style={localStyle.userNameView}>
+          <Image
+            source={{uri: user?.profile_image_url}}
+            style={localStyle.userProfileImage}
+          />
           <TouchableOpacity
             onPress={fnOnUserNamePress}
             style={localStyle.flexShrink}>
-            <View style={localStyle.flexRow}>
+            <View>
               <Text style={localStyle.nameText} numberOfLines={1}>
                 {unescape(user?.name)}
               </Text>
-              {user?.verified ? (
-                <Image source={verifiedIcon} style={localStyle.verifiedIcon} />
-              ) : null}
-              <Text style={localStyle.userNameText} numberOfLines={1}>
-                @{unescape(user?.username)}
-              </Text>
+              <View style={localStyle.flexRow}>
+                <Text style={localStyle.userNameText} numberOfLines={1}>
+                  @{unescape(user?.username)}
+                </Text>
+                {true ? (
+                  <Image
+                    source={verifiedIcon}
+                    style={localStyle.verifiedIcon}
+                  />
+                ) : null}
+              </View>
             </View>
           </TouchableOpacity>
-          <Text style={localStyle.displayDateText}> • {displayDate}</Text>
         </View>
+        <View style={localStyle.timeView}>
+          <Text style={localStyle.displayDateText}>{displayDate}</Text>
+        </View>
+      </TouchableOpacity>
+      <View style={localStyle.tweetDetailContainer}>
         <TwitterTextView
           style={localStyle.tweetText}
           hasMedia={hasMedia}
@@ -126,33 +135,37 @@ function TweetCard(props) {
         </TwitterTextView>
         {hasMedia ? <ImageCard mediaArray={media} tweetId={id} /> : null}
         <View style={localStyle.likeCommentStrip}>
-          <Image source={commentIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.publicMetricText}>
-            {public_metrics?.reply_count === 0
-              ? 0
-              : getFormattedStat(public_metrics?.reply_count)}
-          </Text>
-          <Image source={retweetIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.publicMetricText}>
-            {public_metrics?.retweet_count === 0
-              ? 0
-              : getFormattedStat(public_metrics?.retweet_count)}
-          </Text>
-          <Image source={likeIcon} style={localStyle.iconStyle} />
-          <Text style={localStyle.publicMetricText}>
-            {public_metrics?.like_count === 0
-              ? 0
-              : getFormattedStat(public_metrics?.like_count)}
-          </Text>
-          <TouchableOpacity onPress={onBookmarkButtonPress}>
-            <Image
-              source={isBookmarkedState ? BookmarkedIcon : bookmarkIcon}
-              style={localStyle.iconStyle}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onAddToListPress}>
-            <Image source={ListIcon} style={localStyle.iconStyle} />
-          </TouchableOpacity>
+          <View style={localStyle.flexRow}>
+            <Image source={likeIcon} style={localStyle.iconStyle} />
+            <Text style={localStyle.publicMetricText}>
+              {public_metrics?.like_count === 0
+                ? 0
+                : getFormattedStat(public_metrics?.like_count)}
+            </Text>
+            <Image source={commentIcon} style={localStyle.iconStyle} />
+            <Text style={localStyle.publicMetricText}>
+              {public_metrics?.reply_count === 0
+                ? 0
+                : getFormattedStat(public_metrics?.reply_count)}
+            </Text>
+          </View>
+          <View style={localStyle.optionsView}>
+            <TouchableOpacity
+              onPress={() => {
+                // TODO: add share feature
+              }}>
+              <Image source={ShareIcon} style={localStyle.shareIconStyle} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onBookmarkButtonPress}>
+              <Image
+                source={isBookmarkedState ? BookmarkedIcon : bookmarkIcon}
+                style={localStyle.bookmarkIconStyle}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onAddToListPress}>
+              <Image source={ListIcon} style={localStyle.listIconStyle} />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -161,75 +174,109 @@ function TweetCard(props) {
 
 const styles = {
   cardContainer: {
-    borderTopWidth: 1,
-    borderColor: colors.LightGrey,
-    marginBottom: 10,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    paddingBottom: 5,
-    flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: colors.BlackPearl20,
+    marginHorizontal: layoutPtToPx(8),
+    marginBottom: layoutPtToPx(12),
+    borderRadius: layoutPtToPx(8),
+    padding: layoutPtToPx(12),
     flex: 1,
   },
-  profileImageContainer: {
-    height: layoutPtToPx(50),
-    width: layoutPtToPx(50),
+  userProfileContainer: {
+    flex: 1,
+    flexDirection: 'row',
   },
   userProfileImage: {
-    height: '100%',
-    width: '100%',
-    borderRadius: 25,
+    height: layoutPtToPx(40),
+    width: layoutPtToPx(40),
+    marginRight: layoutPtToPx(8),
+    borderRadius: layoutPtToPx(20),
+  },
+  userNameView: {
+    flexShrink: 1,
+    flexDirection: 'row',
+    paddingRight: layoutPtToPx(10),
+  },
+  timeView: {
+    flexGrow: 1,
+    alignItems: 'flex-end',
   },
   tweetDetailContainer: {
     flex: 1,
-    marginHorizontal: 10,
+    marginTop: layoutPtToPx(8),
     justifyContent: 'center',
   },
   tweetText: {
+    fontFamily: fonts.InterRegular,
     marginBottom: 10,
-    color: colors.Black,
+    color: colors.BlackPearl,
   },
   flexRow: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   flexShrink: {
     flexShrink: 1,
+    justifyContent: 'center',
   },
   displayDateText: {
+    fontFamily: fonts.InterRegular,
     flexGrow: 1,
+    color: colors.BlackPearl50,
     fontSize: fontPtToPx(12),
-    lineHeight: layoutPtToPx(20),
+    lineHeight: layoutPtToPx(16),
+    marginTop: layoutPtToPx(8),
   },
   nameText: {
-    fontWeight: '600',
-    fontSize: fontPtToPx(15),
-    lineHeight: layoutPtToPx(20),
+    fontFamily: fonts.InterSemiBold,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(19),
     flexShrink: 1,
-    color: colors.Black,
+    color: colors.BlackPearl,
   },
   verifiedIcon: {
-    height: layoutPtToPx(20),
-    width: layoutPtToPx(20),
+    height: layoutPtToPx(12),
+    width: layoutPtToPx(12),
+    marginLeft: layoutPtToPx(2),
   },
   userNameText: {
+    fontFamily: fonts.InterRegular,
     fontSize: fontPtToPx(12),
-    lineHeight: layoutPtToPx(20),
-    paddingHorizontal: layoutPtToPx(2),
+    lineHeight: layoutPtToPx(15),
     color: colors.Black,
   },
   likeCommentStrip: {
     flexDirection: 'row',
-    paddingTop: 10,
+    paddingTop: layoutPtToPx(10),
   },
   iconStyle: {
-    height: 15,
-    width: 15,
-    marginRight: 10,
+    height: layoutPtToPx(15),
+    width: layoutPtToPx(17),
+    marginRight: layoutPtToPx(4),
     marginTop: 1,
   },
+  bookmarkIconStyle: {
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(17),
+    marginRight: layoutPtToPx(20),
+  },
+  shareIconStyle: {
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(20),
+    marginRight: layoutPtToPx(20),
+  },
+  listIconStyle: {
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(15),
+  },
   publicMetricText: {
-    flex: 1,
     color: colors.Black,
+    marginRight: layoutPtToPx(12),
+  },
+  optionsView: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'flex-end',
   },
 };
 

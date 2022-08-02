@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {TouchableOpacity, View, Image, TextInput} from 'react-native';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {BinIcon, SearchIcon} from '../../assets/common';
@@ -8,7 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import {unescape} from 'lodash';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
-function SearchBar({searchQuery = '', onSearchPressCallback}) {
+function SearchBar({searchQuery = '', onSearchPressCallback, onQueryChange}) {
   const navigation = useNavigation();
   const localStyle = useStyleProcessor(styles, 'SearchBar');
   const queryRef = useRef(searchQuery);
@@ -49,10 +49,14 @@ function SearchBar({searchQuery = '', onSearchPressCallback}) {
     setQuery(queryRef.current);
   }, []);
 
-  const updateQuery = useCallback(text => {
-    queryRef.current = text;
-    setQuery(queryRef.current);
-  }, []);
+  const updateQuery = useCallback(
+    text => {
+      queryRef.current = text;
+      setQuery(queryRef.current);
+      onQueryChange?.(text);
+    },
+    [onQueryChange],
+  );
 
   return (
     <View style={localStyle.searchContainer}>

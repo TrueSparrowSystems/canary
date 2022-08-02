@@ -3,8 +3,9 @@ import React, {useCallback} from 'react';
 import {Linking, Text} from 'react-native';
 import ScreenName from '../../../constants/ScreenName';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
-import colors from '../../../utils/colors';
+import colors from '../../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
+import fonts from '../../../constants/fonts';
 
 const PATTERN_HASHTAG = /(?:^|\s)(#[^\s#]+|[^\s#]+#)(?=$|\s)/gi;
 const PATTERN_MENTION = /(^|\s)(@[a-z\d-_]+)/gi;
@@ -47,6 +48,7 @@ function TwitterTextView({
   linkStyle,
   hasMedia = false,
   urls = [],
+  style,
   ...extraProps
 }) {
   const localStyle = useStyleProcessor(styles, 'TwitterTextView');
@@ -137,7 +139,7 @@ function TwitterTextView({
             children={displayText}
           />
         ) : (
-          <Text key={i} style={localStyle.textStyle}>
+          <Text key={i} style={style || localStyle.textStyle}>
             {text}
           </Text>
         );
@@ -147,11 +149,13 @@ function TwitterTextView({
 }
 const styles = {
   linkStyle: {
-    color: colors.CuriousBlue,
+    fontFamily: fonts.InterRegular,
+    color: colors.GoldenTainoi,
     lineHeight: layoutPtToPx(19),
     fontSize: fontPtToPx(14),
   },
   textStyle: {
+    fontFamily: fonts.InterRegular,
     color: colors.Black,
     lineHeight: layoutPtToPx(19),
     fontSize: fontPtToPx(14),

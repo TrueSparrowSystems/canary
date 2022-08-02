@@ -6,7 +6,7 @@ import TimelineList from '../../components/TimelineList';
 import ThreadTweetListDataSource from './ThreadTweetList/ThreadTweetListDataSource';
 import Header from '../../components/common/Header';
 import {layoutPtToPx} from '../../utils/responsiveUI';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 
 function ThreadScreen(props) {
   const {tweetData} = props?.route?.params;
@@ -18,6 +18,7 @@ function ThreadScreen(props) {
     listDataSource.current = new ThreadTweetListDataSource({
       tweetId: tweetData.id,
       conversationId: tweetData.conversation_id,
+      username: tweetData.user.username,
     });
   }
 
@@ -29,7 +30,6 @@ function ThreadScreen(props) {
         reloadData={false}
         refreshData={false}
         timelineListDataSource={listDataSource.current}
-        disableTweetPress={true}
         listHeaderComponent={
           <TweetCard dataSource={tweetData} isDisabled={true} />
         }

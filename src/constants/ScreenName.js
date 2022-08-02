@@ -16,4 +16,5 @@ export default {
   ListScreen: 'ListScreen',
   ListTweetsScreen: 'ListTweetsScreen',
   VideoPlayerScreen: 'VideoPlayerScreen',
+  LocationSelectionScreen: 'LocationSelectionScreen',
 };

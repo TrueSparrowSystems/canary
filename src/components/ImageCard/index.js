@@ -6,6 +6,8 @@ import ScreenName from '../../constants/ScreenName';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import Image from 'react-native-fast-image';
 import TwitterAPI from '../../api/helpers/TwitterAPI';
+import {layoutPtToPx} from '../../utils/responsiveUI';
+import colors from '../../constants/colors';
 
 function ImageCard({mediaArray, tweetId}) {
   const localStyle = useStyleProcessor(styles, 'ImageCard');
@@ -130,10 +132,11 @@ function ImageCard({mediaArray, tweetId}) {
 }
 const styles = {
   container: {
+    marginTop: layoutPtToPx(8),
     overflow: 'hidden',
     width: '100%',
-    height: 250,
-    borderRadius: 6,
+    height: layoutPtToPx(234),
+    borderRadius: layoutPtToPx(4),
   },
   defaultImage: {
     height: '100%',
@@ -165,6 +168,7 @@ const styles = {
   playIcon: {
     height: 50,
     width: 50,
+    tintColor: colors.GoldenTainoi,
   },
 };
 export default React.memo(ImageCard);

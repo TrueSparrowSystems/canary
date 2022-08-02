@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import {Text, View, TouchableWithoutFeedback} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
-import colors from '../../utils/colors';
+import colors from '../../constants/colors';
 import Image from 'react-native-fast-image';
 
 function MiniCollectionCard(props) {

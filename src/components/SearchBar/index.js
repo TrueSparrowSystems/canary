@@ -8,7 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import {unescape} from 'lodash';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
-function SearchBar({searchQuery = '', onSearchPressCallback}) {
+function SearchBar({searchQuery = '', onSearchPressCallback, onQueryChange}) {
   const navigation = useNavigation();
   const localStyle = useStyleProcessor(styles, 'SearchBar');
   const queryRef = useRef(searchQuery);
@@ -49,10 +49,14 @@ function SearchBar({searchQuery = '', onSearchPressCallback}) {
     setQuery(queryRef.current);
   }, []);
 
-  const updateQuery = useCallback(text => {
-    queryRef.current = text;
-    setQuery(queryRef.current);
-  }, []);
+  const updateQuery = useCallback(
+    text => {
+      queryRef.current = text;
+      setQuery(queryRef.current);
+      onQueryChange?.(text);
+    },
+    [onQueryChange],
+  );
 
   return (
     <View style={localStyle.searchContainer}>

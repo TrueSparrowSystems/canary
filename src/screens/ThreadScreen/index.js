@@ -18,6 +18,7 @@ function ThreadScreen(props) {
     listDataSource.current = new ThreadTweetListDataSource({
       tweetId: tweetData.id,
       conversationId: tweetData.conversation_id,
+      username: tweetData.user.username,
     });
   }
 
@@ -29,7 +30,6 @@ function ThreadScreen(props) {
         reloadData={false}
         refreshData={false}
         timelineListDataSource={listDataSource.current}
-        disableTweetPress={true}
         listHeaderComponent={
           <TweetCard dataSource={tweetData} isDisabled={true} />
         }

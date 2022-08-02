@@ -15,4 +15,5 @@ export default {
   ListTab: 'ListTab',
   ListScreen: 'ListScreen',
   ListTweetsScreen: 'ListTweetsScreen',
+  LocationSelectionScreen: 'LocationSelectionScreen',
 };

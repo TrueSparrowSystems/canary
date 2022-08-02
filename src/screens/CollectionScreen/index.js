@@ -3,13 +3,14 @@ import {View, ActivityIndicator} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionCard from '../../components/CollectionCard';
-import Header from '../../components/common/Header';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
 import colors from '../../constants/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
-import {AddIcon} from '../../assets/common';
-import {fontPtToPx} from '../../utils/responsiveUI';
+import {CollectionsIcon} from '../../assets/common';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
+import {isEmpty} from 'lodash';
 
 function CollectionScreen() {
   const localStyle = useStyleProcessor(styles, 'CollectionScreen');
@@ -54,42 +55,40 @@ function CollectionScreen() {
 
   return (
     <SafeAreaView style={localStyle.container}>
-      <Header
-        enableBackButton={false}
-        enableRightButton={true}
-        onRightButtonClick={onAddCollectionPress}
-        rightButtonImage={AddIcon}
-        text="Collections"
-        textStyle={localStyle.headerText}
-      />
-
       {isLoading ? (
         <View style={localStyle.loaderStyle}>
           <ActivityIndicator animating={isLoading} />
         </View>
+      ) : isEmpty(collectionDataRef.current) ? (
+        <EmptyScreenComponent
+          emptyImage={CollectionsIcon}
+          buttonText={'Add a new Archive'}
+          onButtonPress={onAddCollectionPress}
+          descriptionText={
+            'Save your favorite tweets in the archive and access it later anytime'
+          }
+        />
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={localStyle.scrollViewContainer}
           style={localStyle.scrollViewStyle}>
-          {collectionDataRef.current == null
-            ? null
-            : Object.keys(collectionDataRef.current).map(key => {
-                const collection = collectionDataRef.current[key];
-                const singleCollectionData = {
-                  collectionId: collection?.id,
-                  collectionName: collection?.name,
-                  // TODO: change image url
-                  imageUrl: 'https://picsum.photos/200/300',
-                };
-                return (
-                  <CollectionCard
-                    key={singleCollectionData.collectionId}
-                    data={singleCollectionData}
-                    onCollectionRemoved={reloadList}
-                  />
-                );
-              })}
+          {Object.keys(collectionDataRef.current).map(key => {
+            const collection = collectionDataRef.current[key];
+            const singleCollectionData = {
+              collectionId: collection?.id,
+              collectionName: collection?.name,
+              // TODO: change image url
+              imageUrl: 'https://picsum.photos/200/300',
+            };
+            return (
+              <CollectionCard
+                key={singleCollectionData.collectionId}
+                data={singleCollectionData}
+                onCollectionRemoved={reloadList}
+              />
+            );
+          })}
           <View />
         </ScrollView>
       )}
@@ -116,13 +115,13 @@ const styles = {
     fontSize: fontPtToPx(35),
   },
   scrollViewStyle: {
-    paddingTop: 20,
+    paddingTop: layoutPtToPx(20),
   },
   add: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: layoutPtToPx(10),
+    paddingHorizontal: layoutPtToPx(20),
     position: 'absolute',
-    right: 20,
+    right: layoutPtToPx(20),
   },
   loaderStyle: {
     flex: 1,
@@ -130,7 +129,7 @@ const styles = {
     alignItems: 'center',
   },
   scrollViewContainer: {
-    paddingBottom: 20,
+    paddingBottom: layoutPtToPx(20),
   },
 };
 

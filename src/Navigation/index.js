@@ -13,7 +13,7 @@ import {
   HomeIcon,
   CollectionsIcon,
   SearchIcon,
-  ListIcon,
+  BottomBarListIcon,
 } from '../assets/common';
 import {layoutPtToPx} from '../utils/responsiveUI';
 import {useStyleProcessor} from '../hooks/useStyleProcessor';
@@ -236,7 +236,7 @@ const Navigation = props => {
                     focused ? localStyle.selectedTabContainer : null,
                   ]}>
                   <Image
-                    source={ListIcon}
+                    source={BottomBarListIcon}
                     style={[
                       localStyle.bottomTabIcons,
                       {

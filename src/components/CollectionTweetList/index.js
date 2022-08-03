@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, ActivityIndicator} from 'react-native';
+import {ScrollView, ActivityIndicator, RefreshControl} from 'react-native';
 import {bookmarkIcon} from '../../assets/common';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import fonts from '../../constants/fonts';
@@ -10,7 +10,8 @@ import TweetCard from '../TweetCard';
 import useCollectionTweetListData from './useCollectionTweetListData';
 
 function CollectionTweetList(props) {
-  const {bIsLoading, aDataSource} = useCollectionTweetListData(props);
+  const {bIsLoading, fnOnRefresh, aDataSource} =
+    useCollectionTweetListData(props);
   const localStyle = useStyleProcessor(styles, 'CollectionTweetList');
 
   return bIsLoading ? (
@@ -24,7 +25,10 @@ function CollectionTweetList(props) {
       buttonImageStyle={localStyle.emptyButtonImageStyle}
     />
   ) : (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={bIsLoading} onRefresh={fnOnRefresh} />
+      }>
       {aDataSource?.map(data => {
         return <TweetCard key={data?.id} dataSource={data} />;
       })}

@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, ActivityIndicator, FlatList} from 'react-native';
+import {View, ActivityIndicator, FlatList, RefreshControl} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionCard from '../../components/CollectionCard';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -107,6 +107,9 @@ function CollectionScreen() {
             data={collectionDataRef.current}
             renderItem={renderItem}
             numColumns={2}
+            refreshControl={
+              <RefreshControl refreshing={isLoading} onRefresh={fetchData} />
+            }
             contentContainerStyle={localStyle.contentContainerStyle}
             keyExtractor={item => {
               return item.id;

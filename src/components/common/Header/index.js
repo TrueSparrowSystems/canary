@@ -12,6 +12,9 @@ function Header(props) {
     enableRightButton,
     onRightButtonClick,
     rightButtonImage,
+    rightIconStyle,
+    rightButtonText,
+    rightButtonTextStyle,
     text,
     textStyle,
     style,
@@ -29,21 +32,40 @@ function Header(props) {
 
   return (
     <View style={style || localStyle.header}>
-      {enableBackButton ? (
-        <TouchableOpacity activeOpacity={1} onPress={onBackPress}>
-          <Image source={BackIcon} style={localStyle.backIcon} />
-        </TouchableOpacity>
-      ) : null}
-      {text ? (
-        <Text style={textStyle || localStyle.textStyle}>{text}</Text>
-      ) : null}
-      {enableRightButton && rightButtonImage ? (
-        <TouchableOpacity activeOpacity={1} onPress={onRightButtonClick}>
-          <Image source={rightButtonImage} style={localStyle.rightIcon} />
-        </TouchableOpacity>
-      ) : (
-        <View />
-      )}
+      <View style={localStyle.backButtonView}>
+        {enableBackButton ? (
+          <TouchableOpacity activeOpacity={1} onPress={onBackPress}>
+            <Image source={BackIcon} style={localStyle.backIcon} />
+          </TouchableOpacity>
+        ) : null}
+      </View>
+      <View style={localStyle.textView}>
+        {text ? (
+          <Text numberOfLines={1} style={textStyle || localStyle.textStyle}>
+            {text}
+          </Text>
+        ) : null}
+      </View>
+      <View style={localStyle.rightButtonView}>
+        {enableRightButton && (rightButtonImage || rightButtonText) ? (
+          <TouchableOpacity
+            style={localStyle.rightButtonStyle}
+            activeOpacity={1}
+            onPress={onRightButtonClick}>
+            {rightButtonImage ? (
+              <Image
+                source={rightButtonImage}
+                style={rightIconStyle || localStyle.rightIcon}
+              />
+            ) : null}
+            {rightButtonText ? (
+              <Text style={rightButtonTextStyle}>{rightButtonText}</Text>
+            ) : null}
+          </TouchableOpacity>
+        ) : (
+          <View />
+        )}
+      </View>
     </View>
   );
 }
@@ -55,7 +77,6 @@ const styles = {
     marginHorizontal: layoutPtToPx(20),
     height: layoutPtToPx(50),
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
   backIcon: {
@@ -69,5 +90,23 @@ const styles = {
   rightIcon: {
     height: layoutPtToPx(25),
     width: layoutPtToPx(25),
+  },
+  rightButtonStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  backButtonView: {
+    flexShrink: 1,
+    alignItems: 'flex-start',
+    minWidth: layoutPtToPx(40),
+  },
+  textView: {
+    flexGrow: 1,
+    alignItems: 'center',
+    maxWidth: '70%',
+  },
+  rightButtonView: {
+    flexShrink: 1,
+    alignItems: 'flex-end',
   },
 };

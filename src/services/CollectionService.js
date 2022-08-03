@@ -3,6 +3,7 @@ import Store from './AsyncStorage';
 import uuid from 'react-native-uuid';
 import Cache from './Cache';
 import {CacheKey} from './Cache/CacheStoreConstants';
+import {getRandomColorCombination} from '../utils/RandomColorUtil';
 
 const COLLECTION_TWEET_LIMIT = 25;
 
@@ -18,6 +19,7 @@ class CollectionService {
   async addCollection(collectionName) {
     return new Promise((resolve, reject) => {
       Store.get(StoreKeys.CollectionsList).then(list => {
+        const colorCombination = getRandomColorCombination();
         if (list == null) {
           const id = uuid.v4();
           var collectionObj = {};
@@ -25,6 +27,7 @@ class CollectionService {
             id: id,
             name: collectionName,
             tweetIds: [],
+            colorScheme: colorCombination,
           };
 
           this.collections = collectionObj;
@@ -44,6 +47,7 @@ class CollectionService {
             id: newId,
             name: collectionName,
             tweetIds: [],
+            colorScheme: colorCombination,
           };
 
           _list = {..._list, ...newCollection};

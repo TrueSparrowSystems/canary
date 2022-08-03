@@ -8,19 +8,18 @@ import {
 } from 'react-native';
 import {BinIcon} from '../../assets/common';
 import ScreenName from '../../constants/ScreenName';
-import {ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import {collectionService} from '../../services/CollectionService';
 import colors from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
-import Toast from 'react-native-toast-message';
 import Image from 'react-native-fast-image';
-import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import fonts from '../../constants/fonts';
+import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 
 function CollectionCard(props) {
   const {data, onCollectionRemoved} = props;
   const {name: collectionName, id: collectionId} = data;
+  let {colorScheme} = data;
   const localStyle = useStyleProcessor(styles, 'CollectionCard');
   const navigation = useNavigation();
 
@@ -32,35 +31,27 @@ function CollectionCard(props) {
   }, [collectionId, collectionName, navigation]);
 
   const onCollectionRemove = useCallback(() => {
-    collectionService()
-      .removeCollection(collectionId)
-      .then(() => {
-        onCollectionRemoved();
-        Toast.show({
-          type: ToastType.Success,
-          text1: 'Removed collection.',
-        });
-      })
-      .catch(() => {
-        Toast.show({
-          type: ToastType.Error,
-          text1: 'Error in removing collection.',
-        });
-      });
-  }, [collectionId, onCollectionRemoved]);
-
-  const colorCombination = getRandomColorCombination();
+    LocalEvent.emit(EventTypes.ShowDeleteCollectionConfirmationModal, {
+      id: collectionId,
+      name: collectionName,
+      onCollectionRemoved,
+    });
+  }, [collectionId, collectionName, onCollectionRemoved]);
 
   const cardStyle = useMemo(() => {
+    if (!colorScheme) {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      colorScheme = getRandomColorCombination();
+    }
     return [
       localStyle.cardStyle,
-      {backgroundColor: colorCombination.backgroundColor},
+      {backgroundColor: colorScheme?.backgroundColor},
     ];
-  }, [colorCombination.backgroundColor, localStyle.cardStyle]);
+  }, [colorScheme, localStyle.cardStyle]);
 
   const textStyle = useMemo(() => {
-    return [localStyle.textStyle, {color: colorCombination.textColor}];
-  }, [colorCombination.textColor, localStyle.textStyle]);
+    return [localStyle.textStyle, {color: colorScheme?.textColor}];
+  }, [colorScheme, localStyle.textStyle]);
 
   return (
     <TouchableWithoutFeedback onPress={onCollectionPress}>
@@ -102,8 +93,8 @@ const styles = {
     justifyContent: 'flex-start',
   },
   binIconStyle: {
-    height: layoutPtToPx(20),
-    width: layoutPtToPx(20),
+    height: layoutPtToPx(24),
+    width: layoutPtToPx(24),
   },
   textStyle: {
     fontFamily: fonts.SoraSemiBold,

@@ -21,6 +21,7 @@ function TimelineList({
   timelineListDataSource = null,
   listHeaderComponent = null,
   disableTweetPress = false,
+  listEmptyComponent = null,
 }) {
   const {bIsLoading, fnOnRefresh, fnOnDataChange} = useTimelineListData({
     onDataAvailable,
@@ -64,6 +65,7 @@ function TimelineList({
       scrollEnabled: true,
       contentContainerStyle: localStyle.contentContainerStyle,
       ListHeaderComponent: listHeaderComponent,
+      ListEmptyComponent: listEmptyComponent,
       refreshControl: (
         <RefreshControl
           refreshing={bIsLoading}
@@ -76,6 +78,7 @@ function TimelineList({
     bIsLoading,
     fnOnRefresh,
     keyExtractor,
+    listEmptyComponent,
     listHeaderComponent,
     localStyle.contentContainerStyle,
     localStyle.flatListPropsStyle,

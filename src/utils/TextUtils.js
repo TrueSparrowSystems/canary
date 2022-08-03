@@ -13,3 +13,12 @@ export function getFormattedStat(count) {
   var newValue = Math.round(count / Math.pow(10, 8)) / 10;
   return `${newValue}b`;
 }
+
+export function getInitialsFromName(fullName) {
+  let nameInitials = '';
+  const nameArray = fullName.split(' ');
+  nameArray.map(name => {
+    nameInitials = nameInitials + name.charAt(0);
+  });
+  return nameInitials;
+}

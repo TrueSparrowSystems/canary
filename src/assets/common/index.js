@@ -18,3 +18,4 @@ export const rightArrowIcon = require('./rightArrow.png');
 export const ShareIcon = require('./ShareIcon.png');
 export const BottomBarListIcon = require('./bottomBarListIcon.png');
 export const CrossIcon = require('./crossIcon.png');
+export const SwipeIcon = require('./swipeIcon.png');

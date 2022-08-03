@@ -12,6 +12,9 @@ function Header(props) {
     enableRightButton,
     onRightButtonClick,
     rightButtonImage,
+    rightButtonImageStyle,
+    rightButtonText,
+    rightButtonTextStyle,
     text,
     textStyle,
     style,
@@ -33,13 +36,25 @@ function Header(props) {
         <TouchableOpacity activeOpacity={1} onPress={onBackPress}>
           <Image source={BackIcon} style={localStyle.backIcon} />
         </TouchableOpacity>
-      ) : null}
+      ) : (
+        <View />
+      )}
       {text ? (
         <Text style={textStyle || localStyle.textStyle}>{text}</Text>
       ) : null}
-      {enableRightButton && rightButtonImage ? (
+      {enableRightButton && (rightButtonImage || rightButtonText) ? (
         <TouchableOpacity activeOpacity={1} onPress={onRightButtonClick}>
-          <Image source={rightButtonImage} style={localStyle.rightIcon} />
+          <View style={localStyle.rightContainerStyle}>
+            {rightButtonImage ? (
+              <Image
+                source={rightButtonImage}
+                style={rightButtonImageStyle || localStyle.rightIcon}
+              />
+            ) : null}
+            {rightButtonText ? (
+              <Text style={rightButtonTextStyle}>{rightButtonText}</Text>
+            ) : null}
+          </View>
         </TouchableOpacity>
       ) : (
         <View />
@@ -69,5 +84,10 @@ const styles = {
   rightIcon: {
     height: layoutPtToPx(25),
     width: layoutPtToPx(25),
+  },
+  rightContainerStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 };

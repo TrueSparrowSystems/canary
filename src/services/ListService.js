@@ -150,7 +150,7 @@ class ListService {
         userNames.splice(index, 1);
       }
       this.lists[listId].userNames = userNames;
-      Store.set(StoreKeys.List, this.lists)
+      Store.set(StoreKeys.Lists, this.lists)
         .then(() => {
           return resolve();
         })

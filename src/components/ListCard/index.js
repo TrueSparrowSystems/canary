@@ -1,12 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useMemo} from 'react';
-import {
-  Text,
-  View,
-  TouchableWithoutFeedback,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useCallback, useMemo, useRef} from 'react';
+import {Text, View, TouchableWithoutFeedback, Image} from 'react-native';
 import ScreenName from '../../constants/ScreenName';
 import {ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -17,14 +11,17 @@ import Toast from 'react-native-toast-message';
 import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import {getInitialsFromName} from '../../utils/TextUtils';
 import fonts from '../../constants/fonts';
-import {Swipeable} from 'react-native-gesture-handler';
 import {SwipeIcon} from '../../assets/common';
+import * as Animatable from 'react-native-animatable';
+import AppleStyleSwipeableRow from '../AppleStyleSwipeableRow';
 
 function ListCard(props) {
   const {data, onListRemoved, onCardLongPress, enableSwipe} = props;
   const {id: listId, name: listName, userNames, colorCombination} = data;
   const localStyle = useStyleProcessor(styles, 'ListCard');
   const navigation = useNavigation();
+  const listCardRef = useRef(null);
+
   const onListPress = useCallback(() => {
     navigation.navigate(ScreenName.ListTweetsScreen, {
       listId,
@@ -65,16 +62,6 @@ function ListCard(props) {
       } others`;
     }
   }, [userNames]);
-  const RightAction = () => {
-    return enableSwipe ? (
-      <TouchableOpacity
-        activeOpacity={0.7}
-        onPress={onListRemove}
-        style={localStyle.rightActionContainer}>
-        <Text style={localStyle.rightActionText}>Remove</Text>
-      </TouchableOpacity>
-    ) : null;
-  };
 
   const listIconStyle = useMemo(() => {
     let _colorCombination = colorCombination;
@@ -97,32 +84,58 @@ function ListCard(props) {
     localStyle.listIconTextStyle,
   ]);
 
+  const onLongPress = useCallback(() => {
+    listCardRef.current.setNativeProps({
+      useNativeDriver: true,
+    });
+    listCardRef.current.animate('pulse');
+    onCardLongPress();
+  }, [onCardLongPress]);
+
   return (
-    <Swipeable enabled={enableSwipe} renderRightActions={RightAction}>
-      <TouchableWithoutFeedback
-        onPress={onListPress}
-        onLongPress={onCardLongPress}
-        disabled={enableSwipe}>
-        <View style={localStyle.container}>
-          <View style={localStyle.cardDetailContainer}>
-            <View style={listIconStyle.backgroundStyle}>
-              <Text style={listIconStyle.textStyle}>
-                {listIntials.substring(0, 2)}
-              </Text>
+    <Animatable.View ref={listCardRef}>
+      <AppleStyleSwipeableRow
+        enabled={enableSwipe}
+        rightActionsArray={[
+          {
+            actionName: 'Remove',
+            color: colors.BitterSweet,
+            onPress: () => {
+              listCardRef.current.setNativeProps({
+                useNativeDriver: true,
+              });
+              listCardRef.current.animate('bounceOutLeft').then(() => {
+                onListRemove();
+              });
+            },
+          },
+        ]}
+        shouldRenderRightAction={true}>
+        <TouchableWithoutFeedback
+          onPress={onListPress}
+          onLongPress={onLongPress}
+          disabled={enableSwipe}>
+          <View style={localStyle.container}>
+            <View style={localStyle.cardDetailContainer}>
+              <View style={listIconStyle.backgroundStyle}>
+                <Text style={listIconStyle.textStyle}>
+                  {listIntials.substring(0, 2)}
+                </Text>
+              </View>
+              <View>
+                <Text style={localStyle.listNameStyle}>{listName}</Text>
+                <Text style={localStyle.descriptionTextStyle}>
+                  {getDescriptionText()}
+                </Text>
+              </View>
             </View>
-            <View>
-              <Text style={localStyle.listNameStyle}>{listName}</Text>
-              <Text style={localStyle.descriptionTextStyle}>
-                {getDescriptionText()}
-              </Text>
-            </View>
+            {enableSwipe ? (
+              <Image source={SwipeIcon} style={localStyle.swipeIconStyle} />
+            ) : null}
           </View>
-          {enableSwipe ? (
-            <Image source={SwipeIcon} style={localStyle.swipeIconStyle} />
-          ) : null}
-        </View>
-      </TouchableWithoutFeedback>
-    </Swipeable>
+        </TouchableWithoutFeedback>
+      </AppleStyleSwipeableRow>
+    </Animatable.View>
   );
 }
 

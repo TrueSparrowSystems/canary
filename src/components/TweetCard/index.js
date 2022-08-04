@@ -1,6 +1,6 @@
 import {unescape} from 'lodash';
 import React, {useCallback, useState, useRef, useMemo} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 import {
   BookmarkedIcon,
   bookmarkIcon,
@@ -24,6 +24,7 @@ import TwitterTextView from '../common/TwitterTextView';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {getDisplayDate} from '../../utils/TimeUtils';
 import fonts from '../../constants/fonts';
+import * as Animatable from 'react-native-animatable';
 
 function TweetCard(props) {
   const {dataSource, isDisabled = false, style} = props;
@@ -88,83 +89,90 @@ function TweetCard(props) {
 
   const displayDate = getDisplayDate(created_at);
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={fnOnCardPress}
-      style={style || localStyle.cardContainer}
-      disabled={isDisabled}>
-      <View style={localStyle.userProfileContainer}>
+    <Animatable.View animation="fadeIn">
+      <TouchableOpacity
+        animation="fadeIn"
+        activeOpacity={0.8}
+        onPress={fnOnCardPress}
+        style={localStyle.cardContainer}
+        disabled={isDisabled}>
         <TouchableOpacity
-          activeOpacity={0.75}
           onPress={fnOnUserNamePress}
-          style={localStyle.userNameView}>
-          <Image
-            source={{uri: user?.profile_image_url}}
-            style={localStyle.userProfileImage}
-          />
-          <View style={localStyle.flexShrink}>
-            <Text style={localStyle.nameText} numberOfLines={1}>
-              {unescape(user?.name)}
-            </Text>
-            <View style={localStyle.flexRow}>
-              <Text style={localStyle.userNameText} numberOfLines={1}>
-                @{unescape(user?.username)}
-              </Text>
-              {true ? (
-                <Image source={verifiedIcon} style={localStyle.verifiedIcon} />
-              ) : null}
-            </View>
+          style={localStyle.userProfileContainer}>
+          <View style={localStyle.userNameView}>
+            <Image
+              source={{uri: user?.profile_image_url}}
+              style={localStyle.userProfileImage}
+            />
+            <TouchableOpacity
+              onPress={fnOnUserNamePress}
+              style={localStyle.flexShrink}>
+              <View>
+                <Text style={localStyle.nameText} numberOfLines={1}>
+                  {unescape(user?.name)}
+                </Text>
+                <View style={localStyle.flexRow}>
+                  <Text style={localStyle.userNameText} numberOfLines={1}>
+                    @{unescape(user?.username)}
+                  </Text>
+                  {true ? (
+                    <Image
+                      source={verifiedIcon}
+                      style={localStyle.verifiedIcon}
+                    />
+                  ) : null}
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={localStyle.timeView}>
+            <Text style={localStyle.displayDateText}>{displayDate}</Text>
           </View>
         </TouchableOpacity>
-        <View style={localStyle.timeView}>
-          <Text style={localStyle.displayDateText}>{displayDate}</Text>
-        </View>
-      </View>
-      <View style={localStyle.tweetDetailContainer}>
-        <TwitterTextView
-          style={localStyle.tweetText}
-          hasMedia={hasMedia}
-          urls={entities?.urls}>
-          {unescape(text)}
-        </TwitterTextView>
-        {hasMedia ? <ImageCard mediaArray={media} /> : null}
-        <View style={localStyle.likeCommentStrip}>
-          <View style={localStyle.flexRow}>
-            <Image source={likeIcon} style={localStyle.iconStyle} />
-            <Text style={localStyle.publicMetricText}>
-              {public_metrics?.like_count === 0
-                ? 0
-                : getFormattedStat(public_metrics?.like_count)}
-            </Text>
-            {public_metrics?.reply_count > 0 ? (
-              <View style={localStyle.flexRow}>
-                <Image source={commentIcon} style={localStyle.iconStyle} />
-                <Text style={localStyle.publicMetricText}>
-                  {getFormattedStat(public_metrics?.reply_count)}
-                </Text>
-              </View>
-            ) : null}
-          </View>
-          <View style={localStyle.optionsView}>
-            <TouchableOpacity
-              onPress={() => {
-                // TODO: add share feature
-              }}>
-              <Image source={ShareIcon} style={localStyle.shareIconStyle} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onBookmarkButtonPress}>
-              <Image
-                source={isBookmarkedState ? BookmarkedIcon : bookmarkIcon}
-                style={localStyle.bookmarkIconStyle}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onAddToListPress}>
-              <Image source={ListIcon} style={localStyle.listIconStyle} />
-            </TouchableOpacity>
+        <View style={localStyle.tweetDetailContainer}>
+          <TwitterTextView
+            style={localStyle.tweetText}
+            hasMedia={hasMedia}
+            urls={entities?.urls}>
+            {unescape(text)}
+          </TwitterTextView>
+          {hasMedia ? <ImageCard mediaArray={media} /> : null}
+          <View style={localStyle.likeCommentStrip}>
+            <View style={localStyle.flexRow}>
+              <Image source={likeIcon} style={localStyle.iconStyle} />
+              <Text style={localStyle.publicMetricText}>
+                {public_metrics?.like_count === 0
+                  ? 0
+                  : getFormattedStat(public_metrics?.like_count)}
+              </Text>
+              <Image source={commentIcon} style={localStyle.iconStyle} />
+              <Text style={localStyle.publicMetricText}>
+                {public_metrics?.reply_count === 0
+                  ? 0
+                  : getFormattedStat(public_metrics?.reply_count)}
+              </Text>
+            </View>
+            <View style={localStyle.optionsView}>
+              <TouchableOpacity
+                onPress={() => {
+                  // TODO: add share feature
+                }}>
+                <Image source={ShareIcon} style={localStyle.shareIconStyle} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onBookmarkButtonPress}>
+                <Image
+                  source={isBookmarkedState ? BookmarkedIcon : bookmarkIcon}
+                  style={localStyle.bookmarkIconStyle}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onAddToListPress}>
+                <Image source={ListIcon} style={localStyle.listIconStyle} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </Animatable.View>
   );
 }
 

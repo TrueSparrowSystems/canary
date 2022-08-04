@@ -164,7 +164,7 @@ const styles = {
     paddingLeft: layoutPtToPx(2),
   },
   flatListStyle: {
-    paddingLeft: layoutPtToPx(20),
+    paddingHorizontal: layoutPtToPx(10),
     flex: 1,
   },
   contentContainerStyle: {

@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {
   Text,
   View,
@@ -22,7 +22,7 @@ import {SwipeIcon} from '../../assets/common';
 
 function ListCard(props) {
   const {data, onListRemoved, onCardLongPress, enableSwipe} = props;
-  const {id: listId, name: listName, userNames} = data;
+  const {id: listId, name: listName, userNames, colorCombination} = data;
   const localStyle = useStyleProcessor(styles, 'ListCard');
   const navigation = useNavigation();
   const onListPress = useCallback(() => {
@@ -51,7 +51,6 @@ function ListCard(props) {
       });
   }, [listId, onListRemoved]);
 
-  const colorCombination = getRandomColorCombination('light');
   const listIntials = getInitialsFromName(listName);
   const getDescriptionText = useCallback(() => {
     if (userNames.length === 0) {
@@ -77,6 +76,27 @@ function ListCard(props) {
     ) : null;
   };
 
+  const listIconStyle = useMemo(() => {
+    let _colorCombination = colorCombination;
+    if (!_colorCombination) {
+      _colorCombination = getRandomColorCombination();
+    }
+    return {
+      backgroundStyle: [
+        localStyle.listIconStyle,
+        {backgroundColor: _colorCombination?.backgroundColor},
+      ],
+      textStyle: [
+        localStyle.listIconTextStyle,
+        {color: _colorCombination?.textColor},
+      ],
+    };
+  }, [
+    colorCombination,
+    localStyle.listIconStyle,
+    localStyle.listIconTextStyle,
+  ]);
+
   return (
     <Swipeable enabled={enableSwipe} renderRightActions={RightAction}>
       <TouchableWithoutFeedback
@@ -85,16 +105,8 @@ function ListCard(props) {
         disabled={enableSwipe}>
         <View style={localStyle.container}>
           <View style={localStyle.cardDetailContainer}>
-            <View
-              style={[
-                localStyle.listIconStyle,
-                {backgroundColor: colorCombination.backgroundColor},
-              ]}>
-              <Text
-                style={[
-                  localStyle.listIconTextStyle,
-                  {color: colorCombination.textColor},
-                ]}>
+            <View style={listIconStyle.backgroundStyle}>
+              <Text style={listIconStyle.textStyle}>
                 {listIntials.substring(0, 2)}
               </Text>
             </View>

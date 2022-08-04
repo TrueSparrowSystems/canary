@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {ActivityIndicator, Text, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import Header from '../../components/common/Header';
 import TimelineList from '../../components/TimelineList';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -58,7 +58,7 @@ function ListTweetsScreen(props) {
         descriptionText={'It’s pretty empty in here 🥲'}
         buttonText={'Add Users to List'}
         onButtonPress={() => {
-          console.log('navigate to add users screen');
+          //TODO: Add to navigation to add user screen
         }}
       />
     );

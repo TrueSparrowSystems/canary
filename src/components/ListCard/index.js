@@ -1,33 +1,37 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {
   Text,
   View,
   TouchableWithoutFeedback,
-  TouchableHighlight,
+  Image,
+  TouchableOpacity,
 } from 'react-native';
-import {BinIcon} from '../../assets/common';
 import ScreenName from '../../constants/ScreenName';
 import {ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {listService} from '../../services/ListService';
 import colors from '../../constants/colors';
-import {layoutPtToPx} from '../../utils/responsiveUI';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import Toast from 'react-native-toast-message';
-import Image from 'react-native-fast-image';
+import {getRandomColorCombination} from '../../utils/RandomColorUtil';
+import {getInitialsFromName} from '../../utils/TextUtils';
+import fonts from '../../constants/fonts';
+import {Swipeable} from 'react-native-gesture-handler';
+import {SwipeIcon} from '../../assets/common';
 
 function ListCard(props) {
-  const {data, onListRemoved} = props;
-  const {imageUrl, listName, listId} = data;
+  const {data, onListRemoved, onCardLongPress, enableSwipe} = props;
+  const {id: listId, name: listName, userNames, colorCombination} = data;
   const localStyle = useStyleProcessor(styles, 'ListCard');
   const navigation = useNavigation();
-
   const onListPress = useCallback(() => {
     navigation.navigate(ScreenName.ListTweetsScreen, {
       listId,
       listName,
+      listUserNames: userNames,
     });
-  }, [listId, listName, navigation]);
+  }, [listId, listName, navigation, userNames]);
 
   const onListRemove = useCallback(() => {
     listService()
@@ -47,50 +51,139 @@ function ListCard(props) {
       });
   }, [listId, onListRemoved]);
 
+  const listIntials = getInitialsFromName(listName);
+  const getDescriptionText = useCallback(() => {
+    if (userNames.length === 0) {
+      return 'includes no one yet 😢';
+    } else if (userNames.length === 1) {
+      return `includes @${userNames[0]}`;
+    } else if (userNames.length === 2) {
+      return `includes @${userNames[0]} & @${userNames[1]}`;
+    } else {
+      return `includes @${userNames[0]}, @${userNames[1]} & ${
+        userNames.length - 2
+      } others`;
+    }
+  }, [userNames]);
+  const RightAction = () => {
+    return enableSwipe ? (
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={onListRemove}
+        style={localStyle.rightActionContainer}>
+        <Text style={localStyle.rightActionText}>Remove</Text>
+      </TouchableOpacity>
+    ) : null;
+  };
+
+  const listIconStyle = useMemo(() => {
+    let _colorCombination = colorCombination;
+    if (!_colorCombination) {
+      _colorCombination = getRandomColorCombination();
+    }
+    return {
+      backgroundStyle: [
+        localStyle.listIconStyle,
+        {backgroundColor: _colorCombination?.backgroundColor},
+      ],
+      textStyle: [
+        localStyle.listIconTextStyle,
+        {color: _colorCombination?.textColor},
+      ],
+    };
+  }, [
+    colorCombination,
+    localStyle.listIconStyle,
+    localStyle.listIconTextStyle,
+  ]);
+
   return (
-    <TouchableWithoutFeedback onPress={onListPress}>
-      <View style={localStyle.container}>
-        <TouchableHighlight
-          underlayColor={colors.Transparent}
-          style={localStyle.binContainer}
-          onPress={onListRemove}>
-          <Image source={BinIcon} style={localStyle.binIconStyle} />
-        </TouchableHighlight>
-        <Image source={{uri: imageUrl}} style={localStyle.imageStyle} />
-        <Text style={localStyle.textStyle}>{listName}</Text>
-      </View>
-    </TouchableWithoutFeedback>
+    <Swipeable enabled={enableSwipe} renderRightActions={RightAction}>
+      <TouchableWithoutFeedback
+        onPress={onListPress}
+        onLongPress={onCardLongPress}
+        disabled={enableSwipe}>
+        <View style={localStyle.container}>
+          <View style={localStyle.cardDetailContainer}>
+            <View style={listIconStyle.backgroundStyle}>
+              <Text style={listIconStyle.textStyle}>
+                {listIntials.substring(0, 2)}
+              </Text>
+            </View>
+            <View>
+              <Text style={localStyle.listNameStyle}>{listName}</Text>
+              <Text style={localStyle.descriptionTextStyle}>
+                {getDescriptionText()}
+              </Text>
+            </View>
+          </View>
+          {enableSwipe ? (
+            <Image source={SwipeIcon} style={localStyle.swipeIconStyle} />
+          ) : null}
+        </View>
+      </TouchableWithoutFeedback>
+    </Swipeable>
   );
 }
 
 const styles = {
   container: {
-    marginBottom: layoutPtToPx(10),
     marginHorizontal: layoutPtToPx(20),
-    borderRadius: layoutPtToPx(6),
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.BlackPearl20,
+    marginTop: layoutPtToPx(16),
+    paddingBottom: layoutPtToPx(13),
+    justifyContent: 'space-between',
   },
-  binContainer: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
+  cardDetailContainer: {
+    flexDirection: 'row',
+    flexShrink: 1,
+  },
+  listIconStyle: {
     height: layoutPtToPx(40),
     width: layoutPtToPx(40),
-    zIndex: 2,
+    borderRadius: layoutPtToPx(20),
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: layoutPtToPx(8),
   },
-  binIconStyle: {
-    height: layoutPtToPx(20),
-    width: layoutPtToPx(20),
+  listIconTextStyle: {
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(20),
   },
-  textStyle: {
-    marginTop: 5,
-    color: colors.SherpaBlue,
+  listNameStyle: {
+    color: colors.Black,
+    fontFamily: fonts.InterSemiBold,
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(17),
   },
-  imageStyle: {
-    height: layoutPtToPx(150),
-    width: '100%',
-    borderRadius: 6,
+  descriptionTextStyle: {
+    color: colors.BlackPearl,
+    fontFamily: fonts.InterRegular,
+    fontSize: fontPtToPx(12),
+    lineHeight: layoutPtToPx(15),
+    marginTop: layoutPtToPx(3),
+    fontStyle: 'italic',
+  },
+  rightActionContainer: {
+    backgroundColor: colors.BitterSweet,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: layoutPtToPx(15),
+  },
+  rightActionText: {
+    color: colors.White,
+    fontFamily: fonts.InterSemiBold,
+    fontSize: fontPtToPx(12),
+    lineHeight: layoutPtToPx(15),
+  },
+
+  swipeIconStyle: {
+    height: layoutPtToPx(8),
+    width: layoutPtToPx(16),
+    alignSelf: 'center',
   },
 };
 

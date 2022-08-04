@@ -7,7 +7,6 @@ import {
   commentIcon,
   likeIcon,
   ListIcon,
-  retweetIcon,
   ShareIcon,
   verifiedIcon,
 } from '../../assets/common';
@@ -27,7 +26,7 @@ import {getDisplayDate} from '../../utils/TimeUtils';
 import fonts from '../../constants/fonts';
 
 function TweetCard(props) {
-  const {dataSource, isDisabled = false} = props;
+  const {dataSource, isDisabled = false, style} = props;
 
   const {fnOnCardPress, fnOnUserNamePress} = useTweetCardData(props);
   const localStyle = useStyleProcessor(styles, 'TweetCard');
@@ -72,6 +71,7 @@ function TweetCard(props) {
   }, [id, isBookmarkedState, onAddToCollectionSuccess]);
 
   const onAddToListSuccess = useCallback(() => {
+    LocalEvent.emit(EventTypes.UpdateList);
     //TODO: handle on add to list success
   }, []);
 
@@ -91,41 +91,35 @@ function TweetCard(props) {
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={fnOnCardPress}
-      style={localStyle.cardContainer}
+      style={style || localStyle.cardContainer}
       disabled={isDisabled}>
-      <TouchableOpacity
-        onPress={fnOnUserNamePress}
-        style={localStyle.userProfileContainer}>
-        <View style={localStyle.userNameView}>
+      <View style={localStyle.userProfileContainer}>
+        <TouchableOpacity
+          activeOpacity={0.75}
+          onPress={fnOnUserNamePress}
+          style={localStyle.userNameView}>
           <Image
             source={{uri: user?.profile_image_url}}
             style={localStyle.userProfileImage}
           />
-          <TouchableOpacity
-            onPress={fnOnUserNamePress}
-            style={localStyle.flexShrink}>
-            <View>
-              <Text style={localStyle.nameText} numberOfLines={1}>
-                {unescape(user?.name)}
+          <View style={localStyle.flexShrink}>
+            <Text style={localStyle.nameText} numberOfLines={1}>
+              {unescape(user?.name)}
+            </Text>
+            <View style={localStyle.flexRow}>
+              <Text style={localStyle.userNameText} numberOfLines={1}>
+                @{unescape(user?.username)}
               </Text>
-              <View style={localStyle.flexRow}>
-                <Text style={localStyle.userNameText} numberOfLines={1}>
-                  @{unescape(user?.username)}
-                </Text>
-                {true ? (
-                  <Image
-                    source={verifiedIcon}
-                    style={localStyle.verifiedIcon}
-                  />
-                ) : null}
-              </View>
+              {true ? (
+                <Image source={verifiedIcon} style={localStyle.verifiedIcon} />
+              ) : null}
             </View>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
         <View style={localStyle.timeView}>
           <Text style={localStyle.displayDateText}>{displayDate}</Text>
         </View>
-      </TouchableOpacity>
+      </View>
       <View style={localStyle.tweetDetailContainer}>
         <TwitterTextView
           style={localStyle.tweetText}
@@ -142,12 +136,14 @@ function TweetCard(props) {
                 ? 0
                 : getFormattedStat(public_metrics?.like_count)}
             </Text>
-            <Image source={commentIcon} style={localStyle.iconStyle} />
-            <Text style={localStyle.publicMetricText}>
-              {public_metrics?.reply_count === 0
-                ? 0
-                : getFormattedStat(public_metrics?.reply_count)}
-            </Text>
+            {public_metrics?.reply_count > 0 ? (
+              <View style={localStyle.flexRow}>
+                <Image source={commentIcon} style={localStyle.iconStyle} />
+                <Text style={localStyle.publicMetricText}>
+                  {getFormattedStat(public_metrics?.reply_count)}
+                </Text>
+              </View>
+            ) : null}
           </View>
           <View style={localStyle.optionsView}>
             <TouchableOpacity

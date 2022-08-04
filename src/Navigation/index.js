@@ -7,7 +7,6 @@ import {TransitionPresets} from '@react-navigation/stack';
 import ScreenName from '../constants/ScreenName';
 import TimelineScreen from '../screens/TimelineScreen';
 import CollectionScreen from '../screens/CollectionScreen';
-import SettingScreen from '../screens/SettingScreen';
 import {Image, View} from 'react-native';
 import {
   HomeIcon,
@@ -29,6 +28,7 @@ import VideoPlayerScreen from '../screens/VideoPlayerScreen';
 import BottomNavigationText from '../components/BottomNavigationText';
 import LocationSelectionScreen from '../screens/LocationSelectionScreen';
 import colors from '../constants/colors';
+import EditListUsersScreen from '../screens/EditListUsersScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -52,17 +52,6 @@ const Navigation = props => {
             headerShown: false,
             headerMode: 'none',
             detachPreviousScreen: true,
-          }}
-        />
-        <TimelineStack.Screen
-          name={ScreenName.SettingScreen}
-          component={SettingScreen}
-          options={{
-            gestureEnabled: true,
-            headerShown: false,
-            tabBarVisible: false,
-            detachPreviousScreen: true,
-            ...TransitionPresets.SlideFromRightIOS,
           }}
         />
         <TimelineStack.Screen
@@ -452,6 +441,17 @@ const Navigation = props => {
         <ListStack.Screen
           name={ScreenName.VideoPlayerScreen}
           component={VideoPlayerScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <ListStack.Screen
+          name={ScreenName.EditListUsersScreen}
+          component={EditListUsersScreen}
           options={{
             gestureEnabled: true,
             headerShown: false,

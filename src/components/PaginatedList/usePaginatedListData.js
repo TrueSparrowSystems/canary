@@ -161,37 +161,43 @@ export function usePaginatedListData({
       // Get the received data from the response.
       let newData = data?.data;
       // [data?.result_type] || [];
-      componentRef.current.allData = [
-        ...componentRef.current.allData,
-        ...newData,
-      ];
-      // Call process data so the custom filter could be applied.
-      const processedData = processData(newData, response);
-      if (processedData.length === 0 && componentRef.current.hasNextPageData) {
-        componentRef.current.shouldTriggerNextPage = true;
-      }
-      componentRef.current.filteredData = [
-        ...componentRef.current.filteredData,
-        ...processedData,
-      ];
-      const placeHolderCells = [];
-      if (
-        numColumns > 1 &&
-        componentRef.current.filteredData.length > 0 &&
-        !useRecyclerView
-      ) {
-        const numberOfPlaceholderCells =
-          numColumns - (componentRef.current.filteredData.length % numColumns);
-        if (numberOfPlaceholderCells > 0) {
-          placeHolderCells.push(PLACE_HOLDER_CELL);
+      if (newData) {
+        componentRef.current.allData = [
+          ...componentRef.current.allData,
+          ...newData,
+        ];
+        // Call process data so the custom filter could be applied.
+        const processedData = processData(newData, response);
+        if (
+          processedData.length === 0 &&
+          componentRef.current.hasNextPageData
+        ) {
+          componentRef.current.shouldTriggerNextPage = true;
         }
+        componentRef.current.filteredData = [
+          ...componentRef.current.filteredData,
+          ...processedData,
+        ];
+        const placeHolderCells = [];
+        if (
+          numColumns > 1 &&
+          componentRef.current.filteredData.length > 0 &&
+          !useRecyclerView
+        ) {
+          const numberOfPlaceholderCells =
+            numColumns -
+            (componentRef.current.filteredData.length % numColumns);
+          if (numberOfPlaceholderCells > 0) {
+            placeHolderCells.push(PLACE_HOLDER_CELL);
+          }
+        }
+        const allData = [
+          ...componentRef.current.filteredData,
+          ...placeHolderCells,
+        ];
+        const filteredData = filterAllData({allData});
+        componentRef.current.filteredData = filteredData;
       }
-      const allData = [
-        ...componentRef.current.filteredData,
-        ...placeHolderCells,
-      ];
-      const filteredData = filterAllData({allData});
-      componentRef.current.filteredData = filteredData;
     },
     [
       componentState.isRefreshing,

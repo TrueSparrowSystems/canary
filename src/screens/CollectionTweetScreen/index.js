@@ -5,7 +5,8 @@ import CollectionTweetList from '../../components/CollectionTweetList';
 import Header from '../../components/common/Header';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import colors from '../../constants/colors';
-import {layoutPtToPx} from '../../utils/responsiveUI';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import fonts from '../../constants/fonts';
 
 function CollectionTweetScreen(props) {
   const localStyle = useStyleProcessor(styles, 'CollectionTweetScreen');
@@ -14,7 +15,11 @@ function CollectionTweetScreen(props) {
   return (
     <SafeAreaView>
       <View style={localStyle.container}>
-        <Header enableBackButton={true} text={collectionName} />
+        <Header
+          enableBackButton={true}
+          text={collectionName}
+          textStyle={localStyle.headerTextStyle}
+        />
         <CollectionTweetList collectionId={collectionId} />
       </View>
     </SafeAreaView>
@@ -26,13 +31,12 @@ const styles = {
     height: '100%',
     backgroundColor: colors.White,
   },
-  headerStyle: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: layoutPtToPx(20),
-    height: layoutPtToPx(50),
-    flexDirection: 'row',
-    backgroundColor: 'white',
+  headerTextStyle: {
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(20),
+    color: colors.BlackPearl,
+    alignSelf: 'center',
   },
 };
 

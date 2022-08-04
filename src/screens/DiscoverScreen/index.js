@@ -23,7 +23,7 @@ function DiscoverScreen() {
     fnNavigateToLocationSelectionScreen,
   } = useDiscoverScreenData();
   return (
-    <View>
+    <View style={localStyle.container}>
       <SearchBar onSearchPressCallback={fnOnSearchPress} />
       <View style={localStyle.trendingCountryContainer}>
         <Text style={localStyle.trendingCountryText}>
@@ -53,6 +53,10 @@ function DiscoverScreen() {
   );
 }
 const styles = {
+  container: {
+    backgroundColor: colors.White,
+    flex: 1,
+  },
   trendingTopicBox: {
     borderBottomWidth: 1,
     borderColor: colors.LightGrey,

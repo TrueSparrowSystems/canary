@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, SafeAreaView} from 'react-native';
+import {View, Text} from 'react-native';
 import {rightArrowIcon} from '../../assets/common';
 import RoundedButton from '../../components/common/RoundedButton';
 import PreferenceSelector from '../../components/PreferenceSelector';
@@ -8,16 +8,18 @@ import colors from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {usePreferenceScreenData} from './usePreferenceScreenData';
 import fonts from '../../constants/fonts';
+import Header from '../../components/common/Header';
 
-function PreferenceScreen() {
+function PreferenceScreen(props) {
   const localStyle = useStyleProcessor(style, 'PreferenceScreen');
-
+  const data = props?.route?.params;
   const {bIsDoneButtonEnabled, fnOnSelectedItemsUpdate, fnOnDonePress} =
     usePreferenceScreenData();
 
   return (
-    <SafeAreaView>
-      <View style={localStyle.container}>
+    <View style={localStyle.container}>
+      <Header enableBackButton={!!data?.enableBackButton} />
+      <View style={localStyle.contentContainer}>
         <View>
           <Text style={localStyle.titleText}>Select Your Preferences</Text>
           <Text style={localStyle.subText}>minimum 3</Text>
@@ -37,7 +39,7 @@ function PreferenceScreen() {
           />
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -45,12 +47,22 @@ export default React.memo(PreferenceScreen);
 
 const style = {
   container: {
-    padding: layoutPtToPx(15),
     height: '100%',
+    backgroundColor: colors.White,
+  },
+  contentContainer: {
+    padding: layoutPtToPx(15),
+  },
+  cancelTextStyle: {
+    color: colors.GoldenTainoi,
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(18),
+    fontFamily: fonts.SoraSemiBold,
   },
   titleText: {
     color: colors.BlackPearl,
     fontSize: fontPtToPx(40),
+    lineHeight: layoutPtToPx(50),
     fontFamily: fonts.SoraSemiBold,
   },
   subText: {

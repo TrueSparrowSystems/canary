@@ -45,7 +45,7 @@ function AddToListModal() {
                 <Text style={localStyle.titleText}>Add To List</Text>
               </View>
               <TouchableOpacity onPress={fnOnAddListPress}>
-                <Image source={AddIcon} />
+                <Image source={AddIcon} style={localStyle.iconStyle} />
               </TouchableOpacity>
             </View>
             {bIsLoading ? (
@@ -97,6 +97,10 @@ const styles = {
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  iconStyle: {
+    height: 20,
+    width: 20,
   },
   blur: {
     position: 'absolute',

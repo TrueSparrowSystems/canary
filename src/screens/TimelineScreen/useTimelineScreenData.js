@@ -9,7 +9,7 @@ function useTimelineScreenData() {
   const [refreshing, setRefreshing] = useState(false);
 
   const onSettingsPress = useCallback(() => {
-    navigation.navigate(ScreenName.SettingScreen);
+    navigation.navigate(ScreenName.PreferenceScreen, {enableBackButton: true});
   }, [navigation]);
 
   const updateList = useCallback(() => {

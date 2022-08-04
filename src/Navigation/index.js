@@ -7,7 +7,6 @@ import {TransitionPresets} from '@react-navigation/stack';
 import ScreenName from '../constants/ScreenName';
 import TimelineScreen from '../screens/TimelineScreen';
 import CollectionScreen from '../screens/CollectionScreen';
-import SettingScreen from '../screens/SettingScreen';
 import {Image, View} from 'react-native';
 import {
   HomeIcon,
@@ -52,17 +51,6 @@ const Navigation = props => {
             headerShown: false,
             headerMode: 'none',
             detachPreviousScreen: true,
-          }}
-        />
-        <TimelineStack.Screen
-          name={ScreenName.SettingScreen}
-          component={SettingScreen}
-          options={{
-            gestureEnabled: true,
-            headerShown: false,
-            tabBarVisible: false,
-            detachPreviousScreen: true,
-            ...TransitionPresets.SlideFromRightIOS,
           }}
         />
         <TimelineStack.Screen

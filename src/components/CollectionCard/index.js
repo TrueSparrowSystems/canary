@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {
   Text,
   View,
@@ -8,17 +8,18 @@ import {
 } from 'react-native';
 import {BinIcon} from '../../assets/common';
 import ScreenName from '../../constants/ScreenName';
-import {ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import {collectionService} from '../../services/CollectionService';
 import colors from '../../constants/colors';
-import {layoutPtToPx} from '../../utils/responsiveUI';
-import Toast from 'react-native-toast-message';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import Image from 'react-native-fast-image';
+import fonts from '../../constants/fonts';
+import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 
 function CollectionCard(props) {
-  const {data, onCollectionRemoved} = props;
-  const {imageUrl, collectionName, collectionId} = data;
+  const {data, onCollectionRemoved, onLongPress, enableDelete} = props;
+  const {name: collectionName, id: collectionId} = data;
+  let {colorScheme} = data;
   const localStyle = useStyleProcessor(styles, 'CollectionCard');
   const navigation = useNavigation();
 
@@ -30,34 +31,47 @@ function CollectionCard(props) {
   }, [collectionId, collectionName, navigation]);
 
   const onCollectionRemove = useCallback(() => {
-    collectionService()
-      .removeCollection(collectionId)
-      .then(() => {
-        onCollectionRemoved();
-        Toast.show({
-          type: ToastType.Success,
-          text1: 'Removed collection.',
-        });
-      })
-      .catch(() => {
-        Toast.show({
-          type: ToastType.Error,
-          text1: 'Error in removing collection.',
-        });
-      });
-  }, [collectionId, onCollectionRemoved]);
+    LocalEvent.emit(EventTypes.ShowDeleteCollectionConfirmationModal, {
+      id: collectionId,
+      name: collectionName,
+      onCollectionRemoved,
+    });
+  }, [collectionId, collectionName, onCollectionRemoved]);
+
+  const colorSchemeStyle = useMemo(() => {
+    if (!colorScheme) {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      colorScheme = getRandomColorCombination();
+    }
+    return {
+      cardStyle: [
+        localStyle.cardStyle,
+        {backgroundColor: colorScheme?.backgroundColor},
+      ],
+      textStyle: [localStyle.textStyle, {color: colorScheme?.textColor}],
+    };
+  }, [colorScheme, localStyle.cardStyle]);
 
   return (
-    <TouchableWithoutFeedback onPress={onCollectionPress}>
+    <TouchableWithoutFeedback
+      onPress={onCollectionPress}
+      onLongPress={onLongPress}>
       <View style={localStyle.container}>
-        <TouchableHighlight
-          underlayColor={colors.Transparent}
-          style={localStyle.binContainer}
-          onPress={onCollectionRemove}>
-          <Image source={BinIcon} style={localStyle.binIconStyle} />
-        </TouchableHighlight>
-        <Image source={{uri: imageUrl}} style={localStyle.imageStyle} />
-        <Text style={localStyle.textStyle}>{collectionName}</Text>
+        {collectionId ? (
+          <View style={colorSchemeStyle.cardStyle}>
+            {enableDelete ? (
+              <TouchableHighlight
+                underlayColor={colors.Transparent}
+                style={localStyle.binContainer}
+                onPress={onCollectionRemove}>
+                <Image source={BinIcon} style={localStyle.binIconStyle} />
+              </TouchableHighlight>
+            ) : null}
+            <Text numberOfLines={3} style={colorSchemeStyle.textStyle}>
+              {collectionName}
+            </Text>
+          </View>
+        ) : null}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -65,32 +79,41 @@ function CollectionCard(props) {
 
 const styles = {
   container: {
-    marginBottom: layoutPtToPx(10),
-    marginHorizontal: layoutPtToPx(20),
+    marginBottom: layoutPtToPx(20),
+    marginRight: layoutPtToPx(20),
     borderRadius: layoutPtToPx(6),
+    flex: 1,
+    aspectRatio: 1,
   },
   binContainer: {
     position: 'absolute',
-    right: 0,
-    top: 0,
+    right: layoutPtToPx(-5),
+    top: layoutPtToPx(-5),
     height: layoutPtToPx(40),
     width: layoutPtToPx(40),
     zIndex: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
   },
   binIconStyle: {
-    height: layoutPtToPx(20),
-    width: layoutPtToPx(20),
+    height: layoutPtToPx(24),
+    width: layoutPtToPx(24),
   },
   textStyle: {
-    marginTop: 5,
-    color: colors.SherpaBlue,
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(24),
+    lineHeight: layoutPtToPx(30),
+    padding: layoutPtToPx(8),
   },
   imageStyle: {
     height: layoutPtToPx(150),
     width: '100%',
     borderRadius: 6,
+  },
+  cardStyle: {
+    flex: 1,
+    borderRadius: layoutPtToPx(12),
+    justifyContent: 'flex-end',
   },
 };
 

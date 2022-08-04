@@ -14,6 +14,7 @@ import useAddToCollectionModalData from './useAddToCollectionModalData';
 import MiniCollectionCard from '../MiniCollectionCard';
 import {ScrollView} from 'react-native-gesture-handler';
 import {AddIcon} from '../../assets/common';
+import {layoutPtToPx} from '../../utils/responsiveUI';
 
 function AddToCollectionModal() {
   const localStyle = useStyleProcessor(styles, 'AddToCollectionModal');
@@ -46,7 +47,7 @@ function AddToCollectionModal() {
                 <Text style={localStyle.titleText}>Add To Collection</Text>
               </View>
               <TouchableOpacity onPress={fnOnAddCollectionPress}>
-                <Image source={AddIcon} />
+                <Image source={AddIcon} style={localStyle.addIconStyle} />
               </TouchableOpacity>
             </View>
             {bIsLoading ? (
@@ -123,6 +124,10 @@ const styles = {
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  addIconStyle: {
+    height: layoutPtToPx(18),
+    width: layoutPtToPx(18),
   },
 };
 

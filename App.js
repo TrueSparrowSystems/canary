@@ -9,6 +9,7 @@ import colors from './src/constants/colors';
 import Toast from 'react-native-toast-message';
 import AddListModal from './src/components/AddListModal';
 import AddToListModal from './src/components/AddToListModal';
+import ConfirmDeleteModal from './src/components/common/ConfirmDeleteModal';
 
 function App() {
   const localStyle = useStyleProcessor(styles, 'App');
@@ -19,6 +20,7 @@ function App() {
         <RootNavigation />
         <AddCollectionModal />
         <AddToCollectionModal />
+        <ConfirmDeleteModal />
         <AddListModal />
         <AddToListModal />
       </NavigationContainer>
@@ -29,7 +31,7 @@ function App() {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: colors.GoldenTainoi,
+    backgroundColor: colors.White,
   },
 };
 

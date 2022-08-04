@@ -1,16 +1,20 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, SafeAreaView, ScrollView, View} from 'react-native';
-import {AddIcon} from '../../assets/common';
+import {AddIcon, BottomBarListIcon} from '../../assets/common';
 import ListCard from '../../components/ListCard';
-import Header from '../../components/common/Header';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {listService} from '../../services/ListService';
 import colors from '../../constants/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
-import {fontPtToPx} from '../../utils/responsiveUI';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
+import Header from '../../components/common/Header';
+import fonts from '../../constants/fonts';
+
 function ListScreen() {
   const localStyle = useStyleProcessor(styles, 'ListScreen');
   const [isLoading, setIsLoading] = useState(true);
+  const [swipeable, setSwipeable] = useState(false);
   const listDataRef = useRef({});
 
   const fetchData = useCallback(() => {
@@ -49,44 +53,56 @@ function ListScreen() {
     });
   }, [onListAddSuccess]);
 
+  const onCardLongPress = useCallback(() => {
+    setSwipeable(true);
+  }, []);
+
+  const onDonePress = useCallback(() => {
+    setSwipeable(false);
+  }, []);
+
   return (
     <SafeAreaView style={localStyle.container}>
       <Header
-        enableBackButton={false}
-        enableRightButton={true}
-        onRightButtonClick={onAddListPress}
-        rightButtonImage={AddIcon}
         text="Lists"
+        rightButtonImage={swipeable ? null : AddIcon}
+        enableRightButton={true}
+        rightButtonText={swipeable ? 'Done' : 'New'}
         textStyle={localStyle.headerText}
+        rightButtonImageStyle={localStyle.headerRightButtonImage}
+        rightButtonTextStyle={localStyle.headerRightButtonText}
+        onRightButtonClick={swipeable ? onDonePress : onAddListPress}
       />
-
       {isLoading ? (
         <View style={localStyle.loaderStyle}>
           <ActivityIndicator animating={isLoading} />
         </View>
+      ) : listDataRef.current == null ? (
+        <EmptyScreenComponent
+          emptyImage={BottomBarListIcon}
+          buttonText={'Create a new List'}
+          onButtonPress={onAddListPress}
+          descriptionText={
+            'Stay up-to-date on the favorite topics by tweeters you love'
+          }
+        />
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={localStyle.scrollViewContainer}
           style={localStyle.scrollViewStyle}>
-          {listDataRef.current == null
-            ? null
-            : Object.keys(listDataRef.current).map(key => {
-                const list = listDataRef.current[key];
-                const singleListData = {
-                  listId: list?.id,
-                  listName: list?.name,
-                  // TODO: change image url
-                  imageUrl: 'https://picsum.photos/200/300',
-                };
-                return (
-                  <ListCard
-                    key={singleListData.listId}
-                    data={singleListData}
-                    onListRemoved={reloadList}
-                  />
-                );
-              })}
+          {Object.keys(listDataRef.current).map(key => {
+            const list = listDataRef.current[key];
+            return (
+              <ListCard
+                key={list.id}
+                data={list}
+                onListRemoved={reloadList}
+                onCardLongPress={onCardLongPress}
+                enableSwipe={swipeable}
+              />
+            );
+          })}
           <View />
         </ScrollView>
       )}
@@ -109,17 +125,27 @@ const styles = {
     justifyContent: 'center',
   },
   headerText: {
-    color: colors.DodgerBlue,
-    fontSize: fontPtToPx(35),
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(20),
   },
-  scrollViewStyle: {
-    paddingTop: 20,
+  headerRightButtonImage: {
+    tintColor: colors.GoldenTainoi,
+    height: layoutPtToPx(14),
+    width: layoutPtToPx(14),
+    marginRight: layoutPtToPx(6),
   },
+  headerRightButtonText: {
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(14),
+    color: colors.GoldenTainoi,
+  },
+  scrollViewStyle: {},
   add: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: layoutPtToPx(10),
+    paddingHorizontal: layoutPtToPx(20),
     position: 'absolute',
-    right: 20,
+    right: layoutPtToPx(20),
   },
   loaderStyle: {
     flex: 1,
@@ -127,7 +153,7 @@ const styles = {
     alignItems: 'center',
   },
   scrollViewContainer: {
-    paddingBottom: 20,
+    paddingBottom: layoutPtToPx(20),
   },
 };
 

@@ -13,6 +13,8 @@ export const EventTypes = {
   ShowAddToCollectionModal: 'event_types_show_add_to_collection_modal',
   ShowAddToListModal: 'event_types_show_add_to_list_modal',
   ShowAddCollectionModal: 'event_types_show_add_collection_modal',
+  ShowDeleteCollectionConfirmationModal:
+    'show_delete_collection_confirmation_modal',
   ShowAddListModal: 'event_types_show_add_list_modal',
   UpdateTimeline: 'event_types_update_timeline',
   UpdateCollection: 'event_types_update_collection',

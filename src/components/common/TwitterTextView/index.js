@@ -149,7 +149,7 @@ function TwitterTextView({
 }
 const styles = {
   linkStyle: {
-    fontFamily: fonts.InterRegular,
+    fontFamily: fonts.InterSemiBold,
     color: colors.GoldenTainoi,
     lineHeight: layoutPtToPx(19),
     fontSize: fontPtToPx(14),

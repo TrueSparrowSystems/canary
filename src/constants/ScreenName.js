@@ -7,7 +7,6 @@ export default {
   CollectionScreen: 'CollectionScreen',
   CollectionTab: 'CollectionTab',
   CollectionTweetScreen: 'CollectionTweetScreen',
-  SettingScreen: 'SettingScreen',
   ImageViewScreen: 'ImageViewScreen',
   DiscoverScreen: 'DiscoverScreen',
   DiscoverTab: 'DiscoverTab',
@@ -17,4 +16,5 @@ export default {
   ListTweetsScreen: 'ListTweetsScreen',
   VideoPlayerScreen: 'VideoPlayerScreen',
   LocationSelectionScreen: 'LocationSelectionScreen',
+  EditListUsersScreen: 'EditListUsersScreen',
 };

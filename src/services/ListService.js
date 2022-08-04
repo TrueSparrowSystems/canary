@@ -1,6 +1,7 @@
 import {StoreKeys} from './AsyncStorage/StoreConstants';
 import Store from './AsyncStorage';
 import uuid from 'react-native-uuid';
+import {getRandomColorCombination} from '../utils/RandomColorUtil';
 
 const LIST_LIMIT = 30;
 
@@ -15,6 +16,7 @@ class ListService {
 
   async addList(listName) {
     return new Promise((resolve, reject) => {
+      const colorCombination = getRandomColorCombination();
       Store.get(StoreKeys.Lists).then(list => {
         if (list == null) {
           const id = uuid.v4();
@@ -23,6 +25,7 @@ class ListService {
             id: id,
             name: listName,
             userNames: [],
+            colorCombination,
           };
 
           this.lists = listObj;
@@ -47,6 +50,7 @@ class ListService {
             id: newId,
             name: listName,
             userNames: [],
+            colorCombination,
           };
 
           _list = {..._list, ...newList};
@@ -150,7 +154,7 @@ class ListService {
         userNames.splice(index, 1);
       }
       this.lists[listId].userNames = userNames;
-      Store.set(StoreKeys.List, this.lists)
+      Store.set(StoreKeys.Lists, this.lists)
         .then(() => {
           return resolve();
         })

@@ -31,7 +31,11 @@ function ThreadScreen(props) {
         refreshData={false}
         timelineListDataSource={listDataSource.current}
         listHeaderComponent={
-          <TweetCard dataSource={tweetData} isDisabled={true} />
+          <TweetCard
+            dataSource={tweetData}
+            isDisabled={true}
+            style={localStyle.cardStyle}
+          />
         }
       />
     </View>
@@ -44,6 +48,13 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: colors.White,
+  },
+  cardStyle: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.BlackPearl20,
+    marginBottom: layoutPtToPx(12),
+    padding: layoutPtToPx(12),
+    flex: 1,
   },
   header: {
     marginHorizontal: layoutPtToPx(20),

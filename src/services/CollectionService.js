@@ -3,6 +3,7 @@ import Store from './AsyncStorage';
 import uuid from 'react-native-uuid';
 import Cache from './Cache';
 import {CacheKey} from './Cache/CacheStoreConstants';
+import {getRandomColorCombination} from '../utils/RandomColorUtil';
 
 const COLLECTION_TWEET_LIMIT = 25;
 
@@ -18,6 +19,7 @@ class CollectionService {
   async addCollection(collectionName) {
     return new Promise((resolve, reject) => {
       Store.get(StoreKeys.CollectionsList).then(list => {
+        const colorCombination = getRandomColorCombination();
         if (list == null) {
           const id = uuid.v4();
           var collectionObj = {};
@@ -25,6 +27,7 @@ class CollectionService {
             id: id,
             name: collectionName,
             tweetIds: [],
+            colorScheme: colorCombination,
           };
 
           this.collections = collectionObj;
@@ -44,6 +47,7 @@ class CollectionService {
             id: newId,
             name: collectionName,
             tweetIds: [],
+            colorScheme: colorCombination,
           };
 
           _list = {..._list, ...newCollection};
@@ -90,6 +94,19 @@ class CollectionService {
     });
   }
 
+  async updateBookmarkedTweetsInCacheAndStore(bookmarkedTweets) {
+    return new Promise((resolve, reject) => {
+      Cache.setValue(CacheKey.BookmarkedTweetsList, bookmarkedTweets);
+      Store.set(StoreKeys.BookmarkedTweetsList, bookmarkedTweets)
+        .then(() => {
+          return resolve();
+        })
+        .catch(() => {
+          return reject();
+        });
+    });
+  }
+
   async _addTweet(collectionId, tweetId) {
     return new Promise((resolve, reject) => {
       if (
@@ -113,8 +130,7 @@ class CollectionService {
 
       Store.set(StoreKeys.CollectionsList, this.collections)
         .then(() => {
-          Cache.setValue(CacheKey.BookmarkedTweetsList, bookmarkedTweets);
-          Store.set(StoreKeys.BookmarkedTweetsList, bookmarkedTweets)
+          this.updateBookmarkedTweetsInCacheAndStore(bookmarkedTweets)
             .then(() => {
               return resolve();
             })
@@ -168,8 +184,7 @@ class CollectionService {
           tweetIdsOfThisCollection.forEach(tweetId => {
             delete bookmarkedIds[tweetId];
           });
-          Cache.setValue(CacheKey.BookmarkedTweetsList, bookmarkedIds);
-          Store.set(StoreKeys.BookmarkedTweetsList, bookmarkedIds)
+          this.updateBookmarkedTweetsInCacheAndStore(bookmarkedIds)
             .then(() => {
               return resolve();
             })
@@ -197,8 +212,7 @@ class CollectionService {
       Store.set(StoreKeys.CollectionsList, this.collections)
         .then(() => {
           delete bookmarkedIds[tweetId];
-          Cache.setValue(CacheKey.BookmarkedTweetsList, bookmarkedIds);
-          Store.set(StoreKeys.BookmarkedTweetsList, bookmarkedIds)
+          this.updateBookmarkedTweetsInCacheAndStore(bookmarkedIds)
             .then(() => {
               return resolve();
             })

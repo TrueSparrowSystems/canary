@@ -1,26 +1,38 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, ActivityIndicator} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {View, ActivityIndicator, FlatList, RefreshControl} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionCard from '../../components/CollectionCard';
-import Header from '../../components/common/Header';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
 import colors from '../../constants/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
-import {AddIcon} from '../../assets/common';
-import {fontPtToPx} from '../../utils/responsiveUI';
+import {AddIcon, CollectionsIcon} from '../../assets/common';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
+import {isEmpty} from 'lodash';
+import Header from '../../components/common/Header';
+import fonts from '../../constants/fonts';
 
 function CollectionScreen() {
   const localStyle = useStyleProcessor(styles, 'CollectionScreen');
   const [isLoading, setIsLoading] = useState(true);
   const collectionDataRef = useRef({});
+  const [isDeleteEnabled, setIsDeleteEnabled] = useState(false);
 
   const fetchData = useCallback(() => {
     setIsLoading(true);
     const _collectionService = collectionService();
     _collectionService.getAllCollections().then(list => {
-      collectionDataRef.current = JSON.parse(list);
+      const jsonObj = JSON.parse(list);
+      let dataArray = [];
+      Object.keys(jsonObj).map(key => {
+        const collectionData = jsonObj[key];
+        dataArray.push(collectionData);
+      });
+      if (dataArray.length % 2) {
+        dataArray.push({});
+      }
+      collectionDataRef.current = dataArray;
       setIsLoading(false);
     });
   }, []);
@@ -52,46 +64,71 @@ function CollectionScreen() {
     });
   }, [onCollectionAddSuccess]);
 
+  const enableCollectionDeleteOption = useCallback(() => {
+    setIsDeleteEnabled(true);
+  }, []);
+
+  const onDonePress = useCallback(() => {
+    setIsDeleteEnabled(false);
+  }, []);
+
+  const renderItem = useCallback(
+    ({item}) => {
+      return (
+        <CollectionCard
+          key={item.id}
+          data={item}
+          onCollectionRemoved={reloadList}
+          onLongPress={enableCollectionDeleteOption}
+          enableDelete={isDeleteEnabled}
+        />
+      );
+    },
+    [enableCollectionDeleteOption, isDeleteEnabled, reloadList],
+  );
+
   return (
     <SafeAreaView style={localStyle.container}>
       <Header
-        enableBackButton={false}
+        text={'Archives'}
+        textStyle={localStyle.headerTextStyle}
         enableRightButton={true}
-        onRightButtonClick={onAddCollectionPress}
-        rightButtonImage={AddIcon}
-        text="Collections"
-        textStyle={localStyle.headerText}
+        rightButtonImage={!isDeleteEnabled ? AddIcon : null}
+        onRightButtonClick={
+          !isDeleteEnabled ? onAddCollectionPress : onDonePress
+        }
+        rightButtonText={!isDeleteEnabled ? 'New' : 'Done'}
+        rightButtonTextStyle={localStyle.newButtonTextStyle}
+        rightButtonImageStyle={localStyle.newButtonImageStyle}
       />
-
       {isLoading ? (
         <View style={localStyle.loaderStyle}>
           <ActivityIndicator animating={isLoading} />
         </View>
+      ) : isEmpty(collectionDataRef.current) ? (
+        <EmptyScreenComponent
+          emptyImage={CollectionsIcon}
+          buttonText={'Add a new Archive'}
+          onButtonPress={onAddCollectionPress}
+          descriptionText={
+            'Save your favorite tweets in the archive and access it later anytime'
+          }
+        />
       ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={localStyle.scrollViewContainer}
-          style={localStyle.scrollViewStyle}>
-          {collectionDataRef.current == null
-            ? null
-            : Object.keys(collectionDataRef.current).map(key => {
-                const collection = collectionDataRef.current[key];
-                const singleCollectionData = {
-                  collectionId: collection?.id,
-                  collectionName: collection?.name,
-                  // TODO: change image url
-                  imageUrl: 'https://picsum.photos/200/300',
-                };
-                return (
-                  <CollectionCard
-                    key={singleCollectionData.collectionId}
-                    data={singleCollectionData}
-                    onCollectionRemoved={reloadList}
-                  />
-                );
-              })}
-          <View />
-        </ScrollView>
+        <View style={localStyle.flatListStyle}>
+          <FlatList
+            data={collectionDataRef.current}
+            renderItem={renderItem}
+            numColumns={2}
+            refreshControl={
+              <RefreshControl refreshing={isLoading} onRefresh={fetchData} />
+            }
+            contentContainerStyle={localStyle.contentContainerStyle}
+            keyExtractor={item => {
+              return item.id;
+            }}
+          />
+        </View>
       )}
     </SafeAreaView>
   );
@@ -102,35 +139,36 @@ const styles = {
     backgroundColor: colors.White,
     flex: 1,
   },
-  headerView: {
-    backgroundColor: colors.White,
-    flexDirection: 'row',
-    borderBottomWidth: 0.8,
-    borderColor: colors.SherpaBlue,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerText: {
-    color: colors.DodgerBlue,
-    fontSize: fontPtToPx(35),
-  },
-  scrollViewStyle: {
-    paddingTop: 20,
-  },
-  add: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    position: 'absolute',
-    right: 20,
-  },
   loaderStyle: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  scrollViewContainer: {
-    paddingBottom: 20,
+  headerTextStyle: {
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(20),
+    color: colors.BlackPearl,
+    alignSelf: 'center',
+  },
+  newButtonImageStyle: {
+    tintColor: colors.GoldenTainoi,
+    height: layoutPtToPx(14),
+    width: layoutPtToPx(14),
+  },
+  newButtonTextStyle: {
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(18),
+    color: colors.GoldenTainoi,
+    paddingLeft: layoutPtToPx(2),
+  },
+  flatListStyle: {
+    paddingLeft: layoutPtToPx(20),
+    flex: 1,
+  },
+  contentContainerStyle: {
+    marginTop: layoutPtToPx(10),
   },
 };
 

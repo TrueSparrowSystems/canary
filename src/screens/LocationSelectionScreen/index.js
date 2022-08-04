@@ -43,6 +43,7 @@ export default React.memo(LocationSelectionScreen);
 const styles = {
   container: {
     flex: 1,
+    backgroundColor: colors.White,
   },
   itemContainer: {
     borderBottomWidth: 1,

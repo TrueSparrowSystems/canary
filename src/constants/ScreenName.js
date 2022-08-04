@@ -7,7 +7,6 @@ export default {
   CollectionScreen: 'CollectionScreen',
   CollectionTab: 'CollectionTab',
   CollectionTweetScreen: 'CollectionTweetScreen',
-  SettingScreen: 'SettingScreen',
   ImageViewScreen: 'ImageViewScreen',
   DiscoverScreen: 'DiscoverScreen',
   DiscoverTab: 'DiscoverTab',

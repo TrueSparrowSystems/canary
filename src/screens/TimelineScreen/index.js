@@ -1,12 +1,13 @@
 import React from 'react';
-import {View} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import {fontPtToPx} from '../../utils/responsiveUI';
-import {SettingsIcon} from '../../assets/common';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import {Canary, SettingsIcon} from '../../assets/common';
 import useTimelineScreenData from './useTimelineScreenData';
 import Header from '../../components/common/Header';
 import colors from '../../constants/colors';
 import TimelineList from '../../components/TimelineList';
+import fonts from '../../constants/fonts';
 
 function TimelineScreen() {
   const localStyle = useStyleProcessor(styles, 'TimelineScreen');
@@ -20,8 +21,12 @@ function TimelineScreen() {
           enableRightButton={true}
           onRightButtonClick={fnOnSettingsPress}
           rightButtonImage={SettingsIcon}
-          text="Twitter.me"
-          textStyle={localStyle.appNameText}
+          text={
+            <View style={localStyle.flexRow}>
+              <Image source={Canary} style={localStyle.iconStyle} />
+              <Text style={localStyle.appNameText}>Canary</Text>
+            </View>
+          }
         />
       </View>
 
@@ -36,8 +41,20 @@ const styles = {
     flex: 1,
     backgroundColor: colors.White,
   },
+  iconStyle: {
+    height: layoutPtToPx(24),
+    width: layoutPtToPx(24),
+  },
   appNameText: {
-    color: colors.DodgerBlue,
-    fontSize: fontPtToPx(35),
+    color: colors.BlackPearl,
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(20),
+    marginLeft: layoutPtToPx(4),
+  },
+  flexRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 };

@@ -22,7 +22,7 @@ const colors = {
   OxfordBlue: '#2B2F30',
   Grandis: '#FED56B',
   SweetCorn: '#FEE077',
-  Bittersweet: '#FF6363',
+  BitterSweet: '#FF6363',
 };
 
 export default colors;

@@ -11,6 +11,9 @@ const EndPoints = {
   getSingleTweet: tweetId => `https://api.twitter.com/2/tweets/${tweetId}`,
   getAvailableWoeids: 'https://api.twitter.com/1.1/trends/available.json',
   getTrendsFromWoeid: 'https://api.twitter.com/1.1/trends/place.json',
+  getUserByUserName: userName =>
+    `https://api.twitter.com/2/users/by/username/${userName}`,
+  getUsersByUserNames: 'https://api.twitter.com/2/users/by',
 };
 
 const API_REQUEST_PARAMETERS = {
@@ -138,6 +141,21 @@ class TwitterApi {
     };
     const apiService = new APIService({});
     return apiService.get(EndPoints.getTrendsFromWoeid, data);
+  }
+  getUserByUserName(userName) {
+    const data = {
+      'user.fields': 'id,name,profile_image_url,username,verified',
+    };
+    const apiService = new APIService({});
+    return apiService.get(EndPoints.getUserByUserName(userName), data);
+  }
+  getUsersByUserNames(usernames) {
+    const data = {
+      usernames: usernames,
+      'user.fields': 'id,name,profile_image_url,username,verified',
+    };
+    const apiService = new APIService({});
+    return apiService.get(EndPoints.getUsersByUserNames, data);
   }
 }
 export default new TwitterApi();

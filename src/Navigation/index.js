@@ -28,6 +28,7 @@ import ListTweetsScreen from '../screens/ListTweetsScreen';
 import BottomNavigationText from '../components/BottomNavigationText';
 import LocationSelectionScreen from '../screens/LocationSelectionScreen';
 import colors from '../constants/colors';
+import EditListUsersScreen from '../screens/EditListUsersScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -417,6 +418,17 @@ const Navigation = props => {
         <ListStack.Screen
           name={ScreenName.SearchResultScreen}
           component={SearchResultScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <ListStack.Screen
+          name={ScreenName.EditListUsersScreen}
+          component={EditListUsersScreen}
           options={{
             gestureEnabled: true,
             headerShown: false,

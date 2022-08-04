@@ -99,7 +99,7 @@ function CollectionScreen() {
         }
         rightButtonText={!isDeleteEnabled ? 'New' : 'Done'}
         rightButtonTextStyle={localStyle.newButtonTextStyle}
-        rightIconStyle={localStyle.newButtonImageStyle}
+        rightButtonImageStyle={localStyle.newButtonImageStyle}
       />
       {isLoading ? (
         <View style={localStyle.loaderStyle}>

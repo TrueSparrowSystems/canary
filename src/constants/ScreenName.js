@@ -16,4 +16,5 @@ export default {
   ListScreen: 'ListScreen',
   ListTweetsScreen: 'ListTweetsScreen',
   LocationSelectionScreen: 'LocationSelectionScreen',
+  EditListUsersScreen: 'EditListUsersScreen',
 };

@@ -46,7 +46,7 @@ function ConfirmDeleteModal() {
                 text={'I am sure'}
                 textStyle={localStyle.sureButtonText}
                 onPress={fnOnSureButtonPress}
-                underlayColor={getColorWithOpacity(colors.Bittersweet, 0.8)}
+                underlayColor={getColorWithOpacity(colors.BitterSweet, 0.8)}
               />
             </View>
           </View>
@@ -94,9 +94,9 @@ const styles = {
     justifyContent: 'center',
   },
   sureButton: {
-    backgroundColor: colors.Bittersweet,
+    backgroundColor: colors.BitterSweet,
     borderWidth: 1,
-    borderColor: colors.Bittersweet,
+    borderColor: colors.BitterSweet,
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',

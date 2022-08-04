@@ -12,7 +12,7 @@ function Header(props) {
     enableRightButton,
     onRightButtonClick,
     rightButtonImage,
-    rightIconStyle,
+    rightButtonImageStyle,
     rightButtonText,
     rightButtonTextStyle,
     text,
@@ -55,7 +55,7 @@ function Header(props) {
             {rightButtonImage ? (
               <Image
                 source={rightButtonImage}
-                style={rightIconStyle || localStyle.rightIcon}
+                style={rightButtonImageStyle || localStyle.rightIcon}
               />
             ) : null}
             {rightButtonText ? (
@@ -96,17 +96,19 @@ const styles = {
     alignItems: 'center',
   },
   backButtonView: {
-    flexShrink: 1,
+    flex: 1,
     alignItems: 'flex-start',
     minWidth: layoutPtToPx(40),
   },
   textView: {
-    flexGrow: 1,
+    position: 'absolute',
+    zIndex: -1,
+    width: '100%',
+    paddingHorizontal: '15%',
     alignItems: 'center',
-    maxWidth: '70%',
   },
   rightButtonView: {
-    flexShrink: 1,
+    flex: 1,
     alignItems: 'flex-end',
   },
 };

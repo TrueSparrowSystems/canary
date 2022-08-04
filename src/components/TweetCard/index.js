@@ -72,6 +72,7 @@ function TweetCard(props) {
   }, [id, isBookmarkedState, onAddToCollectionSuccess]);
 
   const onAddToListSuccess = useCallback(() => {
+    LocalEvent.emit(EventTypes.UpdateList);
     //TODO: handle on add to list success
   }, []);
 

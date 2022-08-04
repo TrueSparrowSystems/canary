@@ -4,7 +4,7 @@ import Header from '../../components/common/Header';
 import TimelineList from '../../components/TimelineList';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {listService} from '../../services/ListService';
-import colors from '../../constants/colors';
+import colors, {getColorWithOpacity} from '../../constants/colors';
 import ListTweetDataSource from './ListTweetDataSource';
 import fonts from '../../constants/fonts';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
@@ -57,12 +57,13 @@ function ListTweetsScreen(props) {
       <EmptyScreenComponent
         descriptionText={'It’s pretty empty in here 🥲'}
         buttonText={'Add Users to List'}
+        descriptionTextStyle={localStyle.descriptionTextStyle}
         onButtonPress={() => {
           //TODO: Add to navigation to add user screen
         }}
       />
     );
-  }, []);
+  }, [localStyle.descriptionTextStyle]);
 
   return (
     <View style={localStyle.container}>
@@ -98,6 +99,12 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: colors.White,
+  },
+  descriptionTextStyle: {
+    fontFamily: fonts.SoraRegular,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(20),
+    color: getColorWithOpacity(colors.Black, 0.7),
   },
   headerText: {
     fontFamily: fonts.SoraSemiBold,

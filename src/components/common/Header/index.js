@@ -32,19 +32,26 @@ function Header(props) {
 
   return (
     <View style={style || localStyle.header}>
-      {enableBackButton ? (
-        <TouchableOpacity activeOpacity={1} onPress={onBackPress}>
-          <Image source={BackIcon} style={localStyle.backIcon} />
-        </TouchableOpacity>
-      ) : (
-        <View />
-      )}
-      {text ? (
-        <Text style={textStyle || localStyle.textStyle}>{text}</Text>
-      ) : null}
-      {enableRightButton && (rightButtonImage || rightButtonText) ? (
-        <TouchableOpacity activeOpacity={1} onPress={onRightButtonClick}>
-          <View style={localStyle.rightContainerStyle}>
+      <View style={localStyle.backButtonView}>
+        {enableBackButton ? (
+          <TouchableOpacity activeOpacity={1} onPress={onBackPress}>
+            <Image source={BackIcon} style={localStyle.backIcon} />
+          </TouchableOpacity>
+        ) : null}
+      </View>
+      <View style={localStyle.textView}>
+        {text ? (
+          <Text numberOfLines={1} style={textStyle || localStyle.textStyle}>
+            {text}
+          </Text>
+        ) : null}
+      </View>
+      <View style={localStyle.rightButtonView}>
+        {enableRightButton && (rightButtonImage || rightButtonText) ? (
+          <TouchableOpacity
+            style={localStyle.rightButtonStyle}
+            activeOpacity={1}
+            onPress={onRightButtonClick}>
             {rightButtonImage ? (
               <Image
                 source={rightButtonImage}
@@ -54,11 +61,11 @@ function Header(props) {
             {rightButtonText ? (
               <Text style={rightButtonTextStyle}>{rightButtonText}</Text>
             ) : null}
-          </View>
-        </TouchableOpacity>
-      ) : (
-        <View />
-      )}
+          </TouchableOpacity>
+        ) : (
+          <View />
+        )}
+      </View>
     </View>
   );
 }
@@ -70,7 +77,6 @@ const styles = {
     marginHorizontal: layoutPtToPx(20),
     height: layoutPtToPx(50),
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
   backIcon: {
@@ -85,9 +91,24 @@ const styles = {
     height: layoutPtToPx(25),
     width: layoutPtToPx(25),
   },
-  rightContainerStyle: {
+  rightButtonStyle: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+  },
+  backButtonView: {
+    flex: 1,
+    alignItems: 'flex-start',
+    minWidth: layoutPtToPx(40),
+  },
+  textView: {
+    position: 'absolute',
+    zIndex: -1,
+    width: '100%',
+    paddingHorizontal: '15%',
+    alignItems: 'center',
+  },
+  rightButtonView: {
+    flex: 1,
+    alignItems: 'flex-end',
   },
 };

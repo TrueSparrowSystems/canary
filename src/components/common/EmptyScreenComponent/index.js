@@ -8,22 +8,38 @@ import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
 import RoundedButton from '../RoundedButton';
 
 function EmptyScreenComponent(props) {
-  const {emptyImage, descriptionText, buttonText, onButtonPress} = props;
+  const {
+    emptyImage,
+    descriptionText,
+    descriptionTextStyle,
+    buttonText,
+    buttonImage,
+    buttonImageStyle,
+    onButtonPress,
+  } = props;
   const localStyle = useStyleProcessor(styles, 'EmptyScreenComponent');
 
   return (
     <View style={localStyle.emptyViewStyle}>
-      <Image source={emptyImage} style={localStyle.emptyImageStyle} />
-      <Text style={localStyle.emptyTextStyle}>{descriptionText}</Text>
-      <RoundedButton
-        style={localStyle.createButton}
-        text={buttonText}
-        textStyle={localStyle.createButtonText}
-        leftImage={AddIcon}
-        leftImageStyle={localStyle.addIconStyle}
-        onPress={onButtonPress}
-        underlayColor={colors.GoldenTainoi80}
-      />
+      {emptyImage ? (
+        <Image source={emptyImage} style={localStyle.emptyImageStyle} />
+      ) : null}
+      {descriptionText ? (
+        <Text style={descriptionTextStyle || localStyle.descriptionTextStyle}>
+          {descriptionText}
+        </Text>
+      ) : null}
+      {buttonText ? (
+        <RoundedButton
+          style={localStyle.createButton}
+          text={buttonText}
+          textStyle={localStyle.createButtonText}
+          leftImage={buttonImage || AddIcon}
+          leftImageStyle={buttonImageStyle || localStyle.addIconStyle}
+          onPress={onButtonPress}
+          underlayColor={colors.GoldenTainoi80}
+        />
+      ) : null}
     </View>
   );
 }
@@ -52,7 +68,7 @@ const styles = {
     height: layoutPtToPx(18),
     width: layoutPtToPx(18),
   },
-  emptyTextStyle: {
+  descriptionTextStyle: {
     fontFamily: fonts.SoraSemiBold,
     textAlign: 'center',
     fontSize: fontPtToPx(16),

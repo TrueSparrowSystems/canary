@@ -17,6 +17,7 @@ function CollectionScreen() {
   const localStyle = useStyleProcessor(styles, 'CollectionScreen');
   const [isLoading, setIsLoading] = useState(true);
   const collectionDataRef = useRef({});
+  const [isDeleteEnabled, setIsDeleteEnabled] = useState(false);
 
   const fetchData = useCallback(() => {
     setIsLoading(true);
@@ -63,6 +64,14 @@ function CollectionScreen() {
     });
   }, [onCollectionAddSuccess]);
 
+  const enableCollectionDeleteOption = useCallback(() => {
+    setIsDeleteEnabled(true);
+  }, []);
+
+  const onDonePress = useCallback(() => {
+    setIsDeleteEnabled(false);
+  }, []);
+
   const renderItem = useCallback(
     ({item}) => {
       return (
@@ -70,10 +79,12 @@ function CollectionScreen() {
           key={item.id}
           data={item}
           onCollectionRemoved={reloadList}
+          onLongPress={enableCollectionDeleteOption}
+          enableDelete={isDeleteEnabled}
         />
       );
     },
-    [reloadList],
+    [enableCollectionDeleteOption, isDeleteEnabled, reloadList],
   );
 
   return (
@@ -82,9 +93,11 @@ function CollectionScreen() {
         text={'Archives'}
         textStyle={localStyle.headerTextStyle}
         enableRightButton={true}
-        rightButtonImage={AddIcon}
-        onRightButtonClick={onAddCollectionPress}
-        rightButtonText={'New'}
+        rightButtonImage={!isDeleteEnabled ? AddIcon : null}
+        onRightButtonClick={
+          !isDeleteEnabled ? onAddCollectionPress : onDonePress
+        }
+        rightButtonText={!isDeleteEnabled ? 'New' : 'Done'}
         rightButtonTextStyle={localStyle.newButtonTextStyle}
         rightIconStyle={localStyle.newButtonImageStyle}
       />

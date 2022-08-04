@@ -17,7 +17,7 @@ import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 
 function CollectionCard(props) {
-  const {data, onCollectionRemoved} = props;
+  const {data, onCollectionRemoved, onLongPress, enableDelete} = props;
   const {name: collectionName, id: collectionId} = data;
   let {colorScheme} = data;
   const localStyle = useStyleProcessor(styles, 'CollectionCard');
@@ -38,33 +38,36 @@ function CollectionCard(props) {
     });
   }, [collectionId, collectionName, onCollectionRemoved]);
 
-  const cardStyle = useMemo(() => {
+  const colorSchemeStyle = useMemo(() => {
     if (!colorScheme) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       colorScheme = getRandomColorCombination();
     }
-    return [
-      localStyle.cardStyle,
-      {backgroundColor: colorScheme?.backgroundColor},
-    ];
+    return {
+      cardStyle: [
+        localStyle.cardStyle,
+        {backgroundColor: colorScheme?.backgroundColor},
+      ],
+      textStyle: [localStyle.textStyle, {color: colorScheme?.textColor}],
+    };
   }, [colorScheme, localStyle.cardStyle]);
 
-  const textStyle = useMemo(() => {
-    return [localStyle.textStyle, {color: colorScheme?.textColor}];
-  }, [colorScheme, localStyle.textStyle]);
-
   return (
-    <TouchableWithoutFeedback onPress={onCollectionPress}>
+    <TouchableWithoutFeedback
+      onPress={onCollectionPress}
+      onLongPress={onLongPress}>
       <View style={localStyle.container}>
         {collectionId ? (
-          <View style={cardStyle}>
-            <TouchableHighlight
-              underlayColor={colors.Transparent}
-              style={localStyle.binContainer}
-              onPress={onCollectionRemove}>
-              <Image source={BinIcon} style={localStyle.binIconStyle} />
-            </TouchableHighlight>
-            <Text numberOfLines={3} style={textStyle}>
+          <View style={colorSchemeStyle.cardStyle}>
+            {enableDelete ? (
+              <TouchableHighlight
+                underlayColor={colors.Transparent}
+                style={localStyle.binContainer}
+                onPress={onCollectionRemove}>
+                <Image source={BinIcon} style={localStyle.binIconStyle} />
+              </TouchableHighlight>
+            ) : null}
+            <Text numberOfLines={3} style={colorSchemeStyle.textStyle}>
               {collectionName}
             </Text>
           </View>

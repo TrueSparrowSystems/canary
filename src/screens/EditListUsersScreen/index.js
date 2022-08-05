@@ -37,50 +37,58 @@ function EditListUsersScreen(props) {
   };
   return (
     <SafeAreaView>
-      <Header
-        text="Edit List"
-        textStyle={localStyle.headerText}
-        enableRightButton={true}
-        rightButtonText={'Done'}
-        rightButtonTextStyle={localStyle.headerRightButtonText}
-        onRightButtonClick={() => {
-          navigation.goBack();
-          onDonePress();
-        }}
-      />
-      {bIsLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <ScrollView style={localStyle.listView}>
-          {aListMembers.map(listMember => {
-            return (
-              <Swipeable
-                key={listMember.id}
-                renderRightActions={() => RightAction(listMember.username)}>
-                <View style={localStyle.cardStyle}>
-                  <View style={localStyle.cardDetailContainer}>
-                    <Image
-                      source={{uri: listMember.profile_image_url}}
-                      style={localStyle.imageStyle}
-                    />
-                    <View>
-                      <Text style={localStyle.nameText}>{listMember.name}</Text>
-                      <Text style={localStyle.userNameText}>
-                        @{listMember.username}
-                      </Text>
+      <View style={localStyle.container}>
+        <Header
+          text="Edit List"
+          textStyle={localStyle.headerText}
+          enableRightButton={true}
+          rightButtonText={'Done'}
+          rightButtonTextStyle={localStyle.headerRightButtonText}
+          onRightButtonClick={() => {
+            navigation.goBack();
+            onDonePress();
+          }}
+        />
+        {bIsLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <ScrollView style={localStyle.listView}>
+            {aListMembers.map(listMember => {
+              return (
+                <Swipeable
+                  key={listMember.id}
+                  renderRightActions={() => RightAction(listMember.username)}>
+                  <View style={localStyle.cardStyle}>
+                    <View style={localStyle.cardDetailContainer}>
+                      <Image
+                        source={{uri: listMember.profile_image_url}}
+                        style={localStyle.imageStyle}
+                      />
+                      <View style={localStyle.cardNameContainer}>
+                        <Text style={localStyle.nameText} numberOfLines={1}>
+                          {listMember.name}
+                        </Text>
+                        <Text style={localStyle.userNameText}>
+                          @{listMember.username}
+                        </Text>
+                      </View>
                     </View>
+                    <Image
+                      source={SwipeIcon}
+                      style={localStyle.swipeIconStyle}
+                    />
                   </View>
-                  <Image source={SwipeIcon} style={localStyle.swipeIconStyle} />
-                </View>
-              </Swipeable>
-            );
-          })}
-        </ScrollView>
-      )}
+                </Swipeable>
+              );
+            })}
+          </ScrollView>
+        )}
+      </View>
     </SafeAreaView>
   );
 }
 const styles = {
+  container: {height: '100%', backgroundColor: colors.White},
   headerText: {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(16),
@@ -110,6 +118,7 @@ const styles = {
     borderRadius: layoutPtToPx(20),
     marginRight: layoutPtToPx(8),
   },
+  cardNameContainer: {width: '80%'},
   rightActionContainer: {
     backgroundColor: colors.BitterSweet,
     alignItems: 'center',

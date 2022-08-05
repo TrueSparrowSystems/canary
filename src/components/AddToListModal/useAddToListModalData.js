@@ -57,10 +57,9 @@ function useAddToListModalData() {
   const onAddToListSuccess = useCallback(
     (listName, listId) => {
       showAddToListToast(listName);
-      closeModal();
       modalData?.onAddToListSuccess(listId);
     },
-    [closeModal, modalData, showAddToListToast],
+    [modalData, showAddToListToast],
   );
 
   const onAddListPress = useCallback(() => {

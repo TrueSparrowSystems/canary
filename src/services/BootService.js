@@ -3,6 +3,8 @@ import AsyncStorage from './AsyncStorage';
 import {StoreKeys} from './AsyncStorage/StoreConstants';
 import Cache from './Cache';
 import {CacheKey} from './Cache/CacheStoreConstants';
+import {collectionService} from './CollectionService';
+import {listService} from './ListService';
 import {networkConnection} from './NetworkConnection';
 
 class BootService {
@@ -22,7 +24,12 @@ class BootService {
                 );
               },
             );
+            AsyncStorage.get(StoreKeys.UserToListMap).then(userToListMap => {
+              Cache.setValue(CacheKey.UserToListMap, JSON.parse(userToListMap));
+            });
             Cache.setValue(CacheKey.PreferenceList, list);
+            listService().getAllLists();
+            collectionService().getAllCollections();
             return resolve();
           });
         } else {

@@ -15,6 +15,7 @@ const EndPoints = {
   getUserByUserName: userName =>
     `https://api.twitter.com/2/users/by/username/${userName}`,
   getUsersByUserNames: 'https://api.twitter.com/2/users/by',
+  userSearch: 'https://api.twitter.com/1.1/users/search.json',
 };
 
 const API_REQUEST_PARAMETERS = {
@@ -166,6 +167,14 @@ class TwitterApi {
     };
     const apiService = new APIService({});
     return apiService.get(EndPoints.getUsersByUserNames, data);
+  }
+  searchUser(query) {
+    const data = {
+      q: query,
+      include_entities: false,
+    };
+    const apiService = new APIService({});
+    return apiService.get(EndPoints.userSearch, data);
   }
 }
 export default new TwitterApi();

@@ -1,16 +1,15 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback} from 'react';
 import {TouchableWithoutFeedback, View} from 'react-native';
-import Toast from 'react-native-toast-message';
 import {PlayIcon} from '../../assets/common';
 import ScreenName from '../../constants/ScreenName';
-import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import Image from 'react-native-fast-image';
+import TwitterAPI from '../../api/helpers/TwitterAPI';
 import {layoutPtToPx} from '../../utils/responsiveUI';
 import colors from '../../constants/colors';
 
-function ImageCard({mediaArray}) {
+function ImageCard({mediaArray, tweetId}) {
   const localStyle = useStyleProcessor(styles, 'ImageCard');
   const navigation = useNavigation();
   const onImagePress = useCallback(
@@ -22,6 +21,26 @@ function ImageCard({mediaArray}) {
     },
     [mediaArray, navigation],
   );
+
+  var videoUrl = null;
+  var aspectRatio = null;
+  if (mediaArray[0].type === 'video') {
+    TwitterAPI.getTweetStatusfromTweetId(tweetId)
+      .then(res => {
+        const videoInfo = res?.data?.extended_entities?.media?.[0]?.video_info;
+        const videoVariantsArray = videoInfo?.variants;
+        aspectRatio = videoInfo?.aspect_ratio;
+        videoVariantsArray &&
+          videoVariantsArray.map(videoVariant => {
+            if (videoVariant?.content_type === 'video/mp4' && !videoUrl) {
+              videoUrl = videoVariant.url;
+            }
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
   return mediaArray[0].type === 'photo' ? (
     <View style={localStyle.container}>
       <View style={localStyle.flexRow}>
@@ -99,10 +118,9 @@ function ImageCard({mediaArray}) {
       />
       <TouchableWithoutFeedback
         onPress={() => {
-          Toast.show({
-            type: ToastType.Info,
-            text1: 'This video is not playable',
-            position: ToastPosition.Top,
+          navigation.navigate(ScreenName.VideoPlayerScreen, {
+            videoUrl: videoUrl,
+            aspectRatio: aspectRatio,
           });
         }}>
         <View style={localStyle.iconBox}>

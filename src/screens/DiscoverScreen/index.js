@@ -44,9 +44,7 @@ function DiscoverScreen() {
               }}
               key={i}
               style={localStyle.trendingTopicBox}>
-              <Text style={localStyle.topicText}>
-                {i + 1}. {text}
-              </Text>
+              <Text style={localStyle.topicText}>{text}</Text>
             </Pressable>
           );
         })}
@@ -71,13 +69,14 @@ const styles = {
     color: colors.Black,
   },
   trendingTopicList: {
-    paddingBottom: layoutPtToPx(50),
+    paddingBottom: layoutPtToPx(100),
   },
   trendingCountryContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: layoutPtToPx(20),
     marginTop: layoutPtToPx(20),
+    marginBottom: layoutPtToPx(10),
   },
   trendingCountryText: {
     fontFamily: fonts.SoraSemiBold,

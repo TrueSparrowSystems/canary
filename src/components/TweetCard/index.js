@@ -127,7 +127,7 @@ function TweetCard(props) {
           urls={entities?.urls}>
           {unescape(text)}
         </TwitterTextView>
-        {hasMedia ? <ImageCard mediaArray={media} /> : null}
+        {hasMedia ? <ImageCard mediaArray={media} tweetId={id} /> : null}
         <View style={localStyle.likeCommentStrip}>
           <View style={localStyle.flexRow}>
             <Image source={likeIcon} style={localStyle.iconStyle} />

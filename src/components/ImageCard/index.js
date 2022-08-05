@@ -37,9 +37,7 @@ function ImageCard({mediaArray, tweetId}) {
             }
           });
       })
-      .catch(err => {
-        console.log(err);
-      });
+      .catch(() => {});
   }
   return mediaArray[0].type === 'photo' ? (
     <View style={localStyle.container}>

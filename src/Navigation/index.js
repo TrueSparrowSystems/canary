@@ -133,6 +133,7 @@ const Navigation = props => {
       case ScreenName.PreferenceScreen:
       case ScreenName.ThreadScreen:
       case ScreenName.ImageViewScreen:
+      case ScreenName.VideoPlayerScreen:
         return false;
       default:
         return true;

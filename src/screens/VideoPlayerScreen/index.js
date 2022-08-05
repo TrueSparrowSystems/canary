@@ -1,8 +1,14 @@
 import React, {useMemo} from 'react';
-import {View} from 'react-native';
+import {StatusBar, View} from 'react-native';
 import Video from 'react-native-video';
+import {
+  VideoPlayer,
+  DefaultMainControl,
+  DefaultBottomControlsBar,
+} from 'react-native-true-sight';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-// import VideoPlayer from 'react-native-video-player';
+import {useNavigation} from '@react-navigation/native';
+import {CrossIcon} from '../../assets/common';
 
 function VideoPlayerScreen(props) {
   const {videoUrl, aspectRatio} = props?.route?.params;
@@ -11,14 +17,46 @@ function VideoPlayerScreen(props) {
     () => [localStyle.video, {aspectRatio: aspectRatio[0] / aspectRatio[1]}],
     [aspectRatio, localStyle.video],
   );
+
+  const navigation = useNavigation();
+
   return (
     <View style={localStyle.container}>
-      <Video source={{uri: videoUrl}} style={videoStyle} />
+      <StatusBar hidden={true} />
+
+      <VideoPlayer
+        autoStart={true}
+        mainControl={args => (
+          <DefaultMainControl restartButton={true} {...args} />
+        )}
+        onClose={() => {
+          navigation.goBack();
+        }}
+        crossIcon={CrossIcon}
+        bottomControl={args => <DefaultBottomControlsBar {...args} />}>
+        {args => (
+          <Video
+            style={videoStyle}
+            ref={args.playerRef}
+            source={{uri: videoUrl}}
+            paused={args.videoPaused}
+            onLoad={args.onLoad}
+            onProgress={args.onProgress}
+            onEnd={args.onEnd}
+          />
+        )}
+      </VideoPlayer>
     </View>
   );
 }
 const styles = {
-  container: {flex: 1, alignItems: 'center', justifyContent: 'center'},
-  video: {width: '100%'},
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  video: {
+    width: '100%',
+  },
 };
 export default React.memo(VideoPlayerScreen);

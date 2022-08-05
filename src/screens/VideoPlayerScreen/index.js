@@ -9,6 +9,7 @@ import {
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {useNavigation} from '@react-navigation/native';
 import {CrossIcon} from '../../assets/common';
+import colors from '../../constants/colors';
 
 function VideoPlayerScreen(props) {
   const {videoUrl, aspectRatio} = props?.route?.params;
@@ -33,7 +34,9 @@ function VideoPlayerScreen(props) {
           navigation.goBack();
         }}
         crossIcon={CrossIcon}
-        bottomControl={args => <DefaultBottomControlsBar {...args} />}>
+        bottomControl={args => (
+          <DefaultBottomControlsBar {...args} barColor={colors.GoldenTainoi} />
+        )}>
         {args => (
           <Video
             style={videoStyle}

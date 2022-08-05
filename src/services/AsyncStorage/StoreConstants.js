@@ -4,4 +4,5 @@ export const StoreKeys = {
   CollectionsList: 'collections_list',
   Lists: 'lists',
   BookmarkedTweetsList: 'bookmarked_tweets_list',
+  UserToListMap: 'user_to_list_map',
 };

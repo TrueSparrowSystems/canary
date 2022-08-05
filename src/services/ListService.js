@@ -2,6 +2,8 @@ import {StoreKeys} from './AsyncStorage/StoreConstants';
 import Store from './AsyncStorage';
 import uuid from 'react-native-uuid';
 import {getRandomColorCombination} from '../utils/RandomColorUtil';
+import Cache from './Cache';
+import {CacheKey} from './Cache/CacheStoreConstants';
 
 const LIST_LIMIT = 30;
 
@@ -102,7 +104,18 @@ class ListService {
       this.lists[listId].userNames.push(userName);
       Store.set(StoreKeys.Lists, this.lists)
         .then(() => {
-          return resolve();
+          const userToListMap = Cache.getValue(CacheKey.UserToListMap) || {};
+          if (userToListMap.hasOwnProperty(userName)) {
+            const listIdArray = userToListMap?.[userName];
+            listIdArray.push(listId);
+            userToListMap[userName] = listIdArray;
+          } else {
+            userToListMap[userName] = [listId];
+          }
+          Cache.setValue(CacheKey.UserToListMap, userToListMap);
+          Store.set(StoreKeys.UserToListMap, userToListMap).then(() => {
+            return resolve();
+          });
         })
         .catch(() => {
           return reject();
@@ -116,20 +129,27 @@ class ListService {
         // If local copy is not populated, populate and then add user
         this.getAllLists()
           .then(() => {
-            this._addUser(listId, userName).catch(() => {
-              return reject();
-            });
+            this._addUser(listId, userName)
+              .then(() => {
+                return resolve();
+              })
+              .catch(() => {
+                return reject();
+              });
           })
           .catch(() => {
             return reject();
           });
       } else {
         // If local copy is populated, add user
-        this._addUser(listId, userName).catch(() => {
-          return reject();
-        });
+        this._addUser(listId, userName)
+          .then(() => {
+            return resolve();
+          })
+          .catch(() => {
+            return reject();
+          });
       }
-      return resolve();
     });
   }
 
@@ -156,7 +176,14 @@ class ListService {
       this.lists[listId].userNames = userNames;
       Store.set(StoreKeys.Lists, this.lists)
         .then(() => {
-          return resolve();
+          const userToListMap = Cache.getValue(CacheKey.UserToListMap);
+          const listIdArray = userToListMap?.[userName];
+          listIdArray.splice(listIdArray.indexOf(listId), 1);
+          userToListMap[userName] = listIdArray;
+          Cache.setValue(CacheKey.UserToListMap, userToListMap);
+          Store.set(StoreKeys.UserToListMap, userToListMap).then(() => {
+            return resolve();
+          });
         })
         .catch(() => {
           return reject('Unable to remove user from list');

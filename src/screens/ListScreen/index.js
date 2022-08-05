@@ -1,5 +1,11 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {ActivityIndicator, SafeAreaView, ScrollView, View} from 'react-native';
+import {
+  ActivityIndicator,
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+  View,
+} from 'react-native';
 import {AddIcon, BottomBarListIcon} from '../../assets/common';
 import ListCard from '../../components/ListCard';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -92,7 +98,10 @@ function ListScreen() {
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={localStyle.scrollViewContainer}
-          style={localStyle.scrollViewStyle}>
+          style={localStyle.scrollViewStyle}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={reloadList} />
+          }>
           {Object.keys(listDataRef.current).map(key => {
             const list = listDataRef.current[key];
             return (

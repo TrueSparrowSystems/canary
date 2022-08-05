@@ -45,7 +45,6 @@ function ListCard(props) {
     listId,
     listName,
     onAddToListSuccess,
-    enableSwipe,
     shouldShowAddButton,
     onCardLongPress,
   );
@@ -76,6 +75,7 @@ function ListCard(props) {
     <Animatable.View ref={viewRef}>
       <AppleStyleSwipeableRow
         enabled={enableSwipe}
+        textStyle={localStyle.removeButtonStyle}
         rightActionsArray={[
           {
             actionName: 'Remove',
@@ -227,6 +227,12 @@ const styles = {
     fontSize: fontPtToPx(12),
     lineHeight: layoutPtToPx(15),
     marginVertical: layoutPtToPx(7),
+  },
+  removeButtonStyle: {
+    fontFamily: fonts.InterSemiBold,
+    fontSize: fontPtToPx(12),
+    lineHeight: layoutPtToPx(15),
+    color: colors.White,
   },
 };
 

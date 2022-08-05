@@ -122,6 +122,7 @@ const styles = {
   },
   cardDetailContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   imageStyle: {
     height: layoutPtToPx(40),

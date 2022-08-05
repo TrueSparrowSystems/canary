@@ -5,6 +5,7 @@ import colors from '../../../constants/colors';
 import {layoutPtToPx} from '../../../utils/responsiveUI';
 import {BackIcon} from '../../../assets/common';
 import {useNavigation} from '@react-navigation/native';
+import fonts from '../../../constants/fonts';
 
 function Header(props) {
   const {
@@ -86,6 +87,7 @@ const styles = {
   },
   textStyle: {
     color: colors.Black,
+    fontFamily: fonts.SoraSemiBold,
   },
   rightIcon: {
     height: layoutPtToPx(25),

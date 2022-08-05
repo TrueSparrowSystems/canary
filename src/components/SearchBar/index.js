@@ -77,6 +77,7 @@ function SearchBar({
         selectionColor={getColorWithOpacity(colors.BlackPearl, 0.5)}
         onChangeText={updateQuery}
         onSubmitEditing={onSearchPress}
+        returnKeyType="search"
       />
 
       {query.length > 0 && (

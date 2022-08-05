@@ -9,7 +9,12 @@ import {unescape} from 'lodash';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import fonts from '../../constants/fonts';
 
-function SearchBar({searchQuery = '', onSearchPressCallback, onQueryChange}) {
+function SearchBar({
+  searchQuery = '',
+  onSearchPressCallback,
+  onQueryChange,
+  placeholderText,
+}) {
   const navigation = useNavigation();
   const localStyle = useStyleProcessor(styles, 'SearchBar');
   const queryRef = useRef(searchQuery);
@@ -67,7 +72,7 @@ function SearchBar({searchQuery = '', onSearchPressCallback, onQueryChange}) {
         style={localStyle.input}
         value={queryRef.current}
         cursorColor={colors.BlackPearl}
-        placeholder={'Search Tweets'}
+        placeholder={placeholderText || 'Search Tweets'}
         placeholderTextColor={getColorWithOpacity(colors.BlackPearl, 0.5)}
         selectionColor={getColorWithOpacity(colors.BlackPearl, 0.5)}
         onChangeText={updateQuery}

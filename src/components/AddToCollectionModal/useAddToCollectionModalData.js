@@ -78,8 +78,9 @@ function useAddToCollectionModalData() {
       onCollectionAddSuccess: (collectionName, collectionId) => {
         showAddToCollectionToast(collectionName, collectionId);
       },
+      onAddToCollectionSuccess,
     });
-  }, [modalData?.tweetId, showAddToCollectionToast]);
+  }, [modalData?.tweetId, onAddToCollectionSuccess, showAddToCollectionToast]);
 
   return {
     bIsVisible: isVisible,

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import CustomModal from '../common/CustomModal';
-import colors from '../../constants/colors';
+import colors, {getColorWithOpacity} from '../../constants/colors';
 import useAddToListModalData from './useAddToListModalData';
 import {ScrollView} from 'react-native-gesture-handler';
 import {AddIcon, BottomBarListIcon} from '../../assets/common';
@@ -90,6 +90,7 @@ function AddToListModal() {
                       onAddToListSuccess={fnOnAddToListSuccess}
                       isPressDisabled={true}
                       shouldShowAddButton={true}
+                      disableSwipeInteraction={true}
                     />
                   );
                 })}
@@ -141,7 +142,7 @@ const styles = {
     left: 0,
     width: '100%',
     height: '100%',
-    backgroundColor: colors.SherpaBlue70,
+    backgroundColor: getColorWithOpacity(colors.BlackPearl, 0.5),
   },
   flexRow: {
     flexDirection: 'row',

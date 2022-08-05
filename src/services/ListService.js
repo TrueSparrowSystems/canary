@@ -33,7 +33,7 @@ class ListService {
           this.lists = listObj;
           Store.set(StoreKeys.Lists, listObj)
             .then(() => {
-              return resolve({listId: 1});
+              return resolve({listId: id});
             })
             .catch(() => {
               return reject('Could not add list. Please try again');

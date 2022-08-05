@@ -275,7 +275,6 @@ const Navigation = props => {
                 ? tabbarStyle
                 : {display: 'none'},
               headerShown: false,
-              lazy: false,
             };
           }}
           name={ScreenName.CollectionTab}

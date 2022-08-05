@@ -57,15 +57,13 @@ function useAddCollectionModalData() {
           _collectionService
             .addTweetToCollection(collectionId, modalData.tweetId)
             .then(() => {
-              closeModal();
-              modalData?.onCollectionAddSuccess(
+              modalData?.onAddToCollectionSuccess(
                 collectionNameRef.current,
                 collectionId,
               );
             })
             .catch(() => {});
         } else {
-          closeModal();
           modalData?.onCollectionAddSuccess();
         }
       })
@@ -77,6 +75,7 @@ function useAddCollectionModalData() {
         });
       })
       .finally(() => {
+        closeModal();
         _collectionService.getAllCollections();
       });
   }, [closeModal, modalData]);

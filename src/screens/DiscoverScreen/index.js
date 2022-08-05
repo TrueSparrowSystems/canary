@@ -26,25 +26,29 @@ function DiscoverScreen() {
   return (
     <View style={localStyle.container}>
       <SearchBar onSearchPressCallback={fnOnSearchPress} />
-      <View style={localStyle.trendingCountryContainer}>
-        <Text style={localStyle.trendingCountryText}>
-          Trending {sSelectedCountryName}
-        </Text>
-        <TouchableOpacity onPress={fnNavigateToLocationSelectionScreen}>
-          <Text style={localStyle.changeLocationText}>Change location</Text>
-        </TouchableOpacity>
-      </View>
+      {sSelectedCountryName ? (
+        <View style={localStyle.trendingCountryContainer}>
+          <Text style={localStyle.trendingCountryText}>
+            Trending {sSelectedCountryName}
+          </Text>
+
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={fnNavigateToLocationSelectionScreen}>
+            <Text style={localStyle.changeLocationText}>Change location</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
       <ScrollView
         contentContainerStyle={localStyle.trendingTopicList}
         showsVerticalScrollIndicator={false}>
         {aTrendingTopics.map((text, i) => {
           return (
-            <Animatable.View animation="fadeIn">
+            <Animatable.View key={i} animation="fadeIn">
               <Pressable
                 onPress={() => {
                   fnOnTopicClick(text);
                 }}
-                key={i}
                 style={localStyle.trendingTopicBox}>
                 <Text style={localStyle.topicText}>{text}</Text>
               </Pressable>

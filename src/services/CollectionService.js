@@ -9,7 +9,7 @@ const COLLECTION_TWEET_LIMIT = 25;
 
 class CollectionService {
   constructor() {
-    this.collections = null;
+    this.collections = {};
   }
 
   async removeAllCollections() {
@@ -33,7 +33,7 @@ class CollectionService {
           this.collections = collectionObj;
           Store.set(StoreKeys.CollectionsList, collectionObj)
             .then(() => {
-              return resolve({collectionId: 1});
+              return resolve({collectionId: id});
             })
             .catch(() => {
               return reject('Could not add collection. Please try again');
@@ -110,7 +110,8 @@ class CollectionService {
   async _addTweet(collectionId, tweetId) {
     return new Promise((resolve, reject) => {
       if (
-        this.collections[collectionId].tweetIds.length > COLLECTION_TWEET_LIMIT
+        this.collections?.[collectionId]?.tweetIds.length >
+        COLLECTION_TWEET_LIMIT
       ) {
         return reject(
           'This collection is full. Try adding it to a different collection or create a new one.',
@@ -126,7 +127,8 @@ class CollectionService {
       // TODO : check for existing collection id
       newArray.push(collectionId);
       bookmarkedTweets[tweetId] = newArray;
-      this.collections[collectionId].tweetIds.push(tweetId);
+
+      this.collections?.[collectionId]?.tweetIds?.push?.(tweetId);
 
       Store.set(StoreKeys.CollectionsList, this.collections)
         .then(() => {

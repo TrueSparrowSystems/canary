@@ -78,14 +78,17 @@ export default class AppleStyleSwipeableRow extends Component {
   render() {
     const {
       children,
+      // using as state update for enabling swipe
       enabled,
+      // To disable entire swipe action
+      disableSwipeInteraction,
       shouldRenderLeftAction,
       shouldRenderRightAction,
       onSwipeableOpen,
       onSwipeableClose,
     } = this.props;
 
-    if (!enabled) {
+    if (!enabled && !disableSwipeInteraction) {
       this.close();
     }
 
@@ -93,7 +96,7 @@ export default class AppleStyleSwipeableRow extends Component {
       <Swipeable
         overshootLeft={false}
         overshootRight={false}
-        enabled={enabled}
+        enabled={enabled && !disableSwipeInteraction}
         ref={this.updateRef}
         friction={2}
         enableTrackpadTwoFingerGesture

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {
   ActivityIndicator,
@@ -6,10 +6,8 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import {Swipeable} from 'react-native-gesture-handler';
 import {SwipeIcon} from '../../assets/common';
 import Header from '../../components/common/Header';
 import colors from '../../constants/colors';
@@ -17,24 +15,19 @@ import fonts from '../../constants/fonts';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useEditListUsersScreenData from './useEditListUsersScreenData';
+import AppleStyleSwipeableRow from '../../components/AppleStyleSwipeableRow';
+import * as Animatable from 'react-native-animatable';
 
 function EditListUsersScreen(props) {
   const {listId, listUserNames, onDonePress} = props?.route?.params;
   const localStyle = useStyleProcessor(styles, 'EditListUsersScreen');
   const navigation = useNavigation();
 
+  const viewRef = useRef(null);
+
   const {bIsLoading, aListMembers, fnOnMemberRemove} =
     useEditListUsersScreenData(listId, listUserNames);
-  const RightAction = username => {
-    return (
-      <TouchableOpacity
-        activeOpacity={0.7}
-        style={localStyle.rightActionContainer}
-        onPress={() => fnOnMemberRemove(username)}>
-        <Text style={localStyle.rightActionText}>Remove</Text>
-      </TouchableOpacity>
-    );
-  };
+
   return (
     <SafeAreaView>
       <View style={localStyle.container}>
@@ -55,30 +48,47 @@ function EditListUsersScreen(props) {
           <ScrollView style={localStyle.listView}>
             {aListMembers.map(listMember => {
               return (
-                <Swipeable
-                  key={listMember.id}
-                  renderRightActions={() => RightAction(listMember.username)}>
-                  <View style={localStyle.cardStyle}>
-                    <View style={localStyle.cardDetailContainer}>
-                      <Image
-                        source={{uri: listMember.profile_image_url}}
-                        style={localStyle.imageStyle}
-                      />
-                      <View style={localStyle.cardNameContainer}>
-                        <Text style={localStyle.nameText} numberOfLines={1}>
-                          {listMember.name}
-                        </Text>
-                        <Text style={localStyle.userNameText}>
-                          @{listMember.username}
-                        </Text>
+                <Animatable.View ref={viewRef}>
+                  <AppleStyleSwipeableRow
+                    key={listMember.id}
+                    enabled={true}
+                    rightActionsArray={[
+                      {
+                        actionName: 'Remove',
+                        color: colors.BitterSweet,
+                        onPress: () => {
+                          viewRef.current.setNativeProps({
+                            useNativeDriver: true,
+                          });
+                          viewRef.current.animate('bounceOutLeft').then(() => {
+                            fnOnMemberRemove(listMember.username);
+                          });
+                        },
+                      },
+                    ]}
+                    shouldRenderRightAction={true}>
+                    <View style={localStyle.cardStyle}>
+                      <View style={localStyle.cardDetailContainer}>
+                        <Image
+                          source={{uri: listMember.profile_image_url}}
+                          style={localStyle.imageStyle}
+                        />
+                        <View style={localStyle.cardNameContainer}>
+                          <Text style={localStyle.nameText} numberOfLines={1}>
+                            {listMember.name}
+                          </Text>
+                          <Text style={localStyle.userNameText}>
+                            @{listMember.username}
+                          </Text>
+                        </View>
                       </View>
+                      <Image
+                        source={SwipeIcon}
+                        style={localStyle.swipeIconStyle}
+                      />
                     </View>
-                    <Image
-                      source={SwipeIcon}
-                      style={localStyle.swipeIconStyle}
-                    />
-                  </View>
-                </Swipeable>
+                  </AppleStyleSwipeableRow>
+                </Animatable.View>
               );
             })}
           </ScrollView>

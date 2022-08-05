@@ -14,8 +14,8 @@ function useListCardData(
   listId,
   listName,
   onAddToListSuccess,
-  enableSwipe,
   shouldShowAddButton,
+  onCardLongPress,
 ) {
   const navigation = useNavigation();
   const dataRef = useRef({});
@@ -29,12 +29,6 @@ function useListCardData(
   }, [listId, listName, navigation, userNames]);
 
   const viewRef = useRef();
-
-  useEffect(() => {
-    if (!enableSwipe) {
-      viewRef.current.close();
-    }
-  }, [enableSwipe]);
 
   useEffect(() => {
     updateAddButtonData();
@@ -116,12 +110,21 @@ function useListCardData(
     userName,
   ]);
 
+  const onLongPress = useCallback(() => {
+    viewRef.current.setNativeProps({
+      useNativeDriver: true,
+    });
+    viewRef.current.animate('pulse');
+    onCardLongPress();
+  }, [onCardLongPress]);
+
   return {
     viewRef: viewRef,
     fnOnListPress: onListPress,
     fnOnListRemove: onListRemove,
     fnGetDescriptionText: getDescriptionText,
     oAddButtonData: dataRef.current,
+    fnOnLongPress: onLongPress,
   };
 }
 export default useListCardData;

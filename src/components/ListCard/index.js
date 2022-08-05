@@ -3,8 +3,8 @@ import {
   Text,
   View,
   TouchableWithoutFeedback,
-  Image,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import colors from '../../constants/colors';
@@ -12,8 +12,9 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import {getInitialsFromName} from '../../utils/TextUtils';
 import fonts from '../../constants/fonts';
-import {Swipeable} from 'react-native-gesture-handler';
 import {SwipeIcon} from '../../assets/common';
+import * as Animatable from 'react-native-animatable';
+import AppleStyleSwipeableRow from '../AppleStyleSwipeableRow';
 import useListCardData from './useListCardData';
 
 function ListCard(props) {
@@ -36,6 +37,7 @@ function ListCard(props) {
     fnOnListPress,
     fnOnListRemove,
     oAddButtonData,
+    fnOnLongPress,
   } = useListCardData(
     onListRemoved,
     userName,
@@ -43,8 +45,8 @@ function ListCard(props) {
     listId,
     listName,
     onAddToListSuccess,
-    enableSwipe,
     shouldShowAddButton,
+    onCardLongPress,
   );
 
   const listIntials = getInitialsFromName(listName);
@@ -69,66 +71,71 @@ function ListCard(props) {
     localStyle.listIconTextStyle,
   ]);
 
-  const RightAction = () => {
-    return enableSwipe ? (
-      <TouchableOpacity
-        activeOpacity={0.7}
-        onPress={fnOnListRemove}
-        style={localStyle.rightActionContainer}>
-        <Text style={localStyle.rightActionText}>Remove</Text>
-      </TouchableOpacity>
-    ) : null;
-  };
-
   return (
-    <Swipeable
-      ref={viewRef}
-      enabled={enableSwipe}
-      renderRightActions={RightAction}>
-      <TouchableWithoutFeedback
-        onPress={fnOnListPress}
-        onLongPress={onCardLongPress}
-        disabled={enableSwipe || isPressDisabled}>
-        <View style={localStyle.container}>
-          <View style={localStyle.cardDetailContainer}>
-            <View style={listIconStyle.backgroundStyle}>
-              <Text style={listIconStyle.textStyle}>
-                {listIntials.substring(0, 2)}
-              </Text>
-            </View>
-            <View style={localStyle.listNameContainer}>
-              <Text style={localStyle.listNameStyle}>{listName}</Text>
-              <Text style={localStyle.descriptionTextStyle} numberOfLines={1}>
-                {fnGetDescriptionText()}
-              </Text>
-            </View>
-          </View>
-          {enableSwipe ? (
-            <Image source={SwipeIcon} style={localStyle.swipeIconStyle} />
-          ) : null}
-          {shouldShowAddButton ? (
-            <TouchableOpacity
-              style={
-                oAddButtonData.buttonType === 'Primary'
-                  ? localStyle.primaryAddButtonContainer
-                  : localStyle.secondaryAddButtonContainer
-              }
-              onPress={oAddButtonData.onPress}>
-              <View>
-                <Text
-                  style={
-                    oAddButtonData.buttonType === 'Primary'
-                      ? localStyle.primaryAddText
-                      : localStyle.secondaryAddText
-                  }>
-                  {oAddButtonData.buttonText}
+    <Animatable.View ref={viewRef}>
+      <AppleStyleSwipeableRow
+        enabled={enableSwipe}
+        textStyle={localStyle.removeButtonStyle}
+        rightActionsArray={[
+          {
+            actionName: 'Remove',
+            color: colors.BitterSweet,
+            onPress: () => {
+              viewRef.current.setNativeProps({
+                useNativeDriver: true,
+              });
+              viewRef.current.animate('bounceOutLeft').then(() => {
+                fnOnListRemove();
+              });
+            },
+          },
+        ]}
+        shouldRenderRightAction={true}>
+        <TouchableWithoutFeedback
+          onPress={fnOnListPress}
+          onLongPress={fnOnLongPress}
+          disabled={enableSwipe || isPressDisabled}>
+          <View style={localStyle.container}>
+            <View style={localStyle.cardDetailContainer}>
+              <View style={listIconStyle.backgroundStyle}>
+                <Text style={listIconStyle.textStyle}>
+                  {listIntials.substring(0, 2)}
                 </Text>
               </View>
-            </TouchableOpacity>
-          ) : null}
-        </View>
-      </TouchableWithoutFeedback>
-    </Swipeable>
+              <View style={localStyle.listNameContainer}>
+                <Text style={localStyle.listNameStyle}>{listName}</Text>
+                <Text style={localStyle.descriptionTextStyle} numberOfLines={1}>
+                  {fnGetDescriptionText()}
+                </Text>
+              </View>
+            </View>
+            {enableSwipe ? (
+              <Image source={SwipeIcon} style={localStyle.swipeIconStyle} />
+            ) : null}
+            {shouldShowAddButton ? (
+              <TouchableOpacity
+                style={
+                  oAddButtonData.buttonType === 'Primary'
+                    ? localStyle.primaryAddButtonContainer
+                    : localStyle.secondaryAddButtonContainer
+                }
+                onPress={oAddButtonData.onPress}>
+                <View>
+                  <Text
+                    style={
+                      oAddButtonData.buttonType === 'Primary'
+                        ? localStyle.primaryAddText
+                        : localStyle.secondaryAddText
+                    }>
+                    {oAddButtonData.buttonText}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ) : null}
+          </View>
+        </TouchableWithoutFeedback>
+      </AppleStyleSwipeableRow>
+    </Animatable.View>
   );
 }
 
@@ -220,6 +227,12 @@ const styles = {
     fontSize: fontPtToPx(12),
     lineHeight: layoutPtToPx(15),
     marginVertical: layoutPtToPx(7),
+  },
+  removeButtonStyle: {
+    fontFamily: fonts.InterSemiBold,
+    fontSize: fontPtToPx(12),
+    lineHeight: layoutPtToPx(15),
+    color: colors.White,
   },
 };
 

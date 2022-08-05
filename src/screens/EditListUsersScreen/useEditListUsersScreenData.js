@@ -19,7 +19,7 @@ function useEditListUsersScreenData(listId) {
       listService()
         .getListDetails(listId)
         .then(res => {
-          resolve(res?.userNames);
+          return resolve(res?.userNames);
         });
     });
   }, [listId]);
@@ -29,6 +29,7 @@ function useEditListUsersScreenData(listId) {
 
     getUserNameArray().then(userNames => {
       const userNamesString = userNames.join(',');
+      listMembersRef.current = [];
       TwitterAPI.getUsersByUserNames(userNamesString)
         .then(res => {
           listMembersRef.current = res.data.data;

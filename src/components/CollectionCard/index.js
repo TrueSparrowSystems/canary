@@ -1,11 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useMemo} from 'react';
-import {
-  Text,
-  View,
-  TouchableWithoutFeedback,
-  TouchableHighlight,
-} from 'react-native';
+import React, {useCallback, useMemo, useRef, useEffect} from 'react';
+import {Text, TouchableWithoutFeedback, TouchableHighlight} from 'react-native';
+import {View} from 'react-native-animatable';
 import {BinIcon} from '../../assets/common';
 import ScreenName from '../../constants/ScreenName';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -15,6 +11,7 @@ import Image from 'react-native-fast-image';
 import fonts from '../../constants/fonts';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {getRandomColorCombination} from '../../utils/RandomColorUtil';
+import * as Animatable from 'react-native-animatable';
 
 function CollectionCard(props) {
   const {data, onCollectionRemoved, onLongPress, enableDelete} = props;
@@ -22,6 +19,7 @@ function CollectionCard(props) {
   let {colorScheme} = data;
   const localStyle = useStyleProcessor(styles, 'CollectionCard');
   const navigation = useNavigation();
+  const viewRef = useRef(null);
 
   const onCollectionPress = useCallback(() => {
     navigation.navigate(ScreenName.CollectionTweetScreen, {
@@ -30,11 +28,45 @@ function CollectionCard(props) {
     });
   }, [collectionId, collectionName, navigation]);
 
+  const startAnimation = useCallback(() => {
+    viewRef.current.setNativeProps({
+      useNativeDriver: true,
+    });
+    viewRef.current.animate({
+      0: {
+        rotate: '5deg',
+      },
+      0.25: {
+        rotate: '-5deg',
+      },
+      0.5: {
+        rotate: '5deg',
+      },
+      0.75: {
+        rotate: '-5deg',
+      },
+      1: {
+        rotate: '0deg',
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    if (enableDelete) {
+      startAnimation();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enableDelete]);
+
   const onCollectionRemove = useCallback(() => {
     LocalEvent.emit(EventTypes.ShowDeleteCollectionConfirmationModal, {
       id: collectionId,
       name: collectionName,
-      onCollectionRemoved,
+      onCollectionRemoved: () => {
+        viewRef.current.animate('bounceOut').then(() => {
+          onCollectionRemoved();
+        });
+      },
     });
   }, [collectionId, collectionName, onCollectionRemoved]);
 
@@ -52,11 +84,15 @@ function CollectionCard(props) {
     };
   }, [colorScheme, localStyle.cardStyle]);
 
+  const fnOnLongPress = useCallback(() => {
+    onLongPress();
+  }, [onLongPress]);
+
   return (
     <TouchableWithoutFeedback
       onPress={onCollectionPress}
-      onLongPress={onLongPress}>
-      <View style={localStyle.container}>
+      onLongPress={fnOnLongPress}>
+      <Animatable.View ref={viewRef} style={localStyle.container}>
         {collectionId ? (
           <View style={colorSchemeStyle.cardStyle}>
             {enableDelete ? (
@@ -72,7 +108,7 @@ function CollectionCard(props) {
             </Text>
           </View>
         ) : null}
-      </View>
+      </Animatable.View>
     </TouchableWithoutFeedback>
   );
 }
@@ -80,8 +116,9 @@ function CollectionCard(props) {
 const styles = {
   container: {
     marginBottom: layoutPtToPx(20),
-    marginRight: layoutPtToPx(20),
+
     borderRadius: layoutPtToPx(6),
+    paddingHorizontal: layoutPtToPx(10),
     flex: 1,
     aspectRatio: 1,
   },

@@ -12,6 +12,7 @@ import colors from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useDiscoverScreenData from './useDiscoverScreenData';
 import fonts from '../../constants/fonts';
+import * as Animatable from 'react-native-animatable';
 
 function DiscoverScreen() {
   const localStyle = useStyleProcessor(styles, 'DiscoverScreen');
@@ -38,14 +39,16 @@ function DiscoverScreen() {
         showsVerticalScrollIndicator={false}>
         {aTrendingTopics.map((text, i) => {
           return (
-            <Pressable
-              onPress={() => {
-                fnOnTopicClick(text);
-              }}
-              key={i}
-              style={localStyle.trendingTopicBox}>
-              <Text style={localStyle.topicText}>{text}</Text>
-            </Pressable>
+            <Animatable.View animation="fadeIn">
+              <Pressable
+                onPress={() => {
+                  fnOnTopicClick(text);
+                }}
+                key={i}
+                style={localStyle.trendingTopicBox}>
+                <Text style={localStyle.topicText}>{text}</Text>
+              </Pressable>
+            </Animatable.View>
           );
         })}
       </ScrollView>

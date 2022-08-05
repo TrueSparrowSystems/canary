@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useMemo, useRef} from 'react';
+import React, {useCallback, useMemo, useRef, useEffect} from 'react';
 import {Text, TouchableWithoutFeedback, TouchableHighlight} from 'react-native';
 import {View} from 'react-native-animatable';
 import {BinIcon} from '../../assets/common';
@@ -28,6 +28,36 @@ function CollectionCard(props) {
     });
   }, [collectionId, collectionName, navigation]);
 
+  const startAnimation = useCallback(() => {
+    viewRef.current.setNativeProps({
+      useNativeDriver: true,
+    });
+    viewRef.current.animate({
+      0: {
+        rotate: '5deg',
+      },
+      0.25: {
+        rotate: '-5deg',
+      },
+      0.5: {
+        rotate: '5deg',
+      },
+      0.75: {
+        rotate: '-5deg',
+      },
+      1: {
+        rotate: '0deg',
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    if (enableDelete) {
+      startAnimation();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enableDelete]);
+
   const onCollectionRemove = useCallback(() => {
     LocalEvent.emit(EventTypes.ShowDeleteCollectionConfirmationModal, {
       id: collectionId,
@@ -55,26 +85,6 @@ function CollectionCard(props) {
   }, [colorScheme, localStyle.cardStyle]);
 
   const fnOnLongPress = useCallback(() => {
-    viewRef.current.setNativeProps({
-      useNativeDriver: true,
-    });
-    viewRef.current.animate({
-      0: {
-        rotate: '5deg',
-      },
-      0.25: {
-        rotate: '-5deg',
-      },
-      0.5: {
-        rotate: '5deg',
-      },
-      0.75: {
-        rotate: '-5deg',
-      },
-      1: {
-        rotate: '0deg',
-      },
-    });
     onLongPress();
   }, [onLongPress]);
 

@@ -67,10 +67,15 @@ function useEditListUsersScreenData(listId) {
     [fetchData, listId],
   );
 
+  const onRefresh = useCallback(() => {
+    fetchData();
+  }, [fetchData]);
+
   return {
     bIsLoading: isLoading,
     aListMembers: listMembersRef.current,
     fnOnMemberRemove: onMemberRemove,
+    fnOnRefresh: onRefresh,
   };
 }
 

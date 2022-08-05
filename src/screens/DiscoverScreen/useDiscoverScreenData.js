@@ -8,6 +8,7 @@ import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
 function useDiscoverScreenData() {
   const [trendingTopics, setTrendingTopics] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation();
 
@@ -24,6 +25,7 @@ function useDiscoverScreenData() {
   }, []);
 
   const getTrendingTopics = useCallback(() => {
+    setIsLoading(true);
     const countryName =
       Cache.getValue(CacheKey.SelectedLocation) || 'Worldwide';
 
@@ -35,6 +37,9 @@ function useDiscoverScreenData() {
       })
       .catch(() => {
         //Handle Error
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -53,11 +58,17 @@ function useDiscoverScreenData() {
     LocalEvent.emit(EventTypes.OnTrendingTopicClick, text);
   }, []);
 
+  const onRefresh = useCallback(() => {
+    getTrendingTopics();
+  }, [getTrendingTopics]);
+
   return {
     aTrendingTopics: trendingTopics,
+    bIsLoading: isLoading,
     sSelectedCountryName: selectedCountry.current,
     fnOnSearchPress: onSearchPress,
     fnOnTopicClick: onTopicClick,
+    fnOnRefresh: onRefresh,
     fnNavigateToLocationSelectionScreen: navigateToLocationSelectionScreen,
   };
 }

@@ -20,7 +20,10 @@ function LocationSelectionScreen() {
         text="Change Location"
         textStyle={localStyle.headerText}
       />
-      <SearchBar onQueryChange={fnOnSearchInput} />
+      <SearchBar
+        onQueryChange={fnOnSearchInput}
+        placeholderText={'Search Location'}
+      />
       <ScrollView style={localStyle.scrollViewContainer}>
         {aData?.map((item, index) => (
           <TouchableOpacity

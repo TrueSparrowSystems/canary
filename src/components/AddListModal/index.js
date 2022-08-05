@@ -1,8 +1,7 @@
 import React, {useMemo} from 'react';
-import {View, Text, TextInput} from 'react-native';
+import {View, Text, TextInput, Dimensions} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import CustomModal from '../common/CustomModal';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import useAddListModalData from './useAddListModalData';
 import {AddIcon} from '../../assets/common';
@@ -24,13 +23,17 @@ function AddListModal() {
     return <View style={localStyle.blur} />;
   }, [localStyle.blur]);
 
+  const screenHeight = useMemo(() => {
+    return Dimensions.get('window').height;
+  }, []);
+
   return bIsVisible ? (
     <CustomModal
       visible={bIsVisible}
       onBackDropPress={fnOnBackdropPress}
       customBackdrop={getBackdrop}>
-      <View style={localStyle.modalStyle}>
-        <SafeAreaView style={localStyle.container}>
+      <View style={[localStyle.modalStyle, {top: screenHeight / 3}]}>
+        <View style={localStyle.container}>
           <View style={localStyle.view}>
             <Text style={localStyle.enterNameStyle}>New List</Text>
             <TextInput
@@ -51,7 +54,7 @@ function AddListModal() {
               underlayColor={colors.GoldenTainoi80}
             />
           </View>
-        </SafeAreaView>
+        </View>
       </View>
     </CustomModal>
   ) : null;
@@ -59,17 +62,20 @@ function AddListModal() {
 
 const styles = {
   container: {
-    flex: 1,
+    position: 'absolute',
+    height: layoutPtToPx(200),
     width: '100%',
     borderRadius: layoutPtToPx(14),
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: colors.White,
   },
   modalStyle: {
-    width: '100%',
+    width: '90%',
+    top: 0,
     bottom: 0,
-    position: 'absolute',
+    left: 0,
+    right: 0,
     justifyContent: 'center',
     alignItems: 'center',
   },

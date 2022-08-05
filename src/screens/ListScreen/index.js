@@ -63,16 +63,18 @@ function ListScreen() {
 
   return (
     <SafeAreaView style={localStyle.container}>
-      <Header
-        text="Lists"
-        rightButtonImage={swipeable ? null : AddIcon}
-        enableRightButton={true}
-        rightButtonText={swipeable ? 'Done' : 'New'}
-        textStyle={localStyle.headerText}
-        rightButtonImageStyle={localStyle.headerRightButtonImage}
-        rightButtonTextStyle={localStyle.headerRightButtonText}
-        onRightButtonClick={swipeable ? onDonePress : onAddListPress}
-      />
+      {listDataRef.current !== null ? (
+        <Header
+          text="Lists"
+          rightButtonImage={swipeable ? null : AddIcon}
+          enableRightButton={true}
+          rightButtonText={swipeable ? 'Done' : 'New'}
+          textStyle={localStyle.headerText}
+          rightButtonImageStyle={localStyle.headerRightButtonImage}
+          rightButtonTextStyle={localStyle.headerRightButtonText}
+          onRightButtonClick={swipeable ? onDonePress : onAddListPress}
+        />
+      ) : null}
       {isLoading ? (
         <View style={localStyle.loaderStyle}>
           <ActivityIndicator animating={isLoading} />

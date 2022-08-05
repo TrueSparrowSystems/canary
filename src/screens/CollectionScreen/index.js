@@ -23,7 +23,7 @@ function CollectionScreen() {
     setIsLoading(true);
     const _collectionService = collectionService();
     _collectionService.getAllCollections().then(list => {
-      const jsonObj = JSON.parse(list);
+      const jsonObj = JSON.parse(list) || {};
       let dataArray = [];
       Object.keys(jsonObj).map(key => {
         const collectionData = jsonObj[key];
@@ -89,18 +89,20 @@ function CollectionScreen() {
 
   return (
     <SafeAreaView style={localStyle.container}>
-      <Header
-        text={'Archives'}
-        textStyle={localStyle.headerTextStyle}
-        enableRightButton={true}
-        rightButtonImage={!isDeleteEnabled ? AddIcon : null}
-        onRightButtonClick={
-          !isDeleteEnabled ? onAddCollectionPress : onDonePress
-        }
-        rightButtonText={!isDeleteEnabled ? 'New' : 'Done'}
-        rightButtonTextStyle={localStyle.newButtonTextStyle}
-        rightButtonImageStyle={localStyle.newButtonImageStyle}
-      />
+      {isEmpty(collectionDataRef.current) ? null : (
+        <Header
+          text={'Archives'}
+          textStyle={localStyle.headerTextStyle}
+          enableRightButton={true}
+          rightButtonImage={!isDeleteEnabled ? AddIcon : null}
+          onRightButtonClick={
+            !isDeleteEnabled ? onAddCollectionPress : onDonePress
+          }
+          rightButtonText={!isDeleteEnabled ? 'New' : 'Done'}
+          rightButtonTextStyle={localStyle.newButtonTextStyle}
+          rightButtonImageStyle={localStyle.newButtonImageStyle}
+        />
+      )}
       {isLoading ? (
         <View style={localStyle.loaderStyle}>
           <ActivityIndicator animating={isLoading} />

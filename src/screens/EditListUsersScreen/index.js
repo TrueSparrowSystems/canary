@@ -66,6 +66,7 @@ function EditListUsersScreen(props) {
                         },
                       },
                     ]}
+                    textStyle={localStyle.removeButtonStyle}
                     shouldRenderRightAction={true}>
                     <View style={localStyle.cardStyle}>
                       <View style={localStyle.cardDetailContainer}>
@@ -157,6 +158,12 @@ const styles = {
     height: layoutPtToPx(8),
     width: layoutPtToPx(16),
     alignSelf: 'center',
+  },
+  removeButtonStyle: {
+    fontFamily: fonts.InterSemiBold,
+    fontSize: fontPtToPx(12),
+    lineHeight: layoutPtToPx(15),
+    color: colors.White,
   },
 };
 

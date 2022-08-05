@@ -23,6 +23,7 @@ function ListCard(props) {
     onListRemoved,
     onCardLongPress,
     enableSwipe,
+    disableSwipeInteraction = false,
     shouldShowAddButton,
     userName,
     onAddToListSuccess,
@@ -74,6 +75,7 @@ function ListCard(props) {
   return (
     <Animatable.View ref={viewRef}>
       <AppleStyleSwipeableRow
+        disableSwipeInteraction={disableSwipeInteraction}
         enabled={enableSwipe}
         textStyle={localStyle.removeButtonStyle}
         rightActionsArray={[

@@ -1,12 +1,7 @@
-import Cache from '../../services/Cache';
-import {CacheKey} from '../../services/Cache/CacheStoreConstants';
-
 export function getTweetData(tweet, response) {
   const authorId = tweet.author_id;
   const mediaKeys = tweet?.attachments?.media_keys || [];
   var data = {...tweet};
-  const bookmarkedTweets = Cache.getValue(CacheKey.BookmarkedTweetsList) || {};
-  data.isBookmarked = bookmarkedTweets[tweet.id] ? true : false;
   const userData = response.data.includes.users;
   userData.forEach(user => {
     if (user.id === authorId) {

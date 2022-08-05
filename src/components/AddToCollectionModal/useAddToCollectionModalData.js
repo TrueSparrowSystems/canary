@@ -4,12 +4,15 @@ import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import Toast from 'react-native-toast-message';
 import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 import {replace} from '../../utils/Strings';
+import Cache from '../../services/Cache';
+import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 
 function useAddToCollectionModalData() {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [modalData, setModalData] = useState(null);
   const collectionListRef = useRef(null);
+  const tweetCollectionIdsArrays = useRef([]);
 
   const getCollectionsList = useCallback(() => {
     setIsLoading(true);
@@ -26,6 +29,10 @@ function useAddToCollectionModalData() {
       setModalData(payload);
       setIsVisible(true);
       getCollectionsList();
+      const bookmarkedTweetList = Cache.getValue(CacheKey.BookmarkedTweetsList);
+      tweetCollectionIdsArrays.current = payload?.tweetId
+        ? bookmarkedTweetList?.[payload.tweetId] || []
+        : [];
     };
 
     LocalEvent.on(EventTypes.ShowAddToCollectionModal, onShowModal);
@@ -57,19 +64,27 @@ function useAddToCollectionModalData() {
   const onAddToCollectionSuccess = useCallback(
     (collectionName, collectionId) => {
       showAddToCollectionToast(collectionName);
-      closeModal();
       modalData?.onAddToCollectionSuccess(collectionId);
     },
-    [closeModal, modalData, showAddToCollectionToast],
+    [modalData, showAddToCollectionToast],
   );
 
   const onAddToCollectionFailure = useCallback(() => {
-    closeModal();
     Toast.show({
       type: ToastType.Error,
       text1: 'Could not add tweet to collection',
     });
-  }, [closeModal]);
+  }, []);
+
+  const onRemoveFromCollectionSuccess = useCallback(collectionName => {
+    Toast.show({
+      type: ToastType.Success,
+      text1: replace('Removed tweet from {{collectionName}}', {
+        collectionName,
+      }),
+      position: ToastPosition.Top,
+    });
+  }, []);
 
   const onAddCollectionPress = useCallback(() => {
     setIsVisible(false);
@@ -83,6 +98,7 @@ function useAddToCollectionModalData() {
   }, [modalData?.tweetId, onAddToCollectionSuccess, showAddToCollectionToast]);
 
   return {
+    aTweetCollectionIds: tweetCollectionIdsArrays.current,
     bIsVisible: isVisible,
     bIsLoading: isLoading,
     sTweetId: modalData?.tweetId || null,
@@ -91,6 +107,8 @@ function useAddToCollectionModalData() {
     fnOnAddToCollectionSuccess: onAddToCollectionSuccess,
     fnOnAddToCollectionFailure: onAddToCollectionFailure,
     fnOnAddCollectionPress: onAddCollectionPress,
+    fnOnDonePress: closeModal,
+    fnOnRemoveFromCollectionSuccess: onRemoveFromCollectionSuccess,
   };
 }
 

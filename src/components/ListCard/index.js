@@ -1,68 +1,56 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useMemo, useRef} from 'react';
-import {Text, View, TouchableWithoutFeedback, Image} from 'react-native';
-import ScreenName from '../../constants/ScreenName';
-import {ToastType} from '../../constants/ToastConstants';
+import React, {useMemo} from 'react';
+import {
+  Text,
+  View,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import {listService} from '../../services/ListService';
 import colors from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
-import Toast from 'react-native-toast-message';
 import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import {getInitialsFromName} from '../../utils/TextUtils';
 import fonts from '../../constants/fonts';
 import {SwipeIcon} from '../../assets/common';
 import * as Animatable from 'react-native-animatable';
 import AppleStyleSwipeableRow from '../AppleStyleSwipeableRow';
+import useListCardData from './useListCardData';
 
 function ListCard(props) {
-  const {data, onListRemoved, onCardLongPress, enableSwipe} = props;
+  const {
+    data,
+    onListRemoved,
+    onCardLongPress,
+    enableSwipe,
+    shouldShowAddButton,
+    userName,
+    onAddToListSuccess,
+    isPressDisabled = false,
+  } = props;
   const {id: listId, name: listName, userNames, colorCombination} = data;
   const localStyle = useStyleProcessor(styles, 'ListCard');
-  const navigation = useNavigation();
-  const listCardRef = useRef(null);
 
-  const onListPress = useCallback(() => {
-    navigation.navigate(ScreenName.ListTweetsScreen, {
-      listId,
-      listName,
-      listUserNames: userNames,
-    });
-  }, [listId, listName, navigation, userNames]);
-
-  const onListRemove = useCallback(() => {
-    listService()
-      .removeList(listId)
-      .then(() => {
-        onListRemoved();
-        Toast.show({
-          type: ToastType.Success,
-          text1: 'Removed list.',
-        });
-      })
-      .catch(() => {
-        Toast.show({
-          type: ToastType.Error,
-          text1: 'Error in removing list.',
-        });
-      });
-  }, [listId, onListRemoved]);
+  const {
+    viewRef,
+    fnGetDescriptionText,
+    fnOnListPress,
+    fnOnListRemove,
+    oAddButtonData,
+    fnOnLongPress,
+  } = useListCardData(
+    onListRemoved,
+    userName,
+    userNames,
+    listId,
+    listName,
+    onAddToListSuccess,
+    enableSwipe,
+    shouldShowAddButton,
+    onCardLongPress,
+  );
 
   const listIntials = getInitialsFromName(listName);
-  const getDescriptionText = useCallback(() => {
-    if (userNames.length === 0) {
-      return 'includes no one yet 😢';
-    } else if (userNames.length === 1) {
-      return `includes @${userNames[0]}`;
-    } else if (userNames.length === 2) {
-      return `includes @${userNames[0]} & @${userNames[1]}`;
-    } else {
-      return `includes @${userNames[0]}, @${userNames[1]} & ${
-        userNames.length - 2
-      } others`;
-    }
-  }, [userNames]);
-
   const listIconStyle = useMemo(() => {
     let _colorCombination = colorCombination;
     if (!_colorCombination) {
@@ -84,16 +72,8 @@ function ListCard(props) {
     localStyle.listIconTextStyle,
   ]);
 
-  const onLongPress = useCallback(() => {
-    listCardRef.current.setNativeProps({
-      useNativeDriver: true,
-    });
-    listCardRef.current.animate('pulse');
-    onCardLongPress();
-  }, [onCardLongPress]);
-
   return (
-    <Animatable.View ref={listCardRef}>
+    <Animatable.View ref={viewRef}>
       <AppleStyleSwipeableRow
         enabled={enableSwipe}
         rightActionsArray={[
@@ -101,20 +81,20 @@ function ListCard(props) {
             actionName: 'Remove',
             color: colors.BitterSweet,
             onPress: () => {
-              listCardRef.current.setNativeProps({
+              viewRef.current.setNativeProps({
                 useNativeDriver: true,
               });
-              listCardRef.current.animate('bounceOutLeft').then(() => {
-                onListRemove();
+              viewRef.current.animate('bounceOutLeft').then(() => {
+                fnOnListRemove();
               });
             },
           },
         ]}
         shouldRenderRightAction={true}>
         <TouchableWithoutFeedback
-          onPress={onListPress}
-          onLongPress={onLongPress}
-          disabled={enableSwipe}>
+          onPress={fnOnListPress}
+          onLongPress={fnOnLongPress}
+          disabled={enableSwipe || isPressDisabled}>
           <View style={localStyle.container}>
             <View style={localStyle.cardDetailContainer}>
               <View style={listIconStyle.backgroundStyle}>
@@ -122,15 +102,35 @@ function ListCard(props) {
                   {listIntials.substring(0, 2)}
                 </Text>
               </View>
-              <View>
+              <View style={localStyle.listNameContainer}>
                 <Text style={localStyle.listNameStyle}>{listName}</Text>
-                <Text style={localStyle.descriptionTextStyle}>
-                  {getDescriptionText()}
+                <Text style={localStyle.descriptionTextStyle} numberOfLines={1}>
+                  {fnGetDescriptionText()}
                 </Text>
               </View>
             </View>
             {enableSwipe ? (
               <Image source={SwipeIcon} style={localStyle.swipeIconStyle} />
+            ) : null}
+            {shouldShowAddButton ? (
+              <TouchableOpacity
+                style={
+                  oAddButtonData.buttonType === 'Primary'
+                    ? localStyle.primaryAddButtonContainer
+                    : localStyle.secondaryAddButtonContainer
+                }
+                onPress={oAddButtonData.onPress}>
+                <View>
+                  <Text
+                    style={
+                      oAddButtonData.buttonType === 'Primary'
+                        ? localStyle.primaryAddText
+                        : localStyle.secondaryAddText
+                    }>
+                    {oAddButtonData.buttonText}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             ) : null}
           </View>
         </TouchableWithoutFeedback>
@@ -148,6 +148,7 @@ const styles = {
     marginTop: layoutPtToPx(16),
     paddingBottom: layoutPtToPx(13),
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   cardDetailContainer: {
     flexDirection: 'row',
@@ -166,6 +167,7 @@ const styles = {
     fontSize: fontPtToPx(16),
     lineHeight: layoutPtToPx(20),
   },
+  listNameContainer: {width: '80%'},
   listNameStyle: {
     color: colors.Black,
     fontFamily: fonts.InterSemiBold,
@@ -192,11 +194,39 @@ const styles = {
     fontSize: fontPtToPx(12),
     lineHeight: layoutPtToPx(15),
   },
-
   swipeIconStyle: {
     height: layoutPtToPx(8),
     width: layoutPtToPx(16),
     alignSelf: 'center',
+  },
+  primaryAddButtonContainer: {
+    paddingHorizontal: layoutPtToPx(12),
+    alignItems: 'center',
+    borderRadius: layoutPtToPx(8),
+    backgroundColor: colors.GoldenTainoi,
+    maxHeight: layoutPtToPx(30),
+  },
+  primaryAddText: {
+    color: colors.White,
+    fontFamily: fonts.SoraBold,
+    fontSize: fontPtToPx(12),
+    lineHeight: layoutPtToPx(15),
+    marginVertical: layoutPtToPx(7),
+  },
+  secondaryAddButtonContainer: {
+    paddingHorizontal: layoutPtToPx(12),
+    alignItems: 'center',
+    borderRadius: layoutPtToPx(8),
+    borderWidth: 1,
+    borderColor: colors.GoldenTainoi,
+    maxHeight: layoutPtToPx(30),
+  },
+  secondaryAddText: {
+    color: colors.GoldenTainoi,
+    fontFamily: fonts.SoraBold,
+    fontSize: fontPtToPx(12),
+    lineHeight: layoutPtToPx(15),
+    marginVertical: layoutPtToPx(7),
   },
 };
 

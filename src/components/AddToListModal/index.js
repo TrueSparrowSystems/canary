@@ -6,14 +6,18 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import CustomModal from '../common/CustomModal';
 import colors from '../../constants/colors';
 import useAddToListModalData from './useAddToListModalData';
 import {ScrollView} from 'react-native-gesture-handler';
-import {AddIcon} from '../../assets/common';
-import MiniListCard from '../MiniListCard';
+import {AddIcon, BottomBarListIcon} from '../../assets/common';
+import ListCard from '../ListCard';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import fonts from '../../constants/fonts';
+import EmptyScreenComponent from '../common/EmptyScreenComponent';
 
 function AddToListModal() {
   const localStyle = useStyleProcessor(styles, 'AddToListModal');
@@ -32,6 +36,12 @@ function AddToListModal() {
     return <View style={localStyle.blur} />;
   }, [localStyle.blur]);
 
+  const scrollViewStyle = useMemo(() => {
+    return {
+      maxHeight: Dimensions.get('window').height / 1.33,
+    };
+  }, []);
+
   return bIsVisible ? (
     <CustomModal
       visible={bIsVisible}
@@ -40,39 +50,49 @@ function AddToListModal() {
       <View style={localStyle.modalStyle}>
         <SafeAreaView style={localStyle.container}>
           <View style={localStyle.view}>
-            <View style={localStyle.flexRow}>
-              <View style={localStyle.titleContainer}>
-                <Text style={localStyle.titleText}>Add To List</Text>
-              </View>
-              <TouchableOpacity onPress={fnOnAddListPress}>
-                <Image source={AddIcon} style={localStyle.iconStyle} />
-              </TouchableOpacity>
+            <View style={localStyle.titleContainer}>
+              <Text style={localStyle.titleText}>Add user to List</Text>
             </View>
+            {oList !== null ? (
+              <TouchableOpacity
+                onPress={fnOnAddListPress}
+                style={localStyle.addButtonContainer}>
+                <View style={localStyle.flexRow}>
+                  <Image source={AddIcon} style={localStyle.addIconStyle} />
+                  <Text style={localStyle.addNewTextStyle}>New</Text>
+                </View>
+              </TouchableOpacity>
+            ) : null}
             {bIsLoading ? (
               <ActivityIndicator animating={bIsLoading} />
+            ) : oList == null ? (
+              <View style={localStyle.emptyComponentContainer}>
+                <EmptyScreenComponent
+                  emptyImage={BottomBarListIcon}
+                  buttonText={'Create a new List'}
+                  onButtonPress={fnOnAddListPress}
+                  descriptionText={
+                    'Stay up-to-date on the favorite topics by users you love, without being tracked 😉'
+                  }
+                />
+              </View>
             ) : (
               <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}>
-                {oList == null
-                  ? null
-                  : Object.keys(oList).map(key => {
-                      const list = oList[key];
-                      const listData = {
-                        listId: list?.id,
-                        listName: list?.name,
-                        // TODO: change image url
-                        imageUrl: 'https://picsum.photos/200/300',
-                      };
-                      return (
-                        <MiniListCard
-                          key={list.id}
-                          data={listData}
-                          userName={sUserName}
-                          onAddToListSuccess={fnOnAddToListSuccess}
-                        />
-                      );
-                    })}
+                style={scrollViewStyle}
+                contentContainerStyle={localStyle.scrollContentContainerStyle}>
+                {Object.keys(oList).map(key => {
+                  const list = oList[key];
+                  return (
+                    <ListCard
+                      key={list.id}
+                      data={list}
+                      userName={sUserName}
+                      onAddToListSuccess={fnOnAddToListSuccess}
+                      isPressDisabled={true}
+                      shouldShowAddButton={true}
+                    />
+                  );
+                })}
               </ScrollView>
             )}
           </View>
@@ -98,9 +118,22 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  iconStyle: {
-    height: 20,
-    width: 20,
+  addButtonContainer: {padding: layoutPtToPx(30)},
+  addIconStyle: {
+    height: layoutPtToPx(14),
+    width: layoutPtToPx(14),
+    tintColor: colors.GoldenTainoi,
+    marginRight: layoutPtToPx(4),
+  },
+  addNewTextStyle: {
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(18),
+    color: colors.GoldenTainoi,
+  },
+  emptyComponentContainer: {
+    paddingVertical: layoutPtToPx(60),
+    height: '80%',
   },
   blur: {
     position: 'absolute',
@@ -112,19 +145,32 @@ const styles = {
   },
   flexRow: {
     flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'flex-end',
   },
-  titleContainer: {flexGrow: 1, alignItems: 'center'},
+  titleContainer: {
+    alignItems: 'center',
+    position: 'absolute',
+    width: '100%',
+    zIndex: -1,
+    top: layoutPtToPx(30),
+    justifyContent: 'center',
+  },
   titleText: {
-    fontSize: 20,
-    color: colors.SherpaBlue,
-    marginBottom: 10,
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(20),
+    color: colors.Black,
   },
   view: {
-    width: '100%',
-    height: 200,
-    padding: 20,
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  scrollContentContainerStyle: {
+    paddingBottom: layoutPtToPx(20),
+    maxWidth: '100%',
   },
 };
 

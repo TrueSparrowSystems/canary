@@ -6,10 +6,8 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import * as Animatable from 'react-native-animatable';
 import {SwipeIcon} from '../../assets/common';
 import Header from '../../components/common/Header';
 import colors from '../../constants/colors';
@@ -18,6 +16,7 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useEditListUsersScreenData from './useEditListUsersScreenData';
 import AppleStyleSwipeableRow from '../../components/AppleStyleSwipeableRow';
+import * as Animatable from 'react-native-animatable';
 
 function EditListUsersScreen(props) {
   const {listId, listUserNames, onDonePress} = props?.route?.params;
@@ -31,72 +30,75 @@ function EditListUsersScreen(props) {
 
   return (
     <SafeAreaView>
-      <Header
-        text="Edit List"
-        textStyle={localStyle.headerText}
-        enableRightButton={true}
-        rightButtonText={'Done'}
-        rightButtonTextStyle={localStyle.headerRightButtonText}
-        onRightButtonClick={() => {
-          navigation.goBack();
-          onDonePress();
-        }}
-      />
-      {bIsLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <ScrollView style={localStyle.listView}>
-          {aListMembers.map(listMember => {
-            return (
-              <Animatable.View ref={viewRef}>
-                <AppleStyleSwipeableRow
-                  key={listMember.id}
-                  enabled={true}
-                  rightActionsArray={[
-                    {
-                      actionName: 'Remove',
-                      color: colors.BitterSweet,
-                      onPress: () => {
-                        viewRef.current.setNativeProps({
-                          useNativeDriver: true,
-                        });
-                        viewRef.current.animate('bounceOutLeft').then(() => {
-                          fnOnMemberRemove(listMember.username);
-                        });
+      <View style={localStyle.container}>
+        <Header
+          text="Edit List"
+          textStyle={localStyle.headerText}
+          enableRightButton={true}
+          rightButtonText={'Done'}
+          rightButtonTextStyle={localStyle.headerRightButtonText}
+          onRightButtonClick={() => {
+            navigation.goBack();
+            onDonePress();
+          }}
+        />
+        {bIsLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <ScrollView style={localStyle.listView}>
+            {aListMembers.map(listMember => {
+              return (
+                <Animatable.View ref={viewRef}>
+                  <AppleStyleSwipeableRow
+                    key={listMember.id}
+                    enabled={true}
+                    rightActionsArray={[
+                      {
+                        actionName: 'Remove',
+                        color: colors.BitterSweet,
+                        onPress: () => {
+                          viewRef.current.setNativeProps({
+                            useNativeDriver: true,
+                          });
+                          viewRef.current.animate('bounceOutLeft').then(() => {
+                            fnOnMemberRemove(listMember.username);
+                          });
+                        },
                       },
-                    },
-                  ]}
-                  shouldRenderRightAction={true}>
-                  <View style={localStyle.cardStyle}>
-                    <View style={localStyle.cardDetailContainer}>
-                      <Image
-                        source={{uri: listMember.profile_image_url}}
-                        style={localStyle.imageStyle}
-                      />
-                      <View>
-                        <Text style={localStyle.nameText}>
-                          {listMember.name}
-                        </Text>
-                        <Text style={localStyle.userNameText}>
-                          @{listMember.username}
-                        </Text>
+                    ]}
+                    shouldRenderRightAction={true}>
+                    <View style={localStyle.cardStyle}>
+                      <View style={localStyle.cardDetailContainer}>
+                        <Image
+                          source={{uri: listMember.profile_image_url}}
+                          style={localStyle.imageStyle}
+                        />
+                        <View style={localStyle.cardNameContainer}>
+                          <Text style={localStyle.nameText} numberOfLines={1}>
+                            {listMember.name}
+                          </Text>
+                          <Text style={localStyle.userNameText}>
+                            @{listMember.username}
+                          </Text>
+                        </View>
                       </View>
+                      <Image
+                        source={SwipeIcon}
+                        style={localStyle.swipeIconStyle}
+                      />
                     </View>
-                    <Image
-                      source={SwipeIcon}
-                      style={localStyle.swipeIconStyle}
-                    />
-                  </View>
-                </AppleStyleSwipeableRow>
-              </Animatable.View>
-            );
-          })}
-        </ScrollView>
-      )}
+                  </AppleStyleSwipeableRow>
+                </Animatable.View>
+              );
+            })}
+          </ScrollView>
+        )}
+      </View>
     </SafeAreaView>
   );
 }
 const styles = {
+  container: {height: '100%', backgroundColor: colors.White},
   headerText: {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(16),
@@ -126,6 +128,7 @@ const styles = {
     borderRadius: layoutPtToPx(20),
     marginRight: layoutPtToPx(8),
   },
+  cardNameContainer: {width: '80%'},
   rightActionContainer: {
     backgroundColor: colors.BitterSweet,
     alignItems: 'center',

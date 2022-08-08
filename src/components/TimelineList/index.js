@@ -13,6 +13,7 @@ const _isTablet = isTablet();
 const ITEM_WIDTH = 276;
 
 function TimelineList({
+  listRef,
   style,
   reloadData,
   refreshData,
@@ -54,6 +55,7 @@ function TimelineList({
 
   const flatListProps = useMemo(() => {
     return {
+      ref: listRef,
       style: localStyle.flatListPropsStyle,
       horizontal: false,
       showsVerticalScrollIndicator: false,
@@ -79,6 +81,7 @@ function TimelineList({
     keyExtractor,
     listEmptyComponent,
     listHeaderComponent,
+    listRef,
     localStyle.contentContainerStyle,
     localStyle.flatListPropsStyle,
     renderItem,

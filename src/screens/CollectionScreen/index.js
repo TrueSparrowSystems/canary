@@ -12,12 +12,23 @@ import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import {isEmpty} from 'lodash';
 import Header from '../../components/common/Header';
 import fonts from '../../constants/fonts';
+import useTabListener from '../../hooks/useTabListener';
 
-function CollectionScreen() {
+function CollectionScreen(props) {
   const localStyle = useStyleProcessor(styles, 'CollectionScreen');
   const [isLoading, setIsLoading] = useState(true);
   const collectionDataRef = useRef({});
   const [isDeleteEnabled, setIsDeleteEnabled] = useState(false);
+  const screenName = props?.route?.name;
+  const scrollRef = useRef(null);
+
+  const scrollToTop = useCallback(() => {
+    scrollRef.current?.scrollToOffset({
+      animated: true,
+      offset: 0,
+    });
+  }, []);
+  useTabListener(screenName, scrollToTop);
 
   const fetchData = useCallback(() => {
     setIsLoading(true);
@@ -124,6 +135,7 @@ function CollectionScreen() {
             data={collectionDataRef.current}
             renderItem={renderItem}
             numColumns={2}
+            ref={scrollRef}
             refreshControl={
               <RefreshControl refreshing={isLoading} onRefresh={fetchData} />
             }

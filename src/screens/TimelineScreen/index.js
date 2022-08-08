@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useRef} from 'react';
 import {Image, Text, View} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
@@ -8,11 +8,22 @@ import Header from '../../components/common/Header';
 import colors from '../../constants/colors';
 import TimelineList from '../../components/TimelineList';
 import fonts from '../../constants/fonts';
+import useTabListener from '../../hooks/useTabListener';
 
-function TimelineScreen() {
+function TimelineScreen(props) {
   const localStyle = useStyleProcessor(styles, 'TimelineScreen');
 
   const {fnOnSettingsPress, bRefreshing} = useTimelineScreenData();
+  const screenName = props?.route?.name;
+  const scrollRef = useRef(null);
+
+  const scrollToTop = useCallback(() => {
+    scrollRef.current?.scrollToOffset({
+      animated: true,
+      offset: 0,
+    });
+  }, []);
+  useTabListener(screenName, scrollToTop);
 
   return (
     <View style={localStyle.container}>
@@ -30,7 +41,11 @@ function TimelineScreen() {
         />
       </View>
 
-      <TimelineList refreshData={bRefreshing} reloadData={false} />
+      <TimelineList
+        listRef={scrollRef}
+        refreshData={bRefreshing}
+        reloadData={false}
+      />
     </View>
   );
 }

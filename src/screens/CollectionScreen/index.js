@@ -73,11 +73,12 @@ function CollectionScreen() {
   }, []);
 
   const renderItem = useCallback(
-    ({item}) => {
+    ({item, index}) => {
       return (
         <CollectionCard
           key={item.id}
           data={item}
+          animationDelay={index * 20}
           onCollectionRemoved={reloadList}
           onLongPress={enableCollectionDeleteOption}
           enableDelete={isDeleteEnabled}

@@ -20,7 +20,7 @@ function ImageViewScreen(props) {
     <SafeAreaView>
       <View style={localStyle.container}>
         <ImageViewing
-          backgroundColor={colors.GoldenTainoi}
+          backgroundColor={colors.Black}
           images={images}
           imageIndex={imageIndex}
           visible={true}

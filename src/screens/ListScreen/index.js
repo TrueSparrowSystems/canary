@@ -16,6 +16,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import Header from '../../components/common/Header';
 import fonts from '../../constants/fonts';
+import {isEmpty} from 'lodash-es';
 
 function ListScreen() {
   const localStyle = useStyleProcessor(styles, 'ListScreen');
@@ -69,7 +70,7 @@ function ListScreen() {
 
   return (
     <SafeAreaView style={localStyle.container}>
-      {listDataRef.current !== null ? (
+      {!isEmpty(listDataRef.current) ? (
         <Header
           text="Lists"
           rightButtonImage={swipeable ? null : AddIcon}
@@ -85,7 +86,7 @@ function ListScreen() {
         <View style={localStyle.loaderStyle}>
           <ActivityIndicator animating={isLoading} />
         </View>
-      ) : listDataRef.current == null ? (
+      ) : isEmpty(listDataRef.current) ? (
         <EmptyScreenComponent
           emptyImage={BottomBarListIcon}
           buttonText={'Create a new List'}

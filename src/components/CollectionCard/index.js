@@ -92,7 +92,10 @@ function CollectionCard(props) {
     <TouchableWithoutFeedback
       onPress={onCollectionPress}
       onLongPress={fnOnLongPress}>
-      <Animatable.View ref={viewRef} style={localStyle.container}>
+      <Animatable.View
+        ref={viewRef}
+        animation="fadeIn"
+        style={localStyle.container}>
         {collectionId ? (
           <View style={colorSchemeStyle.cardStyle}>
             {enableDelete ? (

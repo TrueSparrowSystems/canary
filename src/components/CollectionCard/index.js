@@ -34,16 +34,16 @@ function CollectionCard(props) {
     });
     viewRef.current.animate({
       0: {
-        rotate: '5deg',
+        rotate: '2.5deg',
       },
       0.25: {
-        rotate: '-5deg',
+        rotate: '-2.5deg',
       },
       0.5: {
-        rotate: '5deg',
+        rotate: '2.5deg',
       },
       0.75: {
-        rotate: '-5deg',
+        rotate: '-2.5deg',
       },
       1: {
         rotate: '0deg',

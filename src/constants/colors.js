@@ -23,6 +23,7 @@ const colors = {
   Grandis: '#FED56B',
   SweetCorn: '#FEE077',
   BitterSweet: '#FF6363',
+  EarlyDawn: '#FFF3da',
 };
 
 export default colors;

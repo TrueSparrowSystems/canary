@@ -119,6 +119,7 @@ function CollectionScreen() {
       ) : (
         <View style={localStyle.flatListStyle}>
           <FlatList
+            showsVerticalScrollIndicator={false}
             data={collectionDataRef.current}
             renderItem={renderItem}
             numColumns={2}

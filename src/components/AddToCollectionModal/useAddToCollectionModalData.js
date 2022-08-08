@@ -91,11 +91,18 @@ function useAddToCollectionModalData() {
     LocalEvent.emit(EventTypes.ShowAddCollectionModal, {
       tweetId: modalData?.tweetId,
       onCollectionAddSuccess: (collectionName, collectionId) => {
+        getCollectionsList();
+        setIsVisible(true);
         showAddToCollectionToast(collectionName, collectionId);
       },
       onAddToCollectionSuccess,
     });
-  }, [modalData?.tweetId, onAddToCollectionSuccess, showAddToCollectionToast]);
+  }, [
+    getCollectionsList,
+    modalData?.tweetId,
+    onAddToCollectionSuccess,
+    showAddToCollectionToast,
+  ]);
 
   return {
     aTweetCollectionIds: tweetCollectionIdsArrays.current,

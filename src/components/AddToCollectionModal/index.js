@@ -17,6 +17,7 @@ import {AddIcon, CollectionsIcon} from '../../assets/common';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
 import EmptyScreenComponent from '../common/EmptyScreenComponent';
+import {isEmpty} from 'lodash';
 
 function AddToCollectionModal() {
   const localStyle = useStyleProcessor(styles, 'AddToCollectionModal');
@@ -41,7 +42,7 @@ function AddToCollectionModal() {
 
   const addNewButtonStyleMemo = useMemo(() => {
     return [
-      {opacity: oCollectionList !== null ? 1 : 0},
+      {opacity: !isEmpty(oCollectionList) ? 1 : 0},
       localStyle.addNewButton,
     ];
   }, [localStyle.addNewButton, oCollectionList]);
@@ -65,7 +66,7 @@ function AddToCollectionModal() {
               </View>
               <TouchableOpacity
                 onPress={fnOnAddCollectionPress}
-                disabled={oCollectionList === null}
+                disabled={isEmpty(oCollectionList)}
                 style={addNewButtonStyleMemo}>
                 <View style={localStyle.flexRow}>
                   <Image source={AddIcon} style={localStyle.addIconStyle} />
@@ -75,7 +76,7 @@ function AddToCollectionModal() {
             </View>
             {bIsLoading ? (
               <ActivityIndicator animating={bIsLoading} />
-            ) : oCollectionList === null ? (
+            ) : isEmpty(oCollectionList) ? (
               <View style={localStyle.emptyComponentContainer}>
                 <EmptyScreenComponent
                   emptyImage={CollectionsIcon}
@@ -92,7 +93,7 @@ function AddToCollectionModal() {
                 showsHorizontalScrollIndicator={false}
                 style={localStyle.scrollView}
                 contentContainerStyle={localStyle.scrollViewContentContainer}>
-                {oCollectionList == null
+                {isEmpty(oCollectionList)
                   ? null
                   : Object.keys(oCollectionList).map(key => {
                       const collection = oCollectionList[key];

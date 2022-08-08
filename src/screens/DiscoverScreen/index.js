@@ -20,6 +20,7 @@ function DiscoverScreen() {
   const {
     aTrendingTopics,
     bIsLoading,
+    sTextInputError,
     sSelectedCountryName,
     fnOnSearchPress,
     fnOnTopicClick,
@@ -29,6 +30,7 @@ function DiscoverScreen() {
   return (
     <View style={localStyle.container}>
       <SearchBar onSearchPressCallback={fnOnSearchPress} />
+      <Text style={localStyle.errorText}>{sTextInputError}</Text>
       {sSelectedCountryName ? (
         <View style={localStyle.trendingCountryContainer}>
           <Text style={localStyle.trendingCountryText}>
@@ -103,6 +105,13 @@ const styles = {
     fontFamily: fonts.InterSemiBold,
     fontSize: fontPtToPx(14),
     color: colors.GoldenTainoi,
+  },
+  errorText: {
+    fontFamily: fonts.InterRegular,
+    color: colors.BitterSweet,
+    fontSize: fontPtToPx(14),
+    alignSelf: 'center',
+    marginTop: layoutPtToPx(2),
   },
 };
 

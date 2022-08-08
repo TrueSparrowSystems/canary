@@ -133,7 +133,7 @@ const styles = {
     marginTop: layoutPtToPx(8),
     overflow: 'hidden',
     width: '100%',
-    height: layoutPtToPx(234),
+    height: layoutPtToPx(180),
     borderRadius: layoutPtToPx(4),
     backgroundColor: getColorWithOpacity(colors.BlackPearl, 0.2),
   },

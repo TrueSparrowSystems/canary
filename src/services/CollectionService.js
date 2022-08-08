@@ -5,6 +5,8 @@ import Cache from './Cache';
 import {CacheKey} from './Cache/CacheStoreConstants';
 import {getRandomColorCombination} from '../utils/RandomColorUtil';
 import {find} from 'lodash';
+import {isEmpty} from 'lodash-es';
+import {compareFunction} from '../utils/Strings';
 
 const COLLECTION_TWEET_LIMIT = 25;
 
@@ -21,7 +23,7 @@ class CollectionService {
     return new Promise((resolve, reject) => {
       Store.get(StoreKeys.CollectionsList).then(list => {
         const colorCombination = getRandomColorCombination();
-        if (list == null) {
+        if (isEmpty(JSON.parse(list))) {
           const id = uuid.v4();
           var collectionObj = {};
           collectionObj[id] = {
@@ -90,8 +92,13 @@ class CollectionService {
       Store.get(StoreKeys.CollectionsList)
         .then(list => {
           var jsonList = JSON.parse(list);
-          this.collections = jsonList;
-          return resolve(list);
+          const listArray = Object.entries(jsonList);
+          listArray.sort((collection1, collection2) => {
+            return compareFunction(collection1[1].name, collection2[1].name);
+          });
+
+          this.collections = Object.fromEntries(listArray);
+          return resolve(this.collections);
         })
         .catch(() => {
           return reject();

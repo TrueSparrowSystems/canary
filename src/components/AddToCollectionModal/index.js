@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import CustomModal from '../common/CustomModal';
-import colors from '../../constants/colors';
+import colors, {getColorWithOpacity} from '../../constants/colors';
 import useAddToCollectionModalData from './useAddToCollectionModalData';
 import MiniCollectionCard from '../MiniCollectionCard';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -142,7 +142,7 @@ const styles = {
     left: 0,
     width: '100%',
     height: '100%',
-    backgroundColor: colors.SherpaBlue70,
+    backgroundColor: getColorWithOpacity(colors.BlackPearl, 0.5),
   },
   emptyComponentContainer: {
     paddingVertical: layoutPtToPx(30),

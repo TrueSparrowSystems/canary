@@ -8,11 +8,15 @@ function useAddCollectionModalData() {
   const [isVisible, setIsVisible] = useState(false);
   const collectionNameRef = useRef('');
   const [modalData, setModalData] = useState(null);
+  const [charCount, setCharCount] = useState(0);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const onShowModal = payload => {
       setModalData(payload);
       setIsVisible(true);
+      setCharCount(0);
+      setErrorMessage('');
     };
 
     LocalEvent.on(EventTypes.ShowAddCollectionModal, onShowModal);
@@ -32,6 +36,7 @@ function useAddCollectionModalData() {
 
   const onCollectionNameChange = useCallback(newValue => {
     collectionNameRef.current = newValue;
+    setCharCount(newValue?.length || 0);
   }, []);
 
   const onCreateCollectionPress = useCallback(() => {
@@ -61,27 +66,32 @@ function useAddCollectionModalData() {
                 collectionNameRef.current,
                 collectionId,
               );
+              closeModal();
             })
             .catch(() => {});
         } else {
+          closeModal();
+
           modalData?.onCollectionAddSuccess();
         }
       })
-      .catch(() => {
+      .catch(err => {
         Toast.show({
           type: ToastType.Error,
           text1: 'Collection could not be created. Please try again',
           position: ToastPosition.Top,
         });
+        setErrorMessage(err);
       })
       .finally(() => {
-        closeModal();
         _collectionService.getAllCollections();
       });
   }, [closeModal, modalData]);
 
   return {
     bIsVisible: isVisible,
+    nCharacterCount: charCount,
+    sErrorMessage: errorMessage,
     fnOnBackdropPress: onBackdropPress,
     fnOnCollectionNameChange: onCollectionNameChange,
     fnOnCreateCollectionPress: onCreateCollectionPress,

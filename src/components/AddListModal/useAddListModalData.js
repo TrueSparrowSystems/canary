@@ -8,11 +8,15 @@ function useAddListModalData() {
   const [isVisible, setIsVisible] = useState(false);
   const listNameRef = useRef('');
   const [modalData, setModalData] = useState(null);
+  const [charCount, setCharCount] = useState(0);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const onShowModal = payload => {
       setModalData(payload);
       setIsVisible(true);
+      setCharCount(0);
+      setErrorMessage('');
     };
 
     LocalEvent.on(EventTypes.ShowAddListModal, onShowModal);
@@ -32,6 +36,7 @@ function useAddListModalData() {
 
   const onListNameChange = useCallback(newValue => {
     listNameRef.current = newValue;
+    setCharCount(newValue?.length || 0);
   }, []);
 
   const onCreateListPress = useCallback(() => {
@@ -54,21 +59,25 @@ function useAddListModalData() {
         });
         if (modalData?.userName) {
           LocalEvent.emit(EventTypes.UpdateList);
-          _listService.addUserToList(listId, modalData.userName).then(() => {
-            closeModal();
-            modalData?.onListAddSuccess(listNameRef.current, listId);
-          });
+          _listService
+            .addUserToList(listId, modalData.userName)
+            .then(() => {
+              closeModal();
+              modalData?.onListAddSuccess(listNameRef.current, listId);
+            })
+            .catch(() => {});
         } else {
           closeModal();
           modalData?.onListAddSuccess();
         }
       })
-      .catch(() => {
+      .catch(err => {
         Toast.show({
           type: ToastType.Error,
           text1: 'List could not be created. Please try again',
           position: ToastPosition.Top,
         });
+        setErrorMessage(err);
       })
       .finally(() => {
         _listService.getAllLists();
@@ -77,6 +86,8 @@ function useAddListModalData() {
 
   return {
     bIsVisible: isVisible,
+    nCharacterCount: charCount,
+    sErrorMessage: errorMessage,
     fnOnBackdropPress: onBackdropPress,
     fnOnListNameChange: onListNameChange,
     fnOnCreateListPress: onCreateListPress,

@@ -4,6 +4,7 @@ import uuid from 'react-native-uuid';
 import Cache from './Cache';
 import {CacheKey} from './Cache/CacheStoreConstants';
 import {getRandomColorCombination} from '../utils/RandomColorUtil';
+import {find} from 'lodash';
 
 const COLLECTION_TWEET_LIMIT = 25;
 
@@ -41,6 +42,10 @@ class CollectionService {
         } else {
           var _list = JSON.parse(list);
           const newId = uuid.v4();
+
+          if (find(_list, {name: collectionName})) {
+            return reject('Collection name already exists.');
+          }
 
           const newCollection = {};
           newCollection[newId] = {

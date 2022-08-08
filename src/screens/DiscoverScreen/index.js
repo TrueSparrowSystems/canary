@@ -78,7 +78,7 @@ const styles = {
   },
   topicText: {
     fontSize: fontPtToPx(14),
-    color: colors.Black,
+    color: colors.BlackPearl,
     fontFamily: fonts.InterRegular,
     lineHeight: layoutPtToPx(17),
   },
@@ -96,6 +96,7 @@ const styles = {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(18),
     flexShrink: 1,
+    color: colors.BlackPearl,
   },
   changeLocationText: {
     flexGrow: 1,

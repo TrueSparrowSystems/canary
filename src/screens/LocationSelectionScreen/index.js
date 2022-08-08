@@ -64,5 +64,6 @@ const styles = {
   headerText: {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(16),
+    color: colors.BlackPearl,
   },
 };

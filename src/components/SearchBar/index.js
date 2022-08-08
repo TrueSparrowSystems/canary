@@ -5,7 +5,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {CrossIcon, SearchIcon} from '../../assets/common';
 import {useNavigation} from '@react-navigation/native';
-import {unescape} from 'lodash';
+import {isEmpty, unescape} from 'lodash';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import fonts from '../../constants/fonts';
 
@@ -15,9 +15,16 @@ function SearchBar({
   onQueryChange,
   placeholderText,
 }) {
+  let displayText = searchQuery;
+  if (!isEmpty(searchQuery)) {
+    const arr = displayText.split(':');
+    if (arr[0] === 'from') {
+      displayText = arr[1];
+    }
+  }
   const navigation = useNavigation();
   const localStyle = useStyleProcessor(styles, 'SearchBar');
-  const queryRef = useRef(searchQuery);
+  const queryRef = useRef(displayText);
   const [query, setQuery] = useState(queryRef.current);
   const textInputRef = useRef(null);
 

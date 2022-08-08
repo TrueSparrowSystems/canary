@@ -53,7 +53,7 @@ function EditListUsersScreen(props) {
             }>
             {aListMembers.map(listMember => {
               return (
-                <Animatable.View ref={viewRef} key={listMember.id}>
+                <Animatable.View ref={viewRef} key={listMember.username}>
                   <AppleStyleSwipeableRow
                     enabled={true}
                     rightActionsArray={[

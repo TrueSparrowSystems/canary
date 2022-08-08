@@ -77,7 +77,7 @@ function TweetCard(props) {
                 <Text style={localStyle.userNameText} numberOfLines={1}>
                   @{unescape(user?.username)}
                 </Text>
-                {true ? (
+                {user?.verified ? (
                   <Image
                     source={verifiedIcon}
                     style={localStyle.verifiedIcon}

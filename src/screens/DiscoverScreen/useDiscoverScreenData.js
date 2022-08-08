@@ -9,6 +9,7 @@ import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 function useDiscoverScreenData() {
   const [trendingTopics, setTrendingTopics] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [textInputError, setTextInputError] = useState('');
 
   const navigation = useNavigation();
 
@@ -45,7 +46,12 @@ function useDiscoverScreenData() {
 
   const onSearchPress = useCallback(
     query => {
-      navigation.navigate(ScreenName.SearchResultScreen, {query});
+      if (query !== '') {
+        setTextInputError('');
+        navigation.navigate(ScreenName.SearchResultScreen, {query});
+      } else {
+        setTextInputError('Please Enter Something to Search');
+      }
     },
     [navigation],
   );
@@ -65,6 +71,7 @@ function useDiscoverScreenData() {
   return {
     aTrendingTopics: trendingTopics,
     bIsLoading: isLoading,
+    sTextInputError: textInputError,
     sSelectedCountryName: selectedCountry.current,
     fnOnSearchPress: onSearchPress,
     fnOnTopicClick: onTopicClick,

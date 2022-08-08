@@ -14,7 +14,7 @@ function CollectionTweetList(props) {
     bIsLoading,
     fnOnRefresh,
     aDataSource,
-    fnOnBookmarkFavouriteTweetScreen,
+    fnOnBookmarkFavouriteTweetPress,
   } = useCollectionTweetListData(props);
   const localStyle = useStyleProcessor(styles, 'CollectionTweetList');
 
@@ -27,7 +27,7 @@ function CollectionTweetList(props) {
       buttonText={'Bookmark Your Favorite Tweets'}
       buttonImage={bookmarkIcon}
       buttonImageStyle={localStyle.emptyButtonImageStyle}
-      onButtonPress={fnOnBookmarkFavouriteTweetScreen}
+      onButtonPress={fnOnBookmarkFavouriteTweetPress}
     />
   ) : (
     <ScrollView

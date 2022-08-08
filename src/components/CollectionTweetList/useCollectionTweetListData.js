@@ -58,7 +58,7 @@ function useCollectionTweetListData(props) {
   return {
     aDataSource: listDataRef.current,
     bIsLoading: isLoading,
-    fnOnBookmarkFavouriteTweetScreen: onBookmarkFavouriteTweetPress,
+    fnOnBookmarkFavouriteTweetPress: onBookmarkFavouriteTweetPress,
     fnOnRefresh: onRefresh,
   };
 }

@@ -1,6 +1,8 @@
-import {isArray} from 'lodash';
+import {isArray, sampleSize} from 'lodash';
 import {APIService} from '../../services/Api';
 import PreferencesDataHelper from '../../services/PreferencesDataHelper';
+
+const CONTEXTS_LIMIT = 12;
 
 const EndPoints = {
   timelineFeed: 'https://api.twitter.com/2/tweets/search/recent',
@@ -43,6 +45,9 @@ class TwitterApi {
         contexts.push(currentTopicContext);
       });
     }
+
+    contexts = sampleSize(contexts, CONTEXTS_LIMIT);
+
     const contextString = contexts.join(' OR ');
 
     return contextString;

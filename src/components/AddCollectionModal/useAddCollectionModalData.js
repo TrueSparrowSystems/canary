@@ -62,7 +62,7 @@ function useAddCollectionModalData() {
           _collectionService
             .addTweetToCollection(collectionId, modalData.tweetId)
             .then(() => {
-              modalData?.onAddToCollectionSuccess(
+              modalData?.onAddToCollectionSuccess?.(
                 collectionNameRef.current,
                 collectionId,
               );

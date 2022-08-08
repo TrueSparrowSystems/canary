@@ -64,7 +64,7 @@ function useAddToCollectionModalData() {
   const onAddToCollectionSuccess = useCallback(
     (collectionName, collectionId) => {
       showAddToCollectionToast(collectionName);
-      modalData?.onAddToCollectionSuccess(collectionId);
+      modalData?.onAddToCollectionSuccess?.(collectionId);
     },
     [modalData, showAddToCollectionToast],
   );

@@ -16,10 +16,11 @@ function useMiniCollectionCardData(
     collectionService()
       .addTweetToCollection(collectionId, tweetId)
       .then(() => {
-        onAddToCollectionSuccess(collectionName, collectionId);
+        onAddToCollectionSuccess?.(collectionName, collectionId);
         setIsTweetAddedInThisCollection(true);
       })
-      .catch(() => {
+      .catch(err => {
+        console.log({err});
         onAddToCollectionFailure();
       });
   }, [

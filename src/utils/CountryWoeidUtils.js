@@ -14,7 +14,9 @@ export function setCountriesWoeidsInCache() {
       });
       Cache.setValue(CacheKey.AvailableWoeidsList, countryWoeids);
     })
-    .catch(() => {});
+    .catch(err => {
+      console.error('Trendng list error received - ', err);
+    });
 }
 
 export function getTrendingTopicsForCountry(countryName = 'Worldwide') {

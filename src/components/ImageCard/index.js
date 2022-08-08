@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {TouchableWithoutFeedback, View} from 'react-native';
 import {PlayIcon} from '../../assets/common';
 import ScreenName from '../../constants/ScreenName';
@@ -39,15 +39,56 @@ function ImageCard({mediaArray, tweetId}) {
       })
       .catch(() => {});
   }
+
+  if (mediaArray[0].type === 'photo' && mediaArray?.length === 1) {
+    const {height, width} = mediaArray[0];
+
+    aspectRatio = width / height;
+  }
+
+  const imageStyle = useMemo(() => {
+    const style = [localStyle.showImage];
+    switch (mediaArray.length) {
+      case 1: {
+        const {height, width} = mediaArray[0];
+
+        style.push({aspectRatio: width / height});
+        break;
+      }
+      case 2: {
+        style.push({aspectRatio: 1});
+        break;
+      }
+      case 4: {
+        style.push({aspectRatio: 2});
+        break;
+      }
+    }
+    return style;
+  }, [localStyle.showImage, mediaArray]);
+
+  const containerStyle = useMemo(() => {
+    const style = [localStyle.flexRow];
+
+    switch (mediaArray.length) {
+      case 3: {
+        style.push({aspectRatio: 2});
+        break;
+      }
+    }
+
+    return style;
+  }, [localStyle.flexRow, mediaArray.length]);
+
   return mediaArray[0].type === 'photo' ? (
     <View style={localStyle.container}>
-      <View style={localStyle.flexRow}>
+      <View style={containerStyle}>
         <TouchableWithoutFeedback
           onPress={() => {
             onImagePress(0);
           }}>
           <Image
-            style={localStyle.showImage}
+            style={imageStyle}
             source={mediaArray?.length >= 1 ? {uri: mediaArray[0]?.url} : null}
             resizeMode={'cover'}
           />
@@ -58,30 +99,20 @@ function ImageCard({mediaArray, tweetId}) {
             onImagePress(1);
           }}>
           <Image
-            style={
-              mediaArray?.length >= 2
-                ? localStyle.showImage
-                : localStyle.hideImage
-            }
+            style={mediaArray?.length >= 2 ? imageStyle : localStyle.hideImage}
             source={mediaArray?.length >= 2 ? {uri: mediaArray[1]?.url} : null}
             resizeMode={'cover'}
           />
         </TouchableWithoutFeedback>
       </View>
       <View
-        style={
-          mediaArray?.length >= 3 ? localStyle.flexRow : localStyle.hideImage
-        }>
+        style={mediaArray?.length >= 3 ? containerStyle : localStyle.hideImage}>
         <TouchableWithoutFeedback
           onPress={() => {
             onImagePress(2);
           }}>
           <Image
-            style={
-              mediaArray?.length >= 3
-                ? localStyle.showImage
-                : localStyle.hideImage
-            }
+            style={mediaArray?.length >= 3 ? imageStyle : localStyle.hideImage}
             source={mediaArray?.length >= 3 ? {uri: mediaArray[2]?.url} : null}
             resizeMode={'cover'}
           />
@@ -92,11 +123,7 @@ function ImageCard({mediaArray, tweetId}) {
             onImagePress(3);
           }}>
           <Image
-            style={
-              mediaArray?.length >= 4
-                ? localStyle.showImage
-                : localStyle.hideImage
-            }
+            style={mediaArray?.length >= 4 ? imageStyle : localStyle.hideImage}
             source={mediaArray?.length >= 4 ? {uri: mediaArray[3]?.url} : null}
             resizeMode={'cover'}
           />
@@ -133,7 +160,7 @@ const styles = {
     marginTop: layoutPtToPx(8),
     overflow: 'hidden',
     width: '100%',
-    height: layoutPtToPx(234),
+    height: 'auto',
     borderRadius: layoutPtToPx(4),
     backgroundColor: colors.EarlyDawn,
   },
@@ -155,6 +182,7 @@ const styles = {
     borderWidth: 0.5,
     borderColor: 'white',
     borderRadius: 4,
+    aspectRatio: 1,
   },
   flexRow: {
     flex: 1,

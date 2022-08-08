@@ -5,7 +5,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {CrossIcon, SearchIcon} from '../../assets/common';
 import {useNavigation} from '@react-navigation/native';
-import {unescape} from 'lodash';
+import {isEmpty, unescape} from 'lodash';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import fonts from '../../constants/fonts';
 
@@ -20,6 +20,13 @@ function SearchBar({
   const queryRef = useRef(searchQuery);
   const [query, setQuery] = useState(queryRef.current);
   const textInputRef = useRef(null);
+
+  if (!isEmpty(queryRef.current)) {
+    const arr = queryRef.current.split(':');
+    if (arr[0] === 'from') {
+      queryRef.current = arr[1];
+    }
+  }
 
   useEffect(() => {
     const OnTrendingTopicClicked = term => {

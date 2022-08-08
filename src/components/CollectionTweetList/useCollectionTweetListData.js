@@ -1,5 +1,7 @@
+import {useNavigation} from '@react-navigation/native';
 import {useCallback, useState, useRef, useEffect} from 'react';
 import TwitterAPI from '../../api/helpers/TwitterAPI';
+import ScreenName from '../../constants/ScreenName';
 import {collectionService} from '../../services/CollectionService';
 import {getTweetData} from '../utils/ViewData';
 
@@ -8,6 +10,7 @@ function useCollectionTweetListData(props) {
   const [isLoading, setIsLoading] = useState(false);
   const listDataRef = useRef([]);
   const _collectionService = collectionService();
+  const navigation = useNavigation();
 
   const fetchData = useCallback(() => {
     setIsLoading(true);
@@ -48,10 +51,15 @@ function useCollectionTweetListData(props) {
     fetchData();
   }, [fetchData]);
 
+  const onBookmarkFavouriteTweetPress = useCallback(() => {
+    navigation.navigate(ScreenName.TimelineScreen);
+  }, [navigation]);
+
   return {
-    bIsLoading: isLoading,
-    fnOnRefresh: onRefresh,
     aDataSource: listDataRef.current,
+    bIsLoading: isLoading,
+    fnOnBookmarkFavouriteTweetScreen: onBookmarkFavouriteTweetPress,
+    fnOnRefresh: onRefresh,
   };
 }
 

@@ -1,15 +1,14 @@
 import {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import ScreenNames from '../ScreenName';
 import Cache from '../services/Cache';
 import {CacheKey} from '../services/Cache/CacheStoreConstants';
+import ScreenName from '../constants/ScreenName';
 
 const ScreenIndex = {
-  [ScreenNames.HomeScreen]: 0,
-  [ScreenNames.FindMyFitScreen]: 1,
-  [ScreenNames.SearchScreen]: 2,
-  [ScreenNames.MessageCenterLoginScreen]: 3,
-  [ScreenNames.MembershipScreen]: 4,
+  [ScreenName.TimelineTab]: 0,
+  [ScreenName.DiscoverTab]: 1,
+  [ScreenName.ListTab]: 2,
+  [ScreenName.CollectionTab]: 3,
 };
 
 const TabAction = {
@@ -41,5 +40,6 @@ export default (screenName, scrollToTop) => {
       }
     });
     return tabHandler;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
 };

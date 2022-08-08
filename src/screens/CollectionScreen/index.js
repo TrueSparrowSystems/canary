@@ -73,11 +73,12 @@ function CollectionScreen() {
   }, []);
 
   const renderItem = useCallback(
-    ({item}) => {
+    ({item, index}) => {
       return (
         <CollectionCard
           key={item.id}
           data={item}
+          animationDelay={index * 20}
           onCollectionRemoved={reloadList}
           onLongPress={enableCollectionDeleteOption}
           enableDelete={isDeleteEnabled}
@@ -119,6 +120,7 @@ function CollectionScreen() {
       ) : (
         <View style={localStyle.flatListStyle}>
           <FlatList
+            showsVerticalScrollIndicator={false}
             data={collectionDataRef.current}
             renderItem={renderItem}
             numColumns={2}

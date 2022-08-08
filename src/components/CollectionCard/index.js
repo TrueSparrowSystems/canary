@@ -14,7 +14,8 @@ import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import * as Animatable from 'react-native-animatable';
 
 function CollectionCard(props) {
-  const {data, onCollectionRemoved, onLongPress, enableDelete} = props;
+  const {data, onCollectionRemoved, onLongPress, enableDelete, animationDelay} =
+    props;
   const {name: collectionName, id: collectionId} = data;
   let {colorScheme} = data;
   const localStyle = useStyleProcessor(styles, 'CollectionCard');
@@ -34,16 +35,16 @@ function CollectionCard(props) {
     });
     viewRef.current.animate({
       0: {
-        rotate: '5deg',
+        rotate: '2.5deg',
       },
       0.25: {
-        rotate: '-5deg',
+        rotate: '-2.5deg',
       },
       0.5: {
-        rotate: '5deg',
+        rotate: '2.5deg',
       },
       0.75: {
-        rotate: '-5deg',
+        rotate: '-2.5deg',
       },
       1: {
         rotate: '0deg',
@@ -92,7 +93,11 @@ function CollectionCard(props) {
     <TouchableWithoutFeedback
       onPress={onCollectionPress}
       onLongPress={fnOnLongPress}>
-      <Animatable.View ref={viewRef} style={localStyle.container}>
+      <Animatable.View
+        ref={viewRef}
+        animation="fadeIn"
+        delay={animationDelay}
+        style={localStyle.container}>
         {collectionId ? (
           <View style={colorSchemeStyle.cardStyle}>
             {enableDelete ? (

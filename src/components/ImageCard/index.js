@@ -7,7 +7,7 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import Image from 'react-native-fast-image';
 import TwitterAPI from '../../api/helpers/TwitterAPI';
 import {layoutPtToPx} from '../../utils/responsiveUI';
-import colors, {getColorWithOpacity} from '../../constants/colors';
+import colors from '../../constants/colors';
 
 function ImageCard({mediaArray, tweetId}) {
   const localStyle = useStyleProcessor(styles, 'ImageCard');
@@ -135,7 +135,7 @@ const styles = {
     width: '100%',
     height: layoutPtToPx(234),
     borderRadius: layoutPtToPx(4),
-    backgroundColor: getColorWithOpacity(colors.BlackPearl, 0.2),
+    backgroundColor: colors.EarlyDawn,
   },
   defaultImage: {
     height: '100%',

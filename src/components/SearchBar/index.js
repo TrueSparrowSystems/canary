@@ -15,18 +15,18 @@ function SearchBar({
   onQueryChange,
   placeholderText,
 }) {
-  const navigation = useNavigation();
-  const localStyle = useStyleProcessor(styles, 'SearchBar');
-  const queryRef = useRef(searchQuery);
-  const [query, setQuery] = useState(queryRef.current);
-  const textInputRef = useRef(null);
-
-  if (!isEmpty(queryRef.current)) {
-    const arr = queryRef.current.split(':');
+  let displayText = searchQuery;
+  if (!isEmpty(searchQuery)) {
+    const arr = displayText.split(':');
     if (arr[0] === 'from') {
-      queryRef.current = arr[1];
+      displayText = arr[1];
     }
   }
+  const navigation = useNavigation();
+  const localStyle = useStyleProcessor(styles, 'SearchBar');
+  const queryRef = useRef(displayText);
+  const [query, setQuery] = useState(queryRef.current);
+  const textInputRef = useRef(null);
 
   useEffect(() => {
     const OnTrendingTopicClicked = term => {

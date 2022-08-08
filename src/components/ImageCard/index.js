@@ -40,12 +40,6 @@ function ImageCard({mediaArray, tweetId}) {
       .catch(() => {});
   }
 
-  if (mediaArray[0].type === 'photo' && mediaArray?.length === 1) {
-    const {height, width} = mediaArray[0];
-
-    aspectRatio = width / height;
-  }
-
   const imageStyle = useMemo(() => {
     const style = [localStyle.showImage];
     switch (mediaArray.length) {

@@ -53,6 +53,9 @@ function TweetCard(props) {
   }, [media]);
 
   const displayDate = getDisplayDate(created_at);
+
+  const tweetUrl = useMemo(() => entities?.urls?.[0]?.url, [entities]);
+
   return (
     <Animatable.View animation="fadeIn">
       <TouchableOpacity
@@ -116,16 +119,17 @@ function TweetCard(props) {
               ) : null}
             </View>
             <View style={localStyle.optionsView}>
-              <TouchableOpacity
-                onPress={() => {
-                  const {url} = entities?.urls?.[0];
-                  Share.share({
-                    message: `Check out this tweet!\n${url}`,
-                  });
-                }}
-                style={localStyle.shareIconContainer}>
-                <Image source={ShareIcon} style={localStyle.shareIconStyle} />
-              </TouchableOpacity>
+              {tweetUrl ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    Share.share({
+                      message: `Check out this tweet!\n${tweetUrl}`,
+                    });
+                  }}
+                  style={localStyle.shareIconContainer}>
+                  <Image source={ShareIcon} style={localStyle.shareIconStyle} />
+                </TouchableOpacity>
+              ) : null}
               <TouchableOpacity onPress={onBookmarkButtonPress}>
                 <Image
                   source={bookmarkIcon}

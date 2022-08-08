@@ -17,12 +17,23 @@ import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import Header from '../../components/common/Header';
 import fonts from '../../constants/fonts';
 import {isEmpty} from 'lodash-es';
+import useTabListener from '../../hooks/useTabListener';
 
-function ListScreen() {
+function ListScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListScreen');
   const [isLoading, setIsLoading] = useState(true);
   const [swipeable, setSwipeable] = useState(false);
   const listDataRef = useRef({});
+  const screenName = props?.route?.name;
+  const scrollRef = useRef(null);
+
+  const scrollToTop = useCallback(() => {
+    scrollRef.current?.scrollTo({
+      y: 0,
+      animated: true,
+    });
+  }, []);
+  useTabListener(screenName, scrollToTop);
 
   const fetchData = useCallback(() => {
     setIsLoading(true);
@@ -100,6 +111,7 @@ function ListScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={localStyle.scrollViewContainer}
           style={localStyle.scrollViewStyle}
+          ref={scrollRef}
           refreshControl={
             <RefreshControl refreshing={isLoading} onRefresh={reloadList} />
           }>

@@ -5,4 +5,10 @@ export const CacheKey = {
   AvailableWoeidsList: 'available_woeids_list',
   SelectedLocation: 'selected_location',
   UserToListMap: 'cache_key_user_to_list_map',
+  tabPressCount: {
+    TimelineScreen: 'TimelineScreen',
+    DiscoverScreen: 'DiscoverScreen',
+    ListScreen: 'ListScreen',
+    CollectionScreen: 'CollectionScreen',
+  },
 };

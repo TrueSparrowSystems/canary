@@ -5,10 +5,10 @@ import {CacheKey} from '../services/Cache/CacheStoreConstants';
 import ScreenName from '../constants/ScreenName';
 
 const ScreenIndex = {
-  [ScreenName.TimelineTab]: 0,
-  [ScreenName.DiscoverTab]: 1,
-  [ScreenName.ListTab]: 2,
-  [ScreenName.CollectionTab]: 3,
+  [ScreenName.TimelineScreen]: 0,
+  [ScreenName.DiscoverScreen]: 1,
+  [ScreenName.ListScreen]: 2,
+  [ScreenName.CollectionScreen]: 3,
 };
 
 const TabAction = {
@@ -22,7 +22,7 @@ export default (screenName, scrollToTop) => {
     const tabHandler = navigation.getParent().addListener('tabPress', e => {
       const parentIndex = navigation.getParent().getState().index;
       const {index} = navigation.getState();
-      let state = Cache.getValue(CacheKey.tabPressCount[screenName]);
+      let state = Cache.getValue(CacheKey.tabPressCount[screenName]) || 0;
       if (parentIndex === ScreenIndex[screenName] && index !== 0) {
         navigation.popToTop();
         Cache.setValue(

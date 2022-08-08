@@ -3,14 +3,14 @@ import {collectionService} from '../../services/CollectionService';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import Toast from 'react-native-toast-message';
 import {ToastPosition, ToastType} from '../../constants/ToastConstants';
-import {replace} from '../../utils/Strings';
+import {compareFunction, replace} from '../../utils/Strings';
 import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 
 function useAddToCollectionModalData() {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [modalData, setModalData] = useState(null);
+  const modalRef = useRef(null);
   const collectionListRef = useRef(null);
   const tweetCollectionIdsArrays = useRef([]);
 
@@ -19,20 +19,48 @@ function useAddToCollectionModalData() {
     collectionService()
       .getAllCollections()
       .then(list => {
-        collectionListRef.current = JSON.parse(list);
+        const listArray = Object.entries(list);
+        const userToCollectionMap = Cache.getValue(
+          CacheKey.BookmarkedTweetsList,
+        );
+        const collectionIdArray =
+          userToCollectionMap?.[modalRef.current?.tweetId] || [];
+
+        listArray.sort(function compare(collection1, collection2) {
+          if (
+            collectionIdArray?.includes(collection1[1].id) &&
+            collectionIdArray?.includes(collection2[1].id)
+          ) {
+            // if tweet is present in both collections
+            return compareFunction(collection1[1].name, collection2[1].name);
+          } else if (collectionIdArray.includes(collection1[1].id)) {
+            // if tweet is present in collection1
+            return -1;
+          } else if (collectionIdArray.includes(collection2[1].id)) {
+            // if tweet is present in collection2
+            return 1;
+          }
+
+          // if tweet is not present in any collection
+          return compareFunction(collection1[1].name, collection2[1].name);
+        });
+        collectionListRef.current = Object.fromEntries(listArray);
+
+        const bookmarkedTweetList = Cache.getValue(
+          CacheKey.BookmarkedTweetsList,
+        );
+        tweetCollectionIdsArrays.current = modalRef.current?.tweetId
+          ? bookmarkedTweetList?.[modalRef.current?.tweetId] || []
+          : [];
         setIsLoading(false);
       });
   }, []);
 
   useEffect(() => {
     const onShowModal = payload => {
-      setModalData(payload);
+      modalRef.current = payload;
       setIsVisible(true);
       getCollectionsList();
-      const bookmarkedTweetList = Cache.getValue(CacheKey.BookmarkedTweetsList);
-      tweetCollectionIdsArrays.current = payload?.tweetId
-        ? bookmarkedTweetList?.[payload.tweetId] || []
-        : [];
     };
 
     LocalEvent.on(EventTypes.ShowAddToCollectionModal, onShowModal);
@@ -63,10 +91,12 @@ function useAddToCollectionModalData() {
 
   const onAddToCollectionSuccess = useCallback(
     (collectionName, collectionId) => {
+      getCollectionsList();
+      setIsVisible(true);
       showAddToCollectionToast(collectionName);
-      modalData?.onAddToCollectionSuccess?.(collectionId);
+      modalRef.current?.onAddToCollectionSuccess?.(collectionId);
     },
-    [modalData, showAddToCollectionToast],
+    [getCollectionsList, showAddToCollectionToast],
   );
 
   const onAddToCollectionFailure = useCallback(() => {
@@ -89,7 +119,7 @@ function useAddToCollectionModalData() {
   const onAddCollectionPress = useCallback(() => {
     setIsVisible(false);
     LocalEvent.emit(EventTypes.ShowAddCollectionModal, {
-      tweetId: modalData?.tweetId,
+      tweetId: modalRef.current?.tweetId,
       onCollectionAddSuccess: (collectionName, collectionId) => {
         getCollectionsList();
         setIsVisible(true);
@@ -97,18 +127,13 @@ function useAddToCollectionModalData() {
       },
       onAddToCollectionSuccess,
     });
-  }, [
-    getCollectionsList,
-    modalData?.tweetId,
-    onAddToCollectionSuccess,
-    showAddToCollectionToast,
-  ]);
+  }, [getCollectionsList, onAddToCollectionSuccess, showAddToCollectionToast]);
 
   return {
     aTweetCollectionIds: tweetCollectionIdsArrays.current,
     bIsVisible: isVisible,
     bIsLoading: isLoading,
-    sTweetId: modalData?.tweetId || null,
+    sTweetId: modalRef.current?.tweetId || null,
     oCollectionList: collectionListRef.current,
     fnOnBackdropPress: onBackdropPress,
     fnOnAddToCollectionSuccess: onAddToCollectionSuccess,

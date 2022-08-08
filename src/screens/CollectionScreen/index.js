@@ -33,8 +33,7 @@ function CollectionScreen(props) {
   const fetchData = useCallback(() => {
     setIsLoading(true);
     const _collectionService = collectionService();
-    _collectionService.getAllCollections().then(list => {
-      const jsonObj = JSON.parse(list) || {};
+    _collectionService.getAllCollections().then(jsonObj => {
       let dataArray = [];
       Object.keys(jsonObj).map(key => {
         const collectionData = jsonObj[key];

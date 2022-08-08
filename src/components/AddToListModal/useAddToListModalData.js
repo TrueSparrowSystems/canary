@@ -3,12 +3,14 @@ import {listService} from '../../services/ListService';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import Toast from 'react-native-toast-message';
 import {ToastPosition, ToastType} from '../../constants/ToastConstants';
-import {replace} from '../../utils/Strings';
+import {compareFunction, replace} from '../../utils/Strings';
+import Cache from '../../services/Cache';
+import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 
 function useAddToListModalData() {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [modalData, setModalData] = useState(null);
+  const modalRef = useRef({});
   const listRef = useRef(null);
 
   const getList = useCallback(() => {
@@ -16,14 +18,36 @@ function useAddToListModalData() {
     listService()
       .getAllLists()
       .then(list => {
-        listRef.current = JSON.parse(list);
+        const listArray = Object.entries(list);
+        const userToListMap = Cache.getValue(CacheKey.UserToListMap);
+        const listIdArray = userToListMap?.[modalRef.current?.userName] || [];
+
+        listArray.sort(function compare(list1, list2) {
+          if (
+            listIdArray?.includes(list1[1].id) &&
+            listIdArray?.includes(list2[1].id)
+          ) {
+            // if user is present in both lists
+            return compareFunction(list1[1].name, list2[1].name);
+          } else if (listIdArray.includes(list1[1].id)) {
+            // if user is present in list1
+            return -1;
+          } else if (listIdArray.includes(list2[1].id)) {
+            // if user is present in list2
+            return 1;
+          }
+
+          // if user is not present in any list
+          return compareFunction(list1[1].name, list2[1].name);
+        });
+        listRef.current = Object.fromEntries(listArray);
         setIsLoading(false);
       });
   }, []);
 
   useEffect(() => {
     const onShowModal = payload => {
-      setModalData(payload);
+      modalRef.current = payload;
       setIsVisible(true);
       getList();
     };
@@ -57,27 +81,27 @@ function useAddToListModalData() {
   const onAddToListSuccess = useCallback(
     (listName, listId) => {
       showAddToListToast(listName);
-      modalData?.onAddToListSuccess(listId);
+      modalRef.current?.onAddToListSuccess(listId);
     },
-    [modalData, showAddToListToast],
+    [showAddToListToast],
   );
 
   const onAddListPress = useCallback(() => {
     setIsVisible(false);
     LocalEvent.emit(EventTypes.ShowAddListModal, {
-      userName: modalData?.userName,
+      userName: modalRef.current?.userName,
       onListAddSuccess: (listName, listId) => {
         getList();
         setIsVisible(true);
         showAddToListToast(listName, listId);
       },
     });
-  }, [getList, modalData?.userName, showAddToListToast]);
+  }, [getList, showAddToListToast]);
 
   return {
     bIsVisible: isVisible,
     bIsLoading: isLoading,
-    sUserName: modalData?.userName || null,
+    sUserName: modalRef.current?.userName || null,
     oList: listRef.current,
     fnOnBackdropPress: onBackdropPress,
     fnOnAddToListSuccess: onAddToListSuccess,

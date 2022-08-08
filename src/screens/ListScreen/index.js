@@ -39,7 +39,7 @@ function ListScreen(props) {
     setIsLoading(true);
     const _listService = listService();
     _listService.getAllLists().then(list => {
-      listDataRef.current = JSON.parse(list);
+      listDataRef.current = list;
       setIsLoading(false);
     });
   }, []);

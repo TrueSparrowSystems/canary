@@ -95,8 +95,18 @@ class ListService {
       Store.get(StoreKeys.Lists)
         .then(list => {
           var jsonList = JSON.parse(list);
-          this.lists = jsonList;
-          return resolve(list);
+          const listArray = Object.entries(jsonList);
+          listArray.sort((list1, list2) => {
+            if (list1[1].name < list2[1].name) {
+              return -1;
+            }
+            if (list1[1].name > list2[1].name) {
+              return 1;
+            }
+            return 0;
+          });
+          this.lists = Object.fromEntries(listArray);
+          return resolve(this.lists);
         })
         .catch(() => {
           return reject();

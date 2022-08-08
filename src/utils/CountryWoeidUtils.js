@@ -4,15 +4,17 @@ import {CacheKey} from '../services/Cache/CacheStoreConstants';
 
 export function setCountriesWoeidsInCache() {
   const countryWoeids = {};
-  TwitterAPI.getAvailableWoeids().then(res => {
-    const availableWoeids = res.data;
-    availableWoeids.map(woeid => {
-      if (woeid.parentid === 0 || woeid.parentid === 1) {
-        countryWoeids[woeid.name] = woeid;
-      }
-    });
-    Cache.setValue(CacheKey.AvailableWoeidsList, countryWoeids);
-  });
+  TwitterAPI.getAvailableWoeids()
+    .then(res => {
+      const availableWoeids = res.data;
+      availableWoeids.map(woeid => {
+        if (woeid.parentid === 0 || woeid.parentid === 1) {
+          countryWoeids[woeid.name] = woeid;
+        }
+      });
+      Cache.setValue(CacheKey.AvailableWoeidsList, countryWoeids);
+    })
+    .catch(() => {});
 }
 
 export function getTrendingTopicsForCountry(countryName = 'Worldwide') {

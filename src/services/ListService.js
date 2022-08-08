@@ -95,7 +95,10 @@ class ListService {
     return new Promise((resolve, reject) => {
       Store.get(StoreKeys.Lists)
         .then(list => {
-          var jsonList = JSON.parse(list);
+          var jsonList = {};
+          if (list !== null) {
+            jsonList = JSON.parse(list);
+          }
           const listArray = Object.entries(jsonList);
           listArray.sort((list1, list2) => {
             return compareFunction(list1[1].name, list2[1].name);

@@ -13,21 +13,5 @@
         android:scaleType="fitCenter"
         android:src="@drawable/splash_image" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="151dp"
-        android:layout_height="71dp"
-        android:layout_below="@+id/canaryLogo"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="129dp"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="131dp"
-        android:layout_marginBottom="166dp"
-        android:fontFamily="@font/sora_semibold"
-        android:text="Canary"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="48sp" />
+   
 </RelativeLayout>

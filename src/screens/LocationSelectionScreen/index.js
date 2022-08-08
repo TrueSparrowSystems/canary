@@ -56,6 +56,7 @@ const styles = {
   itemText: {
     marginBottom: layoutPtToPx(16),
     fontFamily: fonts.InterRegular,
+    color: colors.BlackPearl,
   },
   scrollViewContainer: {
     paddingHorizontal: layoutPtToPx(20),

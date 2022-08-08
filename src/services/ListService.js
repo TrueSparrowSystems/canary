@@ -5,6 +5,7 @@ import {getRandomColorCombination} from '../utils/RandomColorUtil';
 import Cache from './Cache';
 import {CacheKey} from './Cache/CacheStoreConstants';
 import {find} from 'lodash';
+import {compareFunction} from '../utils/Strings';
 
 const LIST_LIMIT = 30;
 
@@ -97,13 +98,7 @@ class ListService {
           var jsonList = JSON.parse(list);
           const listArray = Object.entries(jsonList);
           listArray.sort((list1, list2) => {
-            if (list1[1].name < list2[1].name) {
-              return -1;
-            }
-            if (list1[1].name > list2[1].name) {
-              return 1;
-            }
-            return 0;
+            return compareFunction(list1[1].name, list2[1].name);
           });
           this.lists = Object.fromEntries(listArray);
           return resolve(this.lists);

@@ -14,7 +14,8 @@ import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import * as Animatable from 'react-native-animatable';
 
 function CollectionCard(props) {
-  const {data, onCollectionRemoved, onLongPress, enableDelete} = props;
+  const {data, onCollectionRemoved, onLongPress, enableDelete, animationDelay} =
+    props;
   const {name: collectionName, id: collectionId} = data;
   let {colorScheme} = data;
   const localStyle = useStyleProcessor(styles, 'CollectionCard');
@@ -95,6 +96,7 @@ function CollectionCard(props) {
       <Animatable.View
         ref={viewRef}
         animation="fadeIn"
+        delay={animationDelay}
         style={localStyle.container}>
         {collectionId ? (
           <View style={colorSchemeStyle.cardStyle}>

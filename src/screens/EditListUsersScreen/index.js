@@ -3,6 +3,7 @@ import {useNavigation} from '@react-navigation/native';
 import {
   ActivityIndicator,
   Image,
+  RefreshControl,
   SafeAreaView,
   ScrollView,
   Text,
@@ -25,7 +26,7 @@ function EditListUsersScreen(props) {
 
   const viewRef = useRef(null);
 
-  const {bIsLoading, aListMembers, fnOnMemberRemove} =
+  const {bIsLoading, aListMembers, fnOnMemberRemove, fnOnRefresh} =
     useEditListUsersScreenData(listId, listUserNames);
 
   return (
@@ -45,12 +46,15 @@ function EditListUsersScreen(props) {
         {bIsLoading ? (
           <ActivityIndicator />
         ) : (
-          <ScrollView style={localStyle.listView}>
+          <ScrollView
+            style={localStyle.listView}
+            refreshControl={
+              <RefreshControl refreshing={bIsLoading} onRefresh={fnOnRefresh} />
+            }>
             {aListMembers.map(listMember => {
               return (
-                <Animatable.View ref={viewRef}>
+                <Animatable.View ref={viewRef} key={listMember.id}>
                   <AppleStyleSwipeableRow
-                    key={listMember.id}
                     enabled={true}
                     rightActionsArray={[
                       {
@@ -122,6 +126,7 @@ const styles = {
   },
   cardDetailContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   imageStyle: {
     height: layoutPtToPx(40),

@@ -80,6 +80,7 @@ function useAddToListModalData() {
     fnOnBackdropPress: onBackdropPress,
     fnOnAddToListSuccess: onAddToListSuccess,
     fnOnAddListPress: onAddListPress,
+    fnOnDonePress: closeModal,
   };
 }
 

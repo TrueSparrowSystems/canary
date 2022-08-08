@@ -10,6 +10,8 @@ import Toast from 'react-native-toast-message';
 import AddListModal from './src/components/AddListModal';
 import AddToListModal from './src/components/AddToListModal';
 import ConfirmDeleteModal from './src/components/common/ConfirmDeleteModal';
+import toastConfig from './src/utils/ToastConfig';
+import SearchUserModal from './src/components/SearchUserModal';
 
 function App() {
   const localStyle = useStyleProcessor(styles, 'App');
@@ -25,9 +27,10 @@ function App() {
         <AddToCollectionModal />
         <ConfirmDeleteModal />
         <AddListModal />
+        <SearchUserModal />
         <AddToListModal />
       </NavigationContainer>
-      <Toast />
+      <Toast config={toastConfig} />
     </SafeAreaView>
   );
 }

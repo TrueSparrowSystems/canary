@@ -38,7 +38,7 @@ function AddListModal() {
             <Text style={localStyle.enterNameStyle}>New List</Text>
             <TextInput
               style={localStyle.inputStyle}
-              editable={true}
+              autoFocus={true}
               onChangeText={fnOnListNameChange}
               placeholder={'Enter List Name'}
               placeholderTextColor={getColorWithOpacity(colors.BlackPearl, 0.5)}

@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import SearchBar from '../../components/SearchBar';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -18,9 +19,11 @@ function DiscoverScreen() {
   const localStyle = useStyleProcessor(styles, 'DiscoverScreen');
   const {
     aTrendingTopics,
+    bIsLoading,
     sSelectedCountryName,
     fnOnSearchPress,
     fnOnTopicClick,
+    fnOnRefresh,
     fnNavigateToLocationSelectionScreen,
   } = useDiscoverScreenData();
   return (
@@ -41,7 +44,10 @@ function DiscoverScreen() {
       ) : null}
       <ScrollView
         contentContainerStyle={localStyle.trendingTopicList}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={bIsLoading} onRefresh={fnOnRefresh} />
+        }>
         {aTrendingTopics.map((text, i) => {
           return (
             <Animatable.View key={i} animation="fadeIn">
@@ -67,16 +73,17 @@ const styles = {
   trendingTopicBox: {
     borderBottomWidth: 1,
     borderColor: colors.LightGrey,
-    padding: layoutPtToPx(10),
-    margin: layoutPtToPx(10),
-    marginBottom: 0,
+    paddingVertical: layoutPtToPx(16),
+    marginHorizontal: layoutPtToPx(20),
   },
   topicText: {
     fontSize: fontPtToPx(14),
     color: colors.Black,
+    fontFamily: fonts.InterRegular,
+    lineHeight: layoutPtToPx(17),
   },
   trendingTopicList: {
-    paddingBottom: layoutPtToPx(100),
+    paddingBottom: '1%',
   },
   trendingCountryContainer: {
     flexDirection: 'row',
@@ -88,8 +95,10 @@ const styles = {
   trendingCountryText: {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(18),
+    flexShrink: 1,
   },
   changeLocationText: {
+    flexGrow: 1,
     fontFamily: fonts.InterSemiBold,
     fontSize: fontPtToPx(14),
     color: colors.GoldenTainoi,

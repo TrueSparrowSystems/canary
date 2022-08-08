@@ -199,21 +199,20 @@ class CollectionService {
     });
   }
 
-  async removeTweetFromCollection(tweetId) {
+  async removeTweetFromCollection(collectionId, tweetId) {
     return new Promise((resolve, reject) => {
       const bookmarkedIds = Cache.getValue(CacheKey.BookmarkedTweetsList) || [];
       const collectionIds = bookmarkedIds[tweetId];
-      collectionIds.forEach(collectionId => {
-        const tweetIds = this.collections[collectionId]?.tweetIds;
-        const index = tweetIds.indexOf(tweetId);
-        if (index > -1) {
-          tweetIds.splice(index, 1);
-        }
-        this.collections[collectionId].tweetIds = tweetIds;
-      });
+      collectionIds.splice(collectionIds.indexOf(collectionId), 1);
+      bookmarkedIds[tweetId] = collectionIds;
+      const tweetIds = this.collections[collectionId]?.tweetIds;
+      const index = tweetIds.indexOf(tweetId);
+      if (index > -1) {
+        tweetIds.splice(index, 1);
+      }
+      this.collections[collectionId].tweetIds = tweetIds;
       Store.set(StoreKeys.CollectionsList, this.collections)
         .then(() => {
-          delete bookmarkedIds[tweetId];
           this.updateBookmarkedTweetsInCacheAndStore(bookmarkedIds)
             .then(() => {
               return resolve();

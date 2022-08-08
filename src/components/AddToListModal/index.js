@@ -28,6 +28,7 @@ function AddToListModal() {
     fnOnBackdropPress,
     fnOnAddToListSuccess,
     fnOnAddListPress,
+    fnOnDonePress,
     oList,
     sUserName,
   } = useAddToListModalData();
@@ -42,6 +43,10 @@ function AddToListModal() {
     };
   }, []);
 
+  const addNewButtonStyleMemo = useMemo(() => {
+    return [{opacity: oList !== null ? 1 : 0}, localStyle.addNewButton];
+  }, [localStyle.addNewButton, oList]);
+
   return bIsVisible ? (
     <CustomModal
       visible={bIsVisible}
@@ -50,19 +55,25 @@ function AddToListModal() {
       <View style={localStyle.modalStyle}>
         <SafeAreaView style={localStyle.container}>
           <View style={localStyle.view}>
-            <View style={localStyle.titleContainer}>
-              <Text style={localStyle.titleText}>Add user to List</Text>
-            </View>
-            {oList !== null ? (
+            <View style={localStyle.headerStyle}>
+              <TouchableOpacity
+                style={localStyle.doneButtonContainer}
+                onPress={fnOnDonePress}>
+                <Text style={localStyle.headerTextStyle}>Done</Text>
+              </TouchableOpacity>
+              <View style={localStyle.titleContainer}>
+                <Text style={localStyle.titleText}>Add user to List</Text>
+              </View>
               <TouchableOpacity
                 onPress={fnOnAddListPress}
-                style={localStyle.addButtonContainer}>
+                disabled={oList === null}
+                style={addNewButtonStyleMemo}>
                 <View style={localStyle.flexRow}>
                   <Image source={AddIcon} style={localStyle.addIconStyle} />
-                  <Text style={localStyle.addNewTextStyle}>New</Text>
+                  <Text style={localStyle.headerTextStyle}>New</Text>
                 </View>
               </TouchableOpacity>
-            ) : null}
+            </View>
             {bIsLoading ? (
               <ActivityIndicator animating={bIsLoading} />
             ) : oList == null ? (
@@ -119,21 +130,20 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  addButtonContainer: {padding: layoutPtToPx(30)},
   addIconStyle: {
     height: layoutPtToPx(14),
     width: layoutPtToPx(14),
     tintColor: colors.GoldenTainoi,
     marginRight: layoutPtToPx(4),
   },
-  addNewTextStyle: {
+  headerTextStyle: {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(14),
     lineHeight: layoutPtToPx(18),
     color: colors.GoldenTainoi,
   },
   emptyComponentContainer: {
-    paddingVertical: layoutPtToPx(60),
+    paddingVertical: layoutPtToPx(30),
     height: '80%',
   },
   blur: {
@@ -144,25 +154,36 @@ const styles = {
     height: '100%',
     backgroundColor: getColorWithOpacity(colors.BlackPearl, 0.5),
   },
+  headerStyle: {
+    paddingTop: layoutPtToPx(20),
+    paddingBottom: layoutPtToPx(10),
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'flex-end',
+  },
+  doneButtonContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+    paddingLeft: layoutPtToPx(20),
+  },
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
     justifyContent: 'flex-end',
   },
-  titleContainer: {
-    alignItems: 'center',
-    position: 'absolute',
-    width: '100%',
-    zIndex: -1,
-    top: layoutPtToPx(30),
-    justifyContent: 'center',
-  },
+  titleContainer: {flexGrow: 1, alignItems: 'center'},
   titleText: {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(16),
     lineHeight: layoutPtToPx(20),
     color: colors.Black,
+  },
+  addNewButton: {
+    flex: 1,
+    alignItems: 'flex-end',
+    paddingRight: layoutPtToPx(20),
   },
   view: {
     height: '100%',

@@ -24,6 +24,7 @@ const colors = {
   SweetCorn: '#FEE077',
   BitterSweet: '#FF6363',
   EarlyDawn: '#FFF3da',
+  ScreaminGreen: '#80FE44',
 };
 
 export default colors;

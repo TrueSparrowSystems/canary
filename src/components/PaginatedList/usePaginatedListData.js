@@ -139,7 +139,6 @@ export function usePaginatedListData({
       const response = dataSource.onResponse ? dataSource.onResponse(res) : res;
 
       const {data} = response;
-
       // Update the next page identifier.
       componentRef.current.nextPageIdentifier = data.meta?.next_token || null;
 
@@ -160,6 +159,7 @@ export function usePaginatedListData({
 
       // Get the received data from the response.
       let newData = data?.data;
+
       // [data?.result_type] || [];
       if (newData) {
         componentRef.current.allData = [

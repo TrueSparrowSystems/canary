@@ -11,6 +11,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {useNavigation} from '@react-navigation/native';
 import ScreenName from '../../constants/ScreenName';
 import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
+import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
 function ListTweetsScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListTweetsScreen');
@@ -18,8 +19,8 @@ function ListTweetsScreen(props) {
   const _listService = listService();
   const [isLoading, setIsLoading] = useState(true);
   const listDataSource = useRef(null);
-  const currentUserNameArray = useRef(null);
-  const newUserNameArray = useRef(null);
+  const currentUserNameArray = useRef([]);
+  const newUserNameArray = useRef([]);
 
   const navigation = useNavigation();
 
@@ -59,11 +60,14 @@ function ListTweetsScreen(props) {
         buttonText={'Add Users to List'}
         descriptionTextStyle={localStyle.descriptionTextStyle}
         onButtonPress={() => {
-          //TODO: Add to navigation to add user screen
+          LocalEvent.emit(EventTypes.ShowSearchUserModal, {
+            listId: listId,
+            onUserAddComplete: fetchData,
+          });
         }}
       />
     );
-  }, [localStyle.descriptionTextStyle]);
+  }, [fetchData, listId, localStyle.descriptionTextStyle]);
 
   return (
     <View style={localStyle.container}>
@@ -72,7 +76,9 @@ function ListTweetsScreen(props) {
         text={listName}
         textStyle={localStyle.headerText}
         enableRightButton={true}
-        rightButtonText={listUserNames?.length > 0 ? 'Edit' : null}
+        rightButtonText={
+          currentUserNameArray.current.length !== 0 ? 'Edit' : null
+        }
         rightButtonTextStyle={localStyle.headerRightButtonText}
         onRightButtonClick={() => {
           navigation.navigate(ScreenName.EditListUsersScreen, {

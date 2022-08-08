@@ -6,7 +6,6 @@ import TimelineListDataSource from './TimelineListDataSource';
 import useTimelineListData from './useTimelineListData';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
-// import PaginationLoader from '../common/PaginationLoader';
 import {isTablet} from 'react-native-device-info';
 import TweetCard from '../TweetCard';
 

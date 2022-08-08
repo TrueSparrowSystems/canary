@@ -18,6 +18,7 @@ import ListCard from '../ListCard';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
 import EmptyScreenComponent from '../common/EmptyScreenComponent';
+import {isEmpty} from 'lodash';
 
 function AddToListModal() {
   const localStyle = useStyleProcessor(styles, 'AddToListModal');
@@ -44,7 +45,7 @@ function AddToListModal() {
   }, []);
 
   const addNewButtonStyleMemo = useMemo(() => {
-    return [{opacity: oList !== null ? 1 : 0}, localStyle.addNewButton];
+    return [{opacity: !isEmpty(oList) ? 1 : 0}, localStyle.addNewButton];
   }, [localStyle.addNewButton, oList]);
 
   return bIsVisible ? (
@@ -66,7 +67,7 @@ function AddToListModal() {
               </View>
               <TouchableOpacity
                 onPress={fnOnAddListPress}
-                disabled={oList === null}
+                disabled={isEmpty(oList)}
                 style={addNewButtonStyleMemo}>
                 <View style={localStyle.flexRow}>
                   <Image source={AddIcon} style={localStyle.addIconStyle} />
@@ -76,7 +77,7 @@ function AddToListModal() {
             </View>
             {bIsLoading ? (
               <ActivityIndicator animating={bIsLoading} />
-            ) : oList == null ? (
+            ) : isEmpty(oList) ? (
               <View style={localStyle.emptyComponentContainer}>
                 <EmptyScreenComponent
                   emptyImage={BottomBarListIcon}

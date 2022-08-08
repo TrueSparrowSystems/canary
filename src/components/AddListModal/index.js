@@ -9,11 +9,15 @@ import RoundedButton from '../common/RoundedButton';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
 
+const TEXT_INPUT_LIMIT = 25;
+
 function AddListModal() {
   const localStyle = useStyleProcessor(styles, 'AddListModal');
 
   const {
     bIsVisible,
+    nCharacterCount,
+    sErrorMessage,
     fnOnBackdropPress,
     fnOnListNameChange,
     fnOnCreateListPress,
@@ -43,7 +47,15 @@ function AddListModal() {
               placeholder={'Enter List Name'}
               placeholderTextColor={getColorWithOpacity(colors.BlackPearl, 0.5)}
               onSubmitEditing={fnOnCreateListPress}
+              maxLength={TEXT_INPUT_LIMIT}
             />
+            <View style={localStyle.charCounterContainer}>
+              <Text
+                style={
+                  localStyle.charCounterText
+                }>{`${nCharacterCount}/${TEXT_INPUT_LIMIT}`}</Text>
+            </View>
+            <Text style={localStyle.errorText}>{sErrorMessage}</Text>
             <RoundedButton
               style={localStyle.createButton}
               text={'Create'}
@@ -138,6 +150,20 @@ const styles = {
   addIconStyle: {
     height: layoutPtToPx(18),
     width: layoutPtToPx(18),
+  },
+  charCounterContainer: {
+    position: 'absolute',
+    right: 25,
+    bottom: '68%',
+  },
+  charCounterText: {
+    color: getColorWithOpacity(colors.BlackPearl, 0.4),
+    fontSize: fontPtToPx(10),
+  },
+  errorText: {
+    fontFamily: fonts.InterRegular,
+    color: colors.BitterSweet,
+    fontSize: fontPtToPx(12),
   },
 };
 

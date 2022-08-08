@@ -67,10 +67,12 @@ function useAddToListModalData() {
     LocalEvent.emit(EventTypes.ShowAddListModal, {
       userName: modalData?.userName,
       onListAddSuccess: (listName, listId) => {
+        getList();
+        setIsVisible(true);
         showAddToListToast(listName, listId);
       },
     });
-  }, [modalData?.userName, showAddToListToast]);
+  }, [getList, modalData?.userName, showAddToListToast]);
 
   return {
     bIsVisible: isVisible,

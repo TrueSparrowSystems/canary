@@ -11,10 +11,10 @@ class BootService {
   initialize() {
     return new Promise(resolve => {
       networkConnection();
+      setCountriesWoeidsInCache();
       AsyncStorage.getItem(StoreKeys.AreInitialPreferencesSet).then(isSet => {
         Cache.setValue(CacheKey.AreInitialPreferencesSet, isSet);
         if (isSet) {
-          setCountriesWoeidsInCache();
           AsyncStorage.getItem(StoreKeys.PreferenceList).then(list => {
             AsyncStorage.get(StoreKeys.BookmarkedTweetsList).then(
               bookmarkedTweetList => {

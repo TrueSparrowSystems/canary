@@ -10,8 +10,12 @@ import TweetCard from '../TweetCard';
 import useCollectionTweetListData from './useCollectionTweetListData';
 
 function CollectionTweetList(props) {
-  const {bIsLoading, fnOnRefresh, aDataSource} =
-    useCollectionTweetListData(props);
+  const {
+    bIsLoading,
+    fnOnRefresh,
+    aDataSource,
+    fnOnBookmarkFavouriteTweetPress,
+  } = useCollectionTweetListData(props);
   const localStyle = useStyleProcessor(styles, 'CollectionTweetList');
 
   return bIsLoading ? (
@@ -23,6 +27,7 @@ function CollectionTweetList(props) {
       buttonText={'Bookmark Your Favorite Tweets'}
       buttonImage={bookmarkIcon}
       buttonImageStyle={localStyle.emptyButtonImageStyle}
+      onButtonPress={fnOnBookmarkFavouriteTweetPress}
     />
   ) : (
     <ScrollView

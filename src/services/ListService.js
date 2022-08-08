@@ -4,6 +4,7 @@ import uuid from 'react-native-uuid';
 import {getRandomColorCombination} from '../utils/RandomColorUtil';
 import Cache from './Cache';
 import {CacheKey} from './Cache/CacheStoreConstants';
+import {find} from 'lodash';
 
 const LIST_LIMIT = 30;
 
@@ -43,6 +44,10 @@ class ListService {
           const listLength = Object.keys(_list).length;
           if (listLength > LIST_LIMIT) {
             return reject('List Limit exceeded');
+          }
+
+          if (find(_list, {name: listName})) {
+            return reject('List name already exists.');
           }
 
           const newId = uuid.v4();

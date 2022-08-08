@@ -56,6 +56,7 @@ const styles = {
   itemText: {
     marginBottom: layoutPtToPx(16),
     fontFamily: fonts.InterRegular,
+    color: colors.BlackPearl,
   },
   scrollViewContainer: {
     paddingHorizontal: layoutPtToPx(20),
@@ -64,5 +65,6 @@ const styles = {
   headerText: {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(16),
+    color: colors.BlackPearl,
   },
 };

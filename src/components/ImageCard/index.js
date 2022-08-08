@@ -106,7 +106,7 @@ function ImageCard({mediaArray, tweetId}) {
   ) : mediaArray[0].type === 'video' ? (
     <View style={localStyle.container}>
       <Image
-        style={localStyle.showImage}
+        style={localStyle.showVideo}
         source={
           mediaArray?.length >= 1
             ? {uri: mediaArray[0]?.preview_image_url}
@@ -149,6 +149,13 @@ const styles = {
     borderWidth: 0.5,
     borderColor: 'white',
     borderRadius: 4,
+  },
+  showVideo: {
+    flex: 1,
+    borderWidth: 0.5,
+    borderColor: 'white',
+    borderRadius: 4,
+    aspectRatio: 1,
   },
   flexRow: {
     flex: 1,

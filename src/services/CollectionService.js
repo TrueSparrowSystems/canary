@@ -91,7 +91,10 @@ class CollectionService {
     return new Promise((resolve, reject) => {
       Store.get(StoreKeys.CollectionsList)
         .then(list => {
-          var jsonList = JSON.parse(list);
+          var jsonList = {};
+          if (list !== null) {
+            jsonList = JSON.parse(list);
+          }
           const listArray = Object.entries(jsonList);
           listArray.sort((collection1, collection2) => {
             return compareFunction(collection1[1].name, collection2[1].name);

@@ -155,7 +155,6 @@ const styles = {
     borderWidth: 0.5,
     borderColor: 'white',
     borderRadius: 4,
-    aspectRatio: 1,
   },
   flexRow: {
     flex: 1,

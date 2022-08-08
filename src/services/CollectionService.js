@@ -6,6 +6,7 @@ import {CacheKey} from './Cache/CacheStoreConstants';
 import {getRandomColorCombination} from '../utils/RandomColorUtil';
 import {find} from 'lodash';
 import {isEmpty} from 'lodash-es';
+import {compareFunction} from '../utils/Strings';
 
 const COLLECTION_TWEET_LIMIT = 25;
 
@@ -93,13 +94,7 @@ class CollectionService {
           var jsonList = JSON.parse(list);
           const listArray = Object.entries(jsonList);
           listArray.sort((collection1, collection2) => {
-            if (collection1[1].name < collection2[1].name) {
-              return -1;
-            }
-            if (collection1[1].name > collection2[1].name) {
-              return 1;
-            }
-            return 0;
+            return compareFunction(collection1[1].name, collection2[1].name);
           });
 
           this.collections = Object.fromEntries(listArray);

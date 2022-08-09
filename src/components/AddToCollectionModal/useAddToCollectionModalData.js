@@ -116,6 +116,14 @@ function useAddToCollectionModalData() {
   }, []);
 
   const onRemoveFromCollectionSuccess = useCallback(collectionName => {
+    const isTweetRemoveFromAllCollections =
+      collectionService().isTweetRemoveFromAllCollections(
+        modalRef.current?.tweetId,
+      );
+
+    if (isTweetRemoveFromAllCollections) {
+      modalRef.current?.onRemoveFromAllCollectionSuccess?.();
+    }
     LocalEvent.emit(EventTypes.UpdateCollection);
     Toast.show({
       type: ToastType.Success,

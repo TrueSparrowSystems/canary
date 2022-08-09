@@ -92,7 +92,7 @@ function CollectionScreen(props) {
           onCollectionRemoved={reloadList}
           onLongPress={enableCollectionDeleteOption}
           enableDelete={isDeleteEnabled}
-          disabled={isEmpty(item) ? 'none' : 'auto'}
+          disabled={isEmpty(item) ? true : false}
         />
       );
     },

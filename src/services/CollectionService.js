@@ -222,7 +222,11 @@ class CollectionService {
       const bookmarkedIds = Cache.getValue(CacheKey.BookmarkedTweetsList) || {};
       const collectionIds = bookmarkedIds[tweetId];
       collectionIds.splice(collectionIds.indexOf(collectionId), 1);
-      bookmarkedIds[tweetId] = collectionIds;
+      if (collectionIds.length === 0) {
+        delete bookmarkedIds[tweetId];
+      } else {
+        bookmarkedIds[tweetId] = collectionIds;
+      }
       const tweetIds = this.collections[collectionId]?.tweetIds;
       const index = tweetIds.indexOf(tweetId);
       if (index > -1) {
@@ -244,6 +248,16 @@ class CollectionService {
           return reject('Unable to remove tweet from archive');
         });
     });
+  }
+
+  isTweetRemoveFromAllCollections(tweetId) {
+    const bookmarkedTweets = Cache.getValue(CacheKey.BookmarkedTweetsList);
+    console.log({bookmarkedTweets}, bookmarkedTweets?.hasOwnProperty(tweetId));
+    if (bookmarkedTweets) {
+      const isPresent = bookmarkedTweets?.hasOwnProperty(tweetId);
+      return !isPresent;
+    }
+    return true;
   }
 }
 

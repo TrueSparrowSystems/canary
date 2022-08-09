@@ -32,7 +32,7 @@ function SearchResultScreen(props) {
       </View>
     );
   }, [localStyle.emptyContainer, localStyle.emptyScreenTextStyle]);
-  
+
   return (
     <SafeAreaView style={localStyle.flex1}>
       <Header enableBackButton={true} />
@@ -107,9 +107,8 @@ const styles = {
     textTransform: 'capitalize',
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(12),
-    lineHeight: layoutPtToPx(18),
-    marginTop: layoutPtToPx(1),
     marginLeft: layoutPtToPx(4),
+    color: colors.BlackPearl,
   },
   toggleButtonIcon: {
     height: layoutPtToPx(12),

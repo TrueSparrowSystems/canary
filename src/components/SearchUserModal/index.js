@@ -158,7 +158,6 @@ const styles = {
     paddingBottom: layoutPtToPx(25),
     // height: '100%',
     alignItems: 'center',
-    borderWidth: 1,
     justifyContent: 'center',
     flexGrow: 1,
   },

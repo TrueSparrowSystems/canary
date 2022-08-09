@@ -3,6 +3,7 @@ import {View, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import colors, {getColorWithOpacity} from '../../../constants/colors';
 import fonts from '../../../constants/fonts';
+import useBackButtonPress from '../../../hooks/useBackButtonPress';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
 import CustomModal from '../CustomModal';
@@ -11,6 +12,7 @@ import useConfirmDeleteModalData from './useConfirmDeleteModalData';
 
 function ConfirmDeleteModal() {
   const localStyle = useStyleProcessor(styles, 'ConfirmDeleteModal');
+  useBackButtonPress();
 
   const {
     bIsVisible,

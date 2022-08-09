@@ -49,6 +49,7 @@ function TwitterTextView({
   hasMedia = false,
   urls = [],
   style,
+  isPressDisabled = false,
   ...extraProps
 }) {
   const localStyle = useStyleProcessor(styles, 'TwitterTextView');
@@ -130,6 +131,7 @@ function TwitterTextView({
           <Text
             key={i}
             style={linkStyle || localStyle.linkStyle}
+            disabled={isPressDisabled}
             onPress={e => {
               return handle(
                 e,

@@ -160,7 +160,8 @@ class TwitterApi {
   }
   getUserByUserName(userName) {
     const data = {
-      'user.fields': 'id,name,profile_image_url,username,verified',
+      'user.fields':
+        'id,name,profile_image_url,username,verified,description,public_metrics',
     };
     const apiService = new APIService({});
     return apiService.get(EndPoints.getUserByUserName(userName), data);

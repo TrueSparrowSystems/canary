@@ -7,7 +7,7 @@ import {
   Image,
 } from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import colors from '../../constants/colors';
+import colors, {getColorWithOpacity} from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import {getInitialsFromName} from '../../utils/TextUtils';
@@ -222,6 +222,7 @@ const styles = {
     borderWidth: 1,
     borderColor: colors.GoldenTainoi,
     maxHeight: layoutPtToPx(30),
+    backgroundColor: getColorWithOpacity(colors.GoldenTainoi, 0.1),
   },
   secondaryAddText: {
     color: colors.GoldenTainoi,

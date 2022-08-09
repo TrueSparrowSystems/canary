@@ -1,7 +1,7 @@
 import {Image, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
-import colors from '../../constants/colors';
+import colors, {getColorWithOpacity} from '../../constants/colors';
 import fonts from '../../constants/fonts';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {verifiedIcon} from '../../assets/common';
@@ -120,6 +120,7 @@ const styles = {
     borderWidth: 1,
     borderColor: colors.GoldenTainoi,
     maxHeight: layoutPtToPx(30),
+    backgroundColor: getColorWithOpacity(colors.GoldenTainoi, 0.1),
   },
   secondaryAddText: {
     color: colors.GoldenTainoi,

@@ -43,7 +43,7 @@ function useAddCollectionModalData() {
     if (collectionNameRef.current.length === 0) {
       Toast.show({
         type: ToastType.Error,
-        text1: 'Collection name cannot be empty.',
+        text1: 'Archive name cannot be empty.',
         position: ToastPosition.Top,
       });
       return;
@@ -54,7 +54,7 @@ function useAddCollectionModalData() {
       .then(({collectionId}) => {
         Toast.show({
           type: ToastType.Success,
-          text1: 'Collection created successfully.',
+          text1: 'Archive created successfully.',
           position: ToastPosition.Top,
         });
         if (modalData?.tweetId) {
@@ -78,7 +78,7 @@ function useAddCollectionModalData() {
       .catch(err => {
         Toast.show({
           type: ToastType.Error,
-          text1: 'Collection could not be created. Please try again',
+          text1: 'Archive could not be created. Please try again',
           position: ToastPosition.Top,
         });
         setErrorMessage(err);

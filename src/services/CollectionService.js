@@ -42,14 +42,14 @@ class CollectionService {
               return resolve({collectionId: id});
             })
             .catch(() => {
-              return reject('Could not add collection. Please try again');
+              return reject('Could not add archive. Please try again');
             });
         } else {
           var _list = JSON.parse(list);
           const newId = uuid.v4();
 
           if (find(_list, {name: collectionName})) {
-            return reject('Collection name already exists.');
+            return reject('Archive name already exists.');
           }
 
           const newCollection = {};
@@ -67,7 +67,7 @@ class CollectionService {
               return resolve({collectionId: newId});
             })
             .catch(() => {
-              return reject('Could not add collection. Please try again');
+              return reject('Could not add archive. Please try again');
             });
         }
       });
@@ -132,7 +132,7 @@ class CollectionService {
         COLLECTION_TWEET_LIMIT
       ) {
         return reject(
-          'This collection is full. Try adding it to a different collection or create a new one.',
+          'This archive is full. Try adding it to a different archive or create a new one.',
         );
       }
       var bookmarkedTweets =
@@ -241,7 +241,7 @@ class CollectionService {
           return resolve();
         })
         .catch(() => {
-          return reject('Unable to remove tweet from collection');
+          return reject('Unable to remove tweet from archive');
         });
     });
   }

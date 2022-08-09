@@ -6,7 +6,7 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
 import colors from '../../constants/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
-import {AddIcon, CollectionsIcon} from '../../assets/common';
+import {AddIcon, ArchiveIconBig} from '../../assets/common';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import {isEmpty} from 'lodash';
@@ -120,11 +120,11 @@ function CollectionScreen(props) {
         </View>
       ) : isEmpty(collectionDataRef.current) ? (
         <EmptyScreenComponent
-          emptyImage={CollectionsIcon}
+          emptyImage={ArchiveIconBig}
           buttonText={'Add a new Archive'}
           onButtonPress={onAddCollectionPress}
           descriptionText={
-            'Save your favorite tweets in the archive and access it later anytime'
+            'Save your favorite tweets in the archive and access it later anytime - with full privacy 💯'
           }
         />
       ) : (

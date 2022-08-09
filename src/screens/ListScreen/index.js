@@ -6,7 +6,7 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import {AddIcon, BottomBarListIcon} from '../../assets/common';
+import {AddIcon, ListIconBig} from '../../assets/common';
 import ListCard from '../../components/ListCard';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {listService} from '../../services/ListService';
@@ -99,11 +99,11 @@ function ListScreen(props) {
         </View>
       ) : isEmpty(listDataRef.current) ? (
         <EmptyScreenComponent
-          emptyImage={BottomBarListIcon}
+          emptyImage={ListIconBig}
           buttonText={'Create a new List'}
           onButtonPress={onAddListPress}
           descriptionText={
-            'Stay up-to-date on the favorite topics by tweeters you love'
+            'Stay up-to-date on the favorite topics by users you love, without being tracked 😉'
           }
         />
       ) : (

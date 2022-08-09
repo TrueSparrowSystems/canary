@@ -20,3 +20,5 @@ export const CrossIcon = require('./crossIcon.png');
 export const SwipeIcon = require('./swipeIcon.png');
 export const Canary = require('./canary.png');
 export const TickIcon = require('./tickIcon.png');
+export const ListIconBig = require('./listIconBig.png');
+export const ArchiveIconBig = require('./collectionsBig.png');

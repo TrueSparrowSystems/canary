@@ -47,7 +47,8 @@ function SearchBar({
   const clearQuery = useCallback(() => {
     queryRef.current = '';
     setQuery(queryRef.current);
-  }, []);
+    onQueryChange?.('');
+  }, [onQueryChange]);
 
   const updateQuery = useCallback(
     text => {

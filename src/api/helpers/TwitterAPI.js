@@ -3,6 +3,7 @@ import {APIService} from '../../services/Api';
 import PreferencesDataHelper from '../../services/PreferencesDataHelper';
 
 const CONTEXTS_LIMIT = 12;
+const USERS_LIMIT = 30;
 
 const EndPoints = {
   timelineFeed: 'https://api.twitter.com/2/tweets/search/recent',
@@ -54,12 +55,15 @@ class TwitterApi {
   }
 
   getUserNameQueryFromArray(userNameArray) {
-    const userNameQueryArray = [];
+    let userNameQueryArray = [];
     if (userNameArray.length > 0) {
       userNameArray.map(userName => {
         userNameQueryArray.push(`from:${userName}`);
       });
     }
+
+    userNameQueryArray = sampleSize(userNameQueryArray, USERS_LIMIT);
+
     const userNameQuery = userNameQueryArray.join(' OR ');
     return userNameQuery;
   }

@@ -129,7 +129,7 @@ function TwitterTextView({
         return handle ? (
           <Text
             key={i}
-            style={localStyle.linkStyle}
+            style={linkStyle || localStyle.linkStyle}
             onPress={e => {
               return handle(
                 e,

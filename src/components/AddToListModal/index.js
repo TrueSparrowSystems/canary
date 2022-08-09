@@ -58,14 +58,6 @@ function AddToListModal() {
           <View style={localStyle.view}>
             <View style={localStyle.headerStyle}>
               <TouchableOpacity
-                style={localStyle.doneButtonContainer}
-                onPress={fnOnDonePress}>
-                <Text style={localStyle.headerTextStyle}>Done</Text>
-              </TouchableOpacity>
-              <View style={localStyle.titleContainer}>
-                <Text style={localStyle.titleText}>Add user to List</Text>
-              </View>
-              <TouchableOpacity
                 onPress={fnOnAddListPress}
                 disabled={isEmpty(oList)}
                 style={addNewButtonStyleMemo}>
@@ -73,6 +65,14 @@ function AddToListModal() {
                   <Image source={AddIcon} style={localStyle.addIconStyle} />
                   <Text style={localStyle.headerTextStyle}>New</Text>
                 </View>
+              </TouchableOpacity>
+              <View style={localStyle.titleContainer}>
+                <Text style={localStyle.titleText}>Add user to List</Text>
+              </View>
+              <TouchableOpacity
+                style={localStyle.doneButtonContainer}
+                onPress={fnOnDonePress}>
+                <Text style={localStyle.headerTextStyle}>Done</Text>
               </TouchableOpacity>
             </View>
             {bIsLoading ? (
@@ -161,20 +161,23 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    justifyContent: 'flex-end',
   },
   doneButtonContainer: {
     flex: 1,
-    alignItems: 'flex-start',
-    paddingLeft: layoutPtToPx(20),
+    alignItems: 'flex-end',
+    paddingRight: layoutPtToPx(20),
+    paddingBottom: layoutPtToPx(2),
   },
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
   },
-  titleContainer: {flexGrow: 1, alignItems: 'center'},
+  titleContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+  },
   titleText: {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(16),
@@ -182,9 +185,10 @@ const styles = {
     color: colors.Black,
   },
   addNewButton: {
+    paddingTop: layoutPtToPx(2),
+    paddingLeft: layoutPtToPx(20),
     flex: 1,
-    alignItems: 'flex-end',
-    paddingRight: layoutPtToPx(20),
+    alignItems: 'flex-start',
   },
   view: {
     height: '100%',

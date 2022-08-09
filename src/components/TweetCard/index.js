@@ -23,7 +23,13 @@ import fonts from '../../constants/fonts';
 import * as Animatable from 'react-native-animatable';
 
 function TweetCard(props) {
-  const {dataSource, isDisabled = false, style} = props;
+  const {
+    dataSource,
+    isDisabled = false,
+    style,
+    textStyle,
+    linkTextStyle,
+  } = props;
 
   const {fnOnCardPress, fnOnUserNamePress} = useTweetCardData(props);
   const localStyle = useStyleProcessor(styles, 'TweetCard');
@@ -95,7 +101,8 @@ function TweetCard(props) {
         </View>
         <View style={localStyle.tweetDetailContainer}>
           <TwitterTextView
-            style={localStyle.tweetText}
+            style={textStyle || localStyle.tweetText}
+            linkStyle={linkTextStyle}
             hasMedia={hasMedia}
             urls={entities?.urls}>
             {unescape(text)}

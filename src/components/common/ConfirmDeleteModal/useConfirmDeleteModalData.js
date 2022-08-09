@@ -43,13 +43,13 @@ function useConfirmDeleteModalData() {
         modalData?.onCollectionRemoved?.();
         Toast.show({
           type: ToastType.Success,
-          text1: 'Removed collection.',
+          text1: 'Removed archive.',
         });
       })
       .catch(() => {
         Toast.show({
           type: ToastType.Error,
-          text1: 'Error in removing collection.',
+          text1: 'Error in removing archive.',
         });
       })
       .finally(() => {

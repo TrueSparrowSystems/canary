@@ -14,9 +14,15 @@ import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import * as Animatable from 'react-native-animatable';
 
 function CollectionCard(props) {
-  const {data, onCollectionRemoved, onLongPress, enableDelete, animationDelay} =
-    props;
-  const {name: collectionName, id: collectionId} = data;
+  const {
+    data,
+    onCollectionRemoved,
+    onLongPress,
+    enableDelete,
+    animationDelay,
+    disabled,
+  } = props;
+  const {name: collectionName, id: collectionId, tweetIds} = data;
   let {colorScheme} = data;
   const localStyle = useStyleProcessor(styles, 'CollectionCard');
   const navigation = useNavigation();
@@ -82,6 +88,10 @@ function CollectionCard(props) {
         {backgroundColor: colorScheme?.backgroundColor},
       ],
       textStyle: [localStyle.textStyle, {color: colorScheme?.textColor}],
+      tweetCountTextStyle: [
+        localStyle.tweetCountTextStyle,
+        {color: colorScheme?.textColor},
+      ],
     };
   }, [colorScheme, localStyle.cardStyle]);
 
@@ -91,8 +101,8 @@ function CollectionCard(props) {
 
   return (
     <TouchableWithoutFeedback
-      onPress={onCollectionPress}
-      onLongPress={fnOnLongPress}>
+      onPress={disabled ? null : onCollectionPress}
+      onLongPress={disabled ? null : fnOnLongPress}>
       <Animatable.View
         ref={viewRef}
         animation="fadeIn"
@@ -111,6 +121,13 @@ function CollectionCard(props) {
             <Text numberOfLines={3} style={colorSchemeStyle.textStyle}>
               {collectionName}
             </Text>
+            {tweetIds.length > 0 ? (
+              <Text
+                numberOfLines={1}
+                style={colorSchemeStyle.tweetCountTextStyle}>
+                {tweetIds.length} {tweetIds.length > 1 ? 'tweets' : 'tweet'}
+              </Text>
+            ) : null}
           </View>
         ) : null}
       </Animatable.View>
@@ -144,7 +161,13 @@ const styles = {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(24),
     lineHeight: layoutPtToPx(30),
-    padding: layoutPtToPx(8),
+    paddingHorizontal: layoutPtToPx(8),
+  },
+  tweetCountTextStyle: {
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(18),
+    paddingHorizontal: layoutPtToPx(8),
   },
   imageStyle: {
     height: layoutPtToPx(150),
@@ -155,6 +178,7 @@ const styles = {
     flex: 1,
     borderRadius: layoutPtToPx(12),
     justifyContent: 'flex-end',
+    paddingBottom: layoutPtToPx(8),
   },
 };
 

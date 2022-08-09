@@ -8,6 +8,7 @@ export const likeIcon = require('./likeIcon.png');
 export const commentIcon = require('./commentIcon.png');
 export const retweetIcon = require('./retweet.png');
 export const bookmarkIcon = require('./bookmark.png');
+export const bookmarkedIcon = require('./bookmarked.png');
 export const AddIcon = require('./addIcon.png');
 export const BinIcon = require('./binIcon.png');
 export const PlayIcon = require('./play-icon.png');

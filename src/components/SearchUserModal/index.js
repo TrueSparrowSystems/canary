@@ -15,10 +15,11 @@ import fonts from '../../constants/fonts';
 import SearchBar from '../SearchBar';
 import SearchUserListItem from '../SearchUserListItem';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import useBackButtonPress from '../../hooks/useBackButtonPress';
 
 function SearchUserModal() {
   const localStyle = useStyleProcessor(styles, 'SearchUserModal');
-
+  useBackButtonPress();
   const {
     aUserData,
     bIsVisible,
@@ -71,7 +72,7 @@ function SearchUserModal() {
               🔍 Search users to add to the list
             </Text>
           </View>
-        ) : (
+        ) : aUserData.length > 0 ? (
           <ScrollView
             showsVerticalScrollIndicator={false}
             contentContainerStyle={localStyle.scrollViewContainerStyle}>
@@ -88,6 +89,10 @@ function SearchUserModal() {
               );
             })}
           </ScrollView>
+        ) : (
+          <View style={localStyle.listContainer}>
+            <Text style={localStyle.emptyListText}>No Result Found</Text>
+          </View>
         )}
       </KeyboardAwareScrollView>
     </CustomModal>
@@ -151,5 +156,21 @@ const styles = {
   },
   scrollViewContainerStyle: {
     paddingBottom: layoutPtToPx(25),
+    // height: '100%',
+    alignItems: 'center',
+    borderWidth: 1,
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  emptyContainer: {
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyScreenTextStyle: {
+    fontFamily: fonts.InterRegular,
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(17),
+    color: getColorWithOpacity(colors.BlackPearl, 0.7),
   },
 };

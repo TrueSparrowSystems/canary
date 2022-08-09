@@ -1,10 +1,10 @@
-import React from 'react';
-import {ActivityIndicator, SafeAreaView, View} from 'react-native';
+import React, {useMemo} from 'react';
+import {ActivityIndicator, SafeAreaView, Text, View} from 'react-native';
 import Header from '../../components/common/Header';
 import SearchBar from '../../components/SearchBar';
 import TimelineList from '../../components/TimelineList';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import colors from '../../constants/colors';
+import colors, {getColorWithOpacity} from '../../constants/colors';
 import useSearchResultScreenData from './useSearchResultScreenData';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import RoundedButton from '../../components/common/RoundedButton';
@@ -25,6 +25,14 @@ function SearchResultScreen(props) {
     searchQuery: query,
   });
 
+  const ListEmptyComponent = useMemo(() => {
+    return (
+      <View style={localStyle.emptyContainer}>
+        <Text style={localStyle.emptyScreenTextStyle}>No results found</Text>
+      </View>
+    );
+  }, [localStyle.emptyContainer, localStyle.emptyScreenTextStyle]);
+  
   return (
     <SafeAreaView style={localStyle.flex1}>
       <Header enableBackButton={true} />
@@ -69,6 +77,7 @@ function SearchResultScreen(props) {
         timelineListDataSource={searchResultListDataSource}
         refreshData={bIsLoading}
         onDataAvailable={fnOnDataAvailable}
+        listEmptyComponent={ListEmptyComponent}
       />
     </SafeAreaView>
   );
@@ -122,6 +131,16 @@ const styles = {
     borderWidth: layoutPtToPx(1),
     paddingHorizontal: layoutPtToPx(12),
     marginHorizontal: layoutPtToPx(5),
+  },
+  emptyContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyScreenTextStyle: {
+    fontFamily: fonts.InterRegular,
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(17),
+    color: getColorWithOpacity(colors.BlackPearl, 0.7),
   },
 };
 export default React.memo(SearchResultScreen);

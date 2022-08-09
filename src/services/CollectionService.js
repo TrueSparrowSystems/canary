@@ -21,6 +21,9 @@ class CollectionService {
 
   async addCollection(collectionName) {
     return new Promise((resolve, reject) => {
+      if (isEmpty(collectionName.trim())) {
+        return reject('Please enter a valid name');
+      }
       Store.get(StoreKeys.CollectionsList).then(list => {
         const colorCombination = getRandomColorCombination();
         if (isEmpty(JSON.parse(list))) {

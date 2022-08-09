@@ -61,6 +61,7 @@ function AddListModal() {
               text={'Create'}
               textStyle={localStyle.createButtonText}
               leftImage={AddIcon}
+              disabled={nCharacterCount === 0}
               leftImageStyle={localStyle.addIconStyle}
               onPress={fnOnCreateListPress}
               underlayColor={colors.GoldenTainoi80}

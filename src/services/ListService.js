@@ -4,7 +4,7 @@ import uuid from 'react-native-uuid';
 import {getRandomColorCombination} from '../utils/RandomColorUtil';
 import Cache from './Cache';
 import {CacheKey} from './Cache/CacheStoreConstants';
-import {find} from 'lodash';
+import {find, isEmpty} from 'lodash';
 import {compareFunction} from '../utils/Strings';
 
 const LIST_LIMIT = 30;
@@ -20,6 +20,9 @@ class ListService {
 
   async addList(listName) {
     return new Promise((resolve, reject) => {
+      if (isEmpty(listName.trim())) {
+        return reject('Please enter a valid name');
+      }
       const colorCombination = getRandomColorCombination();
       Store.get(StoreKeys.Lists).then(list => {
         if (list == null) {

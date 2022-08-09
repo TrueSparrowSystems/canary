@@ -63,6 +63,7 @@ function AddCollectionModal() {
               text={'Create'}
               textStyle={localStyle.createButtonText}
               leftImage={AddIcon}
+              disabled={nCharacterCount === 0}
               leftImageStyle={localStyle.addIconStyle}
               onPress={fnOnCreateCollectionPress}
               underlayColor={colors.GoldenTainoi80}

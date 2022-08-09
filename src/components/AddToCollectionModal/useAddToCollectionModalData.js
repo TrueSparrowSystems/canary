@@ -91,6 +91,14 @@ function useAddToCollectionModalData() {
 
   const onAddToCollectionSuccess = useCallback(
     (collectionName, collectionId) => {
+      showAddToCollectionToast(collectionName);
+      modalRef.current?.onAddToCollectionSuccess?.(collectionId);
+    },
+    [showAddToCollectionToast],
+  );
+
+  const onAddCollectionSuccess = useCallback(
+    (collectionName, collectionId) => {
       getCollectionsList();
       setIsVisible(true);
       showAddToCollectionToast(collectionName);
@@ -125,9 +133,9 @@ function useAddToCollectionModalData() {
         setIsVisible(true);
         showAddToCollectionToast(collectionName, collectionId);
       },
-      onAddToCollectionSuccess,
+      onAddToCollectionSuccess: onAddCollectionSuccess,
     });
-  }, [getCollectionsList, onAddToCollectionSuccess, showAddToCollectionToast]);
+  }, [getCollectionsList, onAddCollectionSuccess, showAddToCollectionToast]);
 
   return {
     aTweetCollectionIds: tweetCollectionIdsArrays.current,

@@ -91,6 +91,7 @@ function useAddToCollectionModalData() {
 
   const onAddToCollectionSuccess = useCallback(
     (collectionName, collectionId) => {
+      LocalEvent.emit(EventTypes.UpdateCollection);
       showAddToCollectionToast(collectionName);
       modalRef.current?.onAddToCollectionSuccess?.(collectionId);
     },
@@ -99,6 +100,7 @@ function useAddToCollectionModalData() {
 
   const onAddCollectionSuccess = useCallback(
     (collectionName, collectionId) => {
+      LocalEvent.emit(EventTypes.UpdateCollection);
       getCollectionsList();
       setIsVisible(true);
       showAddToCollectionToast(collectionName);
@@ -115,6 +117,15 @@ function useAddToCollectionModalData() {
   }, []);
 
   const onRemoveFromCollectionSuccess = useCallback(collectionName => {
+    const isTweetRemoveFromAllCollections =
+      collectionService().isTweetRemoveFromAllCollections(
+        modalRef.current?.tweetId,
+      );
+
+    if (isTweetRemoveFromAllCollections) {
+      modalRef.current?.onRemoveFromAllCollectionSuccess?.();
+    }
+    LocalEvent.emit(EventTypes.UpdateCollection);
     Toast.show({
       type: ToastType.Success,
       text1: replace('Removed tweet from {{collectionName}}', {

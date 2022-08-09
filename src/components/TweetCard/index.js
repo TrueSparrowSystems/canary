@@ -1,7 +1,8 @@
 import {unescape} from 'lodash';
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {Share, Text, TouchableOpacity, View} from 'react-native';
 import {
+  bookmarkedIcon,
   bookmarkIcon,
   commentIcon,
   likeIcon,
@@ -33,12 +34,28 @@ function TweetCard(props) {
 
   const {fnOnCardPress, fnOnUserNamePress} = useTweetCardData(props);
   const localStyle = useStyleProcessor(styles, 'TweetCard');
-  const {user, text, id, public_metrics, media, entities, created_at} =
-    dataSource;
+  const {
+    user,
+    text,
+    id,
+    public_metrics,
+    media,
+    entities,
+    created_at,
+    isBookmarked,
+  } = dataSource;
+
+  const [isTweetBookmarked, setIsTweetBookmarked] = useState(isBookmarked);
 
   const onBookmarkButtonPress = useCallback(() => {
     LocalEvent.emit(EventTypes.ShowAddToCollectionModal, {
       tweetId: id,
+      onAddToCollectionSuccess: () => {
+        setIsTweetBookmarked(true);
+      },
+      onRemoveFromAllCollectionSuccess: () => {
+        setIsTweetBookmarked(false);
+      },
     });
   }, [id]);
 
@@ -142,7 +159,7 @@ function TweetCard(props) {
                 onPress={onBookmarkButtonPress}
                 hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                 <Image
-                  source={bookmarkIcon}
+                  source={isTweetBookmarked ? bookmarkedIcon : bookmarkIcon}
                   style={localStyle.bookmarkIconStyle}
                 />
               </TouchableOpacity>
@@ -244,8 +261,8 @@ const styles = {
   },
   bookmarkIconStyle: {
     height: layoutPtToPx(20),
-    width: layoutPtToPx(17),
     marginHorizontal: layoutPtToPx(10),
+    width: layoutPtToPx(15),
   },
   shareIconContainer: {
     justifyContent: 'center',

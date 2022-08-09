@@ -150,17 +150,22 @@ function TweetCard(props) {
                       message: `Check out this tweet!\n${tweetUrl}`,
                     });
                   }}
-                  style={localStyle.shareIconContainer}>
+                  style={localStyle.shareIconContainer}
+                  hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                   <Image source={ShareIcon} style={localStyle.shareIconStyle} />
                 </TouchableOpacity>
               ) : null}
-              <TouchableOpacity onPress={onBookmarkButtonPress}>
+              <TouchableOpacity
+                onPress={onBookmarkButtonPress}
+                hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                 <Image
                   source={isTweetBookmarked ? bookmarkedIcon : bookmarkIcon}
                   style={localStyle.bookmarkIconStyle}
                 />
               </TouchableOpacity>
-              <TouchableOpacity onPress={onAddToListPress}>
+              <TouchableOpacity
+                onPress={onAddToListPress}
+                hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                 <Image source={ListIcon} style={localStyle.listIconStyle} />
               </TouchableOpacity>
             </View>
@@ -256,8 +261,8 @@ const styles = {
   },
   bookmarkIconStyle: {
     height: layoutPtToPx(20),
+    marginHorizontal: layoutPtToPx(10),
     width: layoutPtToPx(15),
-    marginRight: layoutPtToPx(20),
   },
   shareIconContainer: {
     justifyContent: 'center',
@@ -265,11 +270,12 @@ const styles = {
   shareIconStyle: {
     height: layoutPtToPx(17),
     aspectRatio: 1,
-    marginRight: layoutPtToPx(20),
+    marginHorizontal: layoutPtToPx(10),
   },
   listIconStyle: {
     height: layoutPtToPx(20),
     width: layoutPtToPx(15),
+    marginHorizontal: layoutPtToPx(10),
   },
   publicMetricText: {
     color: colors.Black,

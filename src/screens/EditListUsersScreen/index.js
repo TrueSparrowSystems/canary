@@ -67,6 +67,7 @@ function EditListUsersScreen(props) {
               return (
                 <Animatable.View ref={viewRef} key={listMember.username}>
                   <AppleStyleSwipeableRow
+                    key={listMember.username}
                     enabled={true}
                     rightActionsArray={[
                       {

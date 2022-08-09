@@ -106,6 +106,9 @@ function TimelineList({
 const styles = {
   flatListPropsStyle: {flex: 1},
   contentContainerStyle: {
+    justifyContent: 'center',
+    width: '100%',
+    flexGrow: 1,
     // paddingRight: layoutPtToPx(20),
     // paddingLeft: layoutPtToPx(10),
   },

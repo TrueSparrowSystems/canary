@@ -1,11 +1,13 @@
-import React from 'react';
-import {ActivityIndicator, SafeAreaView, View} from 'react-native';
+import React, {useMemo} from 'react';
+import {ActivityIndicator, SafeAreaView, Text, View} from 'react-native';
 import Header from '../../components/common/Header';
 import SearchBar from '../../components/SearchBar';
 import TimelineList from '../../components/TimelineList';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import colors from '../../constants/colors';
+import colors, {getColorWithOpacity} from '../../constants/colors';
 import useSearchResultScreenData from './useSearchResultScreenData';
+import fonts from '../../constants/fonts';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 
 function SearchResultScreen(props) {
   const {query} = props?.route?.params;
@@ -18,6 +20,14 @@ function SearchResultScreen(props) {
   } = useSearchResultScreenData({
     searchQuery: query,
   });
+
+  const ListEmptyComponent = useMemo(() => {
+    return (
+      <View style={localStyle.emptyContainer}>
+        <Text style={localStyle.emptyScreenTextStyle}>No results found</Text>
+      </View>
+    );
+  }, [localStyle.emptyContainer, localStyle.emptyScreenTextStyle]);
   return (
     <SafeAreaView style={localStyle.flex1}>
       <Header enableBackButton={true} text={'Tweet Screen'} />
@@ -32,6 +42,7 @@ function SearchResultScreen(props) {
         timelineListDataSource={searchResultListDataSource}
         refreshData={bIsLoading}
         onDataAvailable={fnOnDataAvailable}
+        listEmptyComponent={ListEmptyComponent}
       />
     </SafeAreaView>
   );
@@ -49,6 +60,16 @@ const styles = {
   loaderView: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  emptyContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyScreenTextStyle: {
+    fontFamily: fonts.InterRegular,
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(17),
+    color: getColorWithOpacity(colors.BlackPearl, 0.7),
   },
 };
 export default React.memo(SearchResultScreen);

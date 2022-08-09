@@ -18,10 +18,11 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
 import EmptyScreenComponent from '../common/EmptyScreenComponent';
 import {isEmpty} from 'lodash';
+import useBackButtonPress from '../../hooks/useBackButtonPress';
 
 function AddToCollectionModal() {
   const localStyle = useStyleProcessor(styles, 'AddToCollectionModal');
-
+  useBackButtonPress();
   const {
     aTweetCollectionIds,
     bIsLoading,

@@ -18,6 +18,7 @@ import Colors from '../../../constants/colors';
 function RoundedButton({
   onPress,
   disabled,
+  shouldReduceOpacityWhenDisabled = true,
   text,
   leftImage,
   style,
@@ -33,7 +34,10 @@ function RoundedButton({
     <TouchableHighlight
       underlayColor={underlayColor || Colors.Mandy30}
       disabled={disabled}
-      style={[containerStyle, disabled ? {opacity: 0.5} : {}]}
+      style={[
+        containerStyle,
+        disabled && shouldReduceOpacityWhenDisabled ? {opacity: 0.5} : {},
+      ]}
       onPress={onPress}>
       <View style={localStyle.buttonContainer}>
         {leftImage ? (

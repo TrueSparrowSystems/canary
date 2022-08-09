@@ -22,3 +22,5 @@ export const Canary = require('./canary.png');
 export const TickIcon = require('./tickIcon.png');
 export const ListIconBig = require('./listIconBig.png');
 export const ArchiveIconBig = require('./collectionsBig.png');
+export const NewIcon = require('./newResults.png');
+export const PopularIcon = require('./popular.png');

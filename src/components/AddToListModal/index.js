@@ -19,6 +19,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
 import EmptyScreenComponent from '../common/EmptyScreenComponent';
 import {isEmpty} from 'lodash';
+import UserCard from '../common/UserCard';
 import useBackButtonPress from '../../hooks/useBackButtonPress';
 
 function AddToListModal() {
@@ -32,6 +33,7 @@ function AddToListModal() {
     fnOnAddListPress,
     fnOnDonePress,
     oList,
+    oUserData,
     sUserName,
   } = useAddToListModalData();
 
@@ -79,35 +81,43 @@ function AddToListModal() {
             {bIsLoading ? (
               <ActivityIndicator animating={bIsLoading} />
             ) : isEmpty(oList) ? (
-              <View style={localStyle.emptyComponentContainer}>
-                <EmptyScreenComponent
-                  emptyImage={ListIconBig}
-                  buttonText={'Create a new List'}
-                  onButtonPress={fnOnAddListPress}
-                  descriptionText={
-                    'Stay up-to-date on the favorite topics by users you love, without being tracked 😉'
-                  }
-                />
+              <View>
+                <UserCard userData={oUserData} />
+                <View style={localStyle.emptyComponentContainer}>
+                  <EmptyScreenComponent
+                    emptyImage={ListIconBig}
+                    buttonText={'Create a new List'}
+                    onButtonPress={fnOnAddListPress}
+                    descriptionText={
+                      'Stay up-to-date on the favorite topics by users you love, without being tracked 😉'
+                    }
+                  />
+                </View>
               </View>
             ) : (
-              <ScrollView
-                style={scrollViewStyle}
-                contentContainerStyle={localStyle.scrollContentContainerStyle}>
-                {Object.keys(oList).map(key => {
-                  const list = oList[key];
-                  return (
-                    <ListCard
-                      key={list.id}
-                      data={list}
-                      userName={sUserName}
-                      onAddToListSuccess={fnOnAddToListSuccess}
-                      isPressDisabled={true}
-                      shouldShowAddButton={true}
-                      disableSwipeInteraction={true}
-                    />
-                  );
-                })}
-              </ScrollView>
+              <View>
+                <UserCard userData={oUserData} />
+                <ScrollView
+                  style={scrollViewStyle}
+                  contentContainerStyle={
+                    localStyle.scrollContentContainerStyle
+                  }>
+                  {Object.keys(oList).map(key => {
+                    const list = oList[key];
+                    return (
+                      <ListCard
+                        key={list.id}
+                        data={list}
+                        userName={sUserName}
+                        onAddToListSuccess={fnOnAddToListSuccess}
+                        isPressDisabled={true}
+                        shouldShowAddButton={true}
+                        disableSwipeInteraction={true}
+                      />
+                    );
+                  })}
+                </ScrollView>
+              </View>
             )}
           </View>
         </SafeAreaView>
@@ -145,8 +155,8 @@ const styles = {
     color: colors.GoldenTainoi,
   },
   emptyComponentContainer: {
-    paddingVertical: layoutPtToPx(30),
-    height: '80%',
+    paddingBottom: layoutPtToPx(30),
+    height: '65%',
   },
   blur: {
     position: 'absolute',
@@ -195,6 +205,7 @@ const styles = {
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: layoutPtToPx(20),
   },
   scrollContentContainerStyle: {
     paddingBottom: layoutPtToPx(20),

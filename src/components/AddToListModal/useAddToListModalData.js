@@ -6,15 +6,22 @@ import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 import {compareFunction, replace} from '../../utils/Strings';
 import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
+import TwitterAPI from '../../api/helpers/TwitterAPI';
 
 function useAddToListModalData() {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const modalRef = useRef({});
+  const userDataRef = useRef({});
+  const [userData, setUserData] = useState(userDataRef.current);
   const listRef = useRef(null);
 
   const getList = useCallback(() => {
     setIsLoading(true);
+    TwitterAPI.getUserByUserName(modalRef.current?.userName).then(res => {
+      userDataRef.current = res?.data?.data;
+      setUserData(userDataRef.current);
+    });
     listService()
       .getAllLists()
       .then(list => {
@@ -62,6 +69,8 @@ function useAddToListModalData() {
 
   const closeModal = useCallback(() => {
     setIsVisible(false);
+    userDataRef.current = {};
+    setUserData(userDataRef.current);
   }, []);
 
   const onBackdropPress = useCallback(() => {
@@ -103,6 +112,7 @@ function useAddToListModalData() {
     bIsLoading: isLoading,
     sUserName: modalRef.current?.userName || null,
     oList: listRef.current,
+    oUserData: userDataRef.current,
     fnOnBackdropPress: onBackdropPress,
     fnOnAddToListSuccess: onAddToListSuccess,
     fnOnAddListPress: onAddListPress,

@@ -252,7 +252,6 @@ class CollectionService {
 
   isTweetRemoveFromAllCollections(tweetId) {
     const bookmarkedTweets = Cache.getValue(CacheKey.BookmarkedTweetsList);
-    console.log({bookmarkedTweets}, bookmarkedTweets?.hasOwnProperty(tweetId));
     if (bookmarkedTweets) {
       const isPresent = bookmarkedTweets?.hasOwnProperty(tweetId);
       return !isPresent;

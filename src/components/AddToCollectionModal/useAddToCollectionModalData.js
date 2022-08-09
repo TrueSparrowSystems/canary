@@ -100,6 +100,7 @@ function useAddToCollectionModalData() {
 
   const onAddCollectionSuccess = useCallback(
     (collectionName, collectionId) => {
+      LocalEvent.emit(EventTypes.UpdateCollection);
       getCollectionsList();
       setIsVisible(true);
       showAddToCollectionToast(collectionName);

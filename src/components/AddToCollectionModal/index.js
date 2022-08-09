@@ -13,7 +13,7 @@ import colors, {getColorWithOpacity} from '../../constants/colors';
 import useAddToCollectionModalData from './useAddToCollectionModalData';
 import MiniCollectionCard from '../MiniCollectionCard';
 import {ScrollView} from 'react-native-gesture-handler';
-import {AddIcon, CollectionsIcon} from '../../assets/common';
+import {AddIcon, ArchiveIconBig} from '../../assets/common';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
 import EmptyScreenComponent from '../common/EmptyScreenComponent';
@@ -79,7 +79,7 @@ function AddToCollectionModal() {
             ) : isEmpty(oCollectionList) ? (
               <View style={localStyle.emptyComponentContainer}>
                 <EmptyScreenComponent
-                  emptyImage={CollectionsIcon}
+                  emptyImage={ArchiveIconBig}
                   buttonText={'Add a new Archive'}
                   onButtonPress={fnOnAddCollectionPress}
                   descriptionText={

@@ -13,7 +13,7 @@ import CustomModal from '../common/CustomModal';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import useAddToListModalData from './useAddToListModalData';
 import {ScrollView} from 'react-native-gesture-handler';
-import {AddIcon, BottomBarListIcon} from '../../assets/common';
+import {AddIcon, ListIconBig} from '../../assets/common';
 import ListCard from '../ListCard';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
@@ -80,7 +80,7 @@ function AddToListModal() {
             ) : isEmpty(oList) ? (
               <View style={localStyle.emptyComponentContainer}>
                 <EmptyScreenComponent
-                  emptyImage={BottomBarListIcon}
+                  emptyImage={ListIconBig}
                   buttonText={'Create a new List'}
                   onButtonPress={fnOnAddListPress}
                   descriptionText={

@@ -79,7 +79,6 @@ const styles = {
   emptyImageStyle: {
     height: layoutPtToPx(124),
     width: layoutPtToPx(124),
-    opacity: 0.2,
   },
   emptyViewStyle: {
     marginHorizontal: layoutPtToPx(20),

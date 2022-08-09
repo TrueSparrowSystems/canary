@@ -72,7 +72,7 @@ const Navigation = props => {
             detachPreviousScreen: false,
             headerShown: false,
             gestureEnabled: false,
-            presentation: 'card',
+            presentation: 'modal',
             cardOverlayEnabled: false,
             cardStyle: {backgroundColor: 'transparent'},
             transitionSpec: {
@@ -301,10 +301,10 @@ const Navigation = props => {
           name={ScreenName.ImageViewScreen}
           component={ImageViewScreen}
           options={{
+            presentation: 'modal',
             detachPreviousScreen: false,
             headerShown: false,
             gestureEnabled: false,
-            presentation: 'card',
             cardOverlayEnabled: false,
             cardStyle: {backgroundColor: 'transparent'},
             transitionSpec: {
@@ -387,7 +387,7 @@ const Navigation = props => {
             detachPreviousScreen: false,
             headerShown: false,
             gestureEnabled: false,
-            presentation: 'card',
+            presentation: 'modal',
             cardOverlayEnabled: false,
             cardStyle: {backgroundColor: 'transparent'},
             transitionSpec: {
@@ -494,7 +494,7 @@ const Navigation = props => {
             detachPreviousScreen: false,
             headerShown: false,
             gestureEnabled: false,
-            presentation: 'card',
+            presentation: 'modal',
             cardOverlayEnabled: false,
             cardStyle: {backgroundColor: 'transparent'},
             transitionSpec: {

@@ -3,7 +3,7 @@ import {useCallback, useState} from 'react';
 /**
  * @param {Function} onDataAvailable Callback function which is called when the flat list data is changed.
  */
-export default function useClassListData({onDataAvailable}) {
+export default function useTimelineListData({onDataAvailable, onRefresh}) {
   const [isVisible, setIsVisible] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,9 +22,10 @@ export default function useClassListData({onDataAvailable}) {
     },
     [isVisible, onDataAvailable],
   );
-  const onRefresh = useCallback(() => {
+  const _onRefresh = useCallback(() => {
     setIsLoading(true);
-  }, []);
+    onRefresh?.();
+  }, [onRefresh]);
 
   /*
    * bIsVisible: Boolean variable which indicates if the list is visible or not.
@@ -32,7 +33,7 @@ export default function useClassListData({onDataAvailable}) {
    */
   return {
     bIsLoading: isLoading,
-    fnOnRefresh: onRefresh,
+    fnOnRefresh: _onRefresh,
     fnOnDataChange: onDataChange,
   };
 }

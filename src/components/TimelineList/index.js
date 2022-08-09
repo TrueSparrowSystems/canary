@@ -17,6 +17,7 @@ function TimelineList({
   style,
   reloadData,
   refreshData,
+  onRefresh,
   onDataAvailable,
   timelineListDataSource = null,
   listHeaderComponent = null,
@@ -25,6 +26,7 @@ function TimelineList({
 }) {
   const {bIsLoading, fnOnRefresh, fnOnDataChange} = useTimelineListData({
     onDataAvailable,
+    onRefresh,
   });
 
   const listDataSource = useRef(timelineListDataSource);

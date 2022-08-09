@@ -28,17 +28,21 @@ function LocationSelectionScreen() {
         placeholderText={'Search Location'}
       />
       <ScrollView style={localStyle.scrollViewContainer}>
-        {aData?.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            onPress={() => {
-              fnOnItemSelect(item);
-            }}
-            style={localStyle.itemContainer}
-            activeOpacity={0.8}>
-            <Text style={localStyle.itemText}>{item}</Text>
-          </TouchableOpacity>
-        ))}
+        {aData.length ? (
+          aData?.map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => {
+                fnOnItemSelect(item);
+              }}
+              style={localStyle.itemContainer}
+              activeOpacity={0.8}>
+              <Text style={localStyle.itemText}>{item}</Text>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <Text style={localStyle.noResultsText}>No results found</Text>
+        )}
       </ScrollView>
     </KeyboardAwareScrollView>
   );
@@ -50,6 +54,11 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: colors.White,
+  },
+  noResultsText: {
+    alignSelf: 'center',
+    fontFamily: fonts.SoraSemiBold,
+    color: colors.BlackPearl,
   },
   itemContainer: {
     borderBottomWidth: 1,

@@ -121,6 +121,7 @@ const styles = {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(16),
     lineHeight: layoutPtToPx(20),
+    color: colors.BlackPearl,
   },
   headerRightButtonText: {
     fontFamily: fonts.SoraSemiBold,

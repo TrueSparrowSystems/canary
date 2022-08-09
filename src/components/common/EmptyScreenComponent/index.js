@@ -6,6 +6,7 @@ import fonts from '../../../constants/fonts';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
 import RoundedButton from '../RoundedButton';
+import * as Animatable from 'react-native-animatable';
 
 function EmptyScreenComponent(props) {
   const {
@@ -20,7 +21,7 @@ function EmptyScreenComponent(props) {
   const localStyle = useStyleProcessor(styles, 'EmptyScreenComponent');
 
   return (
-    <View style={localStyle.emptyViewStyle}>
+    <Animatable.View animation="fadeIn" style={localStyle.emptyViewStyle}>
       {emptyImage ? (
         <Image source={emptyImage} style={localStyle.emptyImageStyle} />
       ) : null}
@@ -40,7 +41,7 @@ function EmptyScreenComponent(props) {
           underlayColor={colors.GoldenTainoi80}
         />
       ) : null}
-    </View>
+    </Animatable.View>
   );
 }
 

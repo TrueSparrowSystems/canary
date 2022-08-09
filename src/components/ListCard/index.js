@@ -73,7 +73,7 @@ function ListCard(props) {
   ]);
 
   return (
-    <Animatable.View ref={viewRef}>
+    <Animatable.View animation={'fadeIn'} ref={viewRef}>
       <AppleStyleSwipeableRow
         disableSwipeInteraction={disableSwipeInteraction}
         enabled={enableSwipe}

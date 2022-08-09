@@ -48,7 +48,7 @@ class CollectionService {
           var _list = JSON.parse(list);
           const newId = uuid.v4();
 
-          if (find(_list, {name: collectionName})) {
+          if (find(_list, {name: collectionName.trim()})) {
             return reject('Archive name already exists.');
           }
 
@@ -197,7 +197,7 @@ class CollectionService {
   async removeCollection(collectionId) {
     return new Promise((resolve, reject) => {
       const tweetIdsOfThisCollection = this.collections[collectionId].tweetIds;
-      const bookmarkedIds = Cache.getValue(CacheKey.BookmarkedTweetsList) || [];
+      const bookmarkedIds = Cache.getValue(CacheKey.BookmarkedTweetsList) || {};
       delete this.collections[collectionId];
       Store.set(StoreKeys.CollectionsList, this.collections)
         .then(() => {
@@ -219,10 +219,14 @@ class CollectionService {
 
   async removeTweetFromCollection(collectionId, tweetId) {
     return new Promise((resolve, reject) => {
-      const bookmarkedIds = Cache.getValue(CacheKey.BookmarkedTweetsList) || [];
+      const bookmarkedIds = Cache.getValue(CacheKey.BookmarkedTweetsList) || {};
       const collectionIds = bookmarkedIds[tweetId];
       collectionIds.splice(collectionIds.indexOf(collectionId), 1);
-      bookmarkedIds[tweetId] = collectionIds;
+      if (collectionIds.length === 0) {
+        delete bookmarkedIds[tweetId];
+      } else {
+        bookmarkedIds[tweetId] = collectionIds;
+      }
       const tweetIds = this.collections[collectionId]?.tweetIds;
       const index = tweetIds.indexOf(tweetId);
       if (index > -1) {
@@ -244,6 +248,15 @@ class CollectionService {
           return reject('Unable to remove tweet from archive');
         });
     });
+  }
+
+  isTweetRemoveFromAllCollections(tweetId) {
+    const bookmarkedTweets = Cache.getValue(CacheKey.BookmarkedTweetsList);
+    if (bookmarkedTweets) {
+      const isPresent = bookmarkedTweets?.hasOwnProperty(tweetId);
+      return !isPresent;
+    }
+    return true;
   }
 }
 

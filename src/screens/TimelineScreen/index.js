@@ -1,5 +1,5 @@
 import React, {useCallback, useRef} from 'react';
-import {Image, Text, View} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {Canary, SettingsIcon} from '../../assets/common';
@@ -33,10 +33,13 @@ function TimelineScreen(props) {
           onRightButtonClick={fnOnSettingsPress}
           rightButtonImage={SettingsIcon}
           text={
-            <View style={localStyle.flexRow}>
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={scrollToTop}
+              style={localStyle.flexRow}>
               <Image source={Canary} style={localStyle.iconStyle} />
               <Text style={localStyle.appNameText}>Canary</Text>
-            </View>
+            </TouchableOpacity>
           }
         />
       </View>

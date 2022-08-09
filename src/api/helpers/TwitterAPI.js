@@ -4,6 +4,11 @@ import PreferencesDataHelper from '../../services/PreferencesDataHelper';
 
 const CONTEXTS_LIMIT = 12;
 
+export const SortOrder = {
+  Relevancy: 'relevancy',
+  Recency: 'recency',
+};
+
 const EndPoints = {
   timelineFeed: 'https://api.twitter.com/2/tweets/search/recent',
   searchResultFeed: 'https://api.twitter.com/2/tweets/search/recent',
@@ -67,7 +72,7 @@ class TwitterApi {
   timelineFeed(nextPageIdentifier) {
     const data = {
       max_results: 10,
-      sort_order: 'relevancy',
+      sort_order: SortOrder.Relevancy,
       query: `(${this.getContexts()}) (lang:EN) (-is:retweet -is:reply -is:quote)`,
       ...API_REQUEST_PARAMETERS,
     };
@@ -78,9 +83,10 @@ class TwitterApi {
     return apiService.get(EndPoints.timelineFeed, data);
   }
 
-  searchResultFeed(query, nextPageIdentifier) {
+  searchResultFeed(query, sortOrder = SortOrder.Recency, nextPageIdentifier) {
     const data = {
       max_results: 10,
+      sort_order: sortOrder,
       query: `${query} (-is:retweet -is:reply -is:quote)`,
       ...API_REQUEST_PARAMETERS,
     };

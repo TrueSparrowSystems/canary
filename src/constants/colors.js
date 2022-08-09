@@ -17,7 +17,7 @@ const colors = {
   BlackPearl: '#141819',
   BlackPearl20: '#14181933',
   BlackPearl50: '#14181980',
-  BananaMania: '#FEF1B4',
+  CornField: '#FFFBBE',
   KourniKova: '#FED05B',
   OxfordBlue: '#2B2F30',
   Grandis: '#FED56B',
@@ -55,21 +55,21 @@ export function getColorWithOpacity(color, opacity) {
 
 export const colorCombination = {
   light: [
-    {textColor: colors.GoldenTainoi, backgroundColor: colors.BananaMania},
+    {textColor: colors.GoldenTainoi, backgroundColor: colors.CornField},
     {textColor: colors.KourniKova, backgroundColor: colors.OxfordBlue},
     {textColor: colors.BlackPearl, backgroundColor: colors.Grandis},
     {textColor: colors.BlackPearl, backgroundColor: colors.SweetCorn},
     {textColor: colors.SweetCorn, backgroundColor: colors.OxfordBlue},
-    {textColor: colors.BananaMania, backgroundColor: colors.GoldenTainoi},
+    {textColor: colors.CornField, backgroundColor: colors.GoldenTainoi},
     {textColor: colors.BlackPearl, backgroundColor: colors.GoldenTainoi},
   ],
   dark: [
-    {textColor: colors.GoldenTainoi, backgroundColor: colors.BananaMania},
+    {textColor: colors.GoldenTainoi, backgroundColor: colors.CornField},
     {textColor: colors.KourniKova, backgroundColor: colors.OxfordBlue},
     {textColor: colors.BlackPearl, backgroundColor: colors.Grandis},
     {textColor: colors.BlackPearl, backgroundColor: colors.SweetCorn},
     {textColor: colors.SweetCorn, backgroundColor: colors.OxfordBlue},
-    {textColor: colors.BananaMania, backgroundColor: colors.GoldenTainoi},
+    {textColor: colors.CornField, backgroundColor: colors.GoldenTainoi},
     {textColor: colors.BlackPearl, backgroundColor: colors.GoldenTainoi},
   ],
 };

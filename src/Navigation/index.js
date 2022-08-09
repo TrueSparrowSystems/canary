@@ -564,6 +564,8 @@ const styles = {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    borderTopWidth: 2,
+    borderTopColor: colors.Transparent,
   },
   selectedTabContainer: {
     borderTopColor: colors.BlackPearl,

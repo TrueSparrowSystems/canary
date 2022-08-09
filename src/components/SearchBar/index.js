@@ -4,7 +4,6 @@ import colors, {getColorWithOpacity} from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {CrossIcon, SearchIcon} from '../../assets/common';
-import {useNavigation} from '@react-navigation/native';
 import {isEmpty, unescape} from 'lodash';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import fonts from '../../constants/fonts';
@@ -22,10 +21,10 @@ function SearchBar({
       displayText = arr[1];
     }
   }
-  const navigation = useNavigation();
   const localStyle = useStyleProcessor(styles, 'SearchBar');
   const queryRef = useRef(displayText);
   const [query, setQuery] = useState(queryRef.current);
+  const [isFocussed, setIsFocussed] = useState(false);
   const textInputRef = useRef(null);
 
   useEffect(() => {
@@ -37,18 +36,6 @@ function SearchBar({
     LocalEvent.on(EventTypes.OnTrendingTopicClick, OnTrendingTopicClicked);
     return () => {
       LocalEvent.off(EventTypes.OnTrendingTopicClick, OnTrendingTopicClicked);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const setFocus = useCallback(() => {
-    textInputRef.current.focus();
-  }, []);
-
-  useEffect(() => {
-    navigation.addListener('focus', setFocus);
-    return () => {
-      navigation.removeListener('focus', setFocus);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -71,11 +58,26 @@ function SearchBar({
     [onQueryChange],
   );
 
+  const onTextInputFocussed = useCallback(() => {
+    setIsFocussed(true);
+  }, []);
+
+  const onTextInputBlurred = useCallback(() => {
+    setIsFocussed(false);
+  }, []);
+
   return (
-    <View style={localStyle.searchContainer}>
+    <View
+      style={
+        isFocussed
+          ? localStyle.searchContainerFocussed
+          : localStyle.searchContainer
+      }>
       <Image source={SearchIcon} style={localStyle.searchIconStyle} />
       <TextInput
         ref={textInputRef}
+        onFocus={onTextInputFocussed}
+        onBlur={onTextInputBlurred}
         style={localStyle.input}
         value={queryRef.current}
         cursorColor={colors.BlackPearl}
@@ -105,7 +107,22 @@ const styles = {
     borderWidth: 1,
     borderRadius: layoutPtToPx(4),
     paddingHorizontal: layoutPtToPx(10),
-    borderColor: getColorWithOpacity(colors.BlackPearl, 0.5),
+    borderColor: getColorWithOpacity(colors.BlackPearl, 0.2),
+    backgroundColor: colors.White,
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: layoutPtToPx(36),
+    tablet: {
+      marginTop: layoutPtToPx(20),
+    },
+  },
+  searchContainerFocussed: {
+    marginTop: layoutPtToPx(10),
+    marginHorizontal: layoutPtToPx(20),
+    borderWidth: 1,
+    borderRadius: layoutPtToPx(4),
+    paddingHorizontal: layoutPtToPx(10),
+    borderColor: colors.Black,
     backgroundColor: colors.White,
     flexDirection: 'row',
     alignItems: 'center',

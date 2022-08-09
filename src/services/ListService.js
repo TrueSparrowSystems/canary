@@ -50,7 +50,7 @@ class ListService {
             return reject('List Limit exceeded');
           }
 
-          if (find(_list, {name: listName})) {
+          if (find(_list, {name: listName.trim()})) {
             return reject('List name already exists.');
           }
 

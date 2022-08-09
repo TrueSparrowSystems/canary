@@ -14,6 +14,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useDiscoverScreenData from './useDiscoverScreenData';
 import fonts from '../../constants/fonts';
 import * as Animatable from 'react-native-animatable';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 function DiscoverScreen() {
   const localStyle = useStyleProcessor(styles, 'DiscoverScreen');
@@ -28,7 +29,9 @@ function DiscoverScreen() {
     fnNavigateToLocationSelectionScreen,
   } = useDiscoverScreenData();
   return (
-    <View style={localStyle.container}>
+    <KeyboardAwareScrollView
+      showsVerticalScrollIndicator={false}
+      style={localStyle.container}>
       <SearchBar onSearchPressCallback={fnOnSearchPress} />
       <Text style={localStyle.errorText}>{sTextInputError}</Text>
       {sSelectedCountryName ? (
@@ -64,7 +67,7 @@ function DiscoverScreen() {
           );
         })}
       </ScrollView>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 const styles = {
@@ -90,6 +93,7 @@ const styles = {
   trendingCountryContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     marginHorizontal: layoutPtToPx(20),
     marginTop: layoutPtToPx(20),
     marginBottom: layoutPtToPx(10),
@@ -97,6 +101,7 @@ const styles = {
   trendingCountryText: {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(18),
+    lineHeight: layoutPtToPx(22),
     flexShrink: 1,
     color: colors.BlackPearl,
   },
@@ -104,7 +109,9 @@ const styles = {
     flexGrow: 1,
     fontFamily: fonts.InterSemiBold,
     fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(22),
     color: colors.GoldenTainoi,
+    paddingLeft: layoutPtToPx(5),
   },
   errorText: {
     fontFamily: fonts.InterRegular,

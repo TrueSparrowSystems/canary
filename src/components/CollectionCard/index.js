@@ -121,7 +121,6 @@ function CollectionCard(props) {
 const styles = {
   container: {
     marginBottom: layoutPtToPx(20),
-
     borderRadius: layoutPtToPx(6),
     paddingHorizontal: layoutPtToPx(10),
     flex: 1,

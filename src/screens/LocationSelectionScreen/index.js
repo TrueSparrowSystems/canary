@@ -1,4 +1,4 @@
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {ScrollView, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import SearchBar from '../../components/SearchBar';
@@ -7,6 +7,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import fonts from '../../constants/fonts';
 import Header from '../../components/common/Header';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 function LocationSelectionScreen() {
   const localStyle = useStyleProcessor(styles, 'LocationSelectionScreen');
@@ -14,7 +15,9 @@ function LocationSelectionScreen() {
   const {aData, fnOnSearchInput, fnOnItemSelect} =
     useLocationSelectionScreenData();
   return (
-    <View style={localStyle.container}>
+    <KeyboardAwareScrollView
+      showsVerticalScrollIndicator={false}
+      style={localStyle.container}>
       <Header
         enableBackButton={true}
         text="Change Location"
@@ -37,7 +40,7 @@ function LocationSelectionScreen() {
           </TouchableOpacity>
         ))}
       </ScrollView>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 

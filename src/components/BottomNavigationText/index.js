@@ -26,9 +26,8 @@ const BottomNavigationText = ({style, focused, text}) => {
 
 const styles = {
   text: {
-    fontFamily: fonts.SoraRegular,
+    fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(10),
-    letterSpacing: layoutPtToPx(1.6),
     marginBottom: layoutPtToPx(10),
     color: colors.BlackPearl,
     textTransform: 'capitalize',

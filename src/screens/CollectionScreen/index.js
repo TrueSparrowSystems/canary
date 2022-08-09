@@ -184,6 +184,8 @@ const styles = {
   },
   contentContainerStyle: {
     marginTop: layoutPtToPx(10),
+    paddingTop: layoutPtToPx(5),
+    overflow: 'visible',
   },
 };
 

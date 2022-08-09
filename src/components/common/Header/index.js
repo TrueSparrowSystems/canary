@@ -16,6 +16,12 @@ function Header(props) {
     rightButtonImageStyle,
     rightButtonText,
     rightButtonTextStyle,
+    enableLeftButton,
+    leftButtonImage,
+    leftButtonText,
+    onLeftButtonClick,
+    leftButtonImageStyle,
+    leftButtonTextStyle,
     text,
     textStyle,
     style,
@@ -39,6 +45,24 @@ function Header(props) {
             <Image source={BackIcon} style={localStyle.backIcon} />
           </TouchableOpacity>
         ) : null}
+        {enableLeftButton && (leftButtonImage || leftButtonText) ? (
+          <TouchableOpacity
+            style={localStyle.leftButtonStyle}
+            activeOpacity={1}
+            onPress={onLeftButtonClick}>
+            {leftButtonImage ? (
+              <Image
+                source={leftButtonImage}
+                style={leftButtonImageStyle || localStyle.leftIcon}
+              />
+            ) : null}
+            {leftButtonText ? (
+              <Text style={leftButtonTextStyle}>{leftButtonText}</Text>
+            ) : null}
+          </TouchableOpacity>
+        ) : (
+          <View />
+        )}
       </View>
       <View style={localStyle.textView}>
         {text ? (
@@ -89,9 +113,17 @@ const styles = {
     color: colors.Black,
     fontFamily: fonts.SoraSemiBold,
   },
+  leftIcon: {
+    height: layoutPtToPx(25),
+    width: layoutPtToPx(25),
+  },
   rightIcon: {
     height: layoutPtToPx(25),
     width: layoutPtToPx(25),
+  },
+  leftButtonStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   rightButtonStyle: {
     flexDirection: 'row',

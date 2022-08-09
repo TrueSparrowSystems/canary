@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import colors from '../../constants/colors';
+import colors, {getColorWithOpacity} from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import RoundedButton from '../common/RoundedButton';
 import fonts from '../../constants/fonts';
@@ -20,7 +20,9 @@ const PreferenceOptionButton = ({
 
   const localButtonStyle = style || localStyle.preferenceButton;
 
-  const buttonBorderColor = selected ? colors.BlackPearl20 : colors.BlackPearl;
+  const buttonBorderColor = selected
+    ? getColorWithOpacity(colors.GoldenTainoi, 0.5)
+    : colors.BlackPearl;
   const buttonBackgroundColor = selected
     ? colors.GoldenTainoi
     : colors.Transparent;

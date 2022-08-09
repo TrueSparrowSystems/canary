@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import {SwipeIcon} from '../../assets/common';
+import {AddIcon, SwipeIcon} from '../../assets/common';
 import Header from '../../components/common/Header';
 import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
@@ -18,6 +18,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useEditListUsersScreenData from './useEditListUsersScreenData';
 import AppleStyleSwipeableRow from '../../components/AppleStyleSwipeableRow';
 import * as Animatable from 'react-native-animatable';
+import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
 function EditListUsersScreen(props) {
   const {listId, listUserNames, onDonePress} = props?.route?.params;
@@ -35,8 +36,19 @@ function EditListUsersScreen(props) {
         <Header
           text="Edit List"
           textStyle={localStyle.headerText}
+          enableLeftButton={true}
+          leftButtonText={'Add'}
+          leftButtonImage={AddIcon}
+          leftButtonImageStyle={localStyle.addIconStyle}
+          onLeftButtonClick={() => {
+            LocalEvent.emit(EventTypes.ShowSearchUserModal, {
+              listId: listId,
+              onUserAddComplete: fnOnRefresh,
+            });
+          }}
           enableRightButton={true}
           rightButtonText={'Done'}
+          leftButtonTextStyle={localStyle.headerRightButtonText}
           rightButtonTextStyle={localStyle.headerRightButtonText}
           onRightButtonClick={() => {
             navigation.goBack();
@@ -169,6 +181,12 @@ const styles = {
     fontSize: fontPtToPx(12),
     lineHeight: layoutPtToPx(15),
     color: colors.White,
+  },
+  addIconStyle: {
+    height: layoutPtToPx(14),
+    width: layoutPtToPx(14),
+    tintColor: colors.GoldenTainoi,
+    marginRight: layoutPtToPx(4),
   },
 };
 

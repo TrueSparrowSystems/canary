@@ -15,7 +15,7 @@ export function setCountriesWoeidsInCache() {
       Cache.setValue(CacheKey.AvailableWoeidsList, countryWoeids);
     })
     .catch(err => {
-      console.error('Trendng list error received - ', err);
+      console.error('Trending list error received - ', err);
     });
 }
 

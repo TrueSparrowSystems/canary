@@ -14,8 +14,14 @@ import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import * as Animatable from 'react-native-animatable';
 
 function CollectionCard(props) {
-  const {data, onCollectionRemoved, onLongPress, enableDelete, animationDelay} =
-    props;
+  const {
+    data,
+    onCollectionRemoved,
+    onLongPress,
+    enableDelete,
+    animationDelay,
+    disabled,
+  } = props;
   const {name: collectionName, id: collectionId, tweetIds} = data;
   let {colorScheme} = data;
   const localStyle = useStyleProcessor(styles, 'CollectionCard');
@@ -95,8 +101,8 @@ function CollectionCard(props) {
 
   return (
     <TouchableWithoutFeedback
-      onPress={onCollectionPress}
-      onLongPress={fnOnLongPress}>
+      onPress={disabled ? null : onCollectionPress}
+      onLongPress={disabled ? null : fnOnLongPress}>
       <Animatable.View
         ref={viewRef}
         animation="fadeIn"

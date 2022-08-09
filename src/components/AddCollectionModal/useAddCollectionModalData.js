@@ -58,7 +58,6 @@ function useAddCollectionModalData() {
           position: ToastPosition.Top,
         });
         if (modalData?.tweetId) {
-          LocalEvent.emit(EventTypes.UpdateCollection);
           _collectionService
             .addTweetToCollection(collectionId, modalData.tweetId)
             .then(() => {

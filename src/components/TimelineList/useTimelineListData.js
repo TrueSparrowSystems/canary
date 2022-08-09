@@ -3,7 +3,7 @@ import {useCallback, useState} from 'react';
 /**
  * @param {Function} onDataAvailable Callback function which is called when the flat list data is changed.
  */
-export default function useClassListData({onDataAvailable, onRefresh}) {
+export default function useTimelineListData({onDataAvailable, onRefresh}) {
   const [isVisible, setIsVisible] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 

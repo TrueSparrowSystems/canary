@@ -3,7 +3,7 @@ import {APIService} from '../../services/Api';
 import PreferencesDataHelper from '../../services/PreferencesDataHelper';
 
 const CONTEXTS_LIMIT = 12;
-const USERS_LIMIT = 30;
+const USERS_LIMIT = 20;
 
 const EndPoints = {
   timelineFeed: 'https://api.twitter.com/2/tweets/search/recent',

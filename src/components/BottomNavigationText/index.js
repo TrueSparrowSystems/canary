@@ -17,7 +17,7 @@ const BottomNavigationText = ({style, focused, text}) => {
     <Text
       style={[
         style || localStyles.text,
-        focused ? localStyles.activeText : localStyles.inactiveText,
+        focused ? {} : localStyles.inactiveText,
       ]}>
       {text}
     </Text>

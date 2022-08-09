@@ -14,6 +14,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
 import SearchBar from '../SearchBar';
 import SearchUserListItem from '../SearchUserListItem';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 function SearchUserModal() {
   const localStyle = useStyleProcessor(styles, 'SearchUserModal');
@@ -44,7 +45,9 @@ function SearchUserModal() {
       visible={bIsVisible}
       onBackDropPress={fnCloseModal}
       customBackdrop={getBackdrop}>
-      <View style={modalContainerStyle}>
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        style={modalContainerStyle}>
         {/* Header */}
         <View>
           <View style={localStyle.headerButtonContainer}>
@@ -69,7 +72,9 @@ function SearchUserModal() {
             </Text>
           </View>
         ) : (
-          <ScrollView>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={localStyle.scrollViewContainerStyle}>
             {aUserData.map(item => {
               return (
                 <SearchUserListItem
@@ -84,7 +89,7 @@ function SearchUserModal() {
             })}
           </ScrollView>
         )}
-      </View>
+      </KeyboardAwareScrollView>
     </CustomModal>
   );
 }
@@ -143,5 +148,8 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  scrollViewContainerStyle: {
+    paddingBottom: layoutPtToPx(25),
   },
 };

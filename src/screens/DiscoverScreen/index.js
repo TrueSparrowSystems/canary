@@ -29,7 +29,9 @@ function DiscoverScreen() {
     fnNavigateToLocationSelectionScreen,
   } = useDiscoverScreenData();
   return (
-    <KeyboardAwareScrollView style={localStyle.container}>
+    <KeyboardAwareScrollView
+      showsVerticalScrollIndicator={false}
+      style={localStyle.container}>
       <SearchBar onSearchPressCallback={fnOnSearchPress} />
       <Text style={localStyle.errorText}>{sTextInputError}</Text>
       {sSelectedCountryName ? (

@@ -57,14 +57,6 @@ function AddToCollectionModal() {
           <View style={localStyle.view}>
             <View style={localStyle.headerStyle}>
               <TouchableOpacity
-                style={localStyle.doneButtonContainer}
-                onPress={fnOnDonePress}>
-                <Text style={localStyle.headerTextStyle}>Done</Text>
-              </TouchableOpacity>
-              <View style={localStyle.titleContainer}>
-                <Text style={localStyle.titleText}>Add Tweets to Archives</Text>
-              </View>
-              <TouchableOpacity
                 onPress={fnOnAddCollectionPress}
                 disabled={isEmpty(oCollectionList)}
                 style={addNewButtonStyleMemo}>
@@ -72,6 +64,14 @@ function AddToCollectionModal() {
                   <Image source={AddIcon} style={localStyle.addIconStyle} />
                   <Text style={localStyle.headerTextStyle}>New</Text>
                 </View>
+              </TouchableOpacity>
+              <View style={localStyle.titleContainer}>
+                <Text style={localStyle.titleText}>Add Tweets to Archives</Text>
+              </View>
+              <TouchableOpacity
+                style={localStyle.doneButtonContainer}
+                onPress={fnOnDonePress}>
+                <Text style={localStyle.headerTextStyle}>Done</Text>
               </TouchableOpacity>
             </View>
             {bIsLoading ? (
@@ -166,12 +166,12 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    justifyContent: 'flex-end',
   },
   doneButtonContainer: {
     flex: 1,
-    alignItems: 'flex-start',
-    paddingLeft: layoutPtToPx(20),
+    alignItems: 'flex-end',
+    paddingRight: layoutPtToPx(20),
+    paddingBottom: layoutPtToPx(2),
   },
   flexRow: {
     flexDirection: 'row',
@@ -188,8 +188,9 @@ const styles = {
   },
   addNewButton: {
     flex: 1,
-    alignItems: 'flex-end',
-    paddingRight: layoutPtToPx(20),
+    alignItems: 'flex-start',
+    paddingTop: layoutPtToPx(2),
+    paddingLeft: layoutPtToPx(20),
   },
   view: {
     height: '100%',

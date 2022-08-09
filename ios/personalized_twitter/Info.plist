@@ -36,13 +36,14 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-Bold.ttf</string>
 		<string>Inter-SemiBold.ttf</string>
 		<string>Inter-Medium.ttf</string>
 		<string>Inter-Regular.ttf</string>
+		<string>Inter-Light.ttf</string>
 		<string>Sora-Bold.ttf</string>
 		<string>Sora-SemiBold.ttf</string>
 		<string>Sora-Medium.ttf</string>

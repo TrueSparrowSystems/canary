@@ -5,8 +5,9 @@ import TweetCard from '../../components/TweetCard';
 import TimelineList from '../../components/TimelineList';
 import ThreadTweetListDataSource from './ThreadTweetList/ThreadTweetListDataSource';
 import Header from '../../components/common/Header';
-import {layoutPtToPx} from '../../utils/responsiveUI';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import colors from '../../constants/colors';
+import fonts from '../../constants/fonts';
 
 function ThreadScreen(props) {
   const {tweetData} = props?.route?.params;
@@ -35,6 +36,8 @@ function ThreadScreen(props) {
             dataSource={tweetData}
             isDisabled={true}
             style={localStyle.cardStyle}
+            textStyle={localStyle.tweetText}
+            linkTextStyle={localStyle.tweetLinkText}
           />
         }
       />
@@ -51,7 +54,7 @@ const styles = {
   },
   cardStyle: {
     borderBottomWidth: 1,
-    borderBottomColor: colors.BlackPearl20,
+    borderBottomColor: colors.BlackPearl50,
     marginBottom: layoutPtToPx(12),
     padding: layoutPtToPx(12),
     flex: 1,
@@ -62,5 +65,18 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  tweetText: {
+    fontFamily: fonts.InterMedium,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(21),
+    marginBottom: 10,
+    color: colors.BlackPearl,
+  },
+  tweetLinkText: {
+    fontFamily: fonts.InterSemiBold,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(21),
+    color: colors.GoldenTainoi,
   },
 };

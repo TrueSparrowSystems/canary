@@ -46,7 +46,7 @@ function useDiscoverScreenData() {
 
   const onSearchPress = useCallback(
     query => {
-      if (query !== '') {
+      if (query.trim() !== '') {
         setTextInputError('');
         navigation.navigate(ScreenName.SearchResultScreen, {query});
       } else {

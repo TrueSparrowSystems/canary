@@ -178,7 +178,7 @@ const styles = {
   },
   descriptionTextStyle: {
     color: colors.BlackPearl,
-    fontFamily: fonts.InterRegular,
+    fontFamily: fonts.InterLight,
     fontSize: fontPtToPx(12),
     lineHeight: layoutPtToPx(15),
     marginTop: layoutPtToPx(3),

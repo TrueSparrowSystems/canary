@@ -50,7 +50,7 @@ function useListCardData(
       .removeUserFromList(listId, userName)
       .then(() => {
         updateAddButtonData();
-        onRemoveFromListSuccess(listName, listId);
+        onRemoveFromListSuccess?.(listName, listId);
         //Show Remove from list toast
       });
   }, [

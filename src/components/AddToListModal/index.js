@@ -30,6 +30,7 @@ function AddToListModal() {
     bIsVisible,
     fnOnBackdropPress,
     fnOnAddToListSuccess,
+    fnOnRemoveFromListSuccess,
     fnOnAddListPress,
     fnOnDonePress,
     oList,
@@ -110,6 +111,7 @@ function AddToListModal() {
                         data={list}
                         userName={sUserName}
                         onAddToListSuccess={fnOnAddToListSuccess}
+                        onRemoveFromListSuccess={fnOnRemoveFromListSuccess}
                         isPressDisabled={true}
                         shouldShowAddButton={true}
                         disableSwipeInteraction={true}

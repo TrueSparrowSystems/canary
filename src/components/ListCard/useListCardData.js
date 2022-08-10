@@ -14,6 +14,7 @@ function useListCardData(
   listId,
   listName,
   onAddToListSuccess,
+  onRemoveFromListSuccess,
   shouldShowAddButton,
   onCardLongPress,
 ) {
@@ -49,9 +50,16 @@ function useListCardData(
       .removeUserFromList(listId, userName)
       .then(() => {
         updateAddButtonData();
+        onRemoveFromListSuccess(listName, listId);
         //Show Remove from list toast
       });
-  }, [listId, updateAddButtonData, userName]);
+  }, [
+    listId,
+    listName,
+    onRemoveFromListSuccess,
+    updateAddButtonData,
+    userName,
+  ]);
 
   const onListRemove = useCallback(() => {
     listService()

@@ -87,12 +87,32 @@ function useAddToListModalData() {
     });
   }, []);
 
+  const showRemoveFromListSuccess = useCallback(listName => {
+    Toast.show({
+      type: ToastType.Success,
+      text1: replace('Removed user from {{listName}}', {
+        listName,
+      }),
+      position: ToastPosition.Top,
+    });
+  }, []);
+
   const onAddToListSuccess = useCallback(
     (listName, listId) => {
+      LocalEvent.emit(EventTypes.UpdateList);
       showAddToListToast(listName);
       modalRef.current?.onAddToListSuccess(listId);
     },
     [showAddToListToast],
+  );
+
+  const onRemoveFromListSuccess = useCallback(
+    (listName, listId) => {
+      LocalEvent.emit(EventTypes.UpdateList);
+      showRemoveFromListSuccess(listName);
+      modalRef.current?.onRemoveFromListSuccess?.(listId);
+    },
+    [showRemoveFromListSuccess],
   );
 
   const onAddListPress = useCallback(() => {
@@ -115,6 +135,7 @@ function useAddToListModalData() {
     oUserData: userDataRef.current,
     fnOnBackdropPress: onBackdropPress,
     fnOnAddToListSuccess: onAddToListSuccess,
+    fnOnRemoveFromListSuccess: onRemoveFromListSuccess,
     fnOnAddListPress: onAddListPress,
     fnOnDonePress: closeModal,
   };

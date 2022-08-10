@@ -27,6 +27,7 @@ function ListCard(props) {
     shouldShowAddButton,
     userName,
     onAddToListSuccess,
+    onRemoveFromListSuccess,
     isPressDisabled = false,
   } = props;
   const {id: listId, name: listName, userNames, colorCombination} = data;
@@ -46,6 +47,7 @@ function ListCard(props) {
     listId,
     listName,
     onAddToListSuccess,
+    onRemoveFromListSuccess,
     shouldShowAddButton,
     onCardLongPress,
   );

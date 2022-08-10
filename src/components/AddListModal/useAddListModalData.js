@@ -58,10 +58,10 @@ function useAddListModalData() {
           position: ToastPosition.Top,
         });
         if (modalData?.userName) {
-          LocalEvent.emit(EventTypes.UpdateList);
           _listService
             .addUserToList(listId, modalData.userName)
             .then(() => {
+              LocalEvent.emit(EventTypes.UpdateList);
               closeModal();
               modalData?.onListAddSuccess(listNameRef.current, listId);
             })

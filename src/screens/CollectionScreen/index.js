@@ -117,7 +117,10 @@ function CollectionScreen(props) {
       )}
       {isLoading ? (
         <View style={localStyle.loaderStyle}>
-          <ActivityIndicator animating={isLoading} />
+          <ActivityIndicator
+            animating={isLoading}
+            color={colors.GoldenTainoi}
+          />
         </View>
       ) : isEmpty(collectionDataRef.current) ? (
         <EmptyScreenComponent

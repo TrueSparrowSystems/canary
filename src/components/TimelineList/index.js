@@ -50,7 +50,7 @@ function TimelineList({
   const loaderView = useMemo(() => {
     return (
       <View style={localStyle.loaderViewContainer}>
-        <ActivityIndicator animating={bIsLoading} />
+        <ActivityIndicator animating={bIsLoading} color={colors.GoldenTainoi} />
       </View>
     );
   }, [bIsLoading, localStyle.loaderViewContainer]);

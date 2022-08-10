@@ -35,7 +35,11 @@ function VideoPlayerScreen(props) {
         }}
         crossIcon={CrossIcon}
         bottomControl={args => (
-          <DefaultBottomControlsBar {...args} barColor={colors.GoldenTainoi} />
+          <DefaultBottomControlsBar
+            {...args}
+            barColor={colors.GoldenTainoi}
+            joyStickColor={colors.White}
+          />
         )}>
         {args => (
           <Video

@@ -95,7 +95,10 @@ function ListScreen(props) {
       ) : null}
       {isLoading ? (
         <View style={localStyle.loaderStyle}>
-          <ActivityIndicator animating={isLoading} />
+          <ActivityIndicator
+            animating={isLoading}
+            color={colors.GoldenTainoi}
+          />
         </View>
       ) : isEmpty(listDataRef.current) ? (
         <EmptyScreenComponent

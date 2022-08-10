@@ -17,10 +17,7 @@ function App() {
   const localStyle = useStyleProcessor(styles, 'App');
   return (
     <SafeAreaView style={localStyle.container}>
-      <StatusBar
-        barStyle={'dark-content'}
-        backgroundColor={colors.GoldenTainoi}
-      />
+      <StatusBar barStyle={'dark-content'} backgroundColor={colors.White} />
       <NavigationContainer>
         <RootNavigation />
         <AddCollectionModal />

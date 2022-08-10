@@ -69,7 +69,10 @@ function SearchResultScreen(props) {
       <SearchBar searchQuery={query} onSearchPressCallback={fnOnSearchPress} />
       {bIsLoading ? (
         <View style={localStyle.loaderView}>
-          <ActivityIndicator animating={bIsLoading} />
+          <ActivityIndicator
+            animating={bIsLoading}
+            color={colors.GoldenTainoi}
+          />
         </View>
       ) : null}
       <TimelineList

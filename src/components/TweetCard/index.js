@@ -78,7 +78,6 @@ function TweetCard(props) {
   const displayDate = getDisplayDate(created_at);
 
   const tweetUrl = useMemo(() => entities?.urls?.[0]?.url, [entities]);
-  console.log(JSON.stringify(dataSource));
 
   return (
     <Animatable.View animation="fadeIn">

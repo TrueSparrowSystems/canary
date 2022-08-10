@@ -1,6 +1,6 @@
 import {unescape} from 'lodash';
 import React, {useCallback, useMemo, useState} from 'react';
-import {Share, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {
   bookmarkedIcon,
   bookmarkIcon,
@@ -32,7 +32,8 @@ function TweetCard(props) {
     linkTextStyle,
   } = props;
 
-  const {fnOnCardPress, fnOnUserNamePress} = useTweetCardData(props);
+  const {bCanShare, fnOnCardPress, fnOnUserNamePress, fnOnSharePress} =
+    useTweetCardData(props);
   const localStyle = useStyleProcessor(styles, 'TweetCard');
   const {
     user,
@@ -76,8 +77,6 @@ function TweetCard(props) {
   }, [media]);
 
   const displayDate = getDisplayDate(created_at);
-
-  const tweetUrl = useMemo(() => entities?.urls?.[0]?.url, [entities]);
 
   return (
     <Animatable.View animation="fadeIn">
@@ -143,13 +142,9 @@ function TweetCard(props) {
               ) : null}
             </View>
             <View style={localStyle.optionsView}>
-              {tweetUrl ? (
+              {bCanShare ? (
                 <TouchableOpacity
-                  onPress={() => {
-                    Share.share({
-                      message: `Check out this tweet!\n${tweetUrl}`,
-                    });
-                  }}
+                  onPress={fnOnSharePress}
                   style={localStyle.shareIconContainer}
                   hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                   <Image source={ShareIcon} style={localStyle.shareIconStyle} />

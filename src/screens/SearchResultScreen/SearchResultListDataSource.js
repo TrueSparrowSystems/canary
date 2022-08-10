@@ -12,7 +12,7 @@ class SearchResultListDataSource extends PaginatedListDataSource {
   }
   // Endpoint which is to be called for fetching list data.
   apiCall(...args) {
-    return TwitterAPI.searchResultFeed(this.query, ...args);
+    return TwitterAPI.searchResultFeed(this.query, this.sortOrder, ...args);
   }
 
   onQueryChange(query) {

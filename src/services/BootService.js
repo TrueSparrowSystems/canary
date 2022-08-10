@@ -27,6 +27,14 @@ class BootService {
             AsyncStorage.get(StoreKeys.UserToListMap).then(userToListMap => {
               Cache.setValue(CacheKey.UserToListMap, JSON.parse(userToListMap));
             });
+            AsyncStorage.get(
+              StoreKeys.ShouldShowTimelineFromVerifiedUsersOnly,
+            ).then(pref => {
+              Cache.setValue(
+                CacheKey.ShouldShowTimelineFromVerifiedUsersOnly,
+                !!pref,
+              );
+            });
             Cache.setValue(CacheKey.PreferenceList, list);
             listService().getAllLists();
             collectionService().getAllCollections();

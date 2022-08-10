@@ -64,5 +64,13 @@ class PreferencesDataHelper {
     }
     return [];
   }
+
+  getVerifiedUsersPreferenceFromCache() {
+    const savedValue = Cache.getValue(
+      CacheKey.ShouldShowTimelineFromVerifiedUsersOnly,
+    );
+
+    return !!savedValue;
+  }
 }
 export default new PreferencesDataHelper();

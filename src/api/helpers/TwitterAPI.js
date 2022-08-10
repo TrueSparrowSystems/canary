@@ -73,11 +73,14 @@ class TwitterApi {
     return userNameQuery;
   }
 
-  timelineFeed(nextPageIdentifier) {
+  timelineFeed(shouldShowVerifiedUsers, nextPageIdentifier) {
+    const query = `(${this.getContexts()}) (lang:EN) (-is:retweet -is:reply -is:quote ${
+      shouldShowVerifiedUsers ? 'is:verified' : ''
+    })`;
     const data = {
       max_results: 10,
       sort_order: SortOrder.Relevancy,
-      query: `(${this.getContexts()}) (lang:EN) (-is:retweet -is:reply -is:quote)`,
+      query: query,
       ...API_REQUEST_PARAMETERS,
     };
     if (nextPageIdentifier) {

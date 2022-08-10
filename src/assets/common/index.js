@@ -25,3 +25,5 @@ export const ListIconBig = require('./listIconBig.png');
 export const ArchiveIconBig = require('./collectionsBig.png');
 export const NewIcon = require('./newResults.png');
 export const PopularIcon = require('./popular.png');
+export const AllUsersIcon = require('./all_users.png');
+export const VerifiedIconBlack = require('./verifiedIconBlack.png');

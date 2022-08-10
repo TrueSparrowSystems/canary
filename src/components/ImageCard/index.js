@@ -1,13 +1,16 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useMemo} from 'react';
-import {TouchableWithoutFeedback, View} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {Text, TouchableWithoutFeedback, View} from 'react-native';
 import {PlayIcon} from '../../assets/common';
 import ScreenName from '../../constants/ScreenName';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import Image from 'react-native-fast-image';
 import TwitterAPI from '../../api/helpers/TwitterAPI';
-import {layoutPtToPx} from '../../utils/responsiveUI';
-import colors from '../../constants/colors';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import colors, {getColorWithOpacity} from '../../constants/colors';
+import Video from 'react-native-video';
+import * as Animatable from 'react-native-animatable';
+import fonts from '../../constants/fonts';
 
 function ImageCard({mediaArray, tweetId}) {
   const localStyle = useStyleProcessor(styles, 'ImageCard');
@@ -22,23 +25,32 @@ function ImageCard({mediaArray, tweetId}) {
     [mediaArray, navigation],
   );
 
-  var videoUrl = null;
-  var aspectRatio = null;
-  if (mediaArray[0].type === 'video') {
-    TwitterAPI.getTweetStatusfromTweetId(tweetId)
-      .then(res => {
-        const videoInfo = res?.data?.extended_entities?.media?.[0]?.video_info;
-        const videoVariantsArray = videoInfo?.variants;
-        aspectRatio = videoInfo?.aspect_ratio;
-        videoVariantsArray &&
-          videoVariantsArray.map(videoVariant => {
-            if (videoVariant?.content_type === 'video/mp4' && !videoUrl) {
-              videoUrl = videoVariant.url;
-            }
-          });
-      })
-      .catch(() => {});
-  }
+  const [shouldPlayGif, setShouldPlayGif] = useState(false);
+  const [videoUrl, setVideoUrl] = useState(null);
+  const aspectRatio = useRef(null);
+
+  useEffect(() => {
+    if (
+      mediaArray[0].type === 'video' ||
+      mediaArray[0].type === 'animated_gif'
+    ) {
+      TwitterAPI.getTweetStatusfromTweetId(tweetId)
+        .then(res => {
+          const videoInfo =
+            res?.data?.extended_entities?.media?.[0]?.video_info;
+          const videoVariantsArray = videoInfo?.variants;
+          aspectRatio.current = videoInfo?.aspect_ratio;
+          videoVariantsArray &&
+            videoVariantsArray.map(videoVariant => {
+              if (videoVariant?.content_type === 'video/mp4' && !videoUrl) {
+                setVideoUrl(videoVariant.url);
+              }
+            });
+        })
+        .catch(() => {});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mediaArray, tweetId]);
 
   const imageStyle = useMemo(() => {
     const style = [localStyle.showImage];
@@ -74,8 +86,15 @@ function ImageCard({mediaArray, tweetId}) {
     return style;
   }, [localStyle.flexRow, mediaArray.length]);
 
+  const gifAspectRatio = useMemo(
+    () =>
+      aspectRatio.current ? aspectRatio.current[0] / aspectRatio.current[1] : 1,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [videoUrl],
+  );
+
   return mediaArray[0].type === 'photo' ? (
-    <View style={localStyle.container}>
+    <Animatable.View animation={'fadeIn'} style={localStyle.container}>
       <View style={containerStyle}>
         <TouchableWithoutFeedback
           onPress={() => {
@@ -123,9 +142,9 @@ function ImageCard({mediaArray, tweetId}) {
           />
         </TouchableWithoutFeedback>
       </View>
-    </View>
+    </Animatable.View>
   ) : mediaArray[0].type === 'video' ? (
-    <View style={localStyle.container}>
+    <Animatable.View animation={'fadeIn'} style={localStyle.container}>
       <Image
         style={localStyle.showVideo}
         source={
@@ -139,14 +158,57 @@ function ImageCard({mediaArray, tweetId}) {
         onPress={() => {
           navigation.navigate(ScreenName.VideoPlayerScreen, {
             videoUrl: videoUrl,
-            aspectRatio: aspectRatio,
+            aspectRatio: aspectRatio.current,
           });
         }}>
         <View style={localStyle.iconBox}>
           <Image source={PlayIcon} style={localStyle.playIcon} />
         </View>
       </TouchableWithoutFeedback>
-    </View>
+    </Animatable.View>
+  ) : mediaArray[0].type === 'animated_gif' && videoUrl ? (
+    <Animatable.View animation={'fadeIn'} style={localStyle.container}>
+      {shouldPlayGif ? (
+        <Video
+          source={{uri: videoUrl}}
+          style={[
+            localStyle.showGif,
+            {
+              aspectRatio: gifAspectRatio,
+            },
+          ]}
+          repeat={true}
+        />
+      ) : (
+        <Image
+          style={[
+            localStyle.showGif,
+            {
+              aspectRatio: gifAspectRatio,
+            },
+          ]}
+          source={
+            mediaArray?.length >= 1
+              ? {uri: mediaArray[0]?.preview_image_url}
+              : null
+          }
+          resizeMode={'cover'}
+        />
+      )}
+
+      {shouldPlayGif ? null : (
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setShouldPlayGif(true);
+          }}>
+          <View style={localStyle.iconBox}>
+            <View style={localStyle.gifIconContainer}>
+              <Text style={localStyle.gifText}>GIF</Text>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      )}
+    </Animatable.View>
   ) : null;
 }
 const styles = {
@@ -178,6 +240,11 @@ const styles = {
     borderRadius: 4,
     aspectRatio: 1,
   },
+  showGif: {
+    borderWidth: 0.5,
+    borderColor: 'white',
+    borderRadius: 4,
+  },
   flexRow: {
     flex: 1,
     flexDirection: 'row',
@@ -196,6 +263,20 @@ const styles = {
     height: 50,
     width: 50,
     tintColor: colors.GoldenTainoi,
+  },
+  gifIconContainer: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    backgroundColor: getColorWithOpacity(colors.White, 0.6),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  gifText: {
+    fontFamily: fonts.SoraBold,
+    fontSize: fontPtToPx(14),
+    color: colors.OxfordBlue,
+    letterSpacing: 1.2,
   },
 };
 export default React.memo(ImageCard);

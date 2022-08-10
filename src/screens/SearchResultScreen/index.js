@@ -101,10 +101,10 @@ const styles = {
   },
   toggleButtonsContainer: {
     position: 'absolute',
-    width: '100%',
     height: layoutPtToPx(50),
     justifyContent: 'center',
     flexDirection: 'row',
+    alignSelf: 'center',
   },
   toggleButtonText: {
     textTransform: 'capitalize',

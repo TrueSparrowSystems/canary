@@ -8,16 +8,18 @@ import Image from 'react-native-fast-image';
 import TwitterAPI from '../../api/helpers/TwitterAPI';
 import {layoutPtToPx} from '../../utils/responsiveUI';
 import colors from '../../constants/colors';
+import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
 function ImageCard({mediaArray, tweetId}) {
   const localStyle = useStyleProcessor(styles, 'ImageCard');
   const navigation = useNavigation();
   const onImagePress = useCallback(
     index => {
-      navigation.navigate(ScreenName.ImageViewScreen, {
-        mediaArray,
-        imageIndex: index,
-      });
+      // navigation.navigate(ScreenName.ImageViewScreen, {
+      //   mediaArray,
+      //   imageIndex: index,
+      // });
+      LocalEvent.emit(EventTypes.OpenImageViewer, {media: mediaArray});
     },
     [mediaArray, navigation],
   );

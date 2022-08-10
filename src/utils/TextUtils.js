@@ -28,6 +28,5 @@ export function getInitialsFromName(fullName) {
       nameInitials = nameInitials + char;
     }
   });
-  console.log({nameInitials});
   return nameInitials;
 }

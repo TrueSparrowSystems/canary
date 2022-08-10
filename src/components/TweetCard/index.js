@@ -32,32 +32,27 @@ function TweetCard(props) {
     linkTextStyle,
   } = props;
 
-  const {fnOnCardPress, fnOnUserNamePress} = useTweetCardData(props);
-  const localStyle = useStyleProcessor(styles, 'TweetCard');
   const {
-    user,
-    text,
-    id,
-    public_metrics,
-    media,
-    entities,
-    created_at,
-    isBookmarked,
-  } = dataSource;
-
-  const [isTweetBookmarked, setIsTweetBookmarked] = useState(isBookmarked);
+    bIsTweetBookmarked,
+    fnOnCardPress,
+    fnOnUserNamePress,
+    fnSetIsTweetBookmarked,
+  } = useTweetCardData(props);
+  const localStyle = useStyleProcessor(styles, 'TweetCard');
+  const {user, text, id, public_metrics, media, entities, created_at} =
+    dataSource;
 
   const onBookmarkButtonPress = useCallback(() => {
     LocalEvent.emit(EventTypes.ShowAddToCollectionModal, {
       tweetId: id,
       onAddToCollectionSuccess: () => {
-        setIsTweetBookmarked(true);
+        fnSetIsTweetBookmarked(true);
       },
       onRemoveFromAllCollectionSuccess: () => {
-        setIsTweetBookmarked(false);
+        fnSetIsTweetBookmarked(false);
       },
     });
-  }, [id]);
+  }, [fnSetIsTweetBookmarked, id]);
 
   const onAddToListSuccess = useCallback(() => {
     LocalEvent.emit(EventTypes.UpdateList);
@@ -159,7 +154,7 @@ function TweetCard(props) {
                 onPress={onBookmarkButtonPress}
                 hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                 <Image
-                  source={isTweetBookmarked ? bookmarkedIcon : bookmarkIcon}
+                  source={bIsTweetBookmarked ? bookmarkedIcon : bookmarkIcon}
                   style={localStyle.bookmarkIconStyle}
                 />
               </TouchableOpacity>
@@ -234,7 +229,7 @@ const styles = {
   nameText: {
     fontFamily: fonts.InterSemiBold,
     fontSize: fontPtToPx(16),
-    lineHeight: layoutPtToPx(19),
+    height: layoutPtToPx(24),
     flexShrink: 1,
     color: colors.BlackPearl,
   },

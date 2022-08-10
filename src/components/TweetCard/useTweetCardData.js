@@ -1,5 +1,5 @@
 import {StackActions, useNavigation} from '@react-navigation/native';
-import {useCallback} from 'react';
+import {useCallback, useState} from 'react';
 import ScreenName from '../../constants/ScreenName';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import Toast from 'react-native-toast-message';
@@ -8,6 +8,9 @@ import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 function useTweetCardData(props) {
   const {dataSource} = props;
   const {public_metrics} = dataSource;
+  const [isTweetBookmarked, setIsTweetBookmarked] = useState(
+    dataSource.isBookmarked,
+  );
 
   const navigation = useNavigation();
 
@@ -19,6 +22,7 @@ function useTweetCardData(props) {
 
   const onCardPress = useCallback(() => {
     if (public_metrics?.reply_count > 0) {
+      dataSource.isBookmarked = isTweetBookmarked;
       navigation.dispatch(
         StackActions.push(ScreenName.ThreadScreen, {tweetData: dataSource}),
       );
@@ -29,7 +33,7 @@ function useTweetCardData(props) {
         position: ToastPosition.Top,
       });
     }
-  }, [dataSource, navigation, public_metrics?.reply_count]);
+  }, [dataSource, isTweetBookmarked, navigation, public_metrics?.reply_count]);
 
   const onUserNamePress = useCallback(() => {
     navigation.push(ScreenName.SearchResultScreen, {
@@ -37,10 +41,16 @@ function useTweetCardData(props) {
     });
   }, [dataSource, navigation]);
 
+  const onTweetBookmarked = useCallback(newValue => {
+    setIsTweetBookmarked(newValue);
+  }, []);
+
   return {
     fnOnAddToCollectionPress: onAddToCollectionPress,
     fnOnCardPress: onCardPress,
     fnOnUserNamePress: onUserNamePress,
+    fnSetIsTweetBookmarked: onTweetBookmarked,
+    bIsTweetBookmarked: isTweetBookmarked,
   };
 }
 

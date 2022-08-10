@@ -40,7 +40,7 @@ function useAddCollectionModalData() {
   }, []);
 
   const onCreateCollectionPress = useCallback(() => {
-    if (collectionNameRef.current.length === 0) {
+    if (collectionNameRef.current.trim().length === 0) {
       Toast.show({
         type: ToastType.Error,
         text1: 'Archive name cannot be empty.',
@@ -83,6 +83,7 @@ function useAddCollectionModalData() {
         setErrorMessage(err);
       })
       .finally(() => {
+        collectionNameRef.current = '';
         _collectionService.getAllCollections();
       });
   }, [closeModal, modalData]);

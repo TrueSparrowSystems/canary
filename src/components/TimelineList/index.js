@@ -125,11 +125,7 @@ const styles = {
     color: colors.SherpaBlue,
     fontSize: fontPtToPx(21),
     fontWeight: 'normal',
-    letterSpacing: 0.32,
     paddingHorizontal: layoutPtToPx(20),
-    tablet: {
-      letterSpacing: 0.4,
-    },
   },
   loaderViewContainer: {
     justifyContent: 'center',

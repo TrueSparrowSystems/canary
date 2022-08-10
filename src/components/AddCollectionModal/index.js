@@ -147,7 +147,6 @@ const styles = {
     fontSize: fontPtToPx(14),
     justifyContent: 'center',
     alignItems: 'center',
-    letterSpacing: 1.2,
     color: colors.BlackPearl,
     fontFamily: fonts.SoraSemiBold,
   },

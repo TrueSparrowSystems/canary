@@ -79,7 +79,6 @@ const styles = {
     fontSize: fontPtToPx(10),
     justifyContent: 'center',
     alignItems: 'center',
-    letterSpacing: 2,
     color: Colors.WildWaterMelon,
   },
   btnLeftImage: {

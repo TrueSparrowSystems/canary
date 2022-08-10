@@ -28,6 +28,7 @@ function CollectionTweetList(props) {
       buttonImage={bookmarkIcon}
       buttonImageStyle={localStyle.emptyButtonImageStyle}
       onButtonPress={fnOnBookmarkFavouriteTweetPress}
+      buttonStyle={localStyle.bookmarkButtonStyle}
     />
   ) : (
     <ScrollView
@@ -44,13 +45,23 @@ function CollectionTweetList(props) {
 const styles = {
   descriptionTextStyle: {
     fontSize: fontPtToPx(16),
-    lineHeight: layoutPtToPx(20),
+    lineHeight: layoutPtToPx(21),
     fontFamily: fonts.SoraRegular,
     color: getColorWithOpacity(colors.Black, 0.7),
   },
   emptyButtonImageStyle: {
     height: layoutPtToPx(18),
     width: layoutPtToPx(18),
+  },
+  bookmarkButtonStyle: {
+    marginTop: layoutPtToPx(40),
+    backgroundColor: colors.GoldenTainoi,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: layoutPtToPx(40),
+    borderRadius: layoutPtToPx(25),
   },
 };
 

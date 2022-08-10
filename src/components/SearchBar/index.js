@@ -147,7 +147,6 @@ const styles = {
     color: colors.BlackPearl,
     fontSize: fontPtToPx(14),
     lineHeight: layoutPtToPx(18),
-    letterSpacing: 0.32,
     flex: 1,
   },
   searchIconStyle: {

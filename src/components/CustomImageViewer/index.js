@@ -34,7 +34,11 @@ const CustomImageViewer = () => {
   });
 
   return (
-    <Modal visible={isVisible}>
+    <Modal
+      visible={isVisible}
+      animationType="slide"
+      hardwareAccelerated={true}
+      statusBarTranslucent={true}>
       <StatusBar hidden={true} />
       <ImageViewer
         renderHeader={() => {

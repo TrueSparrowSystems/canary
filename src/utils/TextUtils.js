@@ -18,7 +18,16 @@ export function getInitialsFromName(fullName) {
   let nameInitials = '';
   const nameArray = fullName.split(' ');
   nameArray.map(name => {
-    nameInitials = nameInitials + name.charAt(0);
+    const char = name.charAt(0);
+    // Allow only alphanumeric values
+    if (
+      (char >= 'a' && char <= 'z') ||
+      (char >= 'A' && char <= 'Z') ||
+      (char >= '0' && char <= '9')
+    ) {
+      nameInitials = nameInitials + char;
+    }
   });
+  console.log({nameInitials});
   return nameInitials;
 }

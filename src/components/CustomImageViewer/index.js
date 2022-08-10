@@ -17,7 +17,7 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 const CustomImageViewer = () => {
   const localStyle = useStyleProcessor(styles, 'CustomImageViewer');
 
-  const [isVisisble, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const array = useRef([]);
   useEffect(() => {
     const open = payload => {
@@ -34,20 +34,32 @@ const CustomImageViewer = () => {
   });
 
   return (
-    <Modal visible={isVisisble}>
+    <Modal visible={isVisible}>
       <StatusBar hidden={true} />
-      <SafeAreaView>
-        <View style={localStyle.headerContainer}>
-          <TouchableOpacity
-            style={localStyle.crossIconContainer}
-            onPress={() => {
-              setIsVisible(false);
-            }}>
-            <Image source={CrossIcon} style={localStyle.crossIcon} />
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-      <ImageViewer imageUrls={images} />
+      <ImageViewer
+        renderHeader={() => {
+          return (
+            <SafeAreaView>
+              <View style={localStyle.headerContainer}>
+                <TouchableOpacity
+                  style={localStyle.crossIconContainer}
+                  onPress={() => {
+                    setIsVisible(false);
+                  }}>
+                  <Image source={CrossIcon} style={localStyle.crossIcon} />
+                </TouchableOpacity>
+              </View>
+            </SafeAreaView>
+          );
+        }}
+        imageUrls={images}
+        enableSwipeDown={true}
+        onSwipeDown={() => {
+          setIsVisible(false);
+        }}
+        saveToLocalByLongPress={false}
+        enablePreload={true}
+      />
     </Modal>
   );
 };
@@ -59,7 +71,6 @@ const styles = {
     alignItems: 'flex-end',
     backgroundColor: colors.Black,
     paddingHorizontal: layoutPtToPx(20),
-    paddingTop: layoutPtToPx(10),
   },
   crossIconContainer: {
     height: 40,

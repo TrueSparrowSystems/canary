@@ -1,5 +1,5 @@
 import {StackActions, useNavigation} from '@react-navigation/native';
-import {useCallback, useMemo} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import ScreenName from '../../constants/ScreenName';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import Toast from 'react-native-toast-message';
@@ -9,7 +9,7 @@ import {replace} from '../../utils/Strings';
 
 function useTweetCardData(props) {
   const {dataSource} = props;
-  const {public_metrics, user, id} = dataSource;
+  const {public_metrics, user, id, media, isBookmarked} = dataSource;
 
   const tweetUrl = useMemo(() => {
     const url = replace(
@@ -20,12 +20,35 @@ function useTweetCardData(props) {
   }, [id, user]);
 
   const navigation = useNavigation();
+  const [isTweetBookmarked, setIsTweetBookmarked] = useState(isBookmarked);
 
-  const onAddToCollectionPress = useCallback(() => {
+  const onBookmarkButtonPress = useCallback(() => {
     LocalEvent.emit(EventTypes.ShowAddToCollectionModal, {
-      tweetId: dataSource.id,
+      tweetId: id,
+      onAddToCollectionSuccess: () => {
+        setIsTweetBookmarked(true);
+      },
+      onRemoveFromAllCollectionSuccess: () => {
+        setIsTweetBookmarked(false);
+      },
     });
-  }, [dataSource]);
+  }, [id]);
+
+  const onAddToListSuccess = useCallback(() => {
+    LocalEvent.emit(EventTypes.UpdateList);
+    //TODO: handle on add to list success
+  }, []);
+
+  const onAddToListPress = useCallback(() => {
+    LocalEvent.emit(EventTypes.ShowAddToListModal, {
+      userName: user.username,
+      onAddToListSuccess: onAddToListSuccess,
+    });
+  }, [onAddToListSuccess, user]);
+
+  const hasMedia = useMemo(() => {
+    return media && media?.length !== 0;
+  }, [media]);
 
   const onCardPress = useCallback(() => {
     if (public_metrics?.reply_count > 0) {
@@ -55,7 +78,10 @@ function useTweetCardData(props) {
 
   return {
     bCanShare: !!tweetUrl,
-    fnOnAddToCollectionPress: onAddToCollectionPress,
+    bHasMedia: hasMedia,
+    bIsTweetBookmarked: isTweetBookmarked,
+    fnOnAddToListPress: onAddToListPress,
+    fnOnBookmarkButtonPress: onBookmarkButtonPress,
     fnOnCardPress: onCardPress,
     fnOnUserNamePress: onUserNamePress,
     fnOnSharePress: onSharePress,

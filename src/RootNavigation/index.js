@@ -76,6 +76,13 @@ const HomeAppStack = () => {
 const LaunchStack = () => (
   <PreferenceStack.Navigator>
     <PreferenceStack.Screen
+      name={ScreenName.LandingScreen}
+      component={PreferenceScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <PreferenceStack.Screen
       name={ScreenName.PreferenceScreen}
       component={PreferenceScreen}
       options={{

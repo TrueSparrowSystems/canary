@@ -17,6 +17,7 @@ function EmptyScreenComponent(props) {
     buttonImage,
     buttonImageStyle,
     onButtonPress,
+    buttonStyle,
   } = props;
   const localStyle = useStyleProcessor(styles, 'EmptyScreenComponent');
 
@@ -32,7 +33,7 @@ function EmptyScreenComponent(props) {
       ) : null}
       {buttonText ? (
         <RoundedButton
-          style={localStyle.createButton}
+          style={buttonStyle || localStyle.createButton}
           text={buttonText}
           textStyle={localStyle.createButtonText}
           leftImage={buttonImage || AddIcon}
@@ -61,7 +62,6 @@ const styles = {
     fontSize: fontPtToPx(14),
     justifyContent: 'center',
     alignItems: 'center',
-    letterSpacing: 1.2,
     color: colors.BlackPearl,
     fontFamily: fonts.SoraSemiBold,
   },
@@ -73,7 +73,7 @@ const styles = {
     fontFamily: fonts.SoraSemiBold,
     textAlign: 'center',
     fontSize: fontPtToPx(16),
-    lineHeight: layoutPtToPx(20),
+    lineHeight: layoutPtToPx(21),
     marginTop: layoutPtToPx(20),
     color: getColorWithOpacity(colors.BlackPearl, 0.7),
   },

@@ -65,9 +65,15 @@ function ListTweetsScreen(props) {
             onUserAddComplete: fetchData,
           });
         }}
+        buttonStyle={localStyle.bookmarkButtonStyle}
       />
     );
-  }, [fetchData, listId, localStyle.descriptionTextStyle]);
+  }, [
+    fetchData,
+    listId,
+    localStyle.bookmarkButtonStyle,
+    localStyle.descriptionTextStyle,
+  ]);
 
   return (
     <View style={localStyle.container}>
@@ -110,7 +116,7 @@ const styles = {
   descriptionTextStyle: {
     fontFamily: fonts.SoraRegular,
     fontSize: fontPtToPx(16),
-    lineHeight: layoutPtToPx(20),
+    lineHeight: layoutPtToPx(21),
     color: getColorWithOpacity(colors.Black, 0.7),
   },
   headerText: {
@@ -123,6 +129,16 @@ const styles = {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(14),
     color: colors.GoldenTainoi,
+  },
+  bookmarkButtonStyle: {
+    marginTop: layoutPtToPx(40),
+    backgroundColor: colors.GoldenTainoi,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: layoutPtToPx(40),
+    borderRadius: layoutPtToPx(25),
   },
 };
 export default React.memo(ListTweetsScreen);

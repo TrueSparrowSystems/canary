@@ -43,7 +43,6 @@ const styles = {
     backgroundColor: 'white',
     fontSize: fontPtToPx(14),
     lineHeight: layoutPtToPx(17),
-    letterSpacing: 0.32,
     height: layoutPtToPx(40),
     width: '100%',
     paddingHorizontal: layoutPtToPx(10),

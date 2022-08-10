@@ -68,7 +68,9 @@ function TimelineList({
       scrollEnabled: true,
       contentContainerStyle: localStyle.contentContainerStyle,
       ListHeaderComponent: listHeaderComponent,
-      ListEmptyComponent: listEmptyComponent,
+      ListEmptyComponent: (
+        <View style={localStyle.emptyViewContainer}>{listEmptyComponent}</View>
+      ),
       refreshControl: (
         <RefreshControl
           refreshing={bIsLoading}
@@ -85,6 +87,7 @@ function TimelineList({
     listHeaderComponent,
     listRef,
     localStyle.contentContainerStyle,
+    localStyle.emptyViewContainer,
     localStyle.flatListPropsStyle,
     renderItem,
   ]);
@@ -108,11 +111,8 @@ function TimelineList({
 const styles = {
   flatListPropsStyle: {flex: 1},
   contentContainerStyle: {
-    justifyContent: 'center',
     width: '100%',
     flexGrow: 1,
-    // paddingRight: layoutPtToPx(20),
-    // paddingLeft: layoutPtToPx(10),
   },
   container: {
     flex: 1,
@@ -141,6 +141,10 @@ const styles = {
   },
   verticalCardStyle: {
     width: ITEM_WIDTH,
+  },
+  emptyViewContainer: {
+    width: '100%',
+    height: '100%',
   },
 };
 

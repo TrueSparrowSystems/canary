@@ -1,31 +1,26 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {
   ActivityIndicator,
-  Image,
   RefreshControl,
   SafeAreaView,
   ScrollView,
-  Text,
   View,
 } from 'react-native';
-import {AddIcon, SwipeIcon} from '../../assets/common';
+import {AddIcon} from '../../assets/common';
 import Header from '../../components/common/Header';
 import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useEditListUsersScreenData from './useEditListUsersScreenData';
-import AppleStyleSwipeableRow from '../../components/AppleStyleSwipeableRow';
-import * as Animatable from 'react-native-animatable';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import EditListUserCard from '../../components/common/EditListUserCard';
 
 function EditListUsersScreen(props) {
   const {listId, listUserNames, onDonePress} = props?.route?.params;
   const localStyle = useStyleProcessor(styles, 'EditListUsersScreen');
   const navigation = useNavigation();
-
-  const viewRef = useRef(null);
 
   const {bIsLoading, aListMembers, fnOnMemberRemove, fnOnRefresh} =
     useEditListUsersScreenData(listId, listUserNames);
@@ -63,50 +58,12 @@ function EditListUsersScreen(props) {
             refreshControl={
               <RefreshControl refreshing={bIsLoading} onRefresh={fnOnRefresh} />
             }>
-            {aListMembers.map(listMember => {
+            {aListMembers?.map(listMember => {
               return (
-                <Animatable.View ref={viewRef} key={listMember.username}>
-                  <AppleStyleSwipeableRow
-                    key={listMember.username}
-                    enabled={true}
-                    rightActionsArray={[
-                      {
-                        actionName: 'Remove',
-                        color: colors.BitterSweet,
-                        onPress: () => {
-                          viewRef.current.setNativeProps({
-                            useNativeDriver: true,
-                          });
-                          viewRef.current.animate('bounceOutLeft').then(() => {
-                            fnOnMemberRemove(listMember.username);
-                          });
-                        },
-                      },
-                    ]}
-                    textStyle={localStyle.removeButtonStyle}
-                    shouldRenderRightAction={true}>
-                    <View style={localStyle.cardStyle}>
-                      <View style={localStyle.cardDetailContainer}>
-                        <Image
-                          source={{uri: listMember.profile_image_url}}
-                          style={localStyle.imageStyle}
-                        />
-                        <View style={localStyle.cardNameContainer}>
-                          <Text style={localStyle.nameText} numberOfLines={1}>
-                            {listMember.name}
-                          </Text>
-                          <Text style={localStyle.userNameText}>
-                            @{listMember.username}
-                          </Text>
-                        </View>
-                      </View>
-                      <Image
-                        source={SwipeIcon}
-                        style={localStyle.swipeIconStyle}
-                      />
-                    </View>
-                  </AppleStyleSwipeableRow>
-                </Animatable.View>
+                <EditListUserCard
+                  userData={listMember}
+                  onMemberRemove={fnOnMemberRemove}
+                />
               );
             })}
           </ScrollView>
@@ -129,26 +86,6 @@ const styles = {
     color: colors.GoldenTainoi,
   },
   listView: {marginBottom: layoutPtToPx(50), height: '100%'},
-  cardStyle: {
-    flexDirection: 'row',
-    paddingBottom: layoutPtToPx(13),
-    borderBottomWidth: 1,
-    borderBottomColor: colors.BlackPearl20,
-    marginHorizontal: layoutPtToPx(20),
-    marginTop: layoutPtToPx(18),
-    justifyContent: 'space-between',
-  },
-  cardDetailContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  imageStyle: {
-    height: layoutPtToPx(40),
-    width: layoutPtToPx(40),
-    borderRadius: layoutPtToPx(20),
-    marginRight: layoutPtToPx(8),
-  },
-  cardNameContainer: {width: '80%'},
   rightActionContainer: {
     backgroundColor: colors.BitterSweet,
     alignItems: 'center',
@@ -160,29 +97,6 @@ const styles = {
     fontFamily: fonts.InterSemiBold,
     fontSize: fontPtToPx(12),
     lineHeight: layoutPtToPx(15),
-  },
-  nameText: {
-    color: colors.Black,
-    fontFamily: fonts.InterSemiBold,
-    fontSize: fontPtToPx(14),
-    lineHeight: layoutPtToPx(17),
-  },
-  userNameText: {
-    color: colors.BlackPearl,
-    fontFamily: fonts.InterRegular,
-    fontSize: fontPtToPx(12),
-    lineHeight: layoutPtToPx(15),
-  },
-  swipeIconStyle: {
-    height: layoutPtToPx(8),
-    width: layoutPtToPx(16),
-    alignSelf: 'center',
-  },
-  removeButtonStyle: {
-    fontFamily: fonts.InterSemiBold,
-    fontSize: fontPtToPx(12),
-    lineHeight: layoutPtToPx(15),
-    color: colors.White,
   },
   addIconStyle: {
     height: layoutPtToPx(14),

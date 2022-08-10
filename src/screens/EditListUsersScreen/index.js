@@ -56,7 +56,7 @@ function EditListUsersScreen(props) {
           }}
         />
         {bIsLoading ? (
-          <ActivityIndicator />
+          <ActivityIndicator color={colors.GoldenTainoi} />
         ) : (
           <ScrollView
             style={localStyle.listView}

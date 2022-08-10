@@ -21,7 +21,7 @@ function PreferenceScreen(props) {
       <Header enableBackButton={!!data?.enableBackButton} />
       <View style={localStyle.contentContainer}>
         <View>
-          <Text style={localStyle.titleText}>Select Your Preferences</Text>
+          <Text style={localStyle.titleText}>Select your Preferences</Text>
           <Text style={localStyle.subText}>minimum 3</Text>
         </View>
         <PreferenceSelector onSelectedItemsUpdate={fnOnSelectedItemsUpdate} />
@@ -85,7 +85,6 @@ const style = {
     fontSize: fontPtToPx(14),
     justifyContent: 'center',
     alignItems: 'center',
-    letterSpacing: 1.2,
     color: colors.BlackPearl,
     fontFamily: fonts.SoraSemiBold,
     textTransform: 'capitalize',

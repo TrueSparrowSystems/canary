@@ -76,7 +76,10 @@ function AddToCollectionModal() {
               </TouchableOpacity>
             </View>
             {bIsLoading ? (
-              <ActivityIndicator animating={bIsLoading} />
+              <ActivityIndicator
+                animating={bIsLoading}
+                color={colors.GoldenTainoi}
+              />
             ) : isEmpty(oCollectionList) ? (
               <View style={localStyle.emptyComponentContainer}>
                 <EmptyScreenComponent

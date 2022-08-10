@@ -103,7 +103,10 @@ function PaginatedList(props) {
     return (
       props.loaderView || (
         <View style={localStyle.loaderViewContainer}>
-          <ActivityIndicator animating={bIsLoading} />
+          <ActivityIndicator
+            animating={bIsLoading}
+            color={colors.GoldenTainoi}
+          />
         </View>
       )
     );
@@ -124,6 +127,7 @@ function PaginatedList(props) {
         {bHasNextPageData && bIsFirstPageReceived ? (
           <ActivityIndicator
             animating={bHasNextPageData && bIsFirstPageReceived}
+            color={colors.GoldenTainoi}
           />
         ) : null}
       </View>

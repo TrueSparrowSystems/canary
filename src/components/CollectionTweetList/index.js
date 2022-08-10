@@ -19,7 +19,7 @@ function CollectionTweetList(props) {
   const localStyle = useStyleProcessor(styles, 'CollectionTweetList');
 
   return bIsLoading ? (
-    <ActivityIndicator animating={bIsLoading} />
+    <ActivityIndicator animating={bIsLoading} color={colors.GoldenTainoi} />
   ) : aDataSource.length === 0 ? (
     <EmptyScreenComponent
       descriptionText={'It’s pretty empty in here 🥲'}

@@ -95,7 +95,7 @@ function ListTweetsScreen(props) {
         }}
       />
       {isLoading ? (
-        <ActivityIndicator animating={isLoading} />
+        <ActivityIndicator animating={isLoading} color={colors.GoldenTainoi} />
       ) : currentUserNameArray.current.length !== 0 ? (
         <TimelineList
           timelineListDataSource={listDataSource.current}

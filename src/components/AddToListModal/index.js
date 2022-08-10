@@ -79,7 +79,10 @@ function AddToListModal() {
               </TouchableOpacity>
             </View>
             {bIsLoading ? (
-              <ActivityIndicator animating={bIsLoading} />
+              <ActivityIndicator
+                animating={bIsLoading}
+                color={colors.GoldenTainoi}
+              />
             ) : isEmpty(oList) ? (
               <View>
                 <UserCard userData={oUserData} />

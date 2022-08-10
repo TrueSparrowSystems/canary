@@ -66,8 +66,8 @@ class PreferencesDataHelper {
   }
 
   getVerifiedUsersPreferenceFromCache() {
-    const savedValue = Cache.getValue(
-      CacheKey.ShouldShowTimelineFromVerifiedUsersOnly,
+    const savedValue = JSON.parse(
+      Cache.getValue(CacheKey.ShouldShowTimelineFromVerifiedUsersOnly),
     );
 
     return !!savedValue;

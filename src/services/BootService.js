@@ -16,6 +16,7 @@ class BootService {
         Cache.setValue(CacheKey.AreInitialPreferencesSet, isSet);
         if (isSet) {
           AsyncStorage.getItem(StoreKeys.PreferenceList).then(list => {
+            Cache.setValue(CacheKey.PreferenceList, list);
             AsyncStorage.get(StoreKeys.BookmarkedTweetsList).then(
               bookmarkedTweetList => {
                 Cache.setValue(
@@ -27,18 +28,18 @@ class BootService {
             AsyncStorage.get(StoreKeys.UserToListMap).then(userToListMap => {
               Cache.setValue(CacheKey.UserToListMap, JSON.parse(userToListMap));
             });
-            AsyncStorage.get(
-              StoreKeys.ShouldShowTimelineFromVerifiedUsersOnly,
-            ).then(pref => {
-              Cache.setValue(
-                CacheKey.ShouldShowTimelineFromVerifiedUsersOnly,
-                !!pref,
-              );
-            });
-            Cache.setValue(CacheKey.PreferenceList, list);
-            listService().getAllLists();
-            collectionService().getAllCollections();
-            return resolve();
+            AsyncStorage.get(StoreKeys.ShouldShowTimelineFromVerifiedUsersOnly)
+              .then(pref => {
+                Cache.setValue(
+                  CacheKey.ShouldShowTimelineFromVerifiedUsersOnly,
+                  !!JSON.parse(pref),
+                );
+              })
+              .finally(() => {
+                listService().getAllLists();
+                collectionService().getAllCollections();
+                return resolve();
+              });
           });
         } else {
           return resolve();

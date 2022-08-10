@@ -19,8 +19,7 @@ function useMiniCollectionCardData(
         onAddToCollectionSuccess?.(collectionName, collectionId);
         setIsTweetAddedInThisCollection(true);
       })
-      .catch(err => {
-        console.log({err});
+      .catch(() => {
         onAddToCollectionFailure();
       });
   }, [

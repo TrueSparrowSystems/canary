@@ -21,4 +21,5 @@ export const EventTypes = {
   UpdateCollection: 'event_types_update_collection',
   UpdateList: 'event_types_update_list',
   LocationSelectionChanged: 'event_types_location_selection_changed',
+  OpenImageViewer: 'open_image_viewer',
 };

@@ -12,6 +12,7 @@ import AddToListModal from './src/components/AddToListModal';
 import ConfirmDeleteModal from './src/components/common/ConfirmDeleteModal';
 import toastConfig from './src/utils/ToastConfig';
 import SearchUserModal from './src/components/SearchUserModal';
+import CustomImageViewer from './src/components/CustomImageViewer';
 import Orientation from 'react-native-orientation';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <AddListModal />
         <SearchUserModal />
         <AddToListModal />
+        <CustomImageViewer />
       </NavigationContainer>
       <Toast config={toastConfig} />
     </SafeAreaView>

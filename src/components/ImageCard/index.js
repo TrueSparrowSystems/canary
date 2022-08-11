@@ -6,6 +6,7 @@ import ScreenName from '../../constants/ScreenName';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import Image from 'react-native-fast-image';
 import TwitterAPI from '../../api/helpers/TwitterAPI';
+import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import Video from 'react-native-video';
@@ -17,12 +18,13 @@ function ImageCard({mediaArray, tweetId}) {
   const navigation = useNavigation();
   const onImagePress = useCallback(
     index => {
-      navigation.navigate(ScreenName.ImageViewScreen, {
-        mediaArray,
-        imageIndex: index,
-      });
+      // navigation.navigate(ScreenName.ImageViewScreen, {
+      //   mediaArray,
+      //   imageIndex: index,
+      // });
+      LocalEvent.emit(EventTypes.OpenImageViewer, {media: mediaArray});
     },
-    [mediaArray, navigation],
+    [mediaArray],
   );
 
   const [shouldPlayGif, setShouldPlayGif] = useState(false);

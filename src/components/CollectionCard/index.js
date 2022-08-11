@@ -101,7 +101,7 @@ function CollectionCard(props) {
 
   return (
     <TouchableWithoutFeedback
-      onPress={disabled ? null : onCollectionPress}
+      onPress={disabled || enableDelete ? null : onCollectionPress}
       onLongPress={disabled ? null : fnOnLongPress}>
       <Animatable.View
         ref={viewRef}

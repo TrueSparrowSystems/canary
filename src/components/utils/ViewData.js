@@ -9,8 +9,8 @@ export function getTweetData(tweet, response) {
   data.isBookmarked = bookmarkedTweetList
     ? bookmarkedTweetList?.hasOwnProperty(tweet.id)
     : false;
-  const userData = response.data.includes.users;
-  userData.forEach(user => {
+  const userData = response?.data?.includes?.users;
+  userData?.forEach(user => {
     if (user.id === authorId) {
       data = {...data, user};
       return;

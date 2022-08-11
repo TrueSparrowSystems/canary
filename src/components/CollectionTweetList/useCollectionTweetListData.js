@@ -24,6 +24,10 @@ function useCollectionTweetListData(props) {
             var array = [];
             const {data} = apiResponse;
             const newData = data?.data;
+            const errors = data?.errors;
+            if (errors) {
+              _collectionService.handleTweetError(collectionId, errors);
+            }
             if (newData && newData.length > 0) {
               newData.forEach(tweet => {
                 const tweetData = getTweetData(tweet, apiResponse);

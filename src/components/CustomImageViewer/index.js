@@ -19,10 +19,12 @@ const CustomImageViewer = () => {
 
   const [isVisible, setIsVisible] = useState(false);
   const imagesArray = useRef([]);
+  const imageIndex = useRef(0);
   useEffect(() => {
     const launchModal = payload => {
       setIsVisible(true);
       imagesArray.current = payload?.media;
+      imageIndex.current = payload?.imageIndex;
     };
 
     LocalEvent.on(EventTypes.OpenImageViewer, launchModal);
@@ -34,13 +36,10 @@ const CustomImageViewer = () => {
   });
 
   return (
-    <Modal
-      visible={isVisible}
-      animationType="slide"
-      hardwareAccelerated={true}
-      statusBarTranslucent={true}>
+    <Modal visible={isVisible} animationType="slide" hardwareAccelerated={true}>
       <StatusBar hidden={true} />
       <ImageViewer
+        index={imageIndex.current}
         renderHeader={() => {
           return (
             <SafeAreaView>

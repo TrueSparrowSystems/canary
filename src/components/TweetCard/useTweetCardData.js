@@ -6,11 +6,14 @@ import Toast from 'react-native-toast-message';
 import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 import {Share} from 'react-native';
 import {replace} from '../../utils/Strings';
+import {checkIsTweetBookmarked} from '../utils/ViewData';
 
 function useTweetCardData(props) {
   const {dataSource} = props;
-  const {public_metrics, user, id, media, isBookmarked} = dataSource;
-  const [isTweetBookmarked, setIsTweetBookmarked] = useState(isBookmarked);
+  const {public_metrics, user, id, media} = dataSource;
+  const [isTweetBookmarked, setIsTweetBookmarked] = useState(
+    checkIsTweetBookmarked(id),
+  );
 
   const tweetUrl = useMemo(() => {
     const url = replace(
@@ -51,7 +54,7 @@ function useTweetCardData(props) {
 
   const onCardPress = useCallback(() => {
     if (public_metrics?.reply_count > 0) {
-      dataSource.isBookmarked = isTweetBookmarked;
+      dataSource.isBookmarked = checkIsTweetBookmarked(id);
       navigation.dispatch(
         StackActions.push(ScreenName.ThreadScreen, {tweetData: dataSource}),
       );
@@ -62,7 +65,7 @@ function useTweetCardData(props) {
         position: ToastPosition.Top,
       });
     }
-  }, [dataSource, isTweetBookmarked, navigation, public_metrics?.reply_count]);
+  }, [dataSource, id, navigation, public_metrics?.reply_count]);
 
   const onUserNamePress = useCallback(() => {
     navigation.push(ScreenName.SearchResultScreen, {

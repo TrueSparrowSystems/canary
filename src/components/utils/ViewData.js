@@ -5,10 +5,7 @@ export function getTweetData(tweet, response) {
   const authorId = tweet.author_id;
   const mediaKeys = tweet?.attachments?.media_keys || [];
   var data = {...tweet};
-  const bookmarkedTweetList = Cache.getValue(CacheKey.BookmarkedTweetsList);
-  data.isBookmarked = bookmarkedTweetList
-    ? bookmarkedTweetList?.hasOwnProperty(tweet.id)
-    : false;
+  data.isBookmarked = checkIsTweetBookmarked(tweet.id);
   const userData = response?.data?.includes?.users;
   userData?.forEach(user => {
     if (user.id === authorId) {
@@ -29,4 +26,14 @@ export function getTweetData(tweet, response) {
     });
   }
   return data;
+}
+
+export function checkIsTweetBookmarked(tweetId) {
+  if (!tweetId) {
+    return false;
+  }
+  const bookmarkedTweetList = Cache.getValue(CacheKey.BookmarkedTweetsList);
+  return bookmarkedTweetList
+    ? bookmarkedTweetList?.hasOwnProperty(tweetId)
+    : false;
 }

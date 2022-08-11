@@ -27,6 +27,7 @@ function SearchUserModal() {
     oModalData,
     fnCloseModal,
     fnOnSearchPress,
+    fnOnQueryChange,
   } = useSearchUserModalData();
 
   const getBackdrop = useMemo(() => {
@@ -64,6 +65,7 @@ function SearchUserModal() {
         <SearchBar
           placeholderText="Search Users"
           onSearchPressCallback={fnOnSearchPress}
+          onQueryChange={fnOnQueryChange}
         />
         {/* User List */}
         {bIsSearchBarEmpty ? (

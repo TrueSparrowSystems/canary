@@ -18,18 +18,18 @@ const CustomImageViewer = () => {
   const localStyle = useStyleProcessor(styles, 'CustomImageViewer');
 
   const [isVisible, setIsVisible] = useState(false);
-  const array = useRef([]);
+  const imagesArray = useRef([]);
   useEffect(() => {
-    const open = payload => {
+    const launchModal = payload => {
       setIsVisible(true);
-      array.current = payload?.media;
+      imagesArray.current = payload?.media;
     };
 
-    LocalEvent.on(EventTypes.OpenImageViewer, open);
+    LocalEvent.on(EventTypes.OpenImageViewer, launchModal);
   }, []);
 
   const images = [];
-  array.current.map(image => {
+  imagesArray.current.map(image => {
     images.push({url: image?.url});
   });
 
@@ -68,7 +68,7 @@ const CustomImageViewer = () => {
   );
 };
 
-export default CustomImageViewer;
+export default React.memo(CustomImageViewer);
 
 const styles = {
   headerContainer: {

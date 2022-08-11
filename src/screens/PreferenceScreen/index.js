@@ -56,64 +56,65 @@ function PreferenceScreen(props) {
   ]);
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{backgroundColor: colors.White}}
-      contentContainerStyle={localStyle.container}>
+    <View style={localStyle.container}>
       <Header enableBackButton={isNotOnboardingScreen} />
-      <View style={localStyle.contentContainer}>
-        <View>
-          <Text style={localStyle.titleText}>Personalise your Feed</Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={localStyle.contentContainer}>
+          <View>
+            <Text style={localStyle.titleText}>Personalise your Feed</Text>
+            <View style={localStyle.titleSection}>
+              <Text style={localStyle.subTitleText}>Select your Topics</Text>
+              <Text style={localStyle.subText}>minimum 3</Text>
+            </View>
+          </View>
+          <PreferenceSelector onSelectedItemsUpdate={fnOnSelectedItemsUpdate} />
+
           <View style={localStyle.titleSection}>
-            <Text style={localStyle.subTitleText}>Select your Topics</Text>
-            <Text style={localStyle.subText}>minimum 3</Text>
+            <Text style={localStyle.subTitleText}>Show tweets from</Text>
+            <Text style={localStyle.subText}>
+              Verified users provide more relevancy in our opinion
+            </Text>
+          </View>
+
+          <View style={localStyle.toggleButtonsContainer}>
+            <RoundedButton
+              text="Verified Users Only"
+              leftImage={VerifiedIconBlack}
+              style={[
+                localStyle.toggleButton,
+                bIsVerifiedUsersSelected ? localStyle.selectedToggleButton : {},
+              ]}
+              disabled={bIsVerifiedUsersSelected}
+              shouldReduceOpacityWhenDisabled={false}
+              textStyle={localStyle.toggleButtonText}
+              leftImageStyle={localStyle.toggleButtonIcon}
+              onPress={fnToggleUserPrefSelection}
+              underlayColor={colors.GoldenTainoi20}
+            />
+            <RoundedButton
+              text="All Users"
+              leftImage={AllUsersIcon}
+              onPress={fnToggleUserPrefSelection}
+              style={[
+                localStyle.toggleButton,
+                !bIsVerifiedUsersSelected
+                  ? localStyle.selectedToggleButton
+                  : {},
+              ]}
+              shouldReduceOpacityWhenDisabled={false}
+              disabled={!bIsVerifiedUsersSelected}
+              textStyle={localStyle.toggleButtonText}
+              leftImageStyle={localStyle.toggleButtonIcon}
+              underlayColor={colors.GoldenTainoi20}
+            />
+          </View>
+
+          <View style={localStyle.continueButtonContainer}>
+            <RoundedButton {...roundedButtonStyle} />
           </View>
         </View>
-        <PreferenceSelector onSelectedItemsUpdate={fnOnSelectedItemsUpdate} />
-
-        <View style={localStyle.titleSection}>
-          <Text style={localStyle.subTitleText}>Show tweets from</Text>
-          <Text style={localStyle.subText}>
-            Verified users provide more relevancy in our opinion
-          </Text>
-        </View>
-
-        <View style={localStyle.toggleButtonsContainer}>
-          <RoundedButton
-            text="Verified Users Only"
-            leftImage={VerifiedIconBlack}
-            style={[
-              localStyle.toggleButton,
-              bIsVerifiedUsersSelected ? localStyle.selectedToggleButton : {},
-            ]}
-            disabled={bIsVerifiedUsersSelected}
-            shouldReduceOpacityWhenDisabled={false}
-            textStyle={localStyle.toggleButtonText}
-            leftImageStyle={localStyle.toggleButtonIcon}
-            onPress={fnToggleUserPrefSelection}
-            underlayColor={colors.GoldenTainoi20}
-          />
-          <RoundedButton
-            text="All Users"
-            leftImage={AllUsersIcon}
-            onPress={fnToggleUserPrefSelection}
-            style={[
-              localStyle.toggleButton,
-              !bIsVerifiedUsersSelected ? localStyle.selectedToggleButton : {},
-            ]}
-            shouldReduceOpacityWhenDisabled={false}
-            disabled={!bIsVerifiedUsersSelected}
-            textStyle={localStyle.toggleButtonText}
-            leftImageStyle={localStyle.toggleButtonIcon}
-            underlayColor={colors.GoldenTainoi20}
-          />
-        </View>
-
-        <View style={localStyle.continueButtonContainer}>
-          <RoundedButton {...roundedButtonStyle} />
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -121,7 +122,7 @@ export default React.memo(PreferenceScreen);
 
 const style = {
   container: {
-    // height: '100%',
+    flex: 1,
     backgroundColor: colors.White,
   },
   contentContainer: {

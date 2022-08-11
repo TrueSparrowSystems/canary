@@ -35,13 +35,15 @@ class TimelineListDataSource extends PaginatedListDataSource {
       case API_MODE.AllResults: {
         return TwitterAPI.getAllTweets(...args);
       }
+      default: {
+        this.apiMode = API_MODE.AllUsersRelevent;
+        return TwitterAPI.timelineFeed(false, SortOrder.Relevancy, ...args);
+      }
     }
-    return TwitterAPI.timelineFeed(this.getVerifiedUserPreference(), ...args);
   }
 
   getVerifiedUserPreference() {
-    const data = PreferencesDataHelper.getVerifiedUsersPreferenceFromCache();
-    return data;
+    return PreferencesDataHelper.getVerifiedUsersPreferenceFromCache();
   }
 
   switchApiModeToDefault() {

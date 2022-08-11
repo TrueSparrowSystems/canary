@@ -27,6 +27,8 @@ function useAddCollectionModalData() {
   });
 
   const closeModal = useCallback(() => {
+    collectionNameRef.current = '';
+
     setIsVisible(false);
   }, []);
 
@@ -69,12 +71,13 @@ function useAddCollectionModalData() {
             })
             .catch(() => {});
         } else {
-          closeModal();
-
           modalData?.onCollectionAddSuccess();
+          closeModal();
         }
       })
       .catch(err => {
+        collectionNameRef.current = '';
+
         Toast.show({
           type: ToastType.Error,
           text1: 'Archive could not be created. Please try again',
@@ -83,7 +86,6 @@ function useAddCollectionModalData() {
         setErrorMessage(err);
       })
       .finally(() => {
-        collectionNameRef.current = '';
         _collectionService.getAllCollections();
       });
   }, [closeModal, modalData]);

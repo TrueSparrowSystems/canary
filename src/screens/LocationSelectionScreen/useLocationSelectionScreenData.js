@@ -7,7 +7,16 @@ import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 const useLocationSelectionScreenData = () => {
   const originalDataArray = useMemo(() => {
     const data = Cache.getValue(CacheKey.AvailableWoeidsList) || [];
-    return Object.keys(data);
+
+    const keysArray = Object.keys(data);
+
+    const countriesArray = keysArray.slice(1);
+
+    const sortedArray = countriesArray.sort();
+
+    const mergedArray = [keysArray[0], ...sortedArray];
+
+    return mergedArray;
   }, []);
 
   const navigation = useNavigation();

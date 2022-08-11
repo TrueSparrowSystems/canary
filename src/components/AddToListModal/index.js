@@ -42,7 +42,7 @@ function AddToListModal() {
     return <View style={localStyle.blur} />;
   }, [localStyle.blur]);
 
-  const scrollViewStyle = useMemo(() => {
+  const maxHeightStyle = useMemo(() => {
     return {
       maxHeight: Dimensions.get('window').height / 1.33,
     };
@@ -57,7 +57,7 @@ function AddToListModal() {
       visible={bIsVisible}
       onBackDropPress={fnOnBackdropPress}
       customBackdrop={getBackdrop}>
-      <View style={localStyle.modalStyle}>
+      <View style={[localStyle.modalStyle, maxHeightStyle]}>
         <SafeAreaView style={localStyle.container}>
           <View style={localStyle.view}>
             <View style={localStyle.headerStyle}>
@@ -102,7 +102,8 @@ function AddToListModal() {
               <View>
                 <UserCard userData={oUserData} />
                 <ScrollView
-                  style={scrollViewStyle}
+                  showsVerticalScrollIndicator={false}
+                  style={maxHeightStyle}
                   contentContainerStyle={
                     localStyle.scrollContentContainerStyle
                   }>
@@ -213,7 +214,7 @@ const styles = {
     paddingTop: layoutPtToPx(20),
   },
   scrollContentContainerStyle: {
-    paddingBottom: layoutPtToPx(20),
+    paddingBottom: '40%',
     maxWidth: '100%',
   },
 };

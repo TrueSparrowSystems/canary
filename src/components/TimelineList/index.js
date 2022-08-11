@@ -114,6 +114,10 @@ const styles = {
   contentContainerStyle: {
     width: '100%',
     flexGrow: 1,
+    tablet: {
+      width: layoutPtToPx(600),
+      alignSelf: 'center',
+    },
   },
   container: {
     flex: 1,

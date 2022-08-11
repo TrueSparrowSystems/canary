@@ -7,6 +7,7 @@ import {getRandomColorCombination} from '../utils/RandomColorUtil';
 import {find} from 'lodash';
 import {isEmpty} from 'lodash-es';
 import {compareFunction} from '../utils/Strings';
+import {EventTypes, LocalEvent} from '../utils/LocalEvent';
 
 const COLLECTION_TWEET_LIMIT = 25;
 
@@ -128,7 +129,7 @@ class CollectionService {
   async _addTweet(collectionId, tweetId) {
     return new Promise((resolve, reject) => {
       if (
-        this.collections?.[collectionId]?.tweetIds.length >
+        this.collections?.[collectionId]?.tweetIds.length >=
         COLLECTION_TWEET_LIMIT
       ) {
         return reject(
@@ -257,6 +258,21 @@ class CollectionService {
       return !isPresent;
     }
     return true;
+  }
+
+  handleTweetError(collectionId, errors) {
+    errors.forEach((error, index) => {
+      if (error?.title === 'Not Found Error' && error?.parameter === 'ids') {
+        const tweetId = error?.value;
+        if (tweetId) {
+          this.removeTweetFromCollection(collectionId, tweetId).then(() => {
+            if (index === errors?.length - 1) {
+              LocalEvent.emit(EventTypes.UpdateCollection);
+            }
+          });
+        }
+      }
+    });
   }
 }
 

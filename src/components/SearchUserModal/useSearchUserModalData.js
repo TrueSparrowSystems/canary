@@ -2,7 +2,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import TwitterAPI from '../../api/helpers/TwitterAPI';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
-const DEBOUNCE_TIMEOUT_IN_MILLIS = 1000;
+const DEBOUNCE_TIMEOUT_IN_MILLIS = 500;
 
 const useSearchUserModalData = () => {
   const [isVisible, setIsVisible] = useState(false);

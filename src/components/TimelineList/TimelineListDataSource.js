@@ -27,17 +27,17 @@ class TimelineListDataSource extends PaginatedListDataSource {
   apiCall(...args) {
     switch (this.apiMode) {
       case API_MODE.VerifiedRelevent:
-        return TwitterAPI.timelineFeed(true, SortOrder.Relevancy, ...args);
+        return TwitterAPI.timelineFeed(true, SortOrder.Relevancy, 50, ...args);
       case API_MODE.VerifiedRecent:
-        return TwitterAPI.timelineFeed(true, SortOrder.Recency, ...args);
+        return TwitterAPI.timelineFeed(true, SortOrder.Recency, 20, ...args);
       case API_MODE.AllUsersRelevent:
-        return TwitterAPI.timelineFeed(false, SortOrder.Relevancy, ...args);
+        return TwitterAPI.timelineFeed(false, SortOrder.Relevancy, 20, ...args);
       case API_MODE.AllResults: {
         return TwitterAPI.getAllTweets(...args);
       }
       default: {
         this.apiMode = API_MODE.AllUsersRelevent;
-        return TwitterAPI.timelineFeed(false, SortOrder.Relevancy, ...args);
+        return TwitterAPI.timelineFeed(false, SortOrder.Relevancy, 20, ...args);
       }
     }
   }
@@ -51,9 +51,16 @@ class TimelineListDataSource extends PaginatedListDataSource {
       ? API_MODE.VerifiedRelevent
       : API_MODE.AllUsersRelevent;
   }
+  clearViewData() {
+    super.clearViewData();
+    this.switchApiModeToDefault();
+  }
 
   onResponse(response) {
-    if (!response.data?.meta?.next_token) {
+    if (
+      !response.data?.meta?.next_token ||
+      response.data?.meta?.result_count === 0
+    ) {
       switch (this.apiMode) {
         case API_MODE.VerifiedRelevent:
           lodashSet(response, 'data.meta.next_token', API_MODE.VerifiedRecent);

@@ -77,13 +77,14 @@ class TwitterApi {
   timelineFeed(
     shouldShowVerifiedUsers,
     sortOrder = SortOrder.Relevancy,
+    maxResultCount = 20,
     nextPageIdentifier,
   ) {
     const query = `(${this.getContexts()}) (lang:EN) (-is:retweet -is:reply -is:quote ${
       shouldShowVerifiedUsers ? 'is:verified' : ''
     })`;
     const data = {
-      max_results: 10,
+      max_results: maxResultCount,
       sort_order: sortOrder,
       query: query,
       ...API_REQUEST_PARAMETERS,

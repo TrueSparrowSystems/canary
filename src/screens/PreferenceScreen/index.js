@@ -80,7 +80,7 @@ function PreferenceScreen(props) {
 
         <View style={localStyle.toggleButtonsContainer}>
           <RoundedButton
-            text="Verifies Users Only"
+            text="Verified Users Only"
             leftImage={VerifiedIconBlack}
             style={[
               localStyle.toggleButton,

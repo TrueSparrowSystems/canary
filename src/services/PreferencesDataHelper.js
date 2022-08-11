@@ -66,11 +66,14 @@ class PreferencesDataHelper {
   }
 
   getVerifiedUsersPreferenceFromCache() {
-    const savedValue = JSON.parse(
-      Cache.getValue(CacheKey.ShouldShowTimelineFromVerifiedUsersOnly),
+    const savedValue = Cache.getValue(
+      CacheKey.ShouldShowTimelineFromVerifiedUsersOnly,
     );
+    if (savedValue === undefined || savedValue === null) {
+      return true;
+    }
 
-    return !!savedValue;
+    return !!JSON.parse(savedValue);
   }
 }
 export default new PreferencesDataHelper();

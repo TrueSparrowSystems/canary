@@ -46,7 +46,7 @@ class ListService {
         } else {
           var _list = JSON.parse(list);
           const listLength = Object.keys(_list).length;
-          if (listLength > LIST_LIMIT) {
+          if (listLength >= LIST_LIMIT) {
             return reject('List Limit exceeded');
           }
 

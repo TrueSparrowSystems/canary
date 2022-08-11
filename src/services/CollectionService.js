@@ -129,7 +129,7 @@ class CollectionService {
   async _addTweet(collectionId, tweetId) {
     return new Promise((resolve, reject) => {
       if (
-        this.collections?.[collectionId]?.tweetIds.length >
+        this.collections?.[collectionId]?.tweetIds.length >=
         COLLECTION_TWEET_LIMIT
       ) {
         return reject(

@@ -269,7 +269,7 @@ const Navigation = props => {
                 </View>
               ),
               tabBarLabel: ({focused}) => (
-                <BottomNavigationText focused={focused} text={'Archive'} />
+                <BottomNavigationText focused={focused} text={'Archives'} />
               ),
               tabBarStyle: getTabBarVisibility(route)
                 ? tabbarStyle

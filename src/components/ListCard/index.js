@@ -12,7 +12,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import {getInitialsFromName} from '../../utils/TextUtils';
 import fonts from '../../constants/fonts';
-import {SwipeIcon} from '../../assets/common';
+import {ListIcon, SwipeIcon} from '../../assets/common';
 import * as Animatable from 'react-native-animatable';
 import AppleStyleSwipeableRow from '../AppleStyleSwipeableRow';
 import useListCardData from './useListCardData';
@@ -67,11 +67,18 @@ function ListCard(props) {
         localStyle.listIconTextStyle,
         {color: _colorCombination?.textColor},
       ],
+      listIcon: [
+        localStyle.listImageStyle,
+        {
+          tintColor: _colorCombination?.textColor,
+        },
+      ],
     };
   }, [
     colorCombination,
     localStyle.listIconStyle,
     localStyle.listIconTextStyle,
+    localStyle.listImageStyle,
   ]);
 
   return (
@@ -102,9 +109,13 @@ function ListCard(props) {
           <View style={localStyle.container}>
             <View style={localStyle.cardDetailContainer}>
               <View style={listIconStyle.backgroundStyle}>
-                <Text style={listIconStyle.textStyle}>
-                  {listIntials.substring(0, 2)}
-                </Text>
+                {listIntials?.length === 0 ? (
+                  <Image source={ListIcon} style={listIconStyle.listIcon} />
+                ) : (
+                  <Text style={listIconStyle.textStyle}>
+                    {listIntials?.substring(0, 2)}
+                  </Text>
+                )}
               </View>
               <View style={localStyle.listNameContainer}>
                 <Text style={localStyle.listNameStyle}>{listName}</Text>
@@ -238,6 +249,10 @@ const styles = {
     fontSize: fontPtToPx(12),
     lineHeight: layoutPtToPx(15),
     color: colors.White,
+  },
+  listImageStyle: {
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(20),
   },
 };
 

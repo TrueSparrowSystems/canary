@@ -109,10 +109,10 @@ function useAddToCollectionModalData() {
     [getCollectionsList, showAddToCollectionToast],
   );
 
-  const onAddToCollectionFailure = useCallback(() => {
+  const onAddToCollectionFailure = useCallback(errorMessage => {
     Toast.show({
       type: ToastType.Error,
-      text1: 'Could not add tweet to collection',
+      text1: errorMessage || 'Could not add tweet to collection',
     });
   }, []);
 

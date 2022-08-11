@@ -10,6 +10,7 @@ import {replace} from '../../utils/Strings';
 function useTweetCardData(props) {
   const {dataSource} = props;
   const {public_metrics, user, id, media, isBookmarked} = dataSource;
+  const [isTweetBookmarked, setIsTweetBookmarked] = useState(isBookmarked);
 
   const tweetUrl = useMemo(() => {
     const url = replace(
@@ -20,7 +21,6 @@ function useTweetCardData(props) {
   }, [id, user]);
 
   const navigation = useNavigation();
-  const [isTweetBookmarked, setIsTweetBookmarked] = useState(isBookmarked);
 
   const onBookmarkButtonPress = useCallback(() => {
     LocalEvent.emit(EventTypes.ShowAddToCollectionModal, {
@@ -51,6 +51,7 @@ function useTweetCardData(props) {
 
   const onCardPress = useCallback(() => {
     if (public_metrics?.reply_count > 0) {
+      dataSource.isBookmarked = isTweetBookmarked;
       navigation.dispatch(
         StackActions.push(ScreenName.ThreadScreen, {tweetData: dataSource}),
       );
@@ -61,13 +62,17 @@ function useTweetCardData(props) {
         position: ToastPosition.Top,
       });
     }
-  }, [dataSource, navigation, public_metrics?.reply_count]);
+  }, [dataSource, isTweetBookmarked, navigation, public_metrics?.reply_count]);
 
   const onUserNamePress = useCallback(() => {
     navigation.push(ScreenName.SearchResultScreen, {
       query: `from:${dataSource.user?.username}`,
     });
   }, [dataSource, navigation]);
+
+  const onTweetBookmarked = useCallback(newValue => {
+    setIsTweetBookmarked(newValue);
+  }, []);
 
   const onSharePress = useCallback(() => {
     Share.share({
@@ -83,6 +88,7 @@ function useTweetCardData(props) {
     fnOnBookmarkButtonPress: onBookmarkButtonPress,
     fnOnCardPress: onCardPress,
     fnOnUserNamePress: onUserNamePress,
+    fnSetIsTweetBookmarked: onTweetBookmarked,
     fnOnSharePress: onSharePress,
   };
 }

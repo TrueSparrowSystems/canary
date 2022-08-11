@@ -198,7 +198,7 @@ const styles = {
   nameText: {
     fontFamily: fonts.InterSemiBold,
     fontSize: fontPtToPx(16),
-    lineHeight: layoutPtToPx(19),
+    height: layoutPtToPx(24),
     flexShrink: 1,
     color: colors.BlackPearl,
   },

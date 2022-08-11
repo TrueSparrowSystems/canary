@@ -43,7 +43,7 @@ function DiscoverScreen() {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={fnNavigateToLocationSelectionScreen}>
-            <Text style={localStyle.changeLocationText}>Change location</Text>
+            <Text style={localStyle.changeLocationText}>Change Location</Text>
           </TouchableOpacity>
         </View>
       ) : null}

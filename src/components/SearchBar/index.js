@@ -1,11 +1,10 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {TouchableOpacity, View, Image, TextInput} from 'react-native';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {CrossIcon, SearchIcon} from '../../assets/common';
-import {isEmpty, unescape} from 'lodash';
-import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import {isEmpty} from 'lodash';
 import fonts from '../../constants/fonts';
 
 function SearchBar({
@@ -26,19 +25,6 @@ function SearchBar({
   const [query, setQuery] = useState(queryRef.current);
   const [isFocussed, setIsFocussed] = useState(false);
   const textInputRef = useRef(null);
-
-  useEffect(() => {
-    const OnTrendingTopicClicked = term => {
-      queryRef.current = unescape(term);
-      setQuery(queryRef.current);
-      onSearchPress();
-    };
-    LocalEvent.on(EventTypes.OnTrendingTopicClick, OnTrendingTopicClicked);
-    return () => {
-      LocalEvent.off(EventTypes.OnTrendingTopicClick, OnTrendingTopicClicked);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const onSearchPress = useCallback(() => {
     onSearchPressCallback?.(queryRef.current);

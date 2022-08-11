@@ -10,6 +10,7 @@ const useSearchUserModalData = () => {
   const [modalData, setModalData] = useState({});
   const userData = useRef([]);
   const searchQuery = useRef('');
+  const debounceTimeoutRef = useRef(null);
 
   const onSearchPress = useCallback(
     newQuery => {
@@ -17,6 +18,21 @@ const useSearchUserModalData = () => {
       setIsLoading(true);
 
       fetchData();
+    },
+    [fetchData],
+  );
+
+  const updateQuery = useCallback(
+    newQuery => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+      debounceTimeoutRef.current = setTimeout(() => {
+        searchQuery.current = newQuery.toLowerCase();
+        setIsLoading(true);
+
+        fetchData();
+      }, DEBOUNCE_TIMEOUT_IN_MILLIS);
     },
     [fetchData],
   );
@@ -47,7 +63,7 @@ const useSearchUserModalData = () => {
     return () => {
       LocalEvent.off(EventTypes.ShowSearchUserModal, onShowModal);
     };
-  });
+  }, []);
 
   const closeModal = useCallback(() => {
     LocalEvent.emit(EventTypes.UpdateList);
@@ -65,6 +81,7 @@ const useSearchUserModalData = () => {
     oModalData: modalData,
     fnCloseModal: closeModal,
     fnOnSearchPress: onSearchPress,
+    fnOnQueryChange: updateQuery,
   };
 };
 

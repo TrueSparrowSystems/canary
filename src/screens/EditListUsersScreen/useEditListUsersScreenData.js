@@ -32,7 +32,28 @@ function useEditListUsersScreenData(listId) {
       listMembersRef.current = [];
       TwitterAPI.getUsersByUserNames(userNamesString)
         .then(res => {
-          listMembersRef.current = res.data.data;
+          const apiRes = res?.data?.data;
+          apiRes.sort(function compare(user1, user2) {
+            if (user1.name > user2.name) {
+              return 1;
+            } else if (user1.name < user2.name) {
+              return -1;
+            }
+            return 0;
+          });
+          const errors = res?.data?.errors;
+          errors?.forEach(error => {
+            if (
+              error.title === 'Not Found Error' &&
+              error.parameter === 'usernames'
+            ) {
+              apiRes.push({
+                blocked: true,
+                username: error.value,
+              });
+            }
+          });
+          listMembersRef.current = apiRes;
         })
         .catch(() => {
           //TODO: handle Error

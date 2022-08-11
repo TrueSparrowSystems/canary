@@ -71,7 +71,7 @@ function AddToListModal() {
                 </View>
               </TouchableOpacity>
               <View style={localStyle.titleContainer}>
-                <Text style={localStyle.titleText}>Add user to List</Text>
+                <Text style={localStyle.titleText}>Add user to Lists</Text>
               </View>
               <TouchableOpacity
                 style={localStyle.doneButtonContainer}

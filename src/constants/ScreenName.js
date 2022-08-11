@@ -17,4 +17,5 @@ export default {
   VideoPlayerScreen: 'VideoPlayerScreen',
   LocationSelectionScreen: 'LocationSelectionScreen',
   EditListUsersScreen: 'EditListUsersScreen',
+  LandingScreen: 'LandingScreen',
 };

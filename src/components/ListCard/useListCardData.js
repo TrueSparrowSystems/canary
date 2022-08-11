@@ -84,12 +84,8 @@ function useListCardData(
       return 'includes no one yet 😢';
     } else if (userNames.length === 1) {
       return `includes @${userNames[0]}`;
-    } else if (userNames.length === 2) {
-      return `includes @${userNames[0]} & @${userNames[1]}`;
     } else {
-      return `includes @${userNames[0]}, @${userNames[1]} & ${
-        userNames.length - 2
-      } others`;
+      return `includes @${userNames[0]} & ${userNames.length - 1} others`;
     }
   }, [userNames]);
 

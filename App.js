@@ -1,5 +1,5 @@
 import {NavigationContainer} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaView, StatusBar} from 'react-native';
 import AddCollectionModal from './src/components/AddCollectionModal';
 import AddToCollectionModal from './src/components/AddToCollectionModal';
@@ -13,9 +13,15 @@ import ConfirmDeleteModal from './src/components/common/ConfirmDeleteModal';
 import toastConfig from './src/utils/ToastConfig';
 import SearchUserModal from './src/components/SearchUserModal';
 import CustomImageViewer from './src/components/CustomImageViewer';
+import Orientation from 'react-native-orientation';
 
 function App() {
   const localStyle = useStyleProcessor(styles, 'App');
+
+  useEffect(() => {
+    Orientation.lockToPortrait();
+  }, []);
+
   return (
     <SafeAreaView style={localStyle.container}>
       <StatusBar barStyle={'dark-content'} backgroundColor={colors.White} />

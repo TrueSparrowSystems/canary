@@ -1,6 +1,6 @@
 import {unescape} from 'lodash';
-import React, {useCallback, useMemo, useState} from 'react';
-import {Share, Text, TouchableOpacity, View} from 'react-native';
+import React, {useMemo} from 'react';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {
   bookmarkedIcon,
   bookmarkIcon,
@@ -14,7 +14,6 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import colors from '../../constants/colors';
 import useTweetCardData from './useTweetCardData';
 import ImageCard from '../ImageCard';
-import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {getFormattedStat} from '../../utils/TextUtils';
 import Image from 'react-native-fast-image';
 import TwitterTextView from '../common/TwitterTextView';
@@ -32,52 +31,21 @@ function TweetCard(props) {
     linkTextStyle,
   } = props;
 
-  const {fnOnCardPress, fnOnUserNamePress} = useTweetCardData(props);
-  const localStyle = useStyleProcessor(styles, 'TweetCard');
   const {
-    user,
-    text,
-    id,
-    public_metrics,
-    media,
-    entities,
-    created_at,
-    isBookmarked,
-  } = dataSource;
+    bCanShare,
+    bHasMedia,
+    bIsTweetBookmarked,
+    fnOnAddToListPress,
+    fnOnBookmarkButtonPress,
+    fnOnCardPress,
+    fnOnUserNamePress,
+    fnOnSharePress,
+  } = useTweetCardData(props);
+  const localStyle = useStyleProcessor(styles, 'TweetCard');
+  const {user, text, id, public_metrics, media, entities, created_at} =
+    dataSource;
 
-  const [isTweetBookmarked, setIsTweetBookmarked] = useState(isBookmarked);
-
-  const onBookmarkButtonPress = useCallback(() => {
-    LocalEvent.emit(EventTypes.ShowAddToCollectionModal, {
-      tweetId: id,
-      onAddToCollectionSuccess: () => {
-        setIsTweetBookmarked(true);
-      },
-      onRemoveFromAllCollectionSuccess: () => {
-        setIsTweetBookmarked(false);
-      },
-    });
-  }, [id]);
-
-  const onAddToListSuccess = useCallback(() => {
-    LocalEvent.emit(EventTypes.UpdateList);
-    //TODO: handle on add to list success
-  }, []);
-
-  const onAddToListPress = useCallback(() => {
-    LocalEvent.emit(EventTypes.ShowAddToListModal, {
-      userName: user.username,
-      onAddToListSuccess: onAddToListSuccess,
-    });
-  }, [onAddToListSuccess, user]);
-
-  const hasMedia = useMemo(() => {
-    return media && media?.length !== 0;
-  }, [media]);
-
-  const displayDate = getDisplayDate(created_at);
-
-  const tweetUrl = useMemo(() => entities?.urls?.[0]?.url, [entities]);
+  const displayDate = useMemo(() => getDisplayDate(created_at), [created_at]);
 
   return (
     <Animatable.View animation="fadeIn">
@@ -120,11 +88,11 @@ function TweetCard(props) {
           <TwitterTextView
             style={textStyle || localStyle.tweetText}
             linkStyle={linkTextStyle}
-            hasMedia={hasMedia}
+            hasMedia={bHasMedia}
             urls={entities?.urls}>
             {unescape(text)}
           </TwitterTextView>
-          {hasMedia ? <ImageCard mediaArray={media} tweetId={id} /> : null}
+          {bHasMedia ? <ImageCard mediaArray={media} tweetId={id} /> : null}
           <View style={localStyle.likeCommentStrip}>
             <View style={localStyle.flexRow}>
               <Image source={likeIcon} style={localStyle.iconStyle} />
@@ -143,28 +111,24 @@ function TweetCard(props) {
               ) : null}
             </View>
             <View style={localStyle.optionsView}>
-              {tweetUrl ? (
+              {bCanShare ? (
                 <TouchableOpacity
-                  onPress={() => {
-                    Share.share({
-                      message: `Check out this tweet!\n${tweetUrl}`,
-                    });
-                  }}
+                  onPress={fnOnSharePress}
                   style={localStyle.shareIconContainer}
                   hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                   <Image source={ShareIcon} style={localStyle.shareIconStyle} />
                 </TouchableOpacity>
               ) : null}
               <TouchableOpacity
-                onPress={onBookmarkButtonPress}
+                onPress={fnOnBookmarkButtonPress}
                 hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                 <Image
-                  source={isTweetBookmarked ? bookmarkedIcon : bookmarkIcon}
+                  source={bIsTweetBookmarked ? bookmarkedIcon : bookmarkIcon}
                   style={localStyle.bookmarkIconStyle}
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={onAddToListPress}
+                onPress={fnOnAddToListPress}
                 hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                 <Image source={ListIcon} style={localStyle.listIconStyle} />
               </TouchableOpacity>
@@ -234,7 +198,7 @@ const styles = {
   nameText: {
     fontFamily: fonts.InterSemiBold,
     fontSize: fontPtToPx(16),
-    lineHeight: layoutPtToPx(19),
+    height: layoutPtToPx(24),
     flexShrink: 1,
     color: colors.BlackPearl,
   },

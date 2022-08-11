@@ -40,7 +40,7 @@ function useAddListModalData() {
   }, []);
 
   const onCreateListPress = useCallback(() => {
-    if (listNameRef.current.length === 0) {
+    if (listNameRef.current.trim().length === 0) {
       Toast.show({
         type: ToastType.Error,
         text1: 'List name cannot be empty.',
@@ -80,6 +80,7 @@ function useAddListModalData() {
         setErrorMessage(err);
       })
       .finally(() => {
+        listNameRef.current = '';
         _listService.getAllLists();
       });
   }, [closeModal, modalData]);

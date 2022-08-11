@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
+import {unescape} from 'lodash';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import ScreenName from '../../constants/ScreenName';
 import Cache from '../../services/Cache';
@@ -60,9 +61,14 @@ function useDiscoverScreenData() {
     navigation.navigate(ScreenName.LocationSelectionScreen);
   }, [navigation]);
 
-  const onTopicClick = useCallback(text => {
-    LocalEvent.emit(EventTypes.OnTrendingTopicClick, text);
-  }, []);
+  const onTopicClick = useCallback(
+    text => {
+      navigation.navigate(ScreenName.SearchResultScreen, {
+        query: unescape(text),
+      });
+    },
+    [navigation],
+  );
 
   const onRefresh = useCallback(() => {
     getTrendingTopics();

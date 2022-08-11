@@ -1,4 +1,5 @@
 import {isArray, sampleSize} from 'lodash';
+import {API_MODE} from '../../components/TimelineList/TimelineListDataSource';
 import {APIService} from '../../services/Api';
 import PreferencesDataHelper from '../../services/PreferencesDataHelper';
 
@@ -73,11 +74,38 @@ class TwitterApi {
     return userNameQuery;
   }
 
-  timelineFeed(nextPageIdentifier) {
+  timelineFeed(
+    shouldShowVerifiedUsers,
+    sortOrder = SortOrder.Relevancy,
+    nextPageIdentifier,
+  ) {
+    const query = `(${this.getContexts()}) (lang:EN) (-is:retweet -is:reply -is:quote ${
+      shouldShowVerifiedUsers ? 'is:verified' : ''
+    })`;
+    const data = {
+      max_results: 10,
+      sort_order: sortOrder,
+      query: query,
+      ...API_REQUEST_PARAMETERS,
+    };
+    if (
+      nextPageIdentifier &&
+      nextPageIdentifier !== API_MODE.VerifiedRecent &&
+      nextPageIdentifier !== API_MODE.AllUsersRelevent &&
+      nextPageIdentifier !== API_MODE.AllResults
+    ) {
+      data.next_token = nextPageIdentifier;
+    }
+    const apiService = new APIService({});
+    return apiService.get(EndPoints.timelineFeed, data);
+  }
+
+  getAllTweets(nextPageIdentifier) {
+    const query = '(lang:EN) (-is:retweet -is:reply -is:quote)';
     const data = {
       max_results: 10,
       sort_order: SortOrder.Relevancy,
-      query: `(${this.getContexts()}) (lang:EN) (-is:retweet -is:reply -is:quote)`,
+      query: query,
       ...API_REQUEST_PARAMETERS,
     };
     if (nextPageIdentifier) {

@@ -5,4 +5,6 @@ export const StoreKeys = {
   Lists: 'lists',
   BookmarkedTweetsList: 'bookmarked_tweets_list',
   UserToListMap: 'user_to_list_map',
+  ShouldShowTimelineFromVerifiedUsersOnly:
+    'should_show_timeline_from_verified_users_only',
 };

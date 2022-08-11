@@ -8,9 +8,10 @@ import Cache from '../services/Cache';
 import {CacheKey} from '../services/Cache/CacheStoreConstants';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
 import SplashScreen from 'react-native-splash-screen';
+import LandingScreen from '../screens/LandingScreen';
 
 const AppStack = createSharedElementStackNavigator();
-const PreferenceStack = createSharedElementStackNavigator();
+const OnBoardingStack = createSharedElementStackNavigator();
 function RootNavigation() {
   const [isAppLoaded, setAppLoaded] = useState(false);
   const [currentStack, setCurrentStack] = useState();
@@ -74,15 +75,22 @@ const HomeAppStack = () => {
   );
 };
 const LaunchStack = () => (
-  <PreferenceStack.Navigator>
-    <PreferenceStack.Screen
+  <OnBoardingStack.Navigator>
+    <OnBoardingStack.Screen
+      name={ScreenName.LandingScreen}
+      component={LandingScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <OnBoardingStack.Screen
       name={ScreenName.PreferenceScreen}
       component={PreferenceScreen}
       options={{
         headerShown: false,
       }}
     />
-  </PreferenceStack.Navigator>
+  </OnBoardingStack.Navigator>
 );
 
 export default React.memo(RootNavigation);

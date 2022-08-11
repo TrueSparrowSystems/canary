@@ -1,24 +1,57 @@
 import {StackActions, useNavigation} from '@react-navigation/native';
-import {useCallback} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import ScreenName from '../../constants/ScreenName';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import Toast from 'react-native-toast-message';
 import {ToastPosition, ToastType} from '../../constants/ToastConstants';
+import {Share} from 'react-native';
+import {replace} from '../../utils/Strings';
 
 function useTweetCardData(props) {
   const {dataSource} = props;
-  const {public_metrics} = dataSource;
+  const {public_metrics, user, id, media, isBookmarked} = dataSource;
+  const [isTweetBookmarked, setIsTweetBookmarked] = useState(isBookmarked);
+
+  const tweetUrl = useMemo(() => {
+    const url = replace(
+      'https://twitter.com/{{userName}}/status/{{tweetId}}/',
+      {userName: user?.username, tweetId: id},
+    );
+    return url;
+  }, [id, user]);
 
   const navigation = useNavigation();
 
-  const onAddToCollectionPress = useCallback(() => {
+  const onBookmarkButtonPress = useCallback(() => {
     LocalEvent.emit(EventTypes.ShowAddToCollectionModal, {
-      tweetId: dataSource.id,
+      tweetId: id,
+      onAddToCollectionSuccess: () => {
+        setIsTweetBookmarked(true);
+      },
+      onRemoveFromAllCollectionSuccess: () => {
+        setIsTweetBookmarked(false);
+      },
     });
-  }, [dataSource]);
+  }, [id]);
+
+  const onAddToListSuccess = useCallback(() => {
+    LocalEvent.emit(EventTypes.UpdateList);
+  }, []);
+
+  const onAddToListPress = useCallback(() => {
+    LocalEvent.emit(EventTypes.ShowAddToListModal, {
+      userName: user.username,
+      onAddToListSuccess: onAddToListSuccess,
+    });
+  }, [onAddToListSuccess, user]);
+
+  const hasMedia = useMemo(() => {
+    return media && media?.length !== 0;
+  }, [media]);
 
   const onCardPress = useCallback(() => {
     if (public_metrics?.reply_count > 0) {
+      dataSource.isBookmarked = isTweetBookmarked;
       navigation.dispatch(
         StackActions.push(ScreenName.ThreadScreen, {tweetData: dataSource}),
       );
@@ -29,7 +62,7 @@ function useTweetCardData(props) {
         position: ToastPosition.Top,
       });
     }
-  }, [dataSource, navigation, public_metrics?.reply_count]);
+  }, [dataSource, isTweetBookmarked, navigation, public_metrics?.reply_count]);
 
   const onUserNamePress = useCallback(() => {
     navigation.push(ScreenName.SearchResultScreen, {
@@ -37,10 +70,26 @@ function useTweetCardData(props) {
     });
   }, [dataSource, navigation]);
 
+  const onTweetBookmarked = useCallback(newValue => {
+    setIsTweetBookmarked(newValue);
+  }, []);
+
+  const onSharePress = useCallback(() => {
+    Share.share({
+      message: `Check out this tweet!\n\n${tweetUrl}\n\nSent from Canary app`,
+    });
+  }, [tweetUrl]);
+
   return {
-    fnOnAddToCollectionPress: onAddToCollectionPress,
+    bCanShare: !!tweetUrl,
+    bHasMedia: hasMedia,
+    bIsTweetBookmarked: isTweetBookmarked,
+    fnOnAddToListPress: onAddToListPress,
+    fnOnBookmarkButtonPress: onBookmarkButtonPress,
     fnOnCardPress: onCardPress,
     fnOnUserNamePress: onUserNamePress,
+    fnSetIsTweetBookmarked: onTweetBookmarked,
+    fnOnSharePress: onSharePress,
   };
 }
 

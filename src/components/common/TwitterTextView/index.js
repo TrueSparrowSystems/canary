@@ -7,8 +7,8 @@ import colors from '../../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
 import fonts from '../../../constants/fonts';
 
-const PATTERN_HASHTAG = /(?:^|\s)(#[^\s#]+|[^\s#]+#)(?=$|\s)/gi;
-const PATTERN_MENTION = /(^|\s)(@[a-z\d-_]+)/gi;
+const PATTERN_HASHTAG = /(#[^\s#]+|[^\s#]+#)(?=$|\s)/gi;
+const PATTERN_MENTION = /(@[a-z\d-_]+)/gi;
 const PATTERN_URL =
   /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
 
@@ -70,7 +70,7 @@ function TwitterTextView({
     [navigation],
   );
   const onPressLink = useCallback((e, url) => {
-    Linking.canOpenURL(url).then(canOpen => !!canOpen && Linking.openURL(url));
+    Linking.openURL(url);
   }, []);
 
   const str = (typeof children === 'string' && children) || '';

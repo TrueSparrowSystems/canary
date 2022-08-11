@@ -22,7 +22,10 @@ function ImageCard({mediaArray, tweetId}) {
       //   mediaArray,
       //   imageIndex: index,
       // });
-      LocalEvent.emit(EventTypes.OpenImageViewer, {media: mediaArray});
+      LocalEvent.emit(EventTypes.OpenImageViewer, {
+        media: mediaArray,
+        imageIndex: index,
+      });
     },
     [mediaArray],
   );
@@ -68,7 +71,7 @@ function ImageCard({mediaArray, tweetId}) {
         break;
       }
       case 4: {
-        style.push({aspectRatio: 2});
+        style.push({aspectRatio: 1.8});
         break;
       }
     }

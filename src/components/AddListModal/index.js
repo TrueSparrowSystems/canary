@@ -36,6 +36,7 @@ function AddListModal() {
   return bIsVisible ? (
     <CustomModal
       visible={bIsVisible}
+      onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}
       customBackdrop={getBackdrop}>
       <View style={[localStyle.modalStyle, {top: screenHeight / 3}]}>

@@ -12,6 +12,13 @@ const MINIMUM_TOPICS_COUNT = 3;
 export function usePreferenceScreenData() {
   const navigation = useNavigation();
 
+  const isVerifiedUsersSelectedRef = useRef(
+    PreferencesDataHelper.getVerifiedUsersPreferenceFromCache(),
+  );
+  const [isVerifiedUsersSelected, setIsVerifiedUsersSelected] = useState(
+    isVerifiedUsersSelectedRef.current,
+  );
+
   const selectedItemsList = useRef(
     PreferencesDataHelper.getSelectedPreferencesListFromCache() || [],
   );
@@ -19,6 +26,11 @@ export function usePreferenceScreenData() {
   const [isDoneButtonEnabled, setIsDoneButtonEnabled] = useState(
     selectedItemsList.current.length >= MINIMUM_TOPICS_COUNT,
   );
+
+  const toggleUserPrefSelection = useCallback(() => {
+    isVerifiedUsersSelectedRef.current = !isVerifiedUsersSelectedRef.current;
+    setIsVerifiedUsersSelected(prevVal => !prevVal);
+  }, []);
 
   const onSelectedItemsUpdate = useCallback(
     (list = []) => {
@@ -42,29 +54,40 @@ export function usePreferenceScreenData() {
       PreferencesDataHelper.areInitialPreferencesSetInCache();
 
     Cache.setValue(CacheKey.PreferenceList, selectedItemsList.current);
+    Cache.setValue(
+      CacheKey.ShouldShowTimelineFromVerifiedUsersOnly,
+      isVerifiedUsersSelectedRef.current,
+    );
     AsyncStorage.setItem(
       StoreKeys.PreferenceList,
       selectedItemsList.current,
     ).then(() => {
-      if (areInitialPrefsSet) {
-        LocalEvent.emit(EventTypes.UpdateTimeline);
-        setTimeout(() => {
-          navigation.goBack();
-        }, 200);
-      } else {
-        AsyncStorage.setItem(StoreKeys.AreInitialPreferencesSet, true).then(
-          () => {
-            Cache.setValue(CacheKey.AreInitialPreferencesSet, true);
-            //Change Stack
-            LocalEvent.emit(EventTypes.SwitchToHomeStack);
-          },
-        );
-      }
+      AsyncStorage.setItem(
+        StoreKeys.ShouldShowTimelineFromVerifiedUsersOnly,
+        isVerifiedUsersSelectedRef.current,
+      ).then(() => {
+        if (areInitialPrefsSet) {
+          LocalEvent.emit(EventTypes.UpdateTimeline);
+          setTimeout(() => {
+            navigation.goBack();
+          }, 200);
+        } else {
+          AsyncStorage.setItem(StoreKeys.AreInitialPreferencesSet, true).then(
+            () => {
+              Cache.setValue(CacheKey.AreInitialPreferencesSet, true);
+              //Change Stack
+              LocalEvent.emit(EventTypes.SwitchToHomeStack);
+            },
+          );
+        }
+      });
     });
   }, [navigation]);
 
   return {
     bIsDoneButtonEnabled: isDoneButtonEnabled,
+    bIsVerifiedUsersSelected: isVerifiedUsersSelected,
+    fnToggleUserPrefSelection: toggleUserPrefSelection,
     fnOnSelectedItemsUpdate: onSelectedItemsUpdate,
     fnOnDonePress: onDonePress,
   };

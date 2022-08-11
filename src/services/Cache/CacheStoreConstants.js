@@ -1,5 +1,7 @@
 export const CacheKey = {
   AreInitialPreferencesSet: 'cache_key_are_initial_preferences_set',
+  ShouldShowTimelineFromVerifiedUsersOnly:
+    'cache_key_should_show_timeline_from_verified_users_only',
   PreferenceList: 'cache_key_preference_list',
   BookmarkedTweetsList: 'bookmarked_tweets_list',
   AvailableWoeidsList: 'available_woeids_list',

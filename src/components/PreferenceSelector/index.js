@@ -36,7 +36,6 @@ const styles = {
     flexWrap: 'wrap',
     flexDirection: 'row',
     marginTop: layoutPtToPx(20),
-    marginBottom: layoutPtToPx(30),
   },
   searchBar: {
     color: colors.SherpaBlue,

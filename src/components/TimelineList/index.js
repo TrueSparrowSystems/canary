@@ -24,15 +24,16 @@ function TimelineList({
   disableTweetPress = false,
   listEmptyComponent = null,
 }) {
-  const {bIsLoading, fnOnRefresh, fnOnDataChange} = useTimelineListData({
-    onDataAvailable,
-    onRefresh,
-  });
-
   const listDataSource = useRef(timelineListDataSource);
   if (listDataSource.current === null) {
     listDataSource.current = new TimelineListDataSource();
   }
+
+  const {bIsLoading, fnOnRefresh, fnOnDataChange} = useTimelineListData({
+    listDataSource: listDataSource.current,
+    onDataAvailable,
+    onRefresh,
+  });
 
   const localStyle = useStyleProcessor(styles, 'TimelineList');
 

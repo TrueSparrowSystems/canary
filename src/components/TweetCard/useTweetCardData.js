@@ -36,7 +36,6 @@ function useTweetCardData(props) {
 
   const onAddToListSuccess = useCallback(() => {
     LocalEvent.emit(EventTypes.UpdateList);
-    //TODO: handle on add to list success
   }, []);
 
   const onAddToListPress = useCallback(() => {

@@ -90,7 +90,7 @@ const styles = {
     color: colors.Black,
     fontFamily: fonts.InterSemiBold,
     fontSize: fontPtToPx(14),
-    lineHeight: layoutPtToPx(17),
+    maxHeight: layoutPtToPx(22),
   },
   userNameText: {
     color: colors.BlackPearl,

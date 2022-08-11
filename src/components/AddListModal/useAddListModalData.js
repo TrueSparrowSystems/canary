@@ -27,6 +27,8 @@ function useAddListModalData() {
   });
 
   const closeModal = useCallback(() => {
+    listNameRef.current = '';
+
     setIsVisible(false);
   }, []);
 
@@ -62,16 +64,18 @@ function useAddListModalData() {
             .addUserToList(listId, modalData.userName)
             .then(() => {
               LocalEvent.emit(EventTypes.UpdateList);
-              closeModal();
               modalData?.onListAddSuccess(listNameRef.current, listId);
+              closeModal();
             })
             .catch(() => {});
         } else {
-          closeModal();
           modalData?.onListAddSuccess();
+          closeModal();
         }
       })
       .catch(err => {
+        listNameRef.current = '';
+
         Toast.show({
           type: ToastType.Error,
           text1: 'List could not be created. Please try again',
@@ -80,7 +84,6 @@ function useAddListModalData() {
         setErrorMessage(err);
       })
       .finally(() => {
-        listNameRef.current = '';
         _listService.getAllLists();
       });
   }, [closeModal, modalData]);

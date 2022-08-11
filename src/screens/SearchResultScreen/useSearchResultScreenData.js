@@ -5,6 +5,7 @@ import SearchResultListDataSource from './SearchResultListDataSource';
 function useSearchResultScreenData({searchQuery = ''}) {
   const [query, setQuery] = useState(searchQuery);
   const [isLoading, setIsLoading] = useState(true);
+  const [textInputError, setTextInputError] = useState('');
   const listDataSource = useRef(null);
 
   const sortOrder = useRef(SortOrder.Recency);
@@ -13,9 +14,14 @@ function useSearchResultScreenData({searchQuery = ''}) {
     listDataSource.current = new SearchResultListDataSource(query);
   }
   const onSearchPress = useCallback(newQuery => {
-    listDataSource.current.onQueryChange(newQuery);
-    setQuery(newQuery);
-    setIsLoading(true);
+    if (newQuery.trim() === '') {
+      setTextInputError('Please Enter Something to Search');
+    } else {
+      setTextInputError('');
+      listDataSource.current.onQueryChange(newQuery);
+      setQuery(newQuery);
+      setIsLoading(true);
+    }
   }, []);
 
   const toggleSortOrder = useCallback(() => {
@@ -34,9 +40,10 @@ function useSearchResultScreenData({searchQuery = ''}) {
   }, []);
 
   return {
-    searchResultListDataSource: listDataSource.current,
     bIsLoading: isLoading,
     bIsSortingPopular: sortOrder.current === SortOrder.Relevancy,
+    sTextInputError: textInputError,
+    searchResultListDataSource: listDataSource.current,
     fnOnSearchPress: onSearchPress,
     fnToggleSortOrder: toggleSortOrder,
     fnOnDataAvailable: onDataAvailable,

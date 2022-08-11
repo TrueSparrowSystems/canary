@@ -45,6 +45,7 @@ function SearchUserModal() {
   return (
     <CustomModal
       visible={bIsVisible}
+      onHardwareBackButtonPress={fnCloseModal}
       onBackDropPress={fnCloseModal}
       customBackdrop={getBackdrop}>
       <KeyboardAwareScrollView

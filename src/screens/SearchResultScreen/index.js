@@ -16,6 +16,7 @@ function SearchResultScreen(props) {
   const localStyle = useStyleProcessor(styles, 'SearchResultScreen');
   const {
     bIsLoading,
+    sTextInputError,
     searchResultListDataSource,
     bIsSortingPopular,
     fnToggleSortOrder,
@@ -67,6 +68,9 @@ function SearchResultScreen(props) {
         />
       </View>
       <SearchBar searchQuery={query} onSearchPressCallback={fnOnSearchPress} />
+      {sTextInputError ? (
+        <Text style={localStyle.errorText}>{sTextInputError}</Text>
+      ) : null}
       {bIsLoading ? (
         <View style={localStyle.loaderView}>
           <ActivityIndicator
@@ -143,6 +147,13 @@ const styles = {
     fontSize: fontPtToPx(14),
     lineHeight: layoutPtToPx(17),
     color: getColorWithOpacity(colors.BlackPearl, 0.7),
+  },
+  errorText: {
+    fontFamily: fonts.InterRegular,
+    color: colors.BitterSweet,
+    fontSize: fontPtToPx(14),
+    alignSelf: 'center',
+    marginTop: layoutPtToPx(2),
   },
 };
 export default React.memo(SearchResultScreen);

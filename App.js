@@ -14,7 +14,6 @@ import toastConfig from './src/utils/ToastConfig';
 import SearchUserModal from './src/components/SearchUserModal';
 import CustomImageViewer from './src/components/CustomImageViewer';
 import Orientation from 'react-native-orientation';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 function App() {
   const localStyle = useStyleProcessor(styles, 'App');
@@ -24,22 +23,20 @@ function App() {
   }, []);
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={localStyle.container}>
-        <StatusBar barStyle={'dark-content'} backgroundColor={colors.White} />
-        <NavigationContainer>
-          <RootNavigation />
-          <AddCollectionModal />
-          <AddToCollectionModal />
-          <ConfirmDeleteModal />
-          <AddListModal />
-          <SearchUserModal />
-          <AddToListModal />
-          <CustomImageViewer />
-        </NavigationContainer>
-        <Toast config={toastConfig} />
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <SafeAreaView style={localStyle.container}>
+      <StatusBar barStyle={'dark-content'} backgroundColor={colors.White} />
+      <NavigationContainer>
+        <RootNavigation />
+        <AddCollectionModal />
+        <AddToCollectionModal />
+        <ConfirmDeleteModal />
+        <AddListModal />
+        <SearchUserModal />
+        <AddToListModal />
+        <CustomImageViewer />
+      </NavigationContainer>
+      <Toast config={toastConfig} />
+    </SafeAreaView>
   );
 }
 const styles = {

@@ -1,6 +1,6 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React, {useEffect} from 'react';
-import {SafeAreaView, StatusBar} from 'react-native';
+import {SafeAreaView, StatusBar, LogBox} from 'react-native';
 import AddCollectionModal from './src/components/AddCollectionModal';
 import AddToCollectionModal from './src/components/AddToCollectionModal';
 import {useStyleProcessor} from './src/hooks/useStyleProcessor';
@@ -15,12 +15,19 @@ import SearchUserModal from './src/components/SearchUserModal';
 import CustomImageViewer from './src/components/CustomImageViewer';
 import Orientation from 'react-native-orientation';
 
+const ENABLE_YELLOW_BOX_IN_DEBUG_MODE = true;
+
 function App() {
   const localStyle = useStyleProcessor(styles, 'App');
 
   useEffect(() => {
     Orientation.lockToPortrait();
   }, []);
+
+  if (ENABLE_YELLOW_BOX_IN_DEBUG_MODE) {
+    LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+    LogBox.ignoreAllLogs(); //Ignore all log notifications
+  }
 
   return (
     <SafeAreaView style={localStyle.container}>

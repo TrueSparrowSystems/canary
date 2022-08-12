@@ -13,4 +13,5 @@ export const CacheKey = {
     ListScreen: 'ListScreen',
     CollectionScreen: 'CollectionScreen',
   },
+  IsRedirectModalHidden: 'cache_key_is_redirect_modal_hidden',
 };

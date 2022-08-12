@@ -28,6 +28,9 @@ class BootService {
             AsyncStorage.get(StoreKeys.UserToListMap).then(userToListMap => {
               Cache.setValue(CacheKey.UserToListMap, JSON.parse(userToListMap));
             });
+            AsyncStorage.get(StoreKeys.IsRedirectModalHidden).then(value => {
+              Cache.setValue(CacheKey.IsRedirectModalHidden, JSON.parse(value));
+            });
             AsyncStorage.get(StoreKeys.ShouldShowTimelineFromVerifiedUsersOnly)
               .then(pref => {
                 Cache.setValue(

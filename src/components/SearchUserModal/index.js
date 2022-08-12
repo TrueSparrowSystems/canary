@@ -15,11 +15,10 @@ import fonts from '../../constants/fonts';
 import SearchBar from '../SearchBar';
 import SearchUserListItem from '../SearchUserListItem';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import useBackButtonPress from '../../hooks/useBackButtonPress';
 
 function SearchUserModal() {
   const localStyle = useStyleProcessor(styles, 'SearchUserModal');
-  useBackButtonPress();
+
   const {
     aUserData,
     bIsVisible,

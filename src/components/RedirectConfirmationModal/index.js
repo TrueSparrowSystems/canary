@@ -1,24 +1,26 @@
 import React, {useMemo} from 'react';
 import {View, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import colors, {getColorWithOpacity} from '../../../constants/colors';
-import fonts from '../../../constants/fonts';
-import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
-import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
-import CustomModal from '../CustomModal';
-import RoundedButton from '../RoundedButton';
-import useConfirmDeleteModalData from './useConfirmDeleteModalData';
+import colors, {getColorWithOpacity} from '../../constants/colors';
+import fonts from '../../constants/fonts';
+import {useStyleProcessor} from '../../hooks/useStyleProcessor';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import Checkbox from '../common/Checkbox';
+import CustomModal from '../common/CustomModal';
+import RoundedButton from '../common/RoundedButton';
+import useRedirectConfirmationModalData from './useRedirectConfirmationModalData';
 
-function ConfirmDeleteModal() {
-  const localStyle = useStyleProcessor(styles, 'ConfirmDeleteModal');
+function RedirectConfirmationModal() {
+  const localStyle = useStyleProcessor(styles, 'RedirectConfirmationModal');
 
   const {
     bIsVisible,
-    fnOnBackdropPress,
     sText,
+    fnOnBackdropPress,
     fnOnCancelPress,
     fnOnSureButtonPress,
-  } = useConfirmDeleteModalData();
+    fnOnCheckboxValueChange,
+  } = useRedirectConfirmationModalData();
 
   const getBackdrop = useMemo(() => {
     return <View style={localStyle.blur} />;
@@ -33,7 +35,14 @@ function ConfirmDeleteModal() {
       <View style={localStyle.modalStyle}>
         <SafeAreaView style={localStyle.container}>
           <View style={localStyle.view}>
-            <Text style={localStyle.textStyle}>{sText}</Text>
+            {sText ? <Text style={localStyle.textStyle}>{sText}</Text> : null}
+            <View style={localStyle.flexRow}>
+              <Checkbox
+                onValueChange={fnOnCheckboxValueChange}
+                text={'Do you want to hide this modal next time?'}
+                textStyle={localStyle.checkboxTextStyle}
+              />
+            </View>
             <View style={localStyle.flexRow}>
               <RoundedButton
                 style={localStyle.cancelButton}
@@ -87,6 +96,17 @@ const styles = {
     fontFamily: fonts.SoraSemiBold,
     color: colors.BlackPearl,
   },
+  checkboxTextStyle: {
+    marginLeft: layoutPtToPx(4),
+    fontSize: fontPtToPx(13),
+    lineHeight: layoutPtToPx(16),
+    fontFamily: fonts.InterRegular,
+    color: colors.BlackPearl,
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    flex: 1,
+  },
   view: {
     width: '100%',
     height: 'auto',
@@ -136,9 +156,8 @@ const styles = {
   flexRow: {
     flexDirection: 'row',
     flex: 1,
-    marginTop: layoutPtToPx(25),
-    marginBottom: layoutPtToPx(15),
+    marginVertical: layoutPtToPx(15),
   },
 };
 
-export default React.memo(ConfirmDeleteModal);
+export default React.memo(RedirectConfirmationModal);

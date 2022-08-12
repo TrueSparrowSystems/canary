@@ -28,3 +28,4 @@ export const PopularIcon = require('./popular.png');
 export const UserIcon = require('./user.png');
 export const AllUsersIcon = require('./all_users.png');
 export const VerifiedIconBlack = require('./verifiedIconBlack.png');
+export const CheckBoxImage = require('./checkbox.png');

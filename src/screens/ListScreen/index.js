@@ -5,8 +5,9 @@ import {
   SafeAreaView,
   ScrollView,
   View,
+  Text,
 } from 'react-native';
-import {AddIcon, ListIconBig} from '../../assets/common';
+import {AddIcon, CrossIcon, ListIconBig} from '../../assets/common';
 import ListCard from '../../components/ListCard';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {listService} from '../../services/ListService';
@@ -18,12 +19,20 @@ import Header from '../../components/common/Header';
 import fonts from '../../constants/fonts';
 import {isEmpty} from 'lodash-es';
 import useTabListener from '../../hooks/useTabListener';
+import RoundedButton from '../../components/common/RoundedButton';
+import AsyncStorage from '../../services/AsyncStorage';
+import {StoreKeys} from '../../services/AsyncStorage/StoreConstants';
+import * as Animatable from 'react-native-animatable';
+import Cache from '../../services/Cache';
+import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 
 function ListScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListScreen');
   const [isLoading, setIsLoading] = useState(true);
   const [swipeable, setSwipeable] = useState(false);
   const listDataRef = useRef({});
+  const [showPromotionBanner, setShowPromotionBanner] = useState(false);
+  const crossButtonRef = useRef(null);
   const screenName = props?.route?.name;
   const scrollRef = useRef(null);
 
@@ -40,6 +49,12 @@ function ListScreen(props) {
     const _listService = listService();
     _listService.getAllLists().then(list => {
       listDataRef.current = list;
+      const showPromotion = Cache.getValue(CacheKey.ShowPromotionOnLists);
+      if (showPromotion !== null) {
+        setShowPromotionBanner(JSON.parse(showPromotion));
+      } else {
+        setShowPromotionBanner(true);
+      }
       setIsLoading(false);
     });
   }, []);
@@ -79,6 +94,14 @@ function ListScreen(props) {
     setSwipeable(false);
   }, []);
 
+  const onRemovePromotionPress = useCallback(() => {
+    crossButtonRef.current?.animate('fadeOutLeftBig').then(() => {
+      setShowPromotionBanner(false);
+      Cache.setValue(CacheKey.ShowPromotionOnLists, false);
+      AsyncStorage.set(StoreKeys.ShowPromotionOnLists, false).then(() => {});
+    });
+  }, []);
+
   return (
     <SafeAreaView style={localStyle.container}>
       {!isEmpty(listDataRef.current) ? (
@@ -92,6 +115,20 @@ function ListScreen(props) {
           rightButtonTextStyle={localStyle.headerRightButtonText}
           onRightButtonClick={swipeable ? onDonePress : onAddListPress}
         />
+      ) : null}
+      {showPromotionBanner && !isEmpty(listDataRef.current) ? (
+        <Animatable.View ref={crossButtonRef} style={localStyle.banner}>
+          <Text style={localStyle.flexShrink}>
+            Show some text for lists some text for lists some text for lists
+          </Text>
+          <RoundedButton
+            style={localStyle.crossButton}
+            leftImage={CrossIcon}
+            leftImageStyle={localStyle.crossIconStyle}
+            onPress={onRemovePromotionPress}
+            underlayColor={colors.GoldenTainoi80}
+          />
+        </Animatable.View>
       ) : null}
       {isLoading ? (
         <View style={localStyle.loaderStyle}>
@@ -182,6 +219,30 @@ const styles = {
   },
   scrollViewContainer: {
     paddingBottom: layoutPtToPx(20),
+  },
+  banner: {
+    height: 60,
+    width: '100%',
+    backgroundColor: colors.GoldenTainoi,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: layoutPtToPx(20),
+  },
+  crossButton: {
+    flexGrow: 1,
+    backgroundColor: colors.GoldenTainoi,
+    height: layoutPtToPx(40),
+    width: 'auto',
+    borderRadius: layoutPtToPx(25),
+    paddingHorizontal: layoutPtToPx(10),
+  },
+  crossIconStyle: {
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(20),
+  },
+  flexShrink: {
+    flexShrink: 1,
   },
 };
 

@@ -25,6 +25,23 @@ class BootService {
                 );
               },
             );
+            AsyncStorage.get(StoreKeys.ShowPromotionOnArchives).then(res => {
+              if (!res) {
+                Cache.setValue(CacheKey.ShowPromotionOnArchives, true);
+              } else {
+                Cache.setValue(
+                  CacheKey.ShowPromotionOnArchives,
+                  JSON.parse(res),
+                );
+              }
+            });
+            AsyncStorage.get(StoreKeys.ShowPromotionOnLists).then(res => {
+              if (!res) {
+                Cache.setValue(CacheKey.ShowPromotionOnLists, true);
+              } else {
+                Cache.setValue(CacheKey.ShowPromotionOnLists, JSON.parse(res));
+              }
+            });
             AsyncStorage.get(StoreKeys.UserToListMap).then(userToListMap => {
               Cache.setValue(CacheKey.UserToListMap, JSON.parse(userToListMap));
             });

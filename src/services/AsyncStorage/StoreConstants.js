@@ -7,4 +7,6 @@ export const StoreKeys = {
   UserToListMap: 'user_to_list_map',
   ShouldShowTimelineFromVerifiedUsersOnly:
     'should_show_timeline_from_verified_users_only',
+  ShowPromotionOnLists: 'show_promotion_on_lists',
+  ShowPromotionOnArchives: 'show_promotion_on_archives',
 };

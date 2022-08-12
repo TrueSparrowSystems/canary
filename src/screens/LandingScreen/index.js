@@ -1,48 +1,123 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useCallback} from 'react';
-import {Image, Text, View} from 'react-native';
-import {Canary, rightArrowIcon} from '../../assets/common';
+import React, {useCallback, useMemo} from 'react';
+import {Dimensions, FlatList, Image, Text, View} from 'react-native';
 import RoundedButton from '../../components/common/RoundedButton';
-import colors from '../../constants/colors';
+import colors, {getColorWithOpacity} from '../../constants/colors';
 import fonts from '../../constants/fonts';
-import ScreenName from '../../constants/ScreenName';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import useLandingScreenData from './useLandingScreenData';
+import {Pagination as PaginationDots} from 'react-native-snap-carousel';
+
 function LandingScreen() {
   const localStyle = useStyleProcessor(style, 'LandingScreen');
-  const navigation = useNavigation();
 
-  const onContinuePress = useCallback(() => {
-    navigation.navigate(ScreenName.PreferenceScreen);
-  }, [navigation]);
+  const {
+    aCarousalData,
+    nActiveIndex,
+    nWindowWidth,
+    fnOnMomentumScrollEnd,
+    fnSetFlatListRef,
+    fnOnContinuePress,
+  } = useLandingScreenData();
+
+  const renderItemStyle = useMemo(
+    () => [
+      localStyle.renderItemContainer,
+      {
+        width: nWindowWidth,
+      },
+    ],
+    [localStyle.renderItemContainer, nWindowWidth],
+  );
+
+  const renderItem = useCallback(
+    ({item, index}) => {
+      //TODO: Add lottieview.
+      return (
+        <View key={index} style={renderItemStyle}>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: Dimensions.get('window').height / 2,
+            }}>
+            <Image source={item?.imageAsset} style={{height: 50, width: 50}} />
+          </View>
+        </View>
+      );
+    },
+    [renderItemStyle],
+  );
+
+  const paginationOptionsObj = useMemo(
+    () => ({
+      dotColor: colors.GoldenTainoi,
+      inactiveDotColor: getColorWithOpacity(colors.Black, 0.2),
+      inactiveDotScale: 1,
+      containerStyle: localStyle.paginationContainerStyle,
+      dotStyle: localStyle.dotStyle,
+      dotContainerStyle: localStyle.dotContainerStyle,
+    }),
+    [
+      localStyle.dotContainerStyle,
+      localStyle.dotStyle,
+      localStyle.paginationContainerStyle,
+    ],
+  );
+
+  const activeIndexData = useMemo(
+    () => aCarousalData[nActiveIndex],
+    [aCarousalData, nActiveIndex],
+  );
+
+  const buttonOptions = useMemo(() => {
+    const data = {
+      text: activeIndexData?.buttonText,
+    };
+
+    if (activeIndexData?.buttonImage) {
+      data.rightImage = activeIndexData.buttonImage;
+      data.rightImageStyle = localStyle.continueButtonIcon;
+    }
+
+    return data;
+  }, [
+    activeIndexData.buttonImage,
+    activeIndexData.buttonText,
+    localStyle.continueButtonIcon,
+  ]);
 
   return (
     <View style={localStyle.container}>
       <View style={localStyle.contentContainer}>
-        <View style={localStyle.flexRow}>
-          <Image source={Canary} style={localStyle.iconStyle} />
-          <Text style={localStyle.titleText}>Welcome to Canary</Text>
-        </View>
-        <View style={localStyle.textBox}>
-          <Text style={localStyle.subText}>
-            A space where you can discover content from twitter — browse topics,
-            save tweets, and stay up-to-date from your favorite creators!
-          </Text>
-
-          <Text style={localStyle.noteText}>
-            PS: You don’t need an account for anything, and you’re not tracked
-            😉
-          </Text>
-        </View>
+        <FlatList
+          ref={fnSetFlatListRef}
+          horizontal={true}
+          pagingEnabled={true}
+          renderItem={renderItem}
+          showsHorizontalScrollIndicator={false}
+          data={aCarousalData}
+          onMomentumScrollEnd={fnOnMomentumScrollEnd}
+        />
+        <PaginationDots
+          {...paginationOptionsObj}
+          dotsLength={aCarousalData?.length || 0}
+          activeDotIndex={nActiveIndex}
+          containerStyle={localStyle.paginationDotsContainerStyle}
+        />
         <View style={localStyle.continueButtonContainer}>
+          <Text style={localStyle.primaryText}>
+            {activeIndexData?.primaryText}
+          </Text>
+          <Text style={localStyle.secondaryText}>
+            {activeIndexData?.secondaryText}
+          </Text>
           <RoundedButton
             style={localStyle.continueButton}
-            text="Continue"
             textStyle={localStyle.continueButtonText}
-            onPress={onContinuePress}
-            rightImage={rightArrowIcon}
-            rightImageStyle={localStyle.continueButtonIcon}
+            onPress={fnOnContinuePress}
             underlayColor={colors.GoldenTainoi80}
+            {...buttonOptions}
           />
         </View>
       </View>
@@ -56,45 +131,11 @@ const style = {
     justifyContent: 'center',
     flex: 1,
   },
-  contentContainer: {
-    padding: layoutPtToPx(20),
+  renderItemContainer: {
+    paddingHorizontal: layoutPtToPx(20),
   },
-  flexRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconStyle: {
-    height: layoutPtToPx(40),
-    width: layoutPtToPx(40),
-  },
-  titleText: {
-    color: colors.BlackPearl,
-    fontSize: fontPtToPx(28),
-    lineHeight: layoutPtToPx(40),
-    fontFamily: fonts.SoraSemiBold,
-    marginLeft: layoutPtToPx(8),
-    textAlign: 'center',
-  },
-  textBox: {
-    marginVertical: layoutPtToPx(20),
-  },
-  subText: {
-    color: colors.BlackPearl,
-    fontSize: fontPtToPx(16),
-    lineHeight: layoutPtToPx(24),
-    marginTop: layoutPtToPx(4),
-    fontFamily: fonts.InterMedium,
-    textAlign: 'center',
-  },
-  noteText: {
-    marginTop: layoutPtToPx(24),
-    color: colors.BlackPearl,
-    fontSize: fontPtToPx(16),
-    lineHeight: layoutPtToPx(24),
-    fontFamily: fonts.InterRegular,
-    fontStyle: 'italic',
-    textAlign: 'center',
+  continueButtonContainer: {
+    paddingHorizontal: layoutPtToPx(10),
   },
   continueButton: {
     backgroundColor: colors.GoldenTainoi,
@@ -104,6 +145,7 @@ const style = {
     width: '100%',
     height: layoutPtToPx(40),
     borderRadius: layoutPtToPx(25),
+    marginTop: layoutPtToPx(10),
   },
   continueButtonText: {
     marginHorizontal: layoutPtToPx(5),
@@ -117,6 +159,36 @@ const style = {
   continueButtonIcon: {
     height: layoutPtToPx(12),
     width: layoutPtToPx(16.5),
+  },
+  primaryText: {
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(32),
+    lineHeight: layoutPtToPx(40),
+    textAlign: 'center',
+    marginVertical: layoutPtToPx(20),
+  },
+  secondaryText: {
+    fontFamily: fonts.InterMedium,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(24),
+    textAlign: 'center',
+    marginBottom: layoutPtToPx(16),
+  },
+
+  paginationContainerStyle: {
+    paddingBottom: 0,
+  },
+  scrollViewContainer: {
+    paddingRight: layoutPtToPx(20),
+  },
+  dotStyle: {
+    marginRight: layoutPtToPx(8),
+  },
+  paginationDotsContainerStyle: {
+    paddingVertical: layoutPtToPx(10),
+  },
+  dotContainerStyle: {
+    marginHorizontal: 0,
   },
 };
 export default React.memo(LandingScreen);

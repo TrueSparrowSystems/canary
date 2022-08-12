@@ -7,6 +7,7 @@ import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 import {Share} from 'react-native';
 import {replace} from '../../utils/Strings';
 import {checkIsTweetBookmarked} from '../utils/ViewData';
+import {SortOrder} from '../../api/helpers/TwitterAPI';
 
 function useTweetCardData(props) {
   const {dataSource} = props;
@@ -70,6 +71,7 @@ function useTweetCardData(props) {
   const onUserNamePress = useCallback(() => {
     navigation.push(ScreenName.SearchResultScreen, {
       query: `from:${dataSource.user?.username}`,
+      sortOrder: SortOrder.Recency,
     });
   }, [dataSource, navigation]);
 

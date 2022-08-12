@@ -3,10 +3,10 @@ import PaginatedListDataSource from '../../components/PaginatedList/PaginatedLis
 import {getTweetData} from '../../components/utils/ViewData';
 
 class SearchResultListDataSource extends PaginatedListDataSource {
-  constructor(query) {
+  constructor(query, sortOrder = SortOrder.Relevancy) {
     super();
     this.query = query;
-    this.sortOrder = SortOrder.Recency;
+    this.sortOrder = sortOrder;
     this.onQueryChange.bind(this);
     this.onSortOrderChange.bind(this);
   }

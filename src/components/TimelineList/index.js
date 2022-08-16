@@ -1,13 +1,24 @@
 import React, {useCallback, useMemo, useRef} from 'react';
-import {ActivityIndicator, RefreshControl, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import PaginatedList from '../PaginatedList';
-import colors from '../../constants/colors';
-import TimelineListDataSource from './TimelineListDataSource';
+import colors, {getColorWithOpacity} from '../../constants/colors';
+import TimelineListDataSource, {CARD_TYPE} from './TimelineListDataSource';
 import useTimelineListData from './useTimelineListData';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {isTablet} from 'react-native-device-info';
 import TweetCard from '../TweetCard';
+import RoundedButton from '../common/RoundedButton';
+import {Canary, CrossIcon} from '../../assets/common';
+import fonts from '../../constants/fonts';
+import * as Animatable from 'react-native-animatable';
 
 const _isTablet = isTablet();
 const ITEM_WIDTH = 276;
@@ -29,7 +40,15 @@ function TimelineList({
     listDataSource.current = new TimelineListDataSource();
   }
 
-  const {bIsLoading, fnOnRefresh, fnOnDataChange} = useTimelineListData({
+  const {
+    bShowCard,
+    bIsLoading,
+    crossButtonRef,
+    fnOnRefresh,
+    fnOnDataChange,
+    fnOnShareAppPress,
+    fnOnCloseShareCardPress,
+  } = useTimelineListData({
     listDataSource: listDataSource.current,
     onDataAvailable,
     onRefresh,
@@ -37,11 +56,60 @@ function TimelineList({
 
   const localStyle = useStyleProcessor(styles, 'TimelineList');
 
+  const ShareCard = useMemo(() => {
+    return bShowCard ? (
+      <Animatable.View
+        style={localStyle.shareCardContainer}
+        ref={crossButtonRef}>
+        <View>
+          <View style={localStyle.flexRow}>
+            <Image source={Canary} style={localStyle.canaryIconStyle} />
+            <Text style={localStyle.enjoyingPrivacyText}>
+              Enjoying the privacy?
+            </Text>
+          </View>
+          <Text style={localStyle.shareTheAppText}>
+            Share the app with your friends and support data privacy! 💯
+          </Text>
+          <RoundedButton
+            underlayColor={getColorWithOpacity(colors.Black, 0.2)}
+            style={localStyle.shareAppButton}
+            text={'Share App'}
+            onPress={fnOnShareAppPress}
+            textStyle={localStyle.shareAppButtonText}
+          />
+        </View>
+        <TouchableOpacity
+          hitSlop={{left: 10, right: 10, top: 10, bottom: 10}}
+          onPress={fnOnCloseShareCardPress}>
+          <Image source={CrossIcon} style={localStyle.crossIconStyle} />
+        </TouchableOpacity>
+      </Animatable.View>
+    ) : null;
+  }, [
+    bShowCard,
+    localStyle.shareCardContainer,
+    localStyle.flexRow,
+    localStyle.canaryIconStyle,
+    localStyle.enjoyingPrivacyText,
+    localStyle.shareTheAppText,
+    localStyle.shareAppButton,
+    localStyle.shareAppButtonText,
+    localStyle.crossIconStyle,
+    crossButtonRef,
+    fnOnShareAppPress,
+    fnOnCloseShareCardPress,
+  ]);
+
   const renderItem = useCallback(
     ({item}) => {
-      return <TweetCard dataSource={item} isDisabled={disableTweetPress} />;
+      if (item.card_type === CARD_TYPE.TweetCard) {
+        return <TweetCard dataSource={item} isDisabled={disableTweetPress} />;
+      } else if (item.card_type === CARD_TYPE.ShareCard) {
+        return ShareCard;
+      }
     },
-    [disableTweetPress],
+    [ShareCard, disableTweetPress],
   );
 
   const keyExtractor = useCallback(item => {
@@ -150,6 +218,54 @@ const styles = {
   emptyViewContainer: {
     width: '100%',
     height: '100%',
+  },
+  shareCardContainer: {
+    flexDirection: 'row',
+    padding: layoutPtToPx(20),
+  },
+  flexRow: {
+    flexDirection: 'row',
+  },
+  canaryIconStyle: {
+    height: layoutPtToPx(24),
+    width: layoutPtToPx(24),
+  },
+  enjoyingPrivacyText: {
+    color: colors.Black,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(20),
+    fontFamily: fonts.SoraSemiBold,
+    marginLeft: layoutPtToPx(4),
+    alignSelf: 'center',
+  },
+  shareTheAppText: {
+    color: colors.Black,
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(19),
+    fontFamily: fonts.InterRegular,
+    marginTop: layoutPtToPx(8),
+  },
+  shareAppButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.White,
+    width: layoutPtToPx(128),
+    height: layoutPtToPx(30),
+    borderRadius: layoutPtToPx(15),
+    borderColor: colors.Black,
+    borderWidth: layoutPtToPx(1),
+    marginTop: layoutPtToPx(12),
+  },
+  shareAppButtonText: {
+    color: colors.BlackPearl,
+    fontSize: fontPtToPx(12),
+    lineHeight: layoutPtToPx(15),
+    fontFamily: fonts.SoraSemiBold,
+  },
+  crossIconStyle: {
+    height: layoutPtToPx(15),
+    width: layoutPtToPx(15),
+    padding: layoutPtToPx(5),
   },
 };
 

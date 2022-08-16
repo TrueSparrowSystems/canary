@@ -15,6 +15,11 @@ export const API_MODE = {
   AllResults: 'all_results',
 };
 
+export const CARD_TYPE = {
+  ShareCard: 'share_card',
+  TweetCard: 'tweet_card',
+};
+
 class TimelineListDataSource extends PaginatedListDataSource {
   constructor() {
     super();
@@ -22,6 +27,7 @@ class TimelineListDataSource extends PaginatedListDataSource {
     this.apiMode = API_MODE.AllResults;
     this.switchApiModeToDefault.bind(this);
     this.switchApiModeToDefault();
+    this.addShareCard = false;
   }
   // Endpoint which is to be called for fetching list data.
   apiCall(...args) {
@@ -65,6 +71,7 @@ class TimelineListDataSource extends PaginatedListDataSource {
         case API_MODE.VerifiedRelevent:
           lodashSet(response, 'data.meta.next_token', API_MODE.VerifiedRecent);
           this.apiMode = API_MODE.VerifiedRecent;
+          this.addShareCard = true;
           break;
         case API_MODE.VerifiedRecent:
           lodashSet(
@@ -77,6 +84,7 @@ class TimelineListDataSource extends PaginatedListDataSource {
         case API_MODE.AllUsersRelevent:
           lodashSet(response, 'data.meta.next_token', API_MODE.AllResults);
           this.apiMode = API_MODE.AllResults;
+          this.addShareCard = true;
           break;
         default:
           lodashSet(response, 'data.meta.next_token', API_MODE.AllResults);
@@ -94,6 +102,10 @@ class TimelineListDataSource extends PaginatedListDataSource {
       this.viewData[tweet.id] = getTweetData(tweet, response);
       array.push(this.viewData[tweet.id]);
     });
+    if (this.addShareCard) {
+      this.addShareCard = false;
+      array.push({card_type: CARD_TYPE.ShareCard});
+    }
     return array;
   }
 }

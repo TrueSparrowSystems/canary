@@ -1,10 +1,11 @@
 import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
+import {CARD_TYPE} from '../TimelineList/TimelineListDataSource';
 
 export function getTweetData(tweet, response) {
   const authorId = tweet.author_id;
   const mediaKeys = tweet?.attachments?.media_keys || [];
-  var data = {...tweet};
+  var data = {...tweet, card_type: CARD_TYPE.TweetCard};
   data.isBookmarked = checkIsTweetBookmarked(tweet.id);
   const userData = response?.data?.includes?.users;
   userData?.forEach(user => {

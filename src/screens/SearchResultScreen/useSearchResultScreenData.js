@@ -2,16 +2,19 @@ import {useCallback, useRef, useState} from 'react';
 import {SortOrder} from '../../api/helpers/TwitterAPI';
 import SearchResultListDataSource from './SearchResultListDataSource';
 
-function useSearchResultScreenData({searchQuery = ''}) {
+function useSearchResultScreenData({searchQuery = '', sortOrder}) {
   const [query, setQuery] = useState(searchQuery);
   const [isLoading, setIsLoading] = useState(true);
   const [textInputError, setTextInputError] = useState('');
   const listDataSource = useRef(null);
 
-  const sortOrder = useRef(SortOrder.Recency);
+  const _sortOrder = useRef(sortOrder);
 
   if (listDataSource.current === null) {
-    listDataSource.current = new SearchResultListDataSource(query);
+    listDataSource.current = new SearchResultListDataSource(
+      query,
+      _sortOrder.current,
+    );
   }
   const onSearchPress = useCallback(newQuery => {
     if (newQuery.trim() === '') {
@@ -25,12 +28,12 @@ function useSearchResultScreenData({searchQuery = ''}) {
   }, []);
 
   const toggleSortOrder = useCallback(() => {
-    sortOrder.current =
-      sortOrder.current === SortOrder.Recency
+    _sortOrder.current =
+      _sortOrder.current === SortOrder.Recency
         ? SortOrder.Relevancy
         : SortOrder.Recency;
 
-    listDataSource.current.onSortOrderChange?.(sortOrder.current);
+    listDataSource.current.onSortOrderChange?.(_sortOrder.current);
 
     setIsLoading(true);
   }, []);
@@ -41,7 +44,7 @@ function useSearchResultScreenData({searchQuery = ''}) {
 
   return {
     bIsLoading: isLoading,
-    bIsSortingPopular: sortOrder.current === SortOrder.Relevancy,
+    bIsSortingPopular: _sortOrder.current === SortOrder.Relevancy,
     sTextInputError: textInputError,
     searchResultListDataSource: listDataSource.current,
     fnOnSearchPress: onSearchPress,

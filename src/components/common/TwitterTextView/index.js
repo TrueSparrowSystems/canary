@@ -6,6 +6,7 @@ import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import colors from '../../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
 import fonts from '../../../constants/fonts';
+import {SortOrder} from '../../../api/helpers/TwitterAPI';
 
 const PATTERN_HASHTAG = /(#[^\s#]+|[^\s#]+#)(?=$|\s)/gi;
 const PATTERN_MENTION = /(@[a-z\d-_]+)/gi;
@@ -65,6 +66,7 @@ function TwitterTextView({
       const strArray = str.split('@');
       navigation.push(ScreenName.SearchResultScreen, {
         query: `from:${strArray[1]}`,
+        sortOrder: SortOrder.Recency,
       });
     },
     [navigation],

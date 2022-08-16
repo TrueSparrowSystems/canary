@@ -7,10 +7,9 @@ import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 import {Linking, Share} from 'react-native';
 import {replace} from '../../utils/Strings';
 import {checkIsTweetBookmarked} from '../utils/ViewData';
+import {SortOrder} from '../../api/helpers/TwitterAPI';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 import Cache from '../../services/Cache';
-import AsyncStorage from '../../services/AsyncStorage';
-import {StoreKeys} from '../../services/AsyncStorage/StoreConstants';
 
 function useTweetCardData(props) {
   const {dataSource} = props;
@@ -74,6 +73,7 @@ function useTweetCardData(props) {
   const onUserNamePress = useCallback(() => {
     navigation.push(ScreenName.SearchResultScreen, {
       query: `from:${dataSource.user?.username}`,
+      sortOrder: SortOrder.Recency,
     });
   }, [dataSource, navigation]);
 

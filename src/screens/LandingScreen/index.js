@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo} from 'react';
-import {Dimensions, FlatList, Image, Text, View} from 'react-native';
+import {FlatList, Text, View} from 'react-native';
 import RoundedButton from '../../components/common/RoundedButton';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import fonts from '../../constants/fonts';
@@ -8,6 +8,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useLandingScreenData from './useLandingScreenData';
 import {Pagination as PaginationDots} from 'react-native-snap-carousel';
 import LottieView from 'lottie-react-native';
+import Video from 'react-native-video';
 
 function LandingScreen() {
   const localStyle = useStyleProcessor(style, 'LandingScreen');
@@ -16,6 +17,7 @@ function LandingScreen() {
     aCarousalData,
     nActiveIndex,
     nWindowWidth,
+    nWindowHeight,
     fnOnMomentumScrollEnd,
     fnSetFlatListRef,
     fnOnContinuePress,
@@ -26,35 +28,30 @@ function LandingScreen() {
       localStyle.renderItemContainer,
       {
         width: nWindowWidth,
+        height: nWindowHeight / 2,
       },
     ],
-    [localStyle.renderItemContainer, nWindowWidth],
+    [localStyle.renderItemContainer, nWindowHeight, nWindowWidth],
   );
 
   const renderItem = useCallback(
     ({item, index}) => {
       return (
         <View key={index} style={renderItemStyle}>
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: Dimensions.get('window').height / 2,
-            }}>
-            {item?.imageAsset ? (
-              <Image
-                source={item?.imageAsset}
-                // style={item?.animationStyle}
-              />
-            ) : item?.animationAsset ? (
-              <LottieView
-                autoPlay
-                loop
-                source={item?.animationAsset}
-                style={item?.animationStyle}
-              />
-            ) : null}
-          </View>
+          {item?.videoAsset ? (
+            <Video
+              source={item?.videoAsset}
+              repeat={true}
+              style={item?.animationStyle}
+            />
+          ) : item?.animationAsset ? (
+            <LottieView
+              autoPlay
+              loop
+              source={item?.animationAsset}
+              style={item?.animationStyle}
+            />
+          ) : null}
         </View>
       );
     },
@@ -152,6 +149,8 @@ const style = {
   },
   renderItemContainer: {
     paddingHorizontal: layoutPtToPx(20),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   continueButtonContainer: {
     paddingHorizontal: layoutPtToPx(10),
@@ -195,7 +194,6 @@ const style = {
     marginBottom: layoutPtToPx(16),
     color: colors.BlackPearl,
   },
-
   paginationContainerStyle: {
     paddingBottom: 0,
   },

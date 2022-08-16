@@ -3,6 +3,7 @@ import TwitterAPI, {SortOrder} from '../../api/helpers/TwitterAPI';
 import {getTweetData} from '../utils/ViewData';
 import PreferencesDataHelper from '../../services/PreferencesDataHelper';
 import lodashSet from 'lodash/set';
+import uuid from 'react-native-uuid';
 
 export const API_MODE = {
   //Verified with relevency with context
@@ -104,7 +105,10 @@ class TimelineListDataSource extends PaginatedListDataSource {
     });
     if (this.addShareCard) {
       this.addShareCard = false;
-      array.push({card_type: CARD_TYPE.ShareCard});
+      array.push({
+        id: uuid.v4(),
+        card_type: CARD_TYPE.ShareCard,
+      });
     }
     return array;
   }

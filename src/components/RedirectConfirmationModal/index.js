@@ -35,14 +35,15 @@ function RedirectConfirmationModal() {
       <View style={localStyle.modalStyle}>
         <SafeAreaView style={localStyle.container}>
           <View style={localStyle.view}>
-            {sText ? <Text style={localStyle.textStyle}>{sText}</Text> : null}
-            <View style={localStyle.flexRow}>
-              <Checkbox
-                onValueChange={fnOnCheckboxValueChange}
-                text={'Do you want to hide this modal next time?'}
-                textStyle={localStyle.checkboxTextStyle}
-              />
-            </View>
+            <Text style={localStyle.textStyle}>
+              You’ll be redirected Twitter app and we won’t be able to keep you
+              private, are you sure?
+            </Text>
+            <Text style={localStyle.subTextStyle}>
+              You also need a Twitter account to interact with the tweet and
+              your actions will be visible to Twitter
+            </Text>
+
             <View style={localStyle.flexRow}>
               <RoundedButton
                 style={localStyle.cancelButton}
@@ -59,6 +60,11 @@ function RedirectConfirmationModal() {
                 underlayColor={getColorWithOpacity(colors.BitterSweet, 0.8)}
               />
             </View>
+            <Checkbox
+              onValueChange={fnOnCheckboxValueChange}
+              text={'Don’t show again'}
+              textStyle={localStyle.checkboxTextStyle}
+            />
           </View>
         </SafeAreaView>
       </View>
@@ -95,13 +101,22 @@ const styles = {
     lineHeight: layoutPtToPx(20),
     fontFamily: fonts.SoraSemiBold,
     color: colors.BlackPearl,
+    textAlign: 'center',
+  },
+  subTextStyle: {
+    marginTop: layoutPtToPx(13),
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(17),
+    fontFamily: fonts.InterMedium,
+    color: colors.BlackPearl,
+    textAlign: 'center',
   },
   checkboxTextStyle: {
-    marginLeft: layoutPtToPx(4),
-    fontSize: fontPtToPx(13),
-    lineHeight: layoutPtToPx(16),
-    fontFamily: fonts.InterRegular,
-    color: colors.BlackPearl,
+    marginLeft: layoutPtToPx(8),
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(17),
+    fontFamily: fonts.InterMedium,
+    color: colors.Black,
   },
   checkboxContainer: {
     flexDirection: 'row',
@@ -156,7 +171,8 @@ const styles = {
   flexRow: {
     flexDirection: 'row',
     flex: 1,
-    marginVertical: layoutPtToPx(15),
+    marginTop: layoutPtToPx(20),
+    marginBottom: layoutPtToPx(12),
   },
 };
 

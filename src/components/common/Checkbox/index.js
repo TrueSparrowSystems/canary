@@ -1,6 +1,6 @@
 import React, {useState, useMemo, useEffect, useCallback} from 'react';
 import {View, Image, TouchableOpacity, Text} from 'react-native';
-import {CheckBoxImage} from '../../../assets/common';
+import {CheckMarkIcon} from '../../../assets/common';
 import colors from '../../../constants/colors';
 import fonts from '../../../constants/fonts';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
@@ -14,19 +14,13 @@ function CheckBox({
   uncheckedBoxContainerStyle,
   text,
   textStyle,
-  checkedBoxImage,
 }) {
   const localStyles = useStyleProcessor(styles, 'CheckBox');
-
-  const checkedImage = useMemo(
-    () => checkedBoxImage || CheckBoxImage,
-    [checkedBoxImage],
-  );
 
   const [selected, setSelected] = useState(value);
 
   const localContainerStyle = style || localStyles.container;
-  const localUnheckedBoxContainerStyle =
+  const localUncheckedBoxContainerStyle =
     uncheckedBoxContainerStyle || localStyles.uncheckedBox;
 
   const onButtonPress = useCallback(() => {
@@ -40,8 +34,8 @@ function CheckBox({
 
   const imageStyle = useMemo(
     () => ({
-      height: layoutPtToPx(14),
-      width: layoutPtToPx(14),
+      height: layoutPtToPx(7),
+      width: layoutPtToPx(10),
       opacity: selected ? 1 : 0,
     }),
     [selected],
@@ -55,9 +49,11 @@ function CheckBox({
       onPress={onButtonPress}>
       <View
         style={
-          selected ? localStyles.imageContainer : localUnheckedBoxContainerStyle
+          selected
+            ? localStyles.imageContainer
+            : localUncheckedBoxContainerStyle
         }>
-        <Image style={imageStyle} source={checkedImage} />
+        <Image source={CheckMarkIcon} style={imageStyle} />
       </View>
       {text ? (
         <Text style={textStyle || localStyles.textStyle}>{text}</Text>
@@ -67,22 +63,27 @@ function CheckBox({
 }
 const styles = {
   container: {
-    height: layoutPtToPx(16),
-    margin: layoutPtToPx(2),
+    height: layoutPtToPx(17),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   uncheckedBox: {
-    borderColor: colors.SherpaBlue,
+    borderColor: colors.Black,
     borderWidth: 1,
-    borderRadius: 2,
-    height: layoutPtToPx(14),
-    width: layoutPtToPx(14),
+    borderRadius: layoutPtToPx(9),
+    height: layoutPtToPx(17),
+    width: layoutPtToPx(17),
   },
   imageContainer: {
-    height: layoutPtToPx(14),
-    width: layoutPtToPx(14),
+    borderWidth: 1,
+    borderColor: colors.GoldenTainoi,
+    height: layoutPtToPx(17),
+    width: layoutPtToPx(17),
+    borderRadius: layoutPtToPx(9),
+    backgroundColor: colors.GoldenTainoi,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textStyle: {
     marginLeft: layoutPtToPx(4),

@@ -8,6 +8,7 @@ import {
   likeIcon,
   ListIcon,
   ShareIcon,
+  TwitterIcon,
   verifiedIcon,
 } from '../../assets/common';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -118,17 +119,20 @@ function TweetCard(props) {
             </TouchableOpacity>
             <View style={localStyle.optionsView}>
               <TouchableOpacity
-                onPress={fnOnTwitterIconPress}
+                onPress={fnOnSharePress}
                 style={localStyle.shareIconContainer}
                 hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                 <Image source={ShareIcon} style={localStyle.shareIconStyle} />
               </TouchableOpacity>
               {bCanShare ? (
                 <TouchableOpacity
-                  onPress={fnOnSharePress}
+                  onPress={fnOnTwitterIconPress}
                   style={localStyle.shareIconContainer}
                   hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
-                  <Image source={ShareIcon} style={localStyle.shareIconStyle} />
+                  <Image
+                    source={TwitterIcon}
+                    style={localStyle.twitterIconStyle}
+                  />
                 </TouchableOpacity>
               ) : null}
               <TouchableOpacity
@@ -245,6 +249,11 @@ const styles = {
   },
   shareIconStyle: {
     height: layoutPtToPx(17),
+    aspectRatio: 1,
+    marginHorizontal: layoutPtToPx(10),
+  },
+  twitterIconStyle: {
+    height: layoutPtToPx(20),
     aspectRatio: 1,
     marginHorizontal: layoutPtToPx(10),
   },

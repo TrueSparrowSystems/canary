@@ -9,4 +9,5 @@ export const StoreKeys = {
     'should_show_timeline_from_verified_users_only',
   ShowPromotionOnLists: 'show_promotion_on_lists',
   ShowPromotionOnArchives: 'show_promotion_on_archives',
+  IsRedirectModalHidden: 'is_redirect_modal_hidden',
 };

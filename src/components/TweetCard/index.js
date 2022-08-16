@@ -8,6 +8,7 @@ import {
   likeIcon,
   ListIcon,
   ShareIcon,
+  TwitterIcon,
   verifiedIcon,
 } from '../../assets/common';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -40,6 +41,8 @@ function TweetCard(props) {
     fnOnCardPress,
     fnOnUserNamePress,
     fnOnSharePress,
+    fnOnTwitterIconPress,
+    fnOnLikePress,
   } = useTweetCardData(props);
   const localStyle = useStyleProcessor(styles, 'TweetCard');
   const {user, text, id, public_metrics, media, entities, created_at} =
@@ -94,7 +97,11 @@ function TweetCard(props) {
           </TwitterTextView>
           {bHasMedia ? <ImageCard mediaArray={media} tweetId={id} /> : null}
           <View style={localStyle.likeCommentStrip}>
-            <View style={localStyle.flexRow}>
+            <TouchableOpacity
+              style={localStyle.flexRow}
+              onPress={() => {
+                fnOnLikePress();
+              }}>
               <Image source={likeIcon} style={localStyle.iconStyle} />
               <Text style={localStyle.publicMetricText}>
                 {public_metrics?.like_count === 0
@@ -109,14 +116,23 @@ function TweetCard(props) {
                   </Text>
                 </View>
               ) : null}
-            </View>
+            </TouchableOpacity>
             <View style={localStyle.optionsView}>
+              <TouchableOpacity
+                onPress={fnOnSharePress}
+                style={localStyle.shareIconContainer}
+                hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
+                <Image source={ShareIcon} style={localStyle.shareIconStyle} />
+              </TouchableOpacity>
               {bCanShare ? (
                 <TouchableOpacity
-                  onPress={fnOnSharePress}
+                  onPress={fnOnTwitterIconPress}
                   style={localStyle.shareIconContainer}
                   hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
-                  <Image source={ShareIcon} style={localStyle.shareIconStyle} />
+                  <Image
+                    source={TwitterIcon}
+                    style={localStyle.twitterIconStyle}
+                  />
                 </TouchableOpacity>
               ) : null}
               <TouchableOpacity
@@ -233,6 +249,11 @@ const styles = {
   },
   shareIconStyle: {
     height: layoutPtToPx(17),
+    aspectRatio: 1,
+    marginHorizontal: layoutPtToPx(10),
+  },
+  twitterIconStyle: {
+    height: layoutPtToPx(20),
     aspectRatio: 1,
     marginHorizontal: layoutPtToPx(10),
   },

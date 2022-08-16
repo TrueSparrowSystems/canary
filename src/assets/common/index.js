@@ -29,3 +29,5 @@ export const UserIcon = require('./user.png');
 export const AllUsersIcon = require('./all_users.png');
 export const VerifiedIconBlack = require('./verifiedIconBlack.png');
 export const ListGolden = require('./listGolden.png');
+export const TwitterIcon = require('./twitter.png');
+export const CheckMarkIcon = require('./checkmark.png');

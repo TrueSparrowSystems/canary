@@ -11,7 +11,6 @@ class BootService {
   initialize() {
     return new Promise(resolve => {
       networkConnection();
-      // AsyncStorage.clear();
       AsyncStorage.getItem(StoreKeys.AreInitialPreferencesSet).then(isSet => {
         setCountriesWoeidsInCache();
         Cache.setValue(CacheKey.AreInitialPreferencesSet, isSet);

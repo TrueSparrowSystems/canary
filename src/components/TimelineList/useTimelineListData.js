@@ -1,4 +1,5 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useRef, useState} from 'react';
+import {Share} from 'react-native';
 
 /**
  * @param {Function} onDataAvailable Callback function which is called when the flat list data is changed.
@@ -8,6 +9,8 @@ export default function useTimelineListData({
   onDataAvailable,
   onRefresh,
 }) {
+  const viewRef = useRef();
+  const [showCard, setShowCard] = useState(true);
   const [isVisible, setIsVisible] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,13 +35,29 @@ export default function useTimelineListData({
     onRefresh?.();
   }, [listDataSource, onRefresh]);
 
+  const onShareAppPress = useCallback(() => {
+    Share.share({
+      message: 'Check out Canary app',
+    });
+  }, []);
+
+  const onCloseShareCardPress = useCallback(() => {
+    viewRef.current.animate('fadeOutLeftBig').then(() => {
+      setShowCard(false);
+    });
+  }, []);
+
   /*
    * bIsVisible: Boolean variable which indicates if the list is visible or not.
    * fnOnDataChange: Function which is called when the flat list data is changed.
    */
   return {
     bIsLoading: isLoading,
-    fnOnRefresh: _onRefresh,
+    bShowCard: showCard,
+    crossButtonRef: viewRef,
     fnOnDataChange: onDataChange,
+    fnOnRefresh: _onRefresh,
+    fnOnShareAppPress: onShareAppPress,
+    fnOnCloseShareCardPress: onCloseShareCardPress,
   };
 }

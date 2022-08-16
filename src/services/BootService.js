@@ -25,8 +25,29 @@ class BootService {
                 );
               },
             );
+            AsyncStorage.get(StoreKeys.ShowPromotionOnArchives).then(res => {
+              let newValue = 0;
+              if (!res && JSON.parse(res) !== 0) {
+                Cache.setValue(CacheKey.ShowPromotionOnArchives, 0);
+              } else {
+                newValue = JSON.parse(res) + 1;
+                Cache.setValue(CacheKey.ShowPromotionOnArchives, newValue);
+              }
+            });
+            AsyncStorage.get(StoreKeys.ShowPromotionOnLists).then(res => {
+              let newValue = 0;
+              if (!res && JSON.parse(res) !== 0) {
+                Cache.setValue(CacheKey.ShowPromotionOnLists, 0);
+              } else {
+                newValue = JSON.parse(res) + 1;
+                Cache.setValue(CacheKey.ShowPromotionOnLists, newValue);
+              }
+            });
             AsyncStorage.get(StoreKeys.UserToListMap).then(userToListMap => {
               Cache.setValue(CacheKey.UserToListMap, JSON.parse(userToListMap));
+            });
+            AsyncStorage.get(StoreKeys.IsRedirectModalHidden).then(value => {
+              Cache.setValue(CacheKey.IsRedirectModalHidden, JSON.parse(value));
             });
             AsyncStorage.get(StoreKeys.ShouldShowTimelineFromVerifiedUsersOnly)
               .then(pref => {

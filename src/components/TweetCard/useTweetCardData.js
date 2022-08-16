@@ -4,10 +4,12 @@ import ScreenName from '../../constants/ScreenName';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import Toast from 'react-native-toast-message';
 import {ToastPosition, ToastType} from '../../constants/ToastConstants';
-import {Share} from 'react-native';
+import {Linking, Share} from 'react-native';
 import {replace} from '../../utils/Strings';
 import {checkIsTweetBookmarked} from '../utils/ViewData';
 import {SortOrder} from '../../api/helpers/TwitterAPI';
+import {CacheKey} from '../../services/Cache/CacheStoreConstants';
+import Cache from '../../services/Cache';
 
 function useTweetCardData(props) {
   const {dataSource} = props;
@@ -85,6 +87,31 @@ function useTweetCardData(props) {
     });
   }, [tweetUrl]);
 
+  const onLikePress = useCallback(() => {
+    if (!getIsRedirectModalHidden()) {
+      LocalEvent.emit(EventTypes.ShowRedirectConfirmationModal, {tweetUrl});
+    } else {
+      Linking.openURL(tweetUrl);
+    }
+  }, [getIsRedirectModalHidden, tweetUrl]);
+
+  const onTwitterIconPress = useCallback(() => {
+    if (!getIsRedirectModalHidden()) {
+      LocalEvent.emit(EventTypes.ShowRedirectConfirmationModal, {tweetUrl});
+    } else {
+      Linking.openURL(tweetUrl);
+    }
+  }, [getIsRedirectModalHidden, tweetUrl]);
+
+  const getIsRedirectModalHidden = useCallback(() => {
+    const savedValue = Cache.getValue(CacheKey.IsRedirectModalHidden);
+    if (savedValue === undefined || savedValue === null) {
+      return false;
+    }
+
+    return !!JSON.parse(savedValue);
+  }, []);
+
   return {
     bCanShare: !!tweetUrl,
     bHasMedia: hasMedia,
@@ -94,6 +121,8 @@ function useTweetCardData(props) {
     fnOnCardPress: onCardPress,
     fnOnUserNamePress: onUserNamePress,
     fnSetIsTweetBookmarked: onTweetBookmarked,
+    fnOnLikePress: onLikePress,
+    fnOnTwitterIconPress: onTwitterIconPress,
     fnOnSharePress: onSharePress,
   };
 }

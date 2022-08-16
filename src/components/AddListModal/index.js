@@ -8,13 +8,11 @@ import {AddIcon} from '../../assets/common';
 import RoundedButton from '../common/RoundedButton';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
-import useBackButtonPress from '../../hooks/useBackButtonPress';
 
 const TEXT_INPUT_LIMIT = 25;
 
 function AddListModal() {
   const localStyle = useStyleProcessor(styles, 'AddListModal');
-  useBackButtonPress();
 
   const {
     bIsVisible,

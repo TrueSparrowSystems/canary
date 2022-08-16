@@ -14,6 +14,7 @@ import toastConfig from './src/utils/ToastConfig';
 import SearchUserModal from './src/components/SearchUserModal';
 import CustomImageViewer from './src/components/CustomImageViewer';
 import Orientation from 'react-native-orientation';
+import RedirectConfirmationModal from './src/components/RedirectConfirmationModal';
 
 const ENABLE_YELLOW_BOX_IN_DEBUG_MODE = true;
 
@@ -41,6 +42,7 @@ function App() {
         <SearchUserModal />
         <AddToListModal />
         <CustomImageViewer />
+        <RedirectConfirmationModal />
       </NavigationContainer>
       <Toast config={toastConfig} />
     </SafeAreaView>

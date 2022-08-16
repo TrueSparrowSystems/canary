@@ -1,10 +1,11 @@
 import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
+import {CARD_TYPE} from '../TimelineList/TimelineListDataSource';
 
 export function getTweetData(tweet, response) {
   const authorId = tweet.author_id;
   const mediaKeys = tweet?.attachments?.media_keys || [];
-  var data = {...tweet};
+  var data = {...tweet, card_type: CARD_TYPE.TweetCard};
   data.isBookmarked = checkIsTweetBookmarked(tweet.id);
   const userData = response?.data?.includes?.users;
   userData?.forEach(user => {
@@ -36,4 +37,15 @@ export function checkIsTweetBookmarked(tweetId) {
   return bookmarkedTweetList
     ? bookmarkedTweetList?.hasOwnProperty(tweetId)
     : false;
+}
+
+export function showPromotion(cacheKey) {
+  const promotion = Cache.getValue(cacheKey);
+  if (promotion === false) {
+    return false;
+  }
+  if (promotion % 5 === 0 && promotion <= 25) {
+    return true;
+  }
+  return false;
 }

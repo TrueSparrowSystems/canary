@@ -20,11 +20,10 @@ import fonts from '../../constants/fonts';
 import EmptyScreenComponent from '../common/EmptyScreenComponent';
 import {isEmpty} from 'lodash';
 import UserCard from '../common/UserCard';
-import useBackButtonPress from '../../hooks/useBackButtonPress';
 
 function AddToListModal() {
   const localStyle = useStyleProcessor(styles, 'AddToListModal');
-  useBackButtonPress();
+
   const {
     bIsLoading,
     bIsVisible,

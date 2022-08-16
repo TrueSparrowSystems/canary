@@ -13,4 +13,7 @@ export const CacheKey = {
     ListScreen: 'ListScreen',
     CollectionScreen: 'CollectionScreen',
   },
+  ShowPromotionOnLists: 'show_promotion_on_lists',
+  ShowPromotionOnArchives: 'show_promotion_on_archives',
+  IsRedirectModalHidden: 'cache_key_is_redirect_modal_hidden',
 };

@@ -36,7 +36,7 @@ function RedirectConfirmationModal() {
         <SafeAreaView style={localStyle.container}>
           <View style={localStyle.view}>
             <Text style={localStyle.textStyle}>
-              You’ll be redirected Twitter app and we won’t be able to keep you
+              You’ll be redirected to Twitter and we won’t be able to keep you
               private, are you sure?
             </Text>
             <Text style={localStyle.subTextStyle}>

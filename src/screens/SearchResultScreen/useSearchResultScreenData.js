@@ -1,5 +1,6 @@
 import {useCallback, useRef, useState} from 'react';
-import {SortOrder} from '../../api/helpers/TwitterAPI';
+import {Constants} from '../../constants/Constants';
+
 import SearchResultListDataSource from './SearchResultListDataSource';
 
 function useSearchResultScreenData({searchQuery = '', sortOrder}) {
@@ -29,9 +30,9 @@ function useSearchResultScreenData({searchQuery = '', sortOrder}) {
 
   const toggleSortOrder = useCallback(() => {
     _sortOrder.current =
-      _sortOrder.current === SortOrder.Recency
-        ? SortOrder.Relevancy
-        : SortOrder.Recency;
+      _sortOrder.current === Constants.SortOrder.Recency
+        ? Constants.SortOrder.Relevancy
+        : Constants.SortOrder.Recency;
 
     listDataSource.current.onSortOrderChange?.(_sortOrder.current);
 
@@ -44,7 +45,7 @@ function useSearchResultScreenData({searchQuery = '', sortOrder}) {
 
   return {
     bIsLoading: isLoading,
-    bIsSortingPopular: _sortOrder.current === SortOrder.Relevancy,
+    bIsSortingPopular: _sortOrder.current === Constants.SortOrder.Relevancy,
     sTextInputError: textInputError,
     searchResultListDataSource: listDataSource.current,
     fnOnSearchPress: onSearchPress,

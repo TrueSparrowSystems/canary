@@ -10,10 +10,11 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import RoundedButton from '../../components/common/RoundedButton';
 import {NewIcon, PopularIcon} from '../../assets/common';
 import fonts from '../../constants/fonts';
-import {SortOrder} from '../../api/helpers/TwitterAPI';
+import {Constants} from '../../constants/Constants';
 
 function SearchResultScreen(props) {
-  const {query, sortOrder = SortOrder.Relevancy} = props?.route?.params;
+  const {query, sortOrder = Constants.SortOrder.Relevancy} =
+    props?.route?.params;
   const localStyle = useStyleProcessor(styles, 'SearchResultScreen');
   const {
     bIsLoading,

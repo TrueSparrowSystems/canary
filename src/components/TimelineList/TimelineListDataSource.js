@@ -1,31 +1,16 @@
 import PaginatedListDataSource from '../PaginatedList/PaginatedListDataSource';
-import TwitterAPI, {SortOrder} from '../../api/helpers/TwitterAPI';
+import TwitterAPI from '../../api/helpers/TwitterAPI';
 import {getTweetData} from '../utils/ViewData';
 import PreferencesDataHelper from '../../services/PreferencesDataHelper';
 import lodashSet from 'lodash/set';
 import uuid from 'react-native-uuid';
-
-export const API_MODE = {
-  //Verified with relevency with context
-  VerifiedRelevent: 'verified_relevent',
-  //Verified with recency with context
-  VerifiedRecent: 'verified_recent',
-  //All user with relevency with context
-  AllUsersRelevent: 'all_users_relevent',
-  //All Tweets with relevency without context
-  AllResults: 'all_results',
-};
-
-export const CARD_TYPE = {
-  ShareCard: 'share_card',
-  TweetCard: 'tweet_card',
-};
+import {Constants} from '../../constants/Constants';
 
 class TimelineListDataSource extends PaginatedListDataSource {
   constructor() {
     super();
     this.getVerifiedUserPreference.bind(this);
-    this.apiMode = API_MODE.AllResults;
+    this.apiMode = Constants.ApiModes.AllResults;
     this.switchApiModeToDefault.bind(this);
     this.switchApiModeToDefault();
     this.addShareCard = false;
@@ -33,18 +18,38 @@ class TimelineListDataSource extends PaginatedListDataSource {
   // Endpoint which is to be called for fetching list data.
   apiCall(...args) {
     switch (this.apiMode) {
-      case API_MODE.VerifiedRelevent:
-        return TwitterAPI.timelineFeed(true, SortOrder.Relevancy, 50, ...args);
-      case API_MODE.VerifiedRecent:
-        return TwitterAPI.timelineFeed(true, SortOrder.Recency, 20, ...args);
-      case API_MODE.AllUsersRelevent:
-        return TwitterAPI.timelineFeed(false, SortOrder.Relevancy, 20, ...args);
-      case API_MODE.AllResults: {
+      case Constants.ApiModes.VerifiedRelevent:
+        return TwitterAPI.timelineFeed(
+          true,
+          Constants.SortOrder.Relevancy,
+          50,
+          ...args,
+        );
+      case Constants.ApiModes.VerifiedRecent:
+        return TwitterAPI.timelineFeed(
+          true,
+          Constants.SortOrder.Recency,
+          20,
+          ...args,
+        );
+      case Constants.ApiModes.AllUsersRelevent:
+        return TwitterAPI.timelineFeed(
+          false,
+          Constants.SortOrder.Relevancy,
+          20,
+          ...args,
+        );
+      case Constants.ApiModes.AllResults: {
         return TwitterAPI.getAllTweets(...args);
       }
       default: {
-        this.apiMode = API_MODE.AllUsersRelevent;
-        return TwitterAPI.timelineFeed(false, SortOrder.Relevancy, 20, ...args);
+        this.apiMode = Constants.ApiModes.AllUsersRelevent;
+        return TwitterAPI.timelineFeed(
+          false,
+          Constants.SortOrder.Relevancy,
+          20,
+          ...args,
+        );
       }
     }
   }
@@ -55,8 +60,8 @@ class TimelineListDataSource extends PaginatedListDataSource {
 
   switchApiModeToDefault() {
     this.apiMode = this.getVerifiedUserPreference()
-      ? API_MODE.VerifiedRelevent
-      : API_MODE.AllUsersRelevent;
+      ? Constants.ApiModes.VerifiedRelevent
+      : Constants.ApiModes.AllUsersRelevent;
   }
   clearViewData() {
     super.clearViewData();
@@ -69,27 +74,39 @@ class TimelineListDataSource extends PaginatedListDataSource {
       response.data?.meta?.result_count === 0
     ) {
       switch (this.apiMode) {
-        case API_MODE.VerifiedRelevent:
-          lodashSet(response, 'data.meta.next_token', API_MODE.VerifiedRecent);
-          this.apiMode = API_MODE.VerifiedRecent;
-          this.addShareCard = true;
-          break;
-        case API_MODE.VerifiedRecent:
+        case Constants.ApiModes.VerifiedRelevent:
           lodashSet(
             response,
             'data.meta.next_token',
-            API_MODE.AllUsersRelevent,
+            Constants.ApiModes.VerifiedRecent,
           );
-          this.apiMode = API_MODE.AllUsersRelevent;
+          this.apiMode = Constants.ApiModes.VerifiedRecent;
+          this.addShareCard = true;
           break;
-        case API_MODE.AllUsersRelevent:
-          lodashSet(response, 'data.meta.next_token', API_MODE.AllResults);
-          this.apiMode = API_MODE.AllResults;
+        case Constants.ApiModes.VerifiedRecent:
+          lodashSet(
+            response,
+            'data.meta.next_token',
+            Constants.ApiModes.AllUsersRelevent,
+          );
+          this.apiMode = Constants.ApiModes.AllUsersRelevent;
+          break;
+        case Constants.ApiModes.AllUsersRelevent:
+          lodashSet(
+            response,
+            'data.meta.next_token',
+            Constants.ApiModes.AllResults,
+          );
+          this.apiMode = Constants.ApiModes.AllResults;
           this.addShareCard = true;
           break;
         default:
-          lodashSet(response, 'data.meta.next_token', API_MODE.AllResults);
-          this.apiMode = API_MODE.AllResults;
+          lodashSet(
+            response,
+            'data.meta.next_token',
+            Constants.ApiModes.AllResults,
+          );
+          this.apiMode = Constants.ApiModes.AllResults;
           break;
       }
     }
@@ -107,7 +124,7 @@ class TimelineListDataSource extends PaginatedListDataSource {
       this.addShareCard = false;
       array.push({
         id: uuid.v4(),
-        card_type: CARD_TYPE.ShareCard,
+        card_type: Constants.CardTypes.ShareCard,
       });
     }
     return array;

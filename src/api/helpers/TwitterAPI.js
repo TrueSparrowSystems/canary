@@ -1,15 +1,10 @@
 import {isArray, sampleSize} from 'lodash';
-import {API_MODE} from '../../components/TimelineList/TimelineListDataSource';
+import {Constants} from '../../constants/Constants';
 import {APIService} from '../../services/Api';
 import PreferencesDataHelper from '../../services/PreferencesDataHelper';
 
 const CONTEXTS_LIMIT = 12;
 const USERS_LIMIT = 20;
-
-export const SortOrder = {
-  Relevancy: 'relevancy',
-  Recency: 'recency',
-};
 
 const EndPoints = {
   timelineFeed: 'https://api.twitter.com/2/tweets/search/recent',
@@ -76,7 +71,7 @@ class TwitterApi {
 
   timelineFeed(
     shouldShowVerifiedUsers,
-    sortOrder = SortOrder.Relevancy,
+    sortOrder = Constants.SortOrder.Relevancy,
     maxResultCount = 20,
     nextPageIdentifier,
   ) {
@@ -91,9 +86,9 @@ class TwitterApi {
     };
     if (
       nextPageIdentifier &&
-      nextPageIdentifier !== API_MODE.VerifiedRecent &&
-      nextPageIdentifier !== API_MODE.AllUsersRelevent &&
-      nextPageIdentifier !== API_MODE.AllResults
+      nextPageIdentifier !== Constants.ApiModes.VerifiedRecent &&
+      nextPageIdentifier !== Constants.ApiModes.AllUsersRelevent &&
+      nextPageIdentifier !== Constants.ApiModes.AllResults
     ) {
       data.next_token = nextPageIdentifier;
     }
@@ -105,7 +100,7 @@ class TwitterApi {
     const query = '(lang:EN) (-is:retweet -is:reply -is:quote)';
     const data = {
       max_results: 10,
-      sort_order: SortOrder.Relevancy,
+      sort_order: Constants.SortOrder.Relevancy,
       query: query,
       ...API_REQUEST_PARAMETERS,
     };
@@ -116,7 +111,11 @@ class TwitterApi {
     return apiService.get(EndPoints.timelineFeed, data);
   }
 
-  searchResultFeed(query, sortOrder = SortOrder.Recency, nextPageIdentifier) {
+  searchResultFeed(
+    query,
+    sortOrder = Constants.SortOrder.Recency,
+    nextPageIdentifier,
+  ) {
     const data = {
       max_results: 10,
       sort_order: sortOrder,

@@ -99,15 +99,17 @@ function TweetCard(props) {
           <View style={localStyle.likeCommentStrip}>
             <TouchableOpacity
               style={localStyle.flexRow}
-              onPress={() => {
-                fnOnLikePress();
-              }}>
+              onPress={fnOnLikePress}>
               <Image source={likeIcon} style={localStyle.iconStyle} />
               <Text style={localStyle.publicMetricText}>
                 {public_metrics?.like_count === 0
                   ? 0
                   : getFormattedStat(public_metrics?.like_count)}
               </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={localStyle.flexRow}
+              onPress={fnOnLikePress}>
               {public_metrics?.reply_count > 0 ? (
                 <View style={localStyle.flexRow}>
                   <Image source={commentIcon} style={localStyle.iconStyle} />

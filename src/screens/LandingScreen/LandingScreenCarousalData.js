@@ -1,11 +1,12 @@
 import {rightArrowIcon} from '../../assets/common';
-import {Anonymous, Discovery, Secure, Canary} from '../../assets/animation';
+import {Anonymous, Discovery, Secure, CanaryGif} from '../../assets/animation';
 import {layoutPtToPx} from '../../utils/responsiveUI';
+import colors from '../../constants/colors';
 
 const LandingScreenCarousalData = [
   {
     id: 'welcome',
-    videoAsset: Canary,
+    videoAsset: CanaryGif,
     animationStyle: {
       height: layoutPtToPx(260),
       width: layoutPtToPx(260),
@@ -31,8 +32,8 @@ const LandingScreenCarousalData = [
     id: 'anonymous',
     animationAsset: Anonymous,
     animationStyle: {
-      height: layoutPtToPx(606),
-      width: layoutPtToPx(606),
+      height: layoutPtToPx(500),
+      width: layoutPtToPx(500),
     },
     primaryText: 'Stay Anonymous',
     secondaryText:

@@ -1,5 +1,8 @@
 import {useNavigation} from '@react-navigation/native';
 import {useCallback, useRef, useState} from 'react';
+import {Share} from 'react-native';
+import {Constants} from '../../constants/Constants';
+import ScreenName from '../../constants/ScreenName';
 import AsyncStorage from '../../services/AsyncStorage';
 import {StoreKeys} from '../../services/AsyncStorage/StoreConstants';
 import Cache from '../../services/Cache';
@@ -84,11 +87,23 @@ export function usePreferenceScreenData() {
     });
   }, [navigation]);
 
+  const onInfoPress = useCallback(() => {
+    navigation.navigate(ScreenName.LandingScreen, {enableBackButton: true});
+  }, [navigation]);
+
+  const onShareAppPress = useCallback(() => {
+    Share.share({
+      message: `Check out Canary app - The incognito mode of Twitter.\n${Constants.GoogleDriveLink}`,
+    });
+  }, []);
+
   return {
     bIsDoneButtonEnabled: isDoneButtonEnabled,
     bIsVerifiedUsersSelected: isVerifiedUsersSelected,
     fnToggleUserPrefSelection: toggleUserPrefSelection,
     fnOnSelectedItemsUpdate: onSelectedItemsUpdate,
     fnOnDonePress: onDonePress,
+    fnOnInfoPress: onInfoPress,
+    fnOnShareAppPress: onShareAppPress,
   };
 }

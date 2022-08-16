@@ -1,5 +1,6 @@
 import {useCallback, useRef, useState} from 'react';
 import {Share} from 'react-native';
+import {Constants} from '../../constants/Constants';
 
 /**
  * @param {Function} onDataAvailable Callback function which is called when the flat list data is changed.
@@ -37,7 +38,7 @@ export default function useTimelineListData({
 
   const onShareAppPress = useCallback(() => {
     Share.share({
-      message: 'Check out Canary app',
+      message: `Check out Canary app - The incognito mode of Twitter.\n${Constants.GoogleDriveLink}`,
     });
   }, []);
 

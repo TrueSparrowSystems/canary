@@ -12,7 +12,10 @@ export default function useLandingScreenData() {
   const [activeIndex, setActiveIndex] = useState(activeIndexRef.current);
 
   const carousalData = useMemo(() => LandingScreenCarousalData, []);
-  const windowWidth = useMemo(() => Dimensions.get('window').width, []);
+  const {height: windowHeight, width: windowWidth} = useMemo(
+    () => Dimensions.get('window'),
+    [],
+  );
 
   const _onMomentumScrollEnd = useCallback(
     e => {
@@ -42,6 +45,7 @@ export default function useLandingScreenData() {
   return {
     aCarousalData: carousalData,
     nWindowWidth: windowWidth,
+    nWindowHeight: windowHeight,
     nActiveIndex: activeIndexRef.current,
     fnSetFlatListRef: setFlatListRef,
     fnOnMomentumScrollEnd: _onMomentumScrollEnd,

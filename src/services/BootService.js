@@ -27,7 +27,7 @@ class BootService {
             );
             AsyncStorage.get(StoreKeys.ShowPromotionOnArchives).then(res => {
               let newValue = 0;
-              if (!res && JSON.parse(res !== 0)) {
+              if (!res && JSON.parse(res) !== 0) {
                 Cache.setValue(CacheKey.ShowPromotionOnArchives, 0);
               } else {
                 newValue = JSON.parse(res) + 1;
@@ -36,7 +36,7 @@ class BootService {
             });
             AsyncStorage.get(StoreKeys.ShowPromotionOnLists).then(res => {
               let newValue = 0;
-              if (!res && JSON.parse(res !== 0)) {
+              if (!res && JSON.parse(res) !== 0) {
                 Cache.setValue(CacheKey.ShowPromotionOnLists, 0);
               } else {
                 newValue = JSON.parse(res) + 1;

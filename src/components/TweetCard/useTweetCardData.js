@@ -88,10 +88,6 @@ function useTweetCardData(props) {
   }, [tweetUrl]);
 
   const onLikePress = useCallback(() => {
-    AsyncStorage.set(StoreKeys.IsRedirectModalHidden, false).then(() => {
-      Cache.setValue(CacheKey.IsRedirectModalHidden, false);
-    });
-
     if (!getIsRedirectModalHidden()) {
       LocalEvent.emit(EventTypes.ShowRedirectConfirmationModal, {tweetUrl});
     } else {

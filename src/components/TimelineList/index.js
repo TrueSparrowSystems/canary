@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import PaginatedList from '../PaginatedList';
 import colors, {getColorWithOpacity} from '../../constants/colors';
-import TimelineListDataSource, {CARD_TYPE} from './TimelineListDataSource';
+import TimelineListDataSource from './TimelineListDataSource';
 import useTimelineListData from './useTimelineListData';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
@@ -19,6 +19,7 @@ import RoundedButton from '../common/RoundedButton';
 import {Canary, CrossIcon} from '../../assets/common';
 import fonts from '../../constants/fonts';
 import * as Animatable from 'react-native-animatable';
+import {Constants} from '../../constants/Constants';
 
 const _isTablet = isTablet();
 const ITEM_WIDTH = 276;
@@ -103,9 +104,9 @@ function TimelineList({
 
   const renderItem = useCallback(
     ({item}) => {
-      if (item.card_type === CARD_TYPE.TweetCard) {
+      if (item.card_type === Constants.CardTypes.TweetCard) {
         return <TweetCard dataSource={item} isDisabled={disableTweetPress} />;
-      } else if (item.card_type === CARD_TYPE.ShareCard) {
+      } else if (item.card_type === Constants.CardTypes.ShareCard) {
         return ShareCard;
       }
     },

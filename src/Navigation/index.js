@@ -29,6 +29,7 @@ import BottomNavigationText from '../components/BottomNavigationText';
 import LocationSelectionScreen from '../screens/LocationSelectionScreen';
 import colors from '../constants/colors';
 import EditListUsersScreen from '../screens/EditListUsersScreen';
+import LandingScreen from '../screens/LandingScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -57,6 +58,17 @@ const Navigation = props => {
         <TimelineStack.Screen
           name={ScreenName.PreferenceScreen}
           component={PreferenceScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <TimelineStack.Screen
+          name={ScreenName.LandingScreen}
+          component={LandingScreen}
           options={{
             gestureEnabled: true,
             headerShown: false,
@@ -134,11 +146,24 @@ const Navigation = props => {
       case ScreenName.ThreadScreen:
       case ScreenName.ImageViewScreen:
       case ScreenName.VideoPlayerScreen:
+      case ScreenName.LandingScreen:
         return false;
       default:
         return true;
     }
   };
+
+  const getBottomTabIconStyle = useCallback(
+    isFocused => {
+      return [
+        localStyle.bottomTabIcons,
+        {
+          opacity: isFocused ? 1 : 0.5,
+        },
+      ];
+    },
+    [localStyle.bottomTabIcons],
+  );
 
   const bottomStack = useCallback(bottomHeight => {
     const tabbarStyle = {
@@ -161,12 +186,7 @@ const Navigation = props => {
                     ]}>
                     <Image
                       source={HomeIcon}
-                      style={[
-                        localStyle.bottomTabIcons,
-                        {
-                          opacity: focused ? 1 : 0.5,
-                        },
-                      ]}
+                      style={getBottomTabIconStyle(focused)}
                     />
                   </View>
                 );
@@ -195,12 +215,7 @@ const Navigation = props => {
                   ]}>
                   <Image
                     source={SearchIcon}
-                    style={[
-                      localStyle.bottomTabIcons,
-                      {
-                        opacity: focused ? 1 : 0.5,
-                      },
-                    ]}
+                    style={getBottomTabIconStyle(focused)}
                   />
                 </View>
               ),
@@ -227,12 +242,7 @@ const Navigation = props => {
                   ]}>
                   <Image
                     source={BottomBarListIcon}
-                    style={[
-                      localStyle.bottomTabIcons,
-                      {
-                        opacity: focused ? 1 : 0.5,
-                      },
-                    ]}
+                    style={getBottomTabIconStyle(focused)}
                   />
                 </View>
               ),
@@ -259,12 +269,7 @@ const Navigation = props => {
                   ]}>
                   <Image
                     source={CollectionsIcon}
-                    style={[
-                      localStyle.bottomTabIcons,
-                      {
-                        opacity: focused ? 1 : 0.5,
-                      },
-                    ]}
+                    style={getBottomTabIconStyle(focused)}
                   />
                 </View>
               ),

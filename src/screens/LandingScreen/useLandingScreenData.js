@@ -1,10 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
 import {useCallback, useMemo, useRef, useState} from 'react';
-import {Dimensions} from 'react-native';
+import {Dimensions, Platform} from 'react-native';
 import ScreenName from '../../constants/ScreenName';
 import LandingScreenCarousalData from './LandingScreenCarousalData';
 
-export default function useLandingScreenData() {
+export default function useLandingScreenData({isNotOnboardingScreen}) {
   const navigation = useNavigation();
 
   const flatListRef = useRef(null);
@@ -21,6 +21,7 @@ export default function useLandingScreenData() {
     e => {
       const xPos = e.nativeEvent.contentOffset.x;
       const newIndex = Math.round(xPos / windowWidth);
+
       activeIndexRef.current = newIndex;
       setActiveIndex(activeIndexRef.current);
     },
@@ -33,14 +34,24 @@ export default function useLandingScreenData() {
 
   const onContinuePress = useCallback(() => {
     if (activeIndexRef.current === carousalData.length - 1) {
-      navigation.navigate(ScreenName.PreferenceScreen);
-      return;
+      if (isNotOnboardingScreen) {
+        navigation.goBack();
+        return;
+      } else {
+        navigation.navigate(ScreenName.PreferenceScreen);
+        return;
+      }
     }
     flatListRef.current?.scrollToIndex({
       animated: true,
       index: activeIndexRef.current + 1,
     });
-  }, [carousalData.length, navigation]);
+
+    if (Platform.OS === 'android') {
+      activeIndexRef.current++;
+      setActiveIndex(activeIndexRef.current);
+    }
+  }, [carousalData.length, isNotOnboardingScreen, navigation]);
 
   return {
     aCarousalData: carousalData,

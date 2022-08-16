@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo} from 'react';
-import {FlatList, Text, View} from 'react-native';
+import {FlatList, Image, Text, View} from 'react-native';
 import RoundedButton from '../../components/common/RoundedButton';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import fonts from '../../constants/fonts';
@@ -8,10 +8,15 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useLandingScreenData from './useLandingScreenData';
 import {Pagination as PaginationDots} from 'react-native-snap-carousel';
 import LottieView from 'lottie-react-native';
-import Video from 'react-native-video';
+import Header from '../../components/common/Header';
+import {CanaryGif} from '../../assets/animation';
 
-function LandingScreen() {
+function LandingScreen(props) {
   const localStyle = useStyleProcessor(style, 'LandingScreen');
+
+  const data = props?.route?.params;
+
+  const isNotOnboardingScreen = !!data?.enableBackButton;
 
   const {
     aCarousalData,
@@ -21,7 +26,7 @@ function LandingScreen() {
     fnOnMomentumScrollEnd,
     fnSetFlatListRef,
     fnOnContinuePress,
-  } = useLandingScreenData();
+  } = useLandingScreenData({isNotOnboardingScreen});
 
   const renderItemStyle = useMemo(
     () => [
@@ -39,11 +44,7 @@ function LandingScreen() {
       return (
         <View key={index} style={renderItemStyle}>
           {item?.videoAsset ? (
-            <Video
-              source={item?.videoAsset}
-              repeat={true}
-              style={item?.animationStyle}
-            />
+            <Image source={item?.videoAsset} style={item?.animationStyle} />
           ) : item?.animationAsset ? (
             <LottieView
               autoPlay
@@ -89,15 +90,25 @@ function LandingScreen() {
       data.rightImageStyle = localStyle.continueButtonIcon;
     }
 
+    if (isNotOnboardingScreen && nActiveIndex === aCarousalData.length - 1) {
+      delete data.rightImage;
+      delete data.rightImageStyle;
+      data.text = 'Got it !';
+    }
+
     return data;
   }, [
+    aCarousalData.length,
     activeIndexData.buttonImage,
-    activeIndexData.buttonText,
+    activeIndexData?.buttonText,
+    isNotOnboardingScreen,
     localStyle.continueButtonIcon,
+    nActiveIndex,
   ]);
 
   return (
     <View style={localStyle.container}>
+      {isNotOnboardingScreen ? <Header enableBackButton={true} /> : null}
       <View style={localStyle.contentContainer}>
         <FlatList
           ref={fnSetFlatListRef}
@@ -144,7 +155,6 @@ function LandingScreen() {
 const style = {
   container: {
     backgroundColor: colors.White,
-    justifyContent: 'center',
     flex: 1,
   },
   renderItemContainer: {

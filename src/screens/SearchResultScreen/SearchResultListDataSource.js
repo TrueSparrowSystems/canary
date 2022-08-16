@@ -1,9 +1,10 @@
-import TwitterAPI, {SortOrder} from '../../api/helpers/TwitterAPI';
+import TwitterAPI from '../../api/helpers/TwitterAPI';
 import PaginatedListDataSource from '../../components/PaginatedList/PaginatedListDataSource';
 import {getTweetData} from '../../components/utils/ViewData';
+import {Constants} from '../../constants/Constants';
 
 class SearchResultListDataSource extends PaginatedListDataSource {
-  constructor(query, sortOrder = SortOrder.Relevancy) {
+  constructor(query, sortOrder = Constants.SortOrder.Relevancy) {
     super();
     this.query = query;
     this.sortOrder = sortOrder;

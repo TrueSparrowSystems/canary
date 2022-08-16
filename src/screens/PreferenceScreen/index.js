@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {View, Text, ScrollView, Image} from 'react-native';
+import {View, Text, ScrollView, Image, Linking} from 'react-native';
 import RoundedButton from '../../components/common/RoundedButton';
 import PreferenceSelector from '../../components/PreferenceSelector';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -11,10 +11,13 @@ import Header from '../../components/common/Header';
 import {
   AllUsersIcon,
   Canary,
+  Information,
   rightArrowIcon,
+  ShareAppIcon,
   VerifiedIconBlack,
 } from '../../assets/common';
 import {AppVersion} from '../../../AppVersion';
+import {Constants} from '../../constants/Constants';
 
 function PreferenceScreen(props) {
   const localStyle = useStyleProcessor(style, 'PreferenceScreen');
@@ -25,6 +28,8 @@ function PreferenceScreen(props) {
     fnToggleUserPrefSelection,
     fnOnSelectedItemsUpdate,
     fnOnDonePress,
+    fnOnInfoPress,
+    fnOnShareAppPress,
   } = usePreferenceScreenData();
 
   const isNotOnboardingScreen = !!data?.enableBackButton;
@@ -59,7 +64,22 @@ function PreferenceScreen(props) {
 
   return (
     <View style={localStyle.container}>
-      <Header enableBackButton={isNotOnboardingScreen} />
+      {isNotOnboardingScreen ? (
+        <Header
+          enableBackButton={true}
+          enableRightButton={true}
+          onRightButtonClick={fnOnShareAppPress}
+          rightButtonImage={ShareAppIcon}
+          rightButtonImageStyle={localStyle.header.rightButtonImageStyle}
+          enableSecondaryRightButton={true}
+          onSecondaryRightButtonClick={fnOnInfoPress}
+          secondaryRightButtonImage={Information}
+          secondaryRightButtonImageStyle={
+            localStyle.header.secondaryRightButtonImageStyle
+          }
+          rightButtonViewStyle={localStyle.header.rightButtonViewStyle}
+        />
+      ) : null}
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={localStyle.contentContainer}>
           <View>
@@ -122,7 +142,13 @@ function PreferenceScreen(props) {
           <Text style={localStyle.appNameText}>Canary</Text>
           <Text style={localStyle.appVersionText}>v{AppVersion}</Text>
         </View>
-        <Text style={localStyle.madeByText}>Made with 🖤 by PLG Works</Text>
+        <Text
+          style={localStyle.madeByText}
+          onPress={() => {
+            Linking.openURL(Constants.PlgWorksLink);
+          }}>
+          Made with 🖤 by PLG Works
+        </Text>
       </View>
     </View>
   );
@@ -254,5 +280,22 @@ const style = {
     lineHeight: layoutPtToPx(17),
     fontFamily: fonts.InterSemiBold,
     marginTop: layoutPtToPx(10),
+  },
+  header: {
+    rightButtonViewStyle: {
+      flexDirection: 'row',
+    },
+    rightButtonImageStyle: {
+      tintColor: colors.GoldenTainoi,
+      height: layoutPtToPx(22),
+      width: layoutPtToPx(22),
+      marginRight: 10,
+    },
+    secondaryRightButtonImageStyle: {
+      tintColor: colors.GoldenTainoi,
+      height: layoutPtToPx(22),
+      width: layoutPtToPx(22),
+      marginLeft: 10,
+    },
   },
 };

@@ -14,6 +14,10 @@ function Header(props) {
     onRightButtonClick,
     rightButtonImage,
     rightButtonImageStyle,
+    enableSecondaryRightButton,
+    onSecondaryRightButtonClick,
+    secondaryRightButtonImage,
+    secondaryRightButtonImageStyle,
     rightButtonText,
     rightButtonTextStyle,
     enableLeftButton,
@@ -25,6 +29,7 @@ function Header(props) {
     text,
     textStyle,
     style,
+    rightButtonViewStyle,
   } = props;
 
   const navigation = useNavigation();
@@ -71,7 +76,7 @@ function Header(props) {
           </Text>
         ) : null}
       </View>
-      <View style={localStyle.rightButtonView}>
+      <View style={rightButtonViewStyle || localStyle.rightButtonView}>
         {enableRightButton && (rightButtonImage || rightButtonText) ? (
           <TouchableOpacity
             style={localStyle.rightButtonStyle}
@@ -90,6 +95,19 @@ function Header(props) {
         ) : (
           <View />
         )}
+        {enableSecondaryRightButton && secondaryRightButtonImage ? (
+          <TouchableOpacity
+            style={localStyle.rightButtonStyle}
+            activeOpacity={1}
+            onPress={onSecondaryRightButtonClick}>
+            {secondaryRightButtonImage ? (
+              <Image
+                source={secondaryRightButtonImage}
+                style={secondaryRightButtonImageStyle || localStyle.rightIcon}
+              />
+            ) : null}
+          </TouchableOpacity>
+        ) : null}
       </View>
     </View>
   );

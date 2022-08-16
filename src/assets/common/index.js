@@ -31,3 +31,5 @@ export const VerifiedIconBlack = require('./verifiedIconBlack.png');
 export const ListGolden = require('./listGolden.png');
 export const TwitterIcon = require('./twitter.png');
 export const CheckMarkIcon = require('./checkmark.png');
+export const Information = require('./information.png');
+export const ShareAppIcon = require('./ShareAppIcon.png');

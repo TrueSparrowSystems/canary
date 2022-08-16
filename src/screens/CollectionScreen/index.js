@@ -6,13 +6,20 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
 import colors from '../../constants/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
-import {AddIcon, ArchiveIconBig} from '../../assets/common';
+import {AddIcon, ArchiveIconBig, bookmarkedIcon} from '../../assets/common';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import {isEmpty} from 'lodash';
 import Header from '../../components/common/Header';
 import fonts from '../../constants/fonts';
 import useTabListener from '../../hooks/useTabListener';
+import AsyncStorage from '../../services/AsyncStorage';
+import {StoreKeys} from '../../services/AsyncStorage/StoreConstants';
+import * as Animatable from 'react-native-animatable';
+import Cache from '../../services/Cache';
+import {CacheKey} from '../../services/Cache/CacheStoreConstants';
+import Banner from '../../components/common/Banner';
+import {showPromotion} from '../../components/utils/ViewData';
 
 function CollectionScreen(props) {
   const localStyle = useStyleProcessor(styles, 'CollectionScreen');
@@ -21,6 +28,8 @@ function CollectionScreen(props) {
   const [isDeleteEnabled, setIsDeleteEnabled] = useState(false);
   const screenName = props?.route?.name;
   const scrollRef = useRef(null);
+  const [showPromotionBanner, setShowPromotionBanner] = useState(false);
+  const crossButtonRef = useRef(false);
 
   const scrollToTop = useCallback(() => {
     scrollRef.current?.scrollToOffset({
@@ -43,6 +52,14 @@ function CollectionScreen(props) {
         dataArray.push({});
       }
       collectionDataRef.current = dataArray;
+      const shouldShowPromotion = showPromotion(
+        CacheKey.ShowPromotionOnArchives,
+      );
+      if (!shouldShowPromotion && !isEmpty(collectionDataRef.current)) {
+        const oldCacheVal = Cache.getValue(CacheKey.ShowPromotionOnArchives);
+        AsyncStorage.set(StoreKeys.ShowPromotionOnArchives, oldCacheVal);
+      }
+      setShowPromotionBanner(shouldShowPromotion);
       setIsLoading(false);
     });
   }, []);
@@ -99,6 +116,15 @@ function CollectionScreen(props) {
     [enableCollectionDeleteOption, isDeleteEnabled, reloadList],
   );
 
+  const onRemovePromotionPress = useCallback(() => {
+    crossButtonRef.current?.animate('fadeOutLeftBig').then(() => {
+      setShowPromotionBanner(false);
+      const oldCacheVal = Cache.getValue(CacheKey.ShowPromotionOnArchives);
+      AsyncStorage.set(StoreKeys.ShowPromotionOnArchives, oldCacheVal);
+      Cache.setValue(CacheKey.ShowPromotionOnArchives, false);
+    });
+  }, []);
+
   return (
     <SafeAreaView style={localStyle.container}>
       {isEmpty(collectionDataRef.current) ? null : (
@@ -115,6 +141,20 @@ function CollectionScreen(props) {
           rightButtonImageStyle={localStyle.newButtonImageStyle}
         />
       )}
+      {showPromotionBanner && !isEmpty(collectionDataRef.current) ? (
+        <Animatable.View ref={crossButtonRef}>
+          <Banner
+            headerImage={bookmarkedIcon}
+            headerImageStyle={localStyle.headerImageStyle}
+            headerText={'Archives lets you save your tweets privately'}
+            descriptionText={
+              'Make the archives your own by saving unlimited number of tweets in multiple groups — we won’t know anything'
+            }
+            onRemovePromotionPress={onRemovePromotionPress}
+            crossButtonRef={crossButtonRef}
+          />
+        </Animatable.View>
+      ) : null}
       {isLoading ? (
         <View style={localStyle.loaderStyle}>
           <ActivityIndicator
@@ -190,6 +230,11 @@ const styles = {
     marginTop: layoutPtToPx(10),
     paddingTop: layoutPtToPx(5),
     overflow: 'visible',
+  },
+  headerImageStyle: {
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(15),
+    marginRight: layoutPtToPx(8),
   },
 };
 

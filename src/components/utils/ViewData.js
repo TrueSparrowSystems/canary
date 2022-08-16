@@ -37,3 +37,14 @@ export function checkIsTweetBookmarked(tweetId) {
     ? bookmarkedTweetList?.hasOwnProperty(tweetId)
     : false;
 }
+
+export function showPromotion(cacheKey) {
+  const promotion = Cache.getValue(cacheKey);
+  if (promotion === false) {
+    return false;
+  }
+  if (promotion % 5 === 0 && promotion <= 25) {
+    return true;
+  }
+  return false;
+}

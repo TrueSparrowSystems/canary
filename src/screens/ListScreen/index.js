@@ -6,7 +6,7 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import {AddIcon, ListIconBig} from '../../assets/common';
+import {AddIcon, ListGolden, ListIconBig} from '../../assets/common';
 import ListCard from '../../components/ListCard';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {listService} from '../../services/ListService';
@@ -18,12 +18,21 @@ import Header from '../../components/common/Header';
 import fonts from '../../constants/fonts';
 import {isEmpty} from 'lodash-es';
 import useTabListener from '../../hooks/useTabListener';
+import AsyncStorage from '../../services/AsyncStorage';
+import {StoreKeys} from '../../services/AsyncStorage/StoreConstants';
+import * as Animatable from 'react-native-animatable';
+import Cache from '../../services/Cache';
+import {CacheKey} from '../../services/Cache/CacheStoreConstants';
+import Banner from '../../components/common/Banner';
+import {showPromotion} from '../../components/utils/ViewData';
 
 function ListScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListScreen');
   const [isLoading, setIsLoading] = useState(true);
   const [swipeable, setSwipeable] = useState(false);
   const listDataRef = useRef({});
+  const [showPromotionBanner, setShowPromotionBanner] = useState(false);
+  const crossButtonRef = useRef(null);
   const screenName = props?.route?.name;
   const scrollRef = useRef(null);
 
@@ -40,6 +49,12 @@ function ListScreen(props) {
     const _listService = listService();
     _listService.getAllLists().then(list => {
       listDataRef.current = list;
+      const shouldShowPromotion = showPromotion(CacheKey.ShowPromotionOnLists);
+      if (!shouldShowPromotion && !isEmpty(listDataRef.current)) {
+        const oldCacheVal = Cache.getValue(CacheKey.ShowPromotionOnLists);
+        AsyncStorage.set(StoreKeys.ShowPromotionOnLists, oldCacheVal);
+      }
+      setShowPromotionBanner(shouldShowPromotion);
       setIsLoading(false);
     });
   }, []);
@@ -79,6 +94,15 @@ function ListScreen(props) {
     setSwipeable(false);
   }, []);
 
+  const onRemovePromotionPress = useCallback(() => {
+    crossButtonRef.current?.animate('fadeOutLeftBig').then(() => {
+      setShowPromotionBanner(false);
+      const oldCacheVal = Cache.getValue(CacheKey.ShowPromotionOnLists);
+      AsyncStorage.set(StoreKeys.ShowPromotionOnLists, oldCacheVal);
+      Cache.setValue(CacheKey.ShowPromotionOnLists, false);
+    });
+  }, []);
+
   return (
     <SafeAreaView style={localStyle.container}>
       {!isEmpty(listDataRef.current) ? (
@@ -92,6 +116,20 @@ function ListScreen(props) {
           rightButtonTextStyle={localStyle.headerRightButtonText}
           onRightButtonClick={swipeable ? onDonePress : onAddListPress}
         />
+      ) : null}
+      {showPromotionBanner && !isEmpty(listDataRef.current) ? (
+        <Animatable.View ref={crossButtonRef}>
+          <Banner
+            headerImage={ListGolden}
+            headerImageStyle={localStyle.headerImageStyle}
+            headerText={'How is our Lists different from Twitter’s?'}
+            descriptionText={
+              'This is a version of Lists which doesn’t track any of your data, and keeps your information to yourself'
+            }
+            onRemovePromotionPress={onRemovePromotionPress}
+            crossButtonRef={crossButtonRef}
+          />
+        </Animatable.View>
       ) : null}
       {isLoading ? (
         <View style={localStyle.loaderStyle}>
@@ -182,6 +220,11 @@ const styles = {
   },
   scrollViewContainer: {
     paddingBottom: layoutPtToPx(20),
+  },
+  headerImageStyle: {
+    height: layoutPtToPx(18),
+    width: layoutPtToPx(18),
+    marginRight: layoutPtToPx(8),
   },
 };
 

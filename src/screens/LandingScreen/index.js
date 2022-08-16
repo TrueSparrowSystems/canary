@@ -7,6 +7,7 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useLandingScreenData from './useLandingScreenData';
 import {Pagination as PaginationDots} from 'react-native-snap-carousel';
+import LottieView from 'lottie-react-native';
 
 function LandingScreen() {
   const localStyle = useStyleProcessor(style, 'LandingScreen');
@@ -32,7 +33,6 @@ function LandingScreen() {
 
   const renderItem = useCallback(
     ({item, index}) => {
-      //TODO: Add lottieview.
       return (
         <View key={index} style={renderItemStyle}>
           <View
@@ -41,7 +41,12 @@ function LandingScreen() {
               alignItems: 'center',
               height: Dimensions.get('window').height / 2,
             }}>
-            <Image source={item?.imageAsset} style={{height: 50, width: 50}} />
+            <LottieView
+              autoPlay
+              loop
+              source={item?.animationAsset}
+              style={item?.animationStyle}
+            />
           </View>
         </View>
       );

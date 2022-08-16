@@ -41,6 +41,10 @@ export function checkIsTweetBookmarked(tweetId) {
 
 export function showPromotion(cacheKey) {
   const promotion = Cache.getValue(cacheKey);
+  if (promotion === undefined) {
+    Cache.setValue(cacheKey, 0);
+    return true;
+  }
   if (promotion === false) {
     return false;
   }

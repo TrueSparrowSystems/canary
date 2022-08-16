@@ -14,6 +14,24 @@ class BootService {
       AsyncStorage.getItem(StoreKeys.AreInitialPreferencesSet).then(isSet => {
         setCountriesWoeidsInCache();
         Cache.setValue(CacheKey.AreInitialPreferencesSet, isSet);
+        AsyncStorage.get(StoreKeys.ShowPromotionOnArchives).then(res => {
+          let newValue = 0;
+          if (!res && JSON.parse(res) !== 0) {
+            Cache.setValue(CacheKey.ShowPromotionOnArchives, 0);
+          } else {
+            newValue = JSON.parse(res) + 1;
+            Cache.setValue(CacheKey.ShowPromotionOnArchives, newValue);
+          }
+        });
+        AsyncStorage.get(StoreKeys.ShowPromotionOnLists).then(res => {
+          let newValue = 0;
+          if (!res && JSON.parse(res) !== 0) {
+            Cache.setValue(CacheKey.ShowPromotionOnLists, 0);
+          } else {
+            newValue = JSON.parse(res) + 1;
+            Cache.setValue(CacheKey.ShowPromotionOnLists, newValue);
+          }
+        });
         if (isSet) {
           AsyncStorage.getItem(StoreKeys.PreferenceList).then(list => {
             Cache.setValue(CacheKey.PreferenceList, list);
@@ -25,24 +43,6 @@ class BootService {
                 );
               },
             );
-            AsyncStorage.get(StoreKeys.ShowPromotionOnArchives).then(res => {
-              let newValue = 0;
-              if (!res && JSON.parse(res) !== 0) {
-                Cache.setValue(CacheKey.ShowPromotionOnArchives, 0);
-              } else {
-                newValue = JSON.parse(res) + 1;
-                Cache.setValue(CacheKey.ShowPromotionOnArchives, newValue);
-              }
-            });
-            AsyncStorage.get(StoreKeys.ShowPromotionOnLists).then(res => {
-              let newValue = 0;
-              if (!res && JSON.parse(res) !== 0) {
-                Cache.setValue(CacheKey.ShowPromotionOnLists, 0);
-              } else {
-                newValue = JSON.parse(res) + 1;
-                Cache.setValue(CacheKey.ShowPromotionOnLists, newValue);
-              }
-            });
             AsyncStorage.get(StoreKeys.UserToListMap).then(userToListMap => {
               Cache.setValue(CacheKey.UserToListMap, JSON.parse(userToListMap));
             });

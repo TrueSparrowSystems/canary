@@ -11,6 +11,7 @@ class BootService {
   initialize() {
     return new Promise(resolve => {
       networkConnection();
+      // AsyncStorage.clear();
       AsyncStorage.getItem(StoreKeys.AreInitialPreferencesSet).then(isSet => {
         setCountriesWoeidsInCache();
         Cache.setValue(CacheKey.AreInitialPreferencesSet, isSet);
@@ -26,20 +27,21 @@ class BootService {
               },
             );
             AsyncStorage.get(StoreKeys.ShowPromotionOnArchives).then(res => {
-              if (!res) {
-                Cache.setValue(CacheKey.ShowPromotionOnArchives, true);
+              let newValue = 0;
+              if (!res && JSON.parse(res !== 0)) {
+                Cache.setValue(CacheKey.ShowPromotionOnArchives, 0);
               } else {
-                Cache.setValue(
-                  CacheKey.ShowPromotionOnArchives,
-                  JSON.parse(res),
-                );
+                newValue = JSON.parse(res) + 1;
+                Cache.setValue(CacheKey.ShowPromotionOnArchives, newValue);
               }
             });
             AsyncStorage.get(StoreKeys.ShowPromotionOnLists).then(res => {
-              if (!res) {
-                Cache.setValue(CacheKey.ShowPromotionOnLists, true);
+              let newValue = 0;
+              if (!res && JSON.parse(res !== 0)) {
+                Cache.setValue(CacheKey.ShowPromotionOnLists, 0);
               } else {
-                Cache.setValue(CacheKey.ShowPromotionOnLists, JSON.parse(res));
+                newValue = JSON.parse(res) + 1;
+                Cache.setValue(CacheKey.ShowPromotionOnLists, newValue);
               }
             });
             AsyncStorage.get(StoreKeys.UserToListMap).then(userToListMap => {

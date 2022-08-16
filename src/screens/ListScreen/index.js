@@ -5,9 +5,8 @@ import {
   SafeAreaView,
   ScrollView,
   View,
-  Text,
 } from 'react-native';
-import {AddIcon, CrossIcon, ListIconBig} from '../../assets/common';
+import {AddIcon, ListGolden, ListIconBig} from '../../assets/common';
 import ListCard from '../../components/ListCard';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {listService} from '../../services/ListService';
@@ -19,12 +18,13 @@ import Header from '../../components/common/Header';
 import fonts from '../../constants/fonts';
 import {isEmpty} from 'lodash-es';
 import useTabListener from '../../hooks/useTabListener';
-import RoundedButton from '../../components/common/RoundedButton';
 import AsyncStorage from '../../services/AsyncStorage';
 import {StoreKeys} from '../../services/AsyncStorage/StoreConstants';
 import * as Animatable from 'react-native-animatable';
 import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
+import Banner from '../../components/common/Banner';
+import {showPromotion} from '../../components/utils/ViewData';
 
 function ListScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListScreen');
@@ -49,12 +49,12 @@ function ListScreen(props) {
     const _listService = listService();
     _listService.getAllLists().then(list => {
       listDataRef.current = list;
-      const showPromotion = Cache.getValue(CacheKey.ShowPromotionOnLists);
-      if (showPromotion !== null) {
-        setShowPromotionBanner(JSON.parse(showPromotion));
-      } else {
-        setShowPromotionBanner(true);
+      const shouldShowPromotion = showPromotion(CacheKey.ShowPromotionOnLists);
+      if (!shouldShowPromotion && !isEmpty(listDataRef.current)) {
+        const oldCacheVal = Cache.getValue(CacheKey.ShowPromotionOnLists);
+        AsyncStorage.set(StoreKeys.ShowPromotionOnLists, oldCacheVal);
       }
+      setShowPromotionBanner(shouldShowPromotion);
       setIsLoading(false);
     });
   }, []);
@@ -97,8 +97,9 @@ function ListScreen(props) {
   const onRemovePromotionPress = useCallback(() => {
     crossButtonRef.current?.animate('fadeOutLeftBig').then(() => {
       setShowPromotionBanner(false);
+      const oldCacheVal = Cache.getValue(CacheKey.ShowPromotionOnLists);
+      AsyncStorage.set(StoreKeys.ShowPromotionOnLists, oldCacheVal);
       Cache.setValue(CacheKey.ShowPromotionOnLists, false);
-      AsyncStorage.set(StoreKeys.ShowPromotionOnLists, false).then(() => {});
     });
   }, []);
 
@@ -117,16 +118,16 @@ function ListScreen(props) {
         />
       ) : null}
       {showPromotionBanner && !isEmpty(listDataRef.current) ? (
-        <Animatable.View ref={crossButtonRef} style={localStyle.banner}>
-          <Text style={localStyle.flexShrink}>
-            Show some text for lists some text for lists some text for lists
-          </Text>
-          <RoundedButton
-            style={localStyle.crossButton}
-            leftImage={CrossIcon}
-            leftImageStyle={localStyle.crossIconStyle}
-            onPress={onRemovePromotionPress}
-            underlayColor={colors.GoldenTainoi80}
+        <Animatable.View ref={crossButtonRef}>
+          <Banner
+            headerImage={ListGolden}
+            headerImageStyle={localStyle.headerImageStyle}
+            headerText={'How is our Lists different from Twitter’s?'}
+            descriptionText={
+              'This is a version of Lists which doesn’t track any of your data, and keeps your information to yourself'
+            }
+            onRemovePromotionPress={onRemovePromotionPress}
+            crossButtonRef={crossButtonRef}
           />
         </Animatable.View>
       ) : null}
@@ -220,29 +221,10 @@ const styles = {
   scrollViewContainer: {
     paddingBottom: layoutPtToPx(20),
   },
-  banner: {
-    height: 60,
-    width: '100%',
-    backgroundColor: colors.GoldenTainoi,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: layoutPtToPx(20),
-  },
-  crossButton: {
-    flexGrow: 1,
-    backgroundColor: colors.GoldenTainoi,
-    height: layoutPtToPx(40),
-    width: 'auto',
-    borderRadius: layoutPtToPx(25),
-    paddingHorizontal: layoutPtToPx(10),
-  },
-  crossIconStyle: {
-    height: layoutPtToPx(20),
-    width: layoutPtToPx(20),
-  },
-  flexShrink: {
-    flexShrink: 1,
+  headerImageStyle: {
+    height: layoutPtToPx(18),
+    width: layoutPtToPx(18),
+    marginRight: layoutPtToPx(8),
   },
 };
 

@@ -1,30 +1,25 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {
-  View,
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-  Text,
-} from 'react-native';
+import {View, ActivityIndicator, FlatList, RefreshControl} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionCard from '../../components/CollectionCard';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
 import colors from '../../constants/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
-import {AddIcon, ArchiveIconBig, CrossIcon} from '../../assets/common';
+import {AddIcon, ArchiveIconBig, bookmarkedIcon} from '../../assets/common';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import {isEmpty} from 'lodash';
 import Header from '../../components/common/Header';
 import fonts from '../../constants/fonts';
 import useTabListener from '../../hooks/useTabListener';
-import RoundedButton from '../../components/common/RoundedButton';
 import AsyncStorage from '../../services/AsyncStorage';
 import {StoreKeys} from '../../services/AsyncStorage/StoreConstants';
 import * as Animatable from 'react-native-animatable';
 import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
+import Banner from '../../components/common/Banner';
+import {showPromotion} from '../../components/utils/ViewData';
 
 function CollectionScreen(props) {
   const localStyle = useStyleProcessor(styles, 'CollectionScreen');
@@ -57,12 +52,14 @@ function CollectionScreen(props) {
         dataArray.push({});
       }
       collectionDataRef.current = dataArray;
-      const showPromotion = Cache.getValue(CacheKey.ShowPromotionOnArchives);
-      if (showPromotion !== null) {
-        setShowPromotionBanner(JSON.parse(showPromotion));
-      } else {
-        setShowPromotionBanner(true);
+      const shouldShowPromotion = showPromotion(
+        CacheKey.ShowPromotionOnArchives,
+      );
+      if (!shouldShowPromotion && !isEmpty(collectionDataRef.current)) {
+        const oldCacheVal = Cache.getValue(CacheKey.ShowPromotionOnArchives);
+        AsyncStorage.set(StoreKeys.ShowPromotionOnArchives, oldCacheVal);
       }
+      setShowPromotionBanner(shouldShowPromotion);
       setIsLoading(false);
     });
   }, []);
@@ -122,8 +119,9 @@ function CollectionScreen(props) {
   const onRemovePromotionPress = useCallback(() => {
     crossButtonRef.current?.animate('fadeOutLeftBig').then(() => {
       setShowPromotionBanner(false);
+      const oldCacheVal = Cache.getValue(CacheKey.ShowPromotionOnArchives);
+      AsyncStorage.set(StoreKeys.ShowPromotionOnArchives, oldCacheVal);
       Cache.setValue(CacheKey.ShowPromotionOnArchives, false);
-      AsyncStorage.set(StoreKeys.ShowPromotionOnArchives, false).then(() => {});
     });
   }, []);
 
@@ -144,17 +142,16 @@ function CollectionScreen(props) {
         />
       )}
       {showPromotionBanner && !isEmpty(collectionDataRef.current) ? (
-        <Animatable.View style={localStyle.banner} ref={crossButtonRef}>
-          <Text style={localStyle.flexShrink}>
-            Show some text for archives some text for archives some text for
-            archives
-          </Text>
-          <RoundedButton
-            style={localStyle.crossButton}
-            leftImage={CrossIcon}
-            leftImageStyle={localStyle.crossIconStyle}
-            onPress={onRemovePromotionPress}
-            underlayColor={colors.GoldenTainoi80}
+        <Animatable.View ref={crossButtonRef}>
+          <Banner
+            headerImage={bookmarkedIcon}
+            headerImageStyle={localStyle.headerImageStyle}
+            headerText={'Archives lets you save your tweets privately'}
+            descriptionText={
+              'Make the archives your own by saving unlimited number of tweets in multiple groups — we won’t know anything'
+            }
+            onRemovePromotionPress={onRemovePromotionPress}
+            crossButtonRef={crossButtonRef}
           />
         </Animatable.View>
       ) : null}
@@ -234,28 +231,10 @@ const styles = {
     paddingTop: layoutPtToPx(5),
     overflow: 'visible',
   },
-  banner: {
-    height: 60,
-    width: '100%',
-    backgroundColor: colors.GoldenTainoi,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: layoutPtToPx(20),
-  },
-  crossButton: {
-    flexGrow: 1,
-    backgroundColor: colors.GoldenTainoi,
-    height: layoutPtToPx(40),
-    borderRadius: layoutPtToPx(25),
-    paddingHorizontal: layoutPtToPx(10),
-  },
-  crossIconStyle: {
+  headerImageStyle: {
     height: layoutPtToPx(20),
-    width: layoutPtToPx(20),
-  },
-  flexShrink: {
-    flexShrink: 1,
+    width: layoutPtToPx(15),
+    marginRight: layoutPtToPx(8),
   },
 };
 

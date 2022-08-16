@@ -1,24 +1,26 @@
 import React, {useMemo} from 'react';
 import {View, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import colors, {getColorWithOpacity} from '../../../constants/colors';
-import fonts from '../../../constants/fonts';
-import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
-import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
-import CustomModal from '../CustomModal';
-import RoundedButton from '../RoundedButton';
-import useConfirmDeleteModalData from './useConfirmDeleteModalData';
+import colors, {getColorWithOpacity} from '../../constants/colors';
+import fonts from '../../constants/fonts';
+import {useStyleProcessor} from '../../hooks/useStyleProcessor';
+import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
+import Checkbox from '../common/Checkbox';
+import CustomModal from '../common/CustomModal';
+import RoundedButton from '../common/RoundedButton';
+import useRedirectConfirmationModalData from './useRedirectConfirmationModalData';
 
-function ConfirmDeleteModal() {
-  const localStyle = useStyleProcessor(styles, 'ConfirmDeleteModal');
+function RedirectConfirmationModal() {
+  const localStyle = useStyleProcessor(styles, 'RedirectConfirmationModal');
 
   const {
     bIsVisible,
-    fnOnBackdropPress,
     sText,
+    fnOnBackdropPress,
     fnOnCancelPress,
     fnOnSureButtonPress,
-  } = useConfirmDeleteModalData();
+    fnOnCheckboxValueChange,
+  } = useRedirectConfirmationModalData();
 
   const getBackdrop = useMemo(() => {
     return <View style={localStyle.blur} />;
@@ -33,7 +35,15 @@ function ConfirmDeleteModal() {
       <View style={localStyle.modalStyle}>
         <SafeAreaView style={localStyle.container}>
           <View style={localStyle.view}>
-            <Text style={localStyle.textStyle}>{sText}</Text>
+            <Text style={localStyle.textStyle}>
+              You’ll be redirected Twitter app and we won’t be able to keep you
+              private, are you sure?
+            </Text>
+            <Text style={localStyle.subTextStyle}>
+              You also need a Twitter account to interact with the tweet and
+              your actions will be visible to Twitter
+            </Text>
+
             <View style={localStyle.flexRow}>
               <RoundedButton
                 style={localStyle.cancelButton}
@@ -50,6 +60,11 @@ function ConfirmDeleteModal() {
                 underlayColor={getColorWithOpacity(colors.BitterSweet, 0.8)}
               />
             </View>
+            <Checkbox
+              onValueChange={fnOnCheckboxValueChange}
+              text={'Don’t show again'}
+              textStyle={localStyle.checkboxTextStyle}
+            />
           </View>
         </SafeAreaView>
       </View>
@@ -86,6 +101,26 @@ const styles = {
     lineHeight: layoutPtToPx(20),
     fontFamily: fonts.SoraSemiBold,
     color: colors.BlackPearl,
+    textAlign: 'center',
+  },
+  subTextStyle: {
+    marginTop: layoutPtToPx(13),
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(17),
+    fontFamily: fonts.InterMedium,
+    color: colors.BlackPearl,
+    textAlign: 'center',
+  },
+  checkboxTextStyle: {
+    marginLeft: layoutPtToPx(8),
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(17),
+    fontFamily: fonts.InterMedium,
+    color: colors.Black,
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    flex: 1,
   },
   view: {
     width: '100%',
@@ -136,9 +171,9 @@ const styles = {
   flexRow: {
     flexDirection: 'row',
     flex: 1,
-    marginTop: layoutPtToPx(25),
-    marginBottom: layoutPtToPx(15),
+    marginTop: layoutPtToPx(20),
+    marginBottom: layoutPtToPx(12),
   },
 };
 
-export default React.memo(ConfirmDeleteModal);
+export default React.memo(RedirectConfirmationModal);

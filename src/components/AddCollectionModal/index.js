@@ -8,13 +8,11 @@ import RoundedButton from '../common/RoundedButton';
 import {AddIcon} from '../../assets/common';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
-import useBackButtonPress from '../../hooks/useBackButtonPress';
 
 const TEXT_INPUT_LIMIT = 25;
 
 function AddCollectionModal() {
   const localStyle = useStyleProcessor(styles, 'AddCollectionModal');
-  useBackButtonPress();
   const {
     bIsVisible,
     nCharacterCount,

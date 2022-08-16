@@ -7,4 +7,5 @@ export const StoreKeys = {
   UserToListMap: 'user_to_list_map',
   ShouldShowTimelineFromVerifiedUsersOnly:
     'should_show_timeline_from_verified_users_only',
+  IsRedirectModalHidden: 'is_redirect_modal_hidden',
 };

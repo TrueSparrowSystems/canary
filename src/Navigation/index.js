@@ -70,7 +70,6 @@ const Navigation = props => {
           name={ScreenName.LandingScreen}
           component={LandingScreen}
           options={{
-            gestureEnabled: true,
             headerShown: false,
             tabBarVisible: false,
             detachPreviousScreen: true,

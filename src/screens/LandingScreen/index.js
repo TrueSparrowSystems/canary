@@ -9,7 +9,6 @@ import useLandingScreenData from './useLandingScreenData';
 import {Pagination as PaginationDots} from 'react-native-snap-carousel';
 import LottieView from 'lottie-react-native';
 import Header from '../../components/common/Header';
-import {CanaryGif} from '../../assets/animation';
 
 function LandingScreen(props) {
   const localStyle = useStyleProcessor(style, 'LandingScreen');
@@ -81,22 +80,22 @@ function LandingScreen(props) {
   );
 
   const buttonOptions = useMemo(() => {
-    const data = {
+    const buttonData = {
       text: activeIndexData?.buttonText,
     };
 
     if (activeIndexData?.buttonImage) {
-      data.rightImage = activeIndexData.buttonImage;
-      data.rightImageStyle = localStyle.continueButtonIcon;
+      buttonData.rightImage = activeIndexData.buttonImage;
+      buttonData.rightImageStyle = localStyle.continueButtonIcon;
     }
 
     if (isNotOnboardingScreen && nActiveIndex === aCarousalData.length - 1) {
-      delete data.rightImage;
-      delete data.rightImageStyle;
-      data.text = 'Got it !';
+      delete buttonData.rightImage;
+      delete buttonData.rightImageStyle;
+      buttonData.text = 'Got it !';
     }
 
-    return data;
+    return buttonData;
   }, [
     aCarousalData.length,
     activeIndexData.buttonImage,

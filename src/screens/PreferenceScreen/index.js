@@ -122,7 +122,7 @@ function PreferenceScreen(props) {
           <Text style={localStyle.appNameText}>Canary</Text>
           <Text style={localStyle.appVersionText}>v{AppVersion}</Text>
         </View>
-        <Text style={localStyle.madeByText}>Made with 🖤 by PLGWorks</Text>
+        <Text style={localStyle.madeByText}>Made with 🖤 by PLG Works</Text>
       </View>
     </View>
   );

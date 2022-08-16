@@ -1,10 +1,11 @@
-import {rightArrowIcon} from '../../assets/common';
-import {Anonymous, Canary, Discovery, Secure} from '../../assets/animation';
+import {Canary as CanaryImage, rightArrowIcon} from '../../assets/common';
+import {Anonymous, Discovery, Secure, Canary} from '../../assets/animation';
 import {layoutPtToPx} from '../../utils/responsiveUI';
 
 const LandingScreenCarousalData = [
   {
     id: 'welcome',
+    imageAsset: CanaryImage,
     animationAsset: Canary,
     animationStyle: {
       height: layoutPtToPx(260),

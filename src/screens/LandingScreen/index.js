@@ -41,12 +41,19 @@ function LandingScreen() {
               alignItems: 'center',
               height: Dimensions.get('window').height / 2,
             }}>
-            <LottieView
-              autoPlay
-              loop
-              source={item?.animationAsset}
-              style={item?.animationStyle}
-            />
+            {item?.imageAsset ? (
+              <Image
+                source={item?.imageAsset}
+                // style={item?.animationStyle}
+              />
+            ) : item?.animationAsset ? (
+              <LottieView
+                autoPlay
+                loop
+                source={item?.animationAsset}
+                style={item?.animationStyle}
+              />
+            ) : null}
           </View>
         </View>
       );
@@ -111,10 +118,17 @@ function LandingScreen() {
           containerStyle={localStyle.paginationDotsContainerStyle}
         />
         <View style={localStyle.continueButtonContainer}>
-          <Text style={localStyle.primaryText}>
+          <Text
+            style={localStyle.primaryText}
+            adjustsFontSizeToFit
+            numberOfLines={1}>
             {activeIndexData?.primaryText}
           </Text>
-          <Text style={localStyle.secondaryText}>
+
+          <Text
+            style={localStyle.secondaryText}
+            adjustsFontSizeToFit
+            numberOfLines={2}>
             {activeIndexData?.secondaryText}
           </Text>
           <RoundedButton
@@ -171,6 +185,7 @@ const style = {
     lineHeight: layoutPtToPx(40),
     textAlign: 'center',
     marginVertical: layoutPtToPx(20),
+    color: colors.BlackPearl,
   },
   secondaryText: {
     fontFamily: fonts.InterMedium,
@@ -178,6 +193,7 @@ const style = {
     lineHeight: layoutPtToPx(24),
     textAlign: 'center',
     marginBottom: layoutPtToPx(16),
+    color: colors.BlackPearl,
   },
 
   paginationContainerStyle: {

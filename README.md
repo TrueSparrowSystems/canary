@@ -44,8 +44,49 @@ Users can view media like GIFs, images and videos right in the applications and 
 | - | - | - |
 | ![Make your feed hyper-personalised](https://user-images.githubusercontent.com/86605635/185109753-fbc608eb-fcbf-4cd6-a122-cf408c29320f.jpg) | ![Search for specific topics](https://user-images.githubusercontent.com/86605635/185109722-c09d2c75-3f91-4835-859c-ba416dff1f0d.jpg) | ![Stay up-to-date from users via Lists](https://user-images.githubusercontent.com/86605635/185109694-3d67e6ed-e80d-499d-95a8-b4ad274e94bb.jpg) |
 
+## Installation
+- Create a Twitter Developer account and generate Bearer Token by following [these](https://developer.twitter.com/en/docs/authentication/oauth-2-0/bearer-tokens) steps. Note: To access all features of this app, you will need elevated access which you can get by applying [here](https://developer.twitter.com/en/portal/products/elevated).
+- Clone the project.
+- Create `.env` file in the root directory of the project and paste the following lines.
+```sh
+TWITTER_BEARER_TOKEN={BEARER_TOKEN}
+```
+Install the dependencies and dev dependencies.
+
+```sh
+cd canary
+npm i
+```
+
+for iOS.
+```sh
+cd ios
+pod install
+```
+
+To run the app on android.
+```sh
+npx react-native run-android
+```
+
+To run the app on iOS.
+```sh
+npx react-native run-ios
+```
+
 ## Try it out!
 
 You can download the app [here](https://drive.google.com/drive/folders/1OCA8czAIVEaGfU-F6EUL8fMwdnRerKdP?usp=sharing).
 
+## Future Enhancements
 
+- Exporting existing lists from Twitter and letting users save it
+- Creating and restoring backups
+- Sharing of Lists and Archives across users
+- Support for Dark Mode
+
+## Contributors
+
+- [Mohit Charkha](https://github.com/mohitcharkha)
+- [Harsh Siriah](https://github.com/harshsiri110)
+- [Vinay Harwani](https://github.com/vinayharwani13)

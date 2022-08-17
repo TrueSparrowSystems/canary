@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {networkConnection} from '../NetworkConnection';
 import {RequestType} from './RequestObject';
+import {TWITTER_BEARER_TOKEN} from '@env';
 export class APIService {
   /**
    * This class manages all the network calls.
@@ -47,8 +48,7 @@ export class APIService {
       config => {
         config.headers = {
           ...this.apiConfig.headers,
-          Authorization:
-            'Bearer AAAAAAAAAAAAAAAAAAAAAIH3egEAAAAAIQfPGH9lYLoQEZqHuUzU4xE0M9s%3DiqNWbg7BUtayrTUz9Gx025z7BIJRhg0oe0SWrgUAFyxOPhLAy1',
+          Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`,
         };
         this.apiConfig?.logger?.info('config: ', config);
         return config;

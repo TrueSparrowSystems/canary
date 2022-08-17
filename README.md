@@ -1,7 +1,12 @@
+
 # Canary
 ## The Incognito mode for Twitter
 
 Canary is a cross-platform mobile application that lets you discover and save content via the Twitter APIs without any account or log-in info. All data is private and stored on the user's own device with no tracking parameters.
+
+
+<img src="https://user-images.githubusercontent.com/86605635/185108384-b635c432-6f7a-43c6-909f-a10ff8e550a8.gif" style="width: 50%;"/>
+
 
 ## Features
 
@@ -27,6 +32,14 @@ The user can also opt to browse the most popular or most recent tweets on the to
 To make the app's content more relevant, we have reverse engineered and implemented Twitter's Lists feature. In addition, we have improved Twitter's Bookmarks feature by enabling users to create multiple archives with custom names that will store tweets. So, while browsing through the Canary app, the user can add any of their favorite tweets to any archive. 
 
 Users can view media like GIFs, images and videos right in the applications and also share tweets among their social circles. Moreover, we offer a choice that redirects the user to Twitter in order to allow them to interact with tweets.
+
+## Preview
+
+|    |    |    |
+| ---  | --- | --- |
+|  ![Archive tweets for the future](https://user-images.githubusercontent.com/86605635/185109674-afc635d0-ca85-43d0-87e0-cdd728921bd1.jpg)  |  ![Stay up-to-date from users via Lists](https://user-images.githubusercontent.com/86605635/185109694-3d67e6ed-e80d-499d-95a8-b4ad274e94bb.jpg) |  ![Search for specific topics](https://user-images.githubusercontent.com/86605635/185109722-c09d2c75-3f91-4835-859c-ba416dff1f0d.jpg)  |
+| ![Make your feed hyper-personalised](https://user-images.githubusercontent.com/86605635/185109753-fbc608eb-fcbf-4cd6-a122-cf408c29320f.jpg) | ![All data is stored in device, and none to us](https://user-images.githubusercontent.com/86605635/185109770-a3fe8838-38d1-4bc8-ae82-2f9921f076f7.jpg) |
+
 
 ## Try it out!
 

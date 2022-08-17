@@ -63,3 +63,6 @@ buck-out/
 /vendor/bundle/
 
 *.lock
+
+# env files
+*.env

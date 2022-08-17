@@ -1,15 +1,14 @@
 import {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import ScreenNames from '../ScreenName';
 import Cache from '../services/Cache';
 import {CacheKey} from '../services/Cache/CacheStoreConstants';
+import ScreenName from '../constants/ScreenName';
 
 const ScreenIndex = {
-  [ScreenNames.HomeScreen]: 0,
-  [ScreenNames.FindMyFitScreen]: 1,
-  [ScreenNames.SearchScreen]: 2,
-  [ScreenNames.MessageCenterLoginScreen]: 3,
-  [ScreenNames.MembershipScreen]: 4,
+  [ScreenName.TimelineScreen]: 0,
+  [ScreenName.DiscoverScreen]: 1,
+  [ScreenName.ListScreen]: 2,
+  [ScreenName.CollectionScreen]: 3,
 };
 
 const TabAction = {
@@ -23,7 +22,7 @@ export default (screenName, scrollToTop) => {
     const tabHandler = navigation.getParent().addListener('tabPress', e => {
       const parentIndex = navigation.getParent().getState().index;
       const {index} = navigation.getState();
-      let state = Cache.getValue(CacheKey.tabPressCount[screenName]);
+      let state = Cache.getValue(CacheKey.tabPressCount[screenName]) || 0;
       if (parentIndex === ScreenIndex[screenName] && index !== 0) {
         navigation.popToTop();
         Cache.setValue(
@@ -41,5 +40,6 @@ export default (screenName, scrollToTop) => {
       }
     });
     return tabHandler;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
 };

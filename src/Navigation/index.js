@@ -2,22 +2,45 @@ import React, {useCallback} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
-import {isTablet} from 'react-native-device-info';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TransitionPresets} from '@react-navigation/stack';
 import ScreenName from '../constants/ScreenName';
 import TimelineScreen from '../screens/TimelineScreen';
 import CollectionScreen from '../screens/CollectionScreen';
-import SettingScreen from '../screens/SettingScreen';
-import BottomNavigationText from '../components/common/BottomNavigationText';
-// import BottomNavigationIcon from '../components/common/BottomNavigationIcon';
+import {Image, View} from 'react-native';
+import {
+  HomeIcon,
+  CollectionsIcon,
+  SearchIcon,
+  BottomBarListIcon,
+} from '../assets/common';
+import {layoutPtToPx} from '../utils/responsiveUI';
+import {useStyleProcessor} from '../hooks/useStyleProcessor';
+import PreferenceScreen from '../screens/PreferenceScreen';
+import CollectionTweetScreen from '../screens/CollectionTweetScreen';
+import ImageViewScreen from '../screens/ImageViewScreen';
+import ThreadScreen from '../screens/ThreadScreen';
+import DiscoverScreen from '../screens/DiscoverScreen';
+import SearchResultScreen from '../screens/SearchResultScreen';
+import ListScreen from '../screens/ListScreen';
+import ListTweetsScreen from '../screens/ListTweetsScreen';
+import VideoPlayerScreen from '../screens/VideoPlayerScreen';
+import BottomNavigationText from '../components/BottomNavigationText';
+import LocationSelectionScreen from '../screens/LocationSelectionScreen';
+import colors from '../constants/colors';
+import EditListUsersScreen from '../screens/EditListUsersScreen';
+import LandingScreen from '../screens/LandingScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
+  const localStyle = useStyleProcessor(styles, 'Navigation');
+
   const Tab = createBottomTabNavigator();
   const TimelineStack = createSharedElementStackNavigator();
+  const DiscoverStack = createSharedElementStackNavigator();
+  const ListStack = createSharedElementStackNavigator();
   const CollectionStack = createSharedElementStackNavigator();
-  const SettingStack = createSharedElementStackNavigator();
+
   const {bottom} = useSafeAreaInsets();
 
   function TimelineTabStack() {
@@ -32,20 +55,119 @@ const Navigation = props => {
             detachPreviousScreen: true,
           }}
         />
+        <TimelineStack.Screen
+          name={ScreenName.PreferenceScreen}
+          component={PreferenceScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <TimelineStack.Screen
+          name={ScreenName.LandingScreen}
+          component={LandingScreen}
+          options={{
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <TimelineStack.Screen
+          name={ScreenName.ImageViewScreen}
+          component={ImageViewScreen}
+          options={{
+            detachPreviousScreen: false,
+            headerShown: false,
+            gestureEnabled: false,
+            presentation: 'modal',
+            cardOverlayEnabled: false,
+            cardStyle: {backgroundColor: 'transparent'},
+            transitionSpec: {
+              open: {animation: 'spring'},
+              close: {animation: 'spring'},
+            },
+            cardStyleInterpolator: ({current}) => {
+              return {
+                cardStyle: {
+                  opacity: current.progress,
+                },
+              };
+            },
+          }}
+        />
+        <TimelineStack.Screen
+          name={ScreenName.ThreadScreen}
+          component={ThreadScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+
+        <TimelineStack.Screen
+          name={ScreenName.SearchResultScreen}
+          component={SearchResultScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <TimelineStack.Screen
+          name={ScreenName.VideoPlayerScreen}
+          component={VideoPlayerScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
       </TimelineStack.Navigator>
     );
   }
 
   const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route);
-    if (routeName === ScreenName.PreferenceScreen) {
-      return false;
+
+    switch (routeName) {
+      case ScreenName.PreferenceScreen:
+      case ScreenName.ThreadScreen:
+      case ScreenName.ImageViewScreen:
+      case ScreenName.VideoPlayerScreen:
+      case ScreenName.LandingScreen:
+        return false;
+      default:
+        return true;
     }
-    return true;
   };
 
+  const getBottomTabIconStyle = useCallback(
+    isFocused => {
+      return [
+        localStyle.bottomTabIcons,
+        {
+          opacity: isFocused ? 1 : 0.5,
+        },
+      ];
+    },
+    [localStyle.bottomTabIcons],
+  );
+
   const bottomStack = useCallback(bottomHeight => {
-    const tabbarStyle = {height: 40 + bottomHeight};
+    const tabbarStyle = {
+      height: 60 + bottomHeight,
+    };
     return (
       <Tab.Navigator
         detachInactiveScreens={true}
@@ -54,13 +176,24 @@ const Navigation = props => {
         <Tab.Screen
           options={({route}) => {
             return {
-              // tabBarIcon: ({focused}) => (
-              //   <BottomNavigationIcon image={focused ? HomeActive : Home} />
-              // ),
+              tabBarIcon: ({focused}) => {
+                return (
+                  <View
+                    style={[
+                      localStyle.tabIconContainer,
+                      focused ? localStyle.selectedTabContainer : null,
+                    ]}>
+                    <Image
+                      source={HomeIcon}
+                      style={getBottomTabIconStyle(focused)}
+                    />
+                  </View>
+                );
+              },
+
               tabBarLabel: ({focused}) => (
-                <BottomNavigationText focused={focused} text={'Timeline'} />
+                <BottomNavigationText focused={focused} text={'Home'} />
               ),
-              tabBarLabelPosition: isTablet() ? 'beside-icon' : 'below-icon',
               tabBarStyle: getTabBarVisibility(route)
                 ? tabbarStyle
                 : {display: 'none'},
@@ -68,53 +201,271 @@ const Navigation = props => {
             };
           }}
           name={ScreenName.TimelineTab}
-          title={'Timeline'}
           component={TimelineTabStack}
         />
         <Tab.Screen
           options={({route}) => {
             return {
-              // tabBarIcon: ({focused}) => (
-              //   <BottomNavigationIcon
-              //     image={focused ? WorkoutsActive : Workouts}
-              //   />
-              // ),
-              tabBarLabel: ({focused}) => (
-                <BottomNavigationText focused={focused} text={'Collection'} />
+              tabBarIcon: ({focused}) => (
+                <View
+                  style={[
+                    localStyle.tabIconContainer,
+                    focused ? localStyle.selectedTabContainer : null,
+                  ]}>
+                  <Image
+                    source={SearchIcon}
+                    style={getBottomTabIconStyle(focused)}
+                  />
+                </View>
               ),
-              tabBarLabelPosition: isTablet() ? 'beside-icon' : 'below-icon',
+              tabBarLabel: ({focused}) => (
+                <BottomNavigationText focused={focused} text={'Search'} />
+              ),
               tabBarStyle: getTabBarVisibility(route)
                 ? tabbarStyle
                 : {display: 'none'},
               headerShown: false,
-              lazy: false,
+            };
+          }}
+          name={ScreenName.DiscoverTab}
+          component={DiscoverTabStack}
+        />
+        <Tab.Screen
+          options={({route}) => {
+            return {
+              tabBarIcon: ({focused}) => (
+                <View
+                  style={[
+                    localStyle.tabIconContainer,
+                    focused ? localStyle.selectedTabContainer : null,
+                  ]}>
+                  <Image
+                    source={BottomBarListIcon}
+                    style={getBottomTabIconStyle(focused)}
+                  />
+                </View>
+              ),
+              tabBarLabel: ({focused}) => (
+                <BottomNavigationText focused={focused} text={'Lists'} />
+              ),
+              tabBarStyle: getTabBarVisibility(route)
+                ? tabbarStyle
+                : {display: 'none'},
+              headerShown: false,
+            };
+          }}
+          name={ScreenName.ListTab}
+          component={ListTabStack}
+        />
+        <Tab.Screen
+          options={({route}) => {
+            return {
+              tabBarIcon: ({focused}) => (
+                <View
+                  style={[
+                    localStyle.tabIconContainer,
+                    focused ? localStyle.selectedTabContainer : null,
+                  ]}>
+                  <Image
+                    source={CollectionsIcon}
+                    style={getBottomTabIconStyle(focused)}
+                  />
+                </View>
+              ),
+              tabBarLabel: ({focused}) => (
+                <BottomNavigationText focused={focused} text={'Archives'} />
+              ),
+              tabBarStyle: getTabBarVisibility(route)
+                ? tabbarStyle
+                : {display: 'none'},
+              headerShown: false,
             };
           }}
           name={ScreenName.CollectionTab}
-          title={'Collection'}
           component={CollectionTabStack}
-        />
-        <Tab.Screen
-          options={({route}) => ({
-            // tabBarIcon: ({focused}) => (
-            //   <BottomNavigationIcon image={focused ? SearchActive : Search} />
-            // ),
-            tabBarLabel: ({focused}) => (
-              <BottomNavigationText focused={focused} text={'Settings'} />
-            ),
-            tabBarLabelPosition: isTablet() ? 'beside-icon' : 'below-icon',
-            tabBarStyle: getTabBarVisibility(route)
-              ? tabbarStyle
-              : {display: 'none'},
-            headerShown: false,
-          })}
-          name={ScreenName.SettingTab}
-          title={'Settings'}
-          component={SettingTabStack}
         />
       </Tab.Navigator>
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function DiscoverTabStack() {
+    return (
+      <DiscoverStack.Navigator detachInactiveScreens={true}>
+        <DiscoverStack.Screen
+          name={ScreenName.DiscoverScreen}
+          component={DiscoverScreen}
+          options={{
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+          }}
+        />
+        <DiscoverStack.Screen
+          name={ScreenName.ImageViewScreen}
+          component={ImageViewScreen}
+          options={{
+            presentation: 'modal',
+            detachPreviousScreen: false,
+            headerShown: false,
+            gestureEnabled: false,
+            cardOverlayEnabled: false,
+            cardStyle: {backgroundColor: 'transparent'},
+            transitionSpec: {
+              open: {animation: 'spring'},
+              close: {animation: 'spring'},
+            },
+            cardStyleInterpolator: ({current}) => {
+              return {
+                cardStyle: {
+                  opacity: current.progress,
+                },
+              };
+            },
+          }}
+        />
+
+        <DiscoverStack.Screen
+          name={ScreenName.ThreadScreen}
+          component={ThreadScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <DiscoverStack.Screen
+          name={ScreenName.SearchResultScreen}
+          component={SearchResultScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <DiscoverStack.Screen
+          name={ScreenName.VideoPlayerScreen}
+          component={VideoPlayerScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <DiscoverStack.Screen
+          name={ScreenName.LocationSelectionScreen}
+          component={LocationSelectionScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+      </DiscoverStack.Navigator>
+    );
+  }
+  function ListTabStack() {
+    return (
+      <ListStack.Navigator detachInactiveScreens={true}>
+        <ListStack.Screen
+          name={ScreenName.ListScreen}
+          component={ListScreen}
+          options={{
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+          }}
+        />
+        <ListStack.Screen
+          name={ScreenName.ImageViewScreen}
+          component={ImageViewScreen}
+          options={{
+            detachPreviousScreen: false,
+            headerShown: false,
+            gestureEnabled: false,
+            presentation: 'modal',
+            cardOverlayEnabled: false,
+            cardStyle: {backgroundColor: 'transparent'},
+            transitionSpec: {
+              open: {animation: 'spring'},
+              close: {animation: 'spring'},
+            },
+            cardStyleInterpolator: ({current}) => {
+              return {
+                cardStyle: {
+                  opacity: current.progress,
+                },
+              };
+            },
+          }}
+        />
+        <ListStack.Screen
+          name={ScreenName.ThreadScreen}
+          component={ThreadScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <ListStack.Screen
+          name={ScreenName.ListTweetsScreen}
+          component={ListTweetsScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+
+        <ListStack.Screen
+          name={ScreenName.SearchResultScreen}
+          component={SearchResultScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <ListStack.Screen
+          name={ScreenName.VideoPlayerScreen}
+          component={VideoPlayerScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <ListStack.Screen
+          name={ScreenName.EditListUsersScreen}
+          component={EditListUsersScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+      </ListStack.Navigator>
+    );
+  }
 
   function CollectionTabStack() {
     return (
@@ -128,16 +479,9 @@ const Navigation = props => {
             detachPreviousScreen: true,
           }}
         />
-      </CollectionStack.Navigator>
-    );
-  }
-
-  function SettingTabStack() {
-    return (
-      <SettingStack.Navigator>
-        <SettingStack.Screen
-          name={ScreenName.SettingScreen}
-          component={SettingScreen}
+        <CollectionStack.Screen
+          name={ScreenName.CollectionTweetScreen}
+          component={CollectionTweetScreen}
           options={{
             gestureEnabled: true,
             headerShown: false,
@@ -146,7 +490,66 @@ const Navigation = props => {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         />
-      </SettingStack.Navigator>
+
+        <CollectionStack.Screen
+          name={ScreenName.ImageViewScreen}
+          component={ImageViewScreen}
+          options={{
+            detachPreviousScreen: false,
+            headerShown: false,
+            gestureEnabled: false,
+            presentation: 'modal',
+            cardOverlayEnabled: false,
+            cardStyle: {backgroundColor: 'transparent'},
+            transitionSpec: {
+              open: {animation: 'spring'},
+              close: {animation: 'spring'},
+            },
+            cardStyleInterpolator: ({current}) => {
+              return {
+                cardStyle: {
+                  opacity: current.progress,
+                },
+              };
+            },
+          }}
+        />
+
+        <CollectionStack.Screen
+          name={ScreenName.ThreadScreen}
+          component={ThreadScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+
+        <CollectionStack.Screen
+          name={ScreenName.SearchResultScreen}
+          component={SearchResultScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <CollectionStack.Screen
+          name={ScreenName.VideoPlayerScreen}
+          component={VideoPlayerScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+      </CollectionStack.Navigator>
     );
   }
 
@@ -154,3 +557,22 @@ const Navigation = props => {
 };
 
 export default Navigation;
+
+const styles = {
+  bottomTabIcons: {
+    height: layoutPtToPx(16),
+    width: layoutPtToPx(16),
+  },
+  tabIconContainer: {
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopWidth: 2,
+    borderTopColor: colors.Transparent,
+  },
+  selectedTabContainer: {
+    borderTopColor: colors.BlackPearl,
+    borderTopWidth: 2,
+  },
+};

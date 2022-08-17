@@ -2,7 +2,7 @@ import React from 'react';
 import isEqual from 'lodash/isEqual';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import {Text} from 'react-native';
-import colors from '../../../utils/colors';
+import colors from '../../../constants/colors';
 
 /**
  * @param {Object} style Object containing style info for the component.
@@ -25,7 +25,6 @@ const BottomNavigationText = ({style, focused, text}) => {
 
 const styles = {
   text: {
-    fontFamily: 'OpenSans-SemiBold',
     fontSize: 10,
     letterSpacing: 1.6,
     marginBottom: 10,
@@ -34,7 +33,6 @@ const styles = {
     textAlign: 'center',
   },
   inactiveText: {
-    fontFamily: 'OpenSans-Regular',
     color: colors.DodgerBlue,
   },
 };

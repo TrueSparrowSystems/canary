@@ -35,10 +35,14 @@ Users can view media like GIFs, images and videos right in the applications and 
 
 ## Preview
 
+
+|   |   |
+| - | - |
+|  ![All data is stored in device, and none to us](https://user-images.githubusercontent.com/86605635/185109770-a3fe8838-38d1-4bc8-ae82-2f9921f076f7.jpg) | ![Archive tweets for the future](https://user-images.githubusercontent.com/86605635/185109674-afc635d0-ca85-43d0-87e0-cdd728921bd1.jpg)  |
+
 |   |   |   |
 | - | - | - |
-| ![Make your feed hyper-personalised](https://user-images.githubusercontent.com/86605635/185109753-fbc608eb-fcbf-4cd6-a122-cf408c29320f.jpg) | ![Search for specific topics](https://user-images.githubusercontent.com/86605635/185109722-c09d2c75-3f91-4835-859c-ba416dff1f0d.jpg) | ![All data is stored in device, and none to us](https://user-images.githubusercontent.com/86605635/185109770-a3fe8838-38d1-4bc8-ae82-2f9921f076f7.jpg) |
-|  ![Stay up-to-date from users via Lists](https://user-images.githubusercontent.com/86605635/185109694-3d67e6ed-e80d-499d-95a8-b4ad274e94bb.jpg) | ![Archive tweets for the future](https://user-images.githubusercontent.com/86605635/185109674-afc635d0-ca85-43d0-87e0-cdd728921bd1.jpg)  |
+| ![Make your feed hyper-personalised](https://user-images.githubusercontent.com/86605635/185109753-fbc608eb-fcbf-4cd6-a122-cf408c29320f.jpg) | ![Search for specific topics](https://user-images.githubusercontent.com/86605635/185109722-c09d2c75-3f91-4835-859c-ba416dff1f0d.jpg) | ![Stay up-to-date from users via Lists](https://user-images.githubusercontent.com/86605635/185109694-3d67e6ed-e80d-499d-95a8-b4ad274e94bb.jpg) |
 
 ## Try it out!
 

@@ -35,10 +35,10 @@ const API_REQUEST_PARAMETERS = {
 };
 
 class TwitterApi {
-  getContexts() {
+  getContexts(
+    preferredTopics = PreferencesDataHelper.getSelectedPreferencesListFromCache(),
+  ) {
     let contexts = [];
-    const preferredTopics =
-      PreferencesDataHelper.getSelectedPreferencesListFromCache();
 
     if (isArray(preferredTopics) && preferredTopics?.length > 0) {
       preferredTopics.map(topic => {
@@ -87,8 +87,7 @@ class TwitterApi {
     if (
       nextPageIdentifier &&
       nextPageIdentifier !== Constants.ApiModes.VerifiedRecent &&
-      nextPageIdentifier !== Constants.ApiModes.AllUsersRelevent &&
-      nextPageIdentifier !== Constants.ApiModes.AllResults
+      nextPageIdentifier !== Constants.ApiModes.AllUsersRelevent
     ) {
       data.next_token = nextPageIdentifier;
     }
@@ -97,14 +96,20 @@ class TwitterApi {
   }
 
   getAllTweets(nextPageIdentifier) {
-    const query = '(lang:EN) (-is:retweet -is:reply -is:quote)';
+    const itemsArray = PreferencesDataHelper.getItemsArray();
+    const query = `(${this.getContexts(
+      itemsArray,
+    )}) (lang:EN) (-is:retweet -is:reply -is:quote)`;
     const data = {
       max_results: 10,
       sort_order: Constants.SortOrder.Relevancy,
       query: query,
       ...API_REQUEST_PARAMETERS,
     };
-    if (nextPageIdentifier) {
+    if (
+      nextPageIdentifier &&
+      nextPageIdentifier !== Constants.ApiModes.AllResults
+    ) {
       data.next_token = nextPageIdentifier;
     }
     const apiService = new APIService({});

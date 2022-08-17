@@ -181,7 +181,6 @@ const style = {
     alignItems: 'center',
     color: colors.BlackPearl,
     fontFamily: fonts.SoraSemiBold,
-    textTransform: 'capitalize',
   },
   continueButtonIcon: {
     height: layoutPtToPx(12),

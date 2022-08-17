@@ -6,6 +6,8 @@ import lodashSet from 'lodash/set';
 import uuid from 'react-native-uuid';
 import {Constants} from '../../constants/Constants';
 
+const PROMOTION_TWEET_THRESHOLD = 50;
+
 class TimelineListDataSource extends PaginatedListDataSource {
   constructor() {
     super();
@@ -13,7 +15,6 @@ class TimelineListDataSource extends PaginatedListDataSource {
     this.apiMode = Constants.ApiModes.AllResults;
     this.switchApiModeToDefault.bind(this);
     this.switchApiModeToDefault();
-    this.addShareCard = false;
   }
   // Endpoint which is to be called for fetching list data.
   apiCall(...args) {
@@ -81,7 +82,6 @@ class TimelineListDataSource extends PaginatedListDataSource {
             Constants.ApiModes.VerifiedRecent,
           );
           this.apiMode = Constants.ApiModes.VerifiedRecent;
-          this.addShareCard = true;
           break;
         case Constants.ApiModes.VerifiedRecent:
           lodashSet(
@@ -98,7 +98,6 @@ class TimelineListDataSource extends PaginatedListDataSource {
             Constants.ApiModes.AllResults,
           );
           this.apiMode = Constants.ApiModes.AllResults;
-          this.addShareCard = true;
           break;
         default:
           lodashSet(
@@ -119,14 +118,15 @@ class TimelineListDataSource extends PaginatedListDataSource {
     data.forEach(tweet => {
       this.viewData[tweet.id] = getTweetData(tweet, response);
       array.push(this.viewData[tweet.id]);
+
+      if (Object.keys(this.viewData).length === PROMOTION_TWEET_THRESHOLD) {
+        array.push({
+          id: uuid.v4(),
+          card_type: Constants.CardTypes.ShareCard,
+        });
+      }
     });
-    if (this.addShareCard) {
-      this.addShareCard = false;
-      array.push({
-        id: uuid.v4(),
-        card_type: Constants.CardTypes.ShareCard,
-      });
-    }
+
     return array;
   }
 }

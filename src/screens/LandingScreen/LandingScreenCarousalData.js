@@ -1,7 +1,6 @@
 import {rightArrowIcon} from '../../assets/common';
 import {Anonymous, Discovery, Secure, CanaryGif} from '../../assets/animation';
 import {layoutPtToPx} from '../../utils/responsiveUI';
-import colors from '../../constants/colors';
 
 const LandingScreenCarousalData = [
   {
@@ -13,7 +12,7 @@ const LandingScreenCarousalData = [
     },
     primaryText: 'Welcome to Canary',
     secondaryText:
-      'A privacy-focused app which lets you browse content from Twitter without being tracked',
+      'A privacy-focused app that lets you browse content from Twitter without being tracked',
     buttonText: 'Tell me more',
   },
   {
@@ -49,7 +48,7 @@ const LandingScreenCarousalData = [
     },
     primaryText: 'Stay Private & Secure',
     secondaryText:
-      'All the data is stored only on your device, nowhere else — not even us',
+      'All the data is stored only on your device, nowhere else — not even with us',
     buttonText: 'Start my Incognito Mode',
     buttonImage: rightArrowIcon,
   },

@@ -7,6 +7,7 @@ import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 function useAddListModalData() {
   const [isVisible, setIsVisible] = useState(false);
   const listNameRef = useRef('');
+  const importListTextRef = useRef('');
   const [modalData, setModalData] = useState(null);
   const [charCount, setCharCount] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
@@ -39,6 +40,10 @@ function useAddListModalData() {
   const onListNameChange = useCallback(newValue => {
     listNameRef.current = newValue;
     setCharCount(newValue?.length || 0);
+  }, []);
+
+  const onImportListTextChange = useCallback(newValue => {
+    importListTextRef.current = newValue;
   }, []);
 
   const onCreateListPress = useCallback(() => {
@@ -88,13 +93,62 @@ function useAddListModalData() {
       });
   }, [closeModal, modalData]);
 
+  const onImportListPress = useCallback(() => {
+    if (importListTextRef.current.trim().length === 0) {
+      Toast.show({
+        type: ToastType.Error,
+        text1: 'Import URL cannot be empty.',
+        position: ToastPosition.Top,
+      });
+      return;
+    }
+    const _listService = listService();
+    _listService
+      .importList(importListTextRef.current)
+      .then(({listId}) => {
+        Toast.show({
+          type: ToastType.Success,
+          text1: 'List imported successfully.',
+          position: ToastPosition.Top,
+        });
+        if (modalData?.userName) {
+          _listService
+            .addUserToList(listId, modalData.userName)
+            .then(() => {
+              LocalEvent.emit(EventTypes.UpdateList);
+              modalData?.onListAddSuccess(importListTextRef.current, listId);
+              closeModal();
+            })
+            .catch(() => {});
+        } else {
+          modalData?.onListAddSuccess();
+          closeModal();
+        }
+      })
+      .catch(err => {
+        importListTextRef.current = '';
+
+        Toast.show({
+          type: ToastType.Error,
+          text1: 'List could not be imported. Please try again',
+          position: ToastPosition.Top,
+        });
+        setErrorMessage(err);
+      })
+      .finally(() => {
+        _listService.getAllLists();
+      });
+  }, [closeModal, modalData]);
+
   return {
     bIsVisible: isVisible,
     nCharacterCount: charCount,
     sErrorMessage: errorMessage,
     fnOnBackdropPress: onBackdropPress,
     fnOnListNameChange: onListNameChange,
+    fnOnImportListTextChange: onImportListTextChange,
     fnOnCreateListPress: onCreateListPress,
+    fnOnImportListPress: onImportListPress,
   };
 }
 

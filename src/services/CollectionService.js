@@ -8,6 +8,7 @@ import {find} from 'lodash';
 import {isEmpty} from 'lodash-es';
 import {compareFunction} from '../utils/Strings';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
+import base64 from 'react-native-base64';
 
 const COLLECTION_TWEET_LIMIT = 25;
 
@@ -20,7 +21,7 @@ class CollectionService {
     await Store.removeItem(StoreKeys.CollectionsList);
   }
 
-  async addCollection(collectionName) {
+  async addCollection(collectionName, tweetIdArray) {
     return new Promise((resolve, reject) => {
       if (isEmpty(collectionName.trim())) {
         return reject('Please enter a valid name');
@@ -33,7 +34,7 @@ class CollectionService {
           collectionObj[id] = {
             id: id,
             name: collectionName,
-            tweetIds: [],
+            tweetIds: tweetIdArray || [],
             colorScheme: colorCombination,
           };
 
@@ -57,7 +58,7 @@ class CollectionService {
           newCollection[newId] = {
             id: newId,
             name: collectionName,
-            tweetIds: [],
+            tweetIds: tweetIdArray || [],
             colorScheme: colorCombination,
           };
 
@@ -74,6 +75,19 @@ class CollectionService {
       });
     });
   }
+  async importCollection(importParam) {
+    const collection = JSON.parse(base64.decode(importParam));
+
+    return new Promise((resolve, reject) => {
+      this.addCollection(collection.name, collection.tweetIds)
+        .then(res => {
+          return resolve(res);
+        })
+        .catch(err => {
+          return reject(err);
+        });
+    });
+  }
 
   async getCollectionDetails(collectionId) {
     return new Promise((resolve, reject) => {
@@ -88,6 +102,26 @@ class CollectionService {
       } else {
         return resolve(this.collections[collectionId]);
       }
+    });
+  }
+
+  async exportCollection(collectionId) {
+    return new Promise((resolve, reject) => {
+      this.getCollectionDetails(collectionId)
+        .then(collection => {
+          const exportCollection = {
+            name: collection.name,
+            tweetIds: collection.tweetIds,
+          };
+
+          const encodedCollection = base64.encode(
+            JSON.stringify(exportCollection),
+          );
+          return resolve(encodedCollection);
+        })
+        .catch(err => {
+          return reject(err);
+        });
     });
   }
 

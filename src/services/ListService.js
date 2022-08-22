@@ -6,6 +6,7 @@ import Cache from './Cache';
 import {CacheKey} from './Cache/CacheStoreConstants';
 import {find, isEmpty} from 'lodash';
 import {compareFunction} from '../utils/Strings';
+import base64 from 'react-native-base64';
 
 const LIST_LIMIT = 30;
 
@@ -18,7 +19,7 @@ class ListService {
     await Store.removeItem(StoreKeys.Lists);
   }
 
-  async addList(listName) {
+  async addList(listName, userNameArray) {
     return new Promise((resolve, reject) => {
       if (isEmpty(listName.trim())) {
         return reject('Please enter a valid name');
@@ -31,7 +32,7 @@ class ListService {
           listObj[id] = {
             id: id,
             name: listName,
-            userNames: [],
+            userNames: userNameArray || [],
             colorCombination,
           };
 
@@ -60,7 +61,7 @@ class ListService {
           newList[newId] = {
             id: newId,
             name: listName,
-            userNames: [],
+            userNames: userNameArray || [],
             colorCombination,
           };
 
@@ -78,6 +79,19 @@ class ListService {
     });
   }
 
+  async importList(importParam) {
+    const list = JSON.parse(base64.decode(importParam));
+    return new Promise((resolve, reject) => {
+      this.addList(list.name, list.userNames)
+        .then(res => {
+          return resolve(res);
+        })
+        .catch(err => {
+          return reject(err);
+        });
+    });
+  }
+
   async getListDetails(listId) {
     return new Promise((resolve, reject) => {
       if (this.lists && Object.keys(this.lists).length === 0) {
@@ -91,6 +105,21 @@ class ListService {
       } else {
         return resolve(this.lists[listId]);
       }
+    });
+  }
+
+  async exportList(listId) {
+    return new Promise((resolve, reject) => {
+      this.getListDetails(listId)
+        .then(list => {
+          const exportList = {name: list.name, userNames: list.userNames};
+
+          const encodedList = base64.encode(JSON.stringify(exportList));
+          return resolve(encodedList);
+        })
+        .catch(err => {
+          return reject(err);
+        });
     });
   }
 

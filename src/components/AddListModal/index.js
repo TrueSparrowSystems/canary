@@ -20,7 +20,9 @@ function AddListModal() {
     sErrorMessage,
     fnOnBackdropPress,
     fnOnListNameChange,
+    fnOnImportListTextChange,
     fnOnCreateListPress,
+    fnOnImportListPress,
   } = useAddListModalData();
 
   const getBackdrop = useMemo(() => {
@@ -67,6 +69,24 @@ function AddListModal() {
               onPress={fnOnCreateListPress}
               underlayColor={colors.GoldenTainoi80}
             />
+            <TextInput
+              style={localStyle.inputStyle}
+              autoFocus={true}
+              onChangeText={fnOnImportListTextChange}
+              placeholder={'Import URL'}
+              placeholderTextColor={getColorWithOpacity(colors.BlackPearl, 0.5)}
+              onSubmitEditing={fnOnImportListPress}
+            />
+            <Text style={localStyle.errorText}>{sErrorMessage}</Text>
+            <RoundedButton
+              style={localStyle.createButton}
+              text={'Import'}
+              textStyle={localStyle.createButtonText}
+              leftImage={AddIcon}
+              leftImageStyle={localStyle.addIconStyle}
+              onPress={fnOnImportListPress}
+              underlayColor={colors.GoldenTainoi80}
+            />
           </View>
         </View>
       </View>
@@ -77,7 +97,7 @@ function AddListModal() {
 const styles = {
   container: {
     position: 'absolute',
-    height: layoutPtToPx(200),
+    height: layoutPtToPx(350),
     width: '100%',
     borderRadius: layoutPtToPx(14),
     alignItems: 'center',
@@ -122,7 +142,7 @@ const styles = {
   },
   view: {
     width: '100%',
-    height: layoutPtToPx(200),
+    height: layoutPtToPx(350),
     padding: layoutPtToPx(20),
     alignItems: 'center',
     justifyContent: 'center',
@@ -155,7 +175,7 @@ const styles = {
   charCounterContainer: {
     position: 'absolute',
     right: 25,
-    bottom: '68%',
+    bottom: '82%',
   },
   charCounterText: {
     color: getColorWithOpacity(colors.BlackPearl, 0.4),

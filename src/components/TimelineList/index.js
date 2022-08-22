@@ -120,10 +120,10 @@ function TimelineList({
   const loaderView = useMemo(() => {
     return (
       <View style={localStyle.loaderViewContainer}>
-        <ActivityIndicator animating={bIsLoading} color={colors.GoldenTainoi} />
+        <ActivityIndicator animating={true} color={colors.GoldenTainoi} />
       </View>
     );
-  }, [bIsLoading, localStyle.loaderViewContainer]);
+  }, [localStyle.loaderViewContainer]);
 
   const flatListProps = useMemo(() => {
     return {
@@ -204,6 +204,7 @@ const styles = {
   loaderViewContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
   },
   loaderView: {
     width: layoutPtToPx(40),

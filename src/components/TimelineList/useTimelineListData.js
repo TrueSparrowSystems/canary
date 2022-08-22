@@ -13,7 +13,7 @@ export default function useTimelineListData({
   const viewRef = useRef();
   const [showCard, setShowCard] = useState(true);
   const [isVisible, setIsVisible] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const onDataChange = useCallback(
     listData => {

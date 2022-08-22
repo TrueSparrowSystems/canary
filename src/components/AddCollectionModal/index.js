@@ -19,7 +19,9 @@ function AddCollectionModal() {
     sErrorMessage,
     fnOnBackdropPress,
     fnOnCollectionNameChange,
+    fnOnImportCollectionTextChange,
     fnOnCreateCollectionPress,
+    fnOnImportCollectionPress,
   } = useAddCollectionModalData();
 
   const getBackdrop = useMemo(() => {
@@ -68,6 +70,24 @@ function AddCollectionModal() {
               onPress={fnOnCreateCollectionPress}
               underlayColor={colors.GoldenTainoi80}
             />
+            <TextInput
+              autoFocus={true}
+              style={localStyle.inputStyle}
+              editable={true}
+              onChangeText={fnOnImportCollectionTextChange}
+              placeholder={'Import URL'}
+              placeholderTextColor={getColorWithOpacity(colors.BlackPearl, 0.5)}
+              onSubmitEditing={fnOnImportCollectionPress}
+            />
+            <Text style={localStyle.errorText}>{sErrorMessage}</Text>
+
+            <RoundedButton
+              style={localStyle.createButton}
+              text={'Import'}
+              textStyle={localStyle.createButtonText}
+              onPress={fnOnImportCollectionPress}
+              underlayColor={colors.GoldenTainoi80}
+            />
           </View>
         </View>
       </View>
@@ -78,7 +98,7 @@ function AddCollectionModal() {
 const styles = {
   container: {
     position: 'absolute',
-    height: layoutPtToPx(200),
+    height: layoutPtToPx(350),
     width: '100%',
     borderRadius: layoutPtToPx(14),
     alignItems: 'center',
@@ -123,7 +143,7 @@ const styles = {
   },
   view: {
     width: '100%',
-    height: layoutPtToPx(200),
+    height: layoutPtToPx(350),
     padding: layoutPtToPx(20),
     alignItems: 'center',
     justifyContent: 'center',
@@ -156,7 +176,7 @@ const styles = {
   charCounterContainer: {
     position: 'absolute',
     right: 25,
-    bottom: '68%',
+    bottom: '82%',
   },
   charCounterText: {
     color: getColorWithOpacity(colors.BlackPearl, 0.4),

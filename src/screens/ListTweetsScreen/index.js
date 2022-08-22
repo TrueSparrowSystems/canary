@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, Share, View} from 'react-native';
 import Header from '../../components/common/Header';
 import TimelineList from '../../components/TimelineList';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -12,6 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import ScreenName from '../../constants/ScreenName';
 import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import {EditIcon, ShareAppIcon} from '../../assets/common';
 
 function ListTweetsScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListTweetsScreen');
@@ -75,18 +76,32 @@ function ListTweetsScreen(props) {
     localStyle.descriptionTextStyle,
   ]);
 
+  const onShareListPress = useCallback(() => {
+    _listService
+      .exportList(listId)
+      .then(res => {
+        Share.share({message: res});
+      })
+      .catch(() => {});
+  }, [_listService, listId]);
+
   return (
     <View style={localStyle.container}>
       <Header
+        style={localStyle.header}
         enableBackButton={true}
         text={listName}
         textStyle={localStyle.headerText}
         enableRightButton={true}
-        rightButtonText={
-          currentUserNameArray.current.length !== 0 ? 'Edit' : null
+        rightButtonImage={ShareAppIcon}
+        rightButtonImageStyle={localStyle.shareIconStyle}
+        onrightButtonClick={onShareListPress}
+        enableSecondaryRightButton={true}
+        secondaryRightButtonImage={
+          currentUserNameArray.current.length !== 0 ? EditIcon : null
         }
-        rightButtonTextStyle={localStyle.headerRightButtonText}
-        onRightButtonClick={() => {
+        secondaryRightButtonImageStyle={localStyle.editIconStyle}
+        onSecondaryRightButtonClick={() => {
           navigation.navigate(ScreenName.EditListUsersScreen, {
             listId,
             listUserNames,
@@ -120,6 +135,12 @@ const styles = {
     lineHeight: layoutPtToPx(21),
     color: getColorWithOpacity(colors.Black, 0.7),
   },
+  header: {
+    marginHorizontal: layoutPtToPx(10),
+    height: layoutPtToPx(50),
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   headerText: {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(16),
@@ -130,6 +151,17 @@ const styles = {
     fontFamily: fonts.SoraSemiBold,
     fontSize: fontPtToPx(14),
     color: colors.GoldenTainoi,
+  },
+  editIconStyle: {
+    height: layoutPtToPx(25),
+    width: layoutPtToPx(25),
+    tintColor: colors.GoldenTainoi,
+  },
+  shareIconStyle: {
+    height: layoutPtToPx(25),
+    width: layoutPtToPx(25),
+    tintColor: colors.GoldenTainoi,
+    marginHorizontal: layoutPtToPx(10),
   },
   bookmarkButtonStyle: {
     marginTop: layoutPtToPx(40),

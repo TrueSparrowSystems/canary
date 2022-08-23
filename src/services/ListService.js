@@ -6,7 +6,6 @@ import Cache from './Cache';
 import {CacheKey} from './Cache/CacheStoreConstants';
 import {find, isEmpty} from 'lodash';
 import {compareFunction} from '../utils/Strings';
-import base64 from 'react-native-base64';
 import {getExportURL, getImportData} from './ShareHelper';
 
 const LIST_LIMIT = 30;

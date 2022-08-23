@@ -95,7 +95,7 @@ function ListTweetsScreen(props) {
         enableRightButton={true}
         rightButtonImage={ShareAppIcon}
         rightButtonImageStyle={localStyle.shareIconStyle}
-        onrightButtonClick={onShareListPress}
+        onRightButtonClick={onShareListPress}
         enableSecondaryRightButton={true}
         secondaryRightButtonImage={
           currentUserNameArray.current.length !== 0 ? EditIcon : null
@@ -162,6 +162,7 @@ const styles = {
     width: layoutPtToPx(25),
     tintColor: colors.GoldenTainoi,
     marginHorizontal: layoutPtToPx(10),
+    borderWidth: 1,
   },
   bookmarkButtonStyle: {
     marginTop: layoutPtToPx(40),

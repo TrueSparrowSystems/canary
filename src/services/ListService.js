@@ -7,6 +7,7 @@ import {CacheKey} from './Cache/CacheStoreConstants';
 import {find, isEmpty} from 'lodash';
 import {compareFunction} from '../utils/Strings';
 import {getExportURL, getImportData} from './ShareHelper';
+import {Constants} from '../constants/Constants';
 
 const LIST_LIMIT = 30;
 
@@ -108,16 +109,44 @@ class ListService {
     });
   }
 
-  async exportList(listId) {
+  async getMultipleListDetails(listIds = []) {
     return new Promise((resolve, reject) => {
-      this.getListDetails(listId)
-        .then(list => {
-          const exportList = {name: list.name, userNames: list.userNames};
-          const exportUrl = getExportURL(exportList);
-          return resolve(exportUrl);
+      let listDataArray = [];
+      listIds.forEach(listId => {
+        this.getListDetails(listId)
+          .then(list => {
+            listDataArray.push({name: list.name, userNames: list.userNames});
+            if (listDataArray.length === listIds.length) {
+              return resolve(listDataArray);
+            }
+          })
+          .catch(() => {
+            return reject();
+          });
+      });
+    });
+  }
+
+  async exportList(listIds = []) {
+    return new Promise((resolve, reject) => {
+      this.getMultipleListDetails(listIds)
+        .then(listDataArray => {
+          const exportData = {
+            pn: Constants.PageName.List,
+            data: listDataArray,
+          };
+          getExportURL(exportData)
+            .then(url => {
+              return resolve(url);
+            })
+            .catch(() => {
+              return reject();
+              // TODO: do nothing
+            });
         })
-        .catch(err => {
-          return reject(err);
+        .catch(() => {
+          // TODO: do nothing
+          return reject();
         });
     });
   }

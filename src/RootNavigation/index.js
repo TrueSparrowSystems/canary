@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {Platform, Linking} from 'react-native';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import ScreenName from '../constants/ScreenName';
 import Navigation from '../Navigation';
@@ -9,6 +10,7 @@ import {CacheKey} from '../services/Cache/CacheStoreConstants';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
 import SplashScreen from 'react-native-splash-screen';
 import LandingScreen from '../screens/LandingScreen';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 const AppStack = createSharedElementStackNavigator();
 const OnBoardingStack = createSharedElementStackNavigator();
@@ -16,7 +18,18 @@ function RootNavigation() {
   const [isAppLoaded, setAppLoaded] = useState(false);
   const [currentStack, setCurrentStack] = useState();
 
+  const handleDynamicLinking = () => {
+    dynamicLinks()
+      .getInitialLink()
+      .then(url => {
+        if (url) {
+          // Handle dynamic linking
+        }
+      });
+  };
+
   function switchToHomeStack() {
+    handleDynamicLinking();
     setCurrentStack(HomeAppStack());
   }
 
@@ -38,11 +51,12 @@ function RootNavigation() {
     if (isAppLoaded) {
       const arePrefsSet = Cache.getValue(CacheKey.AreInitialPreferencesSet);
       if (arePrefsSet) {
-        return setCurrentStack(HomeAppStack());
+        return switchToHomeStack();
       } else {
         return setCurrentStack(LaunchStack());
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAppLoaded]);
 
   return currentStack || null;

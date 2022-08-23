@@ -12,6 +12,7 @@ import com.facebook.soloader.SoLoader;
 import com.personalized_twitter.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import io.invertase.firebase.dynamiclinks.ReactNativeFirebaseDynamicLinksPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 

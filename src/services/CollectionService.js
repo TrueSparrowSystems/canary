@@ -9,6 +9,7 @@ import {isEmpty} from 'lodash-es';
 import {compareFunction} from '../utils/Strings';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
 import {getExportURL, getImportData} from './ShareHelper';
+import {Constants} from '../constants/Constants';
 
 const COLLECTION_TWEET_LIMIT = 25;
 
@@ -75,6 +76,7 @@ class CollectionService {
       });
     });
   }
+
   async importCollection(importUrl) {
     const collection = getImportData(importUrl);
 
@@ -85,6 +87,51 @@ class CollectionService {
         })
         .catch(err => {
           return reject(err);
+        });
+    });
+  }
+
+  async getMultipleCollectionDetails(collectionIds = []) {
+    return new Promise((resolve, reject) => {
+      let collectionDataArray = [];
+      collectionIds.forEach(collectionId => {
+        this.getCollectionDetails(collectionId)
+          .then(collection => {
+            collectionDataArray.push({
+              name: collection?.name,
+              tweetIds: collection?.tweetIds,
+            });
+            if (collectionDataArray.length === collectionIds.length) {
+              return resolve(collectionDataArray);
+            }
+          })
+          .catch(() => {
+            return reject();
+          });
+      });
+    });
+  }
+
+  async exportCollection(collectionIds = []) {
+    return new Promise((resolve, reject) => {
+      this.getMultipleCollectionDetails(collectionIds)
+        .then(collectionDataArray => {
+          const exportData = {
+            pn: Constants.PageName.Archive,
+            data: collectionDataArray,
+          };
+          getExportURL(exportData)
+            .then(url => {
+              return resolve(url);
+            })
+            .catch(() => {
+              return reject();
+              // TODO: do nothing
+            });
+        })
+        .catch(() => {
+          // TODO: do nothing
+          return reject();
         });
     });
   }
@@ -102,23 +149,6 @@ class CollectionService {
       } else {
         return resolve(this.collections[collectionId]);
       }
-    });
-  }
-
-  async exportCollection(collectionId) {
-    return new Promise((resolve, reject) => {
-      this.getCollectionDetails(collectionId)
-        .then(collection => {
-          const exportCollection = {
-            name: collection.name,
-            tweetIds: collection.tweetIds,
-          };
-
-          return resolve(getExportURL(exportCollection));
-        })
-        .catch(err => {
-          return reject(err);
-        });
     });
   }
 

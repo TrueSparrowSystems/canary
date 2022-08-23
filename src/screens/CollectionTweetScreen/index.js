@@ -17,7 +17,7 @@ function CollectionTweetScreen(props) {
   const onExportCollectionPress = useCallback(() => {
     const _collectionService = collectionService();
     _collectionService
-      .exportCollection(collectionId)
+      .exportCollection([collectionId])
       .then(res => {
         Share.share({message: res});
       })

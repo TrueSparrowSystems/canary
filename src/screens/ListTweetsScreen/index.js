@@ -78,7 +78,7 @@ function ListTweetsScreen(props) {
 
   const onShareListPress = useCallback(() => {
     _listService
-      .exportList(listId)
+      .exportList([listId])
       .then(res => {
         Share.share({message: res});
       })

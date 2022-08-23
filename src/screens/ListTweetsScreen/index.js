@@ -95,7 +95,7 @@ function ListTweetsScreen(props) {
         enableRightButton={true}
         rightButtonImage={ShareAppIcon}
         rightButtonImageStyle={localStyle.shareIconStyle}
-        onrightButtonClick={onShareListPress}
+        onRightButtonClick={onShareListPress}
         enableSecondaryRightButton={true}
         secondaryRightButtonImage={
           currentUserNameArray.current.length !== 0 ? EditIcon : null

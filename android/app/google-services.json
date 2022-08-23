@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "28545152546",
+    "project_id": "canary-8ff4c",
+    "storage_bucket": "canary-8ff4c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28545152546:android:4d701c9da9f9224d5bfc7b",
+        "android_client_info": {
+          "package_name": "com.personalized_twitter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "28545152546-tujvp37st762v6j9bovtg189jfngglnk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpN86SPgeRc7Vu_K5ZdMrnEa8Tzm9o-qY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "28545152546-tujvp37st762v6j9bovtg189jfngglnk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "28545152546-38a7ausm245or1dae7cmuqp50oefgetb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.plgworks.canary"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28545152546:android:bc8bb873f67aa43f5bfc7b",
+        "android_client_info": {
+          "package_name": "com.plgworks.canary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "28545152546-ep130chbqob2v0dda2rsk48907o424rq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.plgworks.canary",
+            "certificate_hash": "7b4a70fd63306f31acff59f5a9f2da1893b48f35"
+          }
+        },
+        {
+          "client_id": "28545152546-tujvp37st762v6j9bovtg189jfngglnk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpN86SPgeRc7Vu_K5ZdMrnEa8Tzm9o-qY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "28545152546-tujvp37st762v6j9bovtg189jfngglnk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "28545152546-38a7ausm245or1dae7cmuqp50oefgetb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.plgworks.canary"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

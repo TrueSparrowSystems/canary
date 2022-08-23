@@ -8,7 +8,7 @@ import {find} from 'lodash';
 import {isEmpty} from 'lodash-es';
 import {compareFunction} from '../utils/Strings';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
-import base64 from 'react-native-base64';
+import {getExportURL, getImportData} from './ShareHelper';
 
 const COLLECTION_TWEET_LIMIT = 25;
 
@@ -75,8 +75,8 @@ class CollectionService {
       });
     });
   }
-  async importCollection(importParam) {
-    const collection = JSON.parse(base64.decode(importParam));
+  async importCollection(importUrl) {
+    const collection = getImportData(importUrl);
 
     return new Promise((resolve, reject) => {
       this.addCollection(collection.name, collection.tweetIds)
@@ -114,10 +114,7 @@ class CollectionService {
             tweetIds: collection.tweetIds,
           };
 
-          const encodedCollection = base64.encode(
-            JSON.stringify(exportCollection),
-          );
-          return resolve(encodedCollection);
+          return resolve(getExportURL(exportCollection));
         })
         .catch(err => {
           return reject(err);

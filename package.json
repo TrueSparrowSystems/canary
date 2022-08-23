@@ -8,11 +8,13 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "generate-keystore": "sh ./android/keystore/sample/generate_keystore.sh "
   },
   "dependencies": {
     "@react-native-community/netinfo": "9.3.0",
     "@react-native-community/slider": "4.2.4",
+    "@react-native-firebase/app": "15.3.0",
     "@react-navigation/bottom-tabs": "6.3.2",
     "@react-navigation/native": "6.0.11",
     "@react-navigation/stack": "6.2.2",

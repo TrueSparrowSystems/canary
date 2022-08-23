@@ -9,3 +9,15 @@ index e09fb27..f5b1e04 100644
 -    compile "com.facebook.react:react-native:+"
 +    implementation "com.facebook.react:react-native:+"
  }
+diff --git a/node_modules/react-native-orientation/react-native-orientation.podspec b/node_modules/react-native-orientation/react-native-orientation.podspec
+index 7f91a14..d8dc381 100644
+--- a/node_modules/react-native-orientation/react-native-orientation.podspec
++++ b/node_modules/react-native-orientation/react-native-orientation.podspec
+@@ -18,5 +18,5 @@ Pod::Spec.new do |s|
+   s.preserve_paths = 'README.md', 'package.json', 'index.js'
+   s.source_files   = 'iOS/RCTOrientation/*.{h,m}'
+ 
+-  s.dependency 'React'
++  s.dependency 'React-Core'
+ end
+\ No newline at end of file

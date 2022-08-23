@@ -162,7 +162,6 @@ const styles = {
     width: layoutPtToPx(25),
     tintColor: colors.GoldenTainoi,
     marginHorizontal: layoutPtToPx(10),
-    borderWidth: 1,
   },
   bookmarkButtonStyle: {
     marginTop: layoutPtToPx(40),

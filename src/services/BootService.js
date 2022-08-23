@@ -1,3 +1,4 @@
+import {Linking, Platform} from 'react-native';
 import {setCountriesWoeidsInCache} from '../utils/CountryWoeidUtils';
 import AsyncStorage from './AsyncStorage';
 import {StoreKeys} from './AsyncStorage/StoreConstants';
@@ -6,11 +7,31 @@ import {CacheKey} from './Cache/CacheStoreConstants';
 import {collectionService} from './CollectionService';
 import {listService} from './ListService';
 import {networkConnection} from './NetworkConnection';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 class BootService {
   initialize() {
     return new Promise(resolve => {
       networkConnection();
+      dynamicLinks()
+        .getInitialLink()
+        .then(url => {
+          if (url) {
+            console.log('Firebase Url', url);
+          } else {
+            // use deep link to handle the URL.
+            if (Platform.OS === 'android') {
+              Linking.getInitialURL()
+                .then(url1 => {
+                  console.log('Linking url', {url1});
+                  // do something with the URL
+                })
+                .catch(err => console.log(err));
+            } else {
+              console.log('in IOS else');
+            }
+          }
+        });
       AsyncStorage.getItem(StoreKeys.AreInitialPreferencesSet).then(isSet => {
         setCountriesWoeidsInCache();
         Cache.setValue(CacheKey.AreInitialPreferencesSet, isSet);

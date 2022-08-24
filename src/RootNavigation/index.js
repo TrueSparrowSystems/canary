@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {Platform, Linking} from 'react-native';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import ScreenName from '../constants/ScreenName';
 import Navigation from '../Navigation';
@@ -11,6 +10,7 @@ import {EventTypes, LocalEvent} from '../utils/LocalEvent';
 import SplashScreen from 'react-native-splash-screen';
 import LandingScreen from '../screens/LandingScreen';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {handleDynamicUrl} from '../services/DynamicLinkingHelper';
 
 const AppStack = createSharedElementStackNavigator();
 const OnBoardingStack = createSharedElementStackNavigator();
@@ -24,6 +24,7 @@ function RootNavigation() {
       .then(url => {
         if (url) {
           // Handle dynamic linking
+          handleDynamicUrl(url.url);
         }
       });
   };

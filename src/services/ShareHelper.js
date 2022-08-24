@@ -28,6 +28,13 @@ export async function getExportURL(exportData) {
 }
 export function getImportData(importUrl) {
   const encodedImportData = decodeURIComponent(importUrl);
-  const importData = JSON.parse(base64.decode(encodedImportData));
+  const stringArr = encodedImportData.split('?q=');
+  if (stringArr.length < 2) {
+    return {
+      error: true,
+      message: 'Invalid import url',
+    };
+  }
+  const importData = JSON.parse(base64.decode(stringArr[1]));
   return importData;
 }

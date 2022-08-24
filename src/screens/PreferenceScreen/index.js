@@ -18,6 +18,7 @@ import {
 } from '../../assets/common';
 import {AppVersion} from '../../../AppVersion';
 import {Constants} from '../../constants/Constants';
+import {firebase} from '@react-native-firebase/database';
 
 function PreferenceScreen(props) {
   const localStyle = useStyleProcessor(style, 'PreferenceScreen');
@@ -135,6 +136,33 @@ function PreferenceScreen(props) {
             <RoundedButton {...roundedButtonStyle} />
           </View>
         </View>
+        <RoundedButton
+          text="BackUp"
+          onPress={() => {
+            const reference = firebase
+              .app()
+              .database(
+                'https://canary-8ff4c-default-rtdb.us-central1.firebasedatabase.app',
+              )
+              .ref('/deviceId/12123412');
+            reference.set({name: 'item'});
+            // .set({
+            //   name: 'PLG',
+            // })
+            // database()
+            //   .ref('/items')
+            //   .push({
+            //     name: 'item',
+            //   })
+            //   .then(res => {
+            //     console.log('data set', res);
+            //   })
+            //   .catch(err => {
+            //     console.log({err});
+            //   });
+            console.log({reference});
+          }}
+        />
       </ScrollView>
       <View style={localStyle.bottomContainer}>
         <View style={localStyle.flexRow}>

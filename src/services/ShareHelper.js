@@ -2,6 +2,7 @@ import base64 from 'react-native-base64';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import firebase from '@react-native-firebase/app';
 import {Constants} from '../constants/Constants';
+import url from 'url';
 
 export async function getExportURL(exportData) {
   return new Promise((resolve, reject) => {
@@ -9,7 +10,7 @@ export async function getExportURL(exportData) {
     dynamicLinks()
       .buildShortLink(
         {
-          link: `${Constants.DeepLinkUrl}?q=${encodedData}`,
+          link: `${Constants.DeepLinkUrl}?query=${encodedData}`,
           domainUriPrefix: Constants.DeepLinkUrl,
           android: {
             // TODO: See if we can get this using some function?
@@ -28,13 +29,13 @@ export async function getExportURL(exportData) {
 }
 export function getImportData(importUrl) {
   const encodedImportData = decodeURIComponent(importUrl);
-  const stringArr = encodedImportData.split('?q=');
-  if (stringArr.length < 2) {
-    return {
-      error: true,
-      message: 'Invalid import url',
-    };
+  const queryParams = url.parse(encodedImportData, true)?.query;
+  if (queryParams?.query) {
+    const importData = JSON.parse(base64.decode(queryParams.query));
+    return importData;
   }
-  const importData = JSON.parse(base64.decode(stringArr[1]));
-  return importData;
+  return {
+    error: true,
+    message: 'Invalid import url',
+  };
 }

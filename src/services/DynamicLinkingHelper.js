@@ -13,12 +13,28 @@ export const handleDynamicUrl = url => {
   switch (pageName) {
     case Constants.PageName.Archive:
       if (data.length === 1) {
-        NavigationService.navigate(ScreenName.CollectionScreen, data);
+        const navigationProps = {
+          collectionName: data[0]?.name,
+          isImport: true,
+          tweetIds: data[0]?.tweetIds,
+        };
+        NavigationService.navigate(
+          ScreenName.CollectionTweetScreen,
+          navigationProps,
+        );
       }
       break;
     case Constants.PageName.List:
       if (data.length === 1) {
-        NavigationService.navigate(ScreenName.ListScreen, data);
+        const navigationProps = {
+          listName: data[0]?.name,
+          isImport: true,
+          listUserNames: data[0]?.userNames,
+        };
+        NavigationService.navigate(
+          ScreenName.ListTweetsScreen,
+          navigationProps,
+        );
       }
       break;
   }

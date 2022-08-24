@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
+import {isArray} from 'lodash-es';
 import {useCallback, useState, useRef, useEffect} from 'react';
 import TwitterAPI from '../../api/helpers/TwitterAPI';
 import ScreenName from '../../constants/ScreenName';
@@ -6,46 +7,57 @@ import {collectionService} from '../../services/CollectionService';
 import {getTweetData} from '../utils/ViewData';
 
 function useCollectionTweetListData(props) {
-  const {collectionId} = props;
+  const {collectionId, tweetIds} = props;
   const [isLoading, setIsLoading] = useState(false);
   const listDataRef = useRef([]);
   const _collectionService = collectionService();
   const navigation = useNavigation();
 
+  const lookupTweets = useCallback(
+    _tweetIds => {
+      var ids = _tweetIds.join(',');
+      TwitterAPI.multipleTweetLookup(ids)
+        .then(apiResponse => {
+          var array = [];
+          const {data} = apiResponse;
+          const newData = data?.data;
+          const errors = data?.errors;
+          if (errors) {
+            _collectionService.handleTweetError(collectionId, errors);
+          }
+          if (newData && newData.length > 0) {
+            newData.forEach(tweet => {
+              const tweetData = getTweetData(tweet, apiResponse);
+              tweetData.collectionId = collectionId;
+              array.push(tweetData);
+            });
+          }
+
+          listDataRef.current = array;
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [_collectionService, collectionId],
+  );
+
   const fetchData = useCallback(() => {
     setIsLoading(true);
-    _collectionService
-      .getCollectionDetails(collectionId)
-      .then(collectionData => {
-        listDataRef.current = [];
-        var ids = collectionData?.tweetIds.join(',');
-        TwitterAPI.multipleTweetLookup(ids)
-          .then(apiResponse => {
-            var array = [];
-            const {data} = apiResponse;
-            const newData = data?.data;
-            const errors = data?.errors;
-            if (errors) {
-              _collectionService.handleTweetError(collectionId, errors);
-            }
-            if (newData && newData.length > 0) {
-              newData.forEach(tweet => {
-                const tweetData = getTweetData(tweet, apiResponse);
-                tweetData.collectionId = collectionId;
-                array.push(tweetData);
-              });
-            }
-
-            listDataRef.current = array;
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
-  }, [_collectionService, collectionId]);
+    if (isArray(tweetIds) && tweetIds.length > 0) {
+      lookupTweets(tweetIds);
+    } else {
+      _collectionService
+        .getCollectionDetails(collectionId)
+        .then(collectionData => {
+          listDataRef.current = [];
+          lookupTweets(collectionData?.tweetIds);
+        })
+        .catch(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [_collectionService, collectionId, lookupTweets, tweetIds]);
 
   useEffect(() => {
     fetchData();

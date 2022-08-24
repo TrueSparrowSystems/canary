@@ -16,7 +16,7 @@ import {EditIcon, ShareAppIcon} from '../../assets/common';
 
 function ListTweetsScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListTweetsScreen');
-  const {listId, listName, listUserNames} = props?.route?.params;
+  const {listId, listName, listUserNames, isImport} = props?.route?.params;
   const _listService = listService();
   const [isLoading, setIsLoading] = useState(true);
   const listDataSource = useRef(null);
@@ -37,13 +37,18 @@ function ListTweetsScreen(props) {
 
   const fetchData = useCallback(() => {
     setIsLoading(true);
-    _listService.getListDetails(listId).then(listData => {
-      const userNameArray = listData.userNames;
-      newUserNameArray.current = userNameArray;
-      initialiseDataSource(userNameArray);
+    if (isImport) {
+      initialiseDataSource(listUserNames);
       setIsLoading(false);
-    });
-  }, [_listService, initialiseDataSource, listId]);
+    } else {
+      _listService.getListDetails(listId).then(listData => {
+        const userNameArray = listData.userNames;
+        newUserNameArray.current = userNameArray;
+        initialiseDataSource(userNameArray);
+        setIsLoading(false);
+      });
+    }
+  }, [_listService, initialiseDataSource, isImport, listId, listUserNames]);
 
   useEffect(() => {
     fetchData();
@@ -55,6 +60,7 @@ function ListTweetsScreen(props) {
   }, [fetchData]);
 
   const ListEmptyComponent = useMemo(() => {
+    // TODO: handle for empty shared list
     return (
       <EmptyScreenComponent
         descriptionText={'It’s pretty empty in here 🥲'}
@@ -87,28 +93,43 @@ function ListTweetsScreen(props) {
 
   return (
     <View style={localStyle.container}>
-      <Header
-        style={localStyle.header}
-        enableBackButton={true}
-        text={listName}
-        textStyle={localStyle.headerText}
-        enableRightButton={true}
-        rightButtonImage={ShareAppIcon}
-        rightButtonImageStyle={localStyle.shareIconStyle}
-        onRightButtonClick={onShareListPress}
-        enableSecondaryRightButton={true}
-        secondaryRightButtonImage={
-          currentUserNameArray.current.length !== 0 ? EditIcon : null
-        }
-        secondaryRightButtonImageStyle={localStyle.editIconStyle}
-        onSecondaryRightButtonClick={() => {
-          navigation.navigate(ScreenName.EditListUsersScreen, {
-            listId,
-            listUserNames,
-            onDonePress,
-          });
-        }}
-      />
+      {isImport ? (
+        <Header
+          style={localStyle.header}
+          enableBackButton={true}
+          text={listName}
+          textStyle={localStyle.headerText}
+          enableRightButton={true}
+          rightButtonText={'Import'}
+          rightButtonTextStyle={localStyle.rightButtonTextStyle}
+          onRightButtonClick={() => {
+            console.log('---- clicked on import list');
+          }}
+        />
+      ) : (
+        <Header
+          style={localStyle.header}
+          enableBackButton={true}
+          text={listName}
+          textStyle={localStyle.headerText}
+          enableRightButton={true}
+          rightButtonImage={ShareAppIcon}
+          rightButtonImageStyle={localStyle.shareIconStyle}
+          onRightButtonClick={onShareListPress}
+          enableSecondaryRightButton={true}
+          secondaryRightButtonImage={
+            currentUserNameArray.current.length !== 0 ? EditIcon : null
+          }
+          secondaryRightButtonImageStyle={localStyle.editIconStyle}
+          onSecondaryRightButtonClick={() => {
+            navigation.navigate(ScreenName.EditListUsersScreen, {
+              listId,
+              listUserNames,
+              onDonePress,
+            });
+          }}
+        />
+      )}
       {isLoading ? (
         <ActivityIndicator animating={isLoading} color={colors.GoldenTainoi} />
       ) : null}
@@ -172,6 +193,12 @@ const styles = {
     width: '100%',
     height: layoutPtToPx(40),
     borderRadius: layoutPtToPx(25),
+  },
+  rightButtonTextStyle: {
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(20),
+    color: colors.GoldenTainoi,
   },
 };
 export default React.memo(ListTweetsScreen);

@@ -7,16 +7,22 @@ import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 function useAddListModalData() {
   const [isVisible, setIsVisible] = useState(false);
   const listNameRef = useRef('');
-  const importListTextRef = useRef('');
   const [modalData, setModalData] = useState(null);
   const [charCount, setCharCount] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+  const _listService = listService();
 
   useEffect(() => {
     const onShowModal = payload => {
       setModalData(payload);
+      const {id, name} = payload;
+      if (id && name) {
+        listNameRef.current = name;
+        setCharCount(name.length);
+      } else {
+        setCharCount(0);
+      }
       setIsVisible(true);
-      setCharCount(0);
       setErrorMessage('');
     };
 
@@ -42,10 +48,6 @@ function useAddListModalData() {
     setCharCount(newValue?.length || 0);
   }, []);
 
-  const onImportListTextChange = useCallback(newValue => {
-    importListTextRef.current = newValue;
-  }, []);
-
   const onCreateListPress = useCallback(() => {
     if (listNameRef.current.trim().length === 0) {
       Toast.show({
@@ -55,7 +57,6 @@ function useAddListModalData() {
       });
       return;
     }
-    const _listService = listService();
     _listService
       .addList(listNameRef.current)
       .then(({listId}) => {
@@ -91,64 +92,50 @@ function useAddListModalData() {
       .finally(() => {
         _listService.getAllLists();
       });
-  }, [closeModal, modalData]);
+  }, [_listService, closeModal, modalData]);
 
-  const onImportListPress = useCallback(() => {
-    if (importListTextRef.current.trim().length === 0) {
+  const onEditListPress = useCallback(() => {
+    if (listNameRef.current.trim().length === 0) {
       Toast.show({
         type: ToastType.Error,
-        text1: 'Import URL cannot be empty.',
+        text1: 'List name cannot be empty.',
         position: ToastPosition.Top,
       });
       return;
     }
-    const _listService = listService();
+    if (modalData?.name === listNameRef.current) {
+      closeModal?.();
+      return;
+    }
     _listService
-      .importList(importListTextRef.current)
-      .then(({listId}) => {
+      .editList({
+        id: modalData?.id,
+        name: listNameRef.current,
+      })
+      .then(() => {
+        LocalEvent.emit(EventTypes.UpdateList);
         Toast.show({
           type: ToastType.Success,
-          text1: 'List imported successfully.',
+          text1: 'List updated successfully',
           position: ToastPosition.Top,
         });
-        if (modalData?.userName) {
-          _listService
-            .addUserToList(listId, modalData.userName)
-            .then(() => {
-              LocalEvent.emit(EventTypes.UpdateList);
-              modalData?.onListAddSuccess(importListTextRef.current, listId);
-              closeModal();
-            })
-            .catch(() => {});
-        } else {
-          modalData?.onListAddSuccess();
-          closeModal();
-        }
+        closeModal();
       })
       .catch(err => {
-        importListTextRef.current = '';
-
-        Toast.show({
-          type: ToastType.Error,
-          text1: 'List could not be imported. Please try again',
-          position: ToastPosition.Top,
-        });
         setErrorMessage(err);
-      })
-      .finally(() => {
-        _listService.getAllLists();
       });
-  }, [closeModal, modalData]);
+  }, [_listService, closeModal, modalData?.id, modalData?.name]);
 
   return {
+    bIsEditMode: !!modalData?.id,
+    sDefaultValue: modalData?.name,
     bIsVisible: isVisible,
     nCharacterCount: charCount,
     sErrorMessage: errorMessage,
     fnOnBackdropPress: onBackdropPress,
     fnOnListNameChange: onListNameChange,
-    fnOnImportListTextChange: onImportListTextChange,
     fnOnCreateListPress: onCreateListPress,
-    fnOnImportListPress: onImportListPress,
+    fnOnEditListPress: onEditListPress,
   };
 }
 

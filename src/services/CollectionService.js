@@ -8,7 +8,7 @@ import {find} from 'lodash';
 import {isEmpty} from 'lodash-es';
 import {compareFunction} from '../utils/Strings';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
-import {getExportURL, getImportData} from './ShareHelper';
+import {getExportURL} from './ShareHelper';
 import {Constants} from '../constants/Constants';
 
 const COLLECTION_TWEET_LIMIT = 25;
@@ -74,6 +74,25 @@ class CollectionService {
             });
         }
       });
+    });
+  }
+
+  async editCollection(collection) {
+    return new Promise((resolve, reject) => {
+      const {id, name} = collection;
+      if (find(this.collections, {name: name.trim()})) {
+        return reject('Archive name already exists.');
+      }
+      const _collection = this.collections[id];
+      _collection.name = name;
+      this.collections[id] = _collection;
+      Store.set(StoreKeys.CollectionsList, this.collections)
+        .then(() => {
+          return resolve();
+        })
+        .catch(() => {
+          return reject('Could not update archive. Please try again!');
+        });
     });
   }
 

@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useCallback} from 'react';
 import {
   Text,
   View,
@@ -16,6 +16,7 @@ import {ListIcon, SwipeIcon} from '../../assets/common';
 import * as Animatable from 'react-native-animatable';
 import AppleStyleSwipeableRow from '../AppleStyleSwipeableRow';
 import useListCardData from './useListCardData';
+import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
 function ListCard(props) {
   const {
@@ -81,6 +82,22 @@ function ListCard(props) {
     localStyle.listImageStyle,
   ]);
 
+  const onRemovePress = useCallback(() => {
+    viewRef.current.setNativeProps({
+      useNativeDriver: true,
+    });
+    viewRef.current.animate('bounceOutLeft').then(() => {
+      fnOnListRemove();
+    });
+  }, [fnOnListRemove, viewRef]);
+
+  const onEditPress = useCallback(() => {
+    LocalEvent.emit(EventTypes.ShowAddListModal, {
+      name: listName,
+      id: listId,
+    });
+  }, [listId, listName]);
+
   return (
     <Animatable.View animation={'fadeIn'} ref={viewRef}>
       <AppleStyleSwipeableRow
@@ -91,14 +108,12 @@ function ListCard(props) {
           {
             actionName: 'Remove',
             color: colors.BitterSweet,
-            onPress: () => {
-              viewRef.current.setNativeProps({
-                useNativeDriver: true,
-              });
-              viewRef.current.animate('bounceOutLeft').then(() => {
-                fnOnListRemove();
-              });
-            },
+            onPress: onRemovePress,
+          },
+          {
+            actionName: 'Edit',
+            color: colors.LightGrey,
+            onPress: onEditPress,
           },
         ]}
         shouldRenderRightAction={true}>

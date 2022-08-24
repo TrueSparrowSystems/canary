@@ -7,16 +7,22 @@ import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 function useAddCollectionModalData() {
   const [isVisible, setIsVisible] = useState(false);
   const collectionNameRef = useRef('');
-  const importCollectionTextRef = useRef('');
   const [modalData, setModalData] = useState(null);
   const [charCount, setCharCount] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
 
+  const _collectionService = collectionService();
+
   useEffect(() => {
     const onShowModal = payload => {
       setModalData(payload);
+      if (payload?.name && payload?.id) {
+        collectionNameRef.current = payload.name;
+        setCharCount(payload?.name?.length);
+      } else {
+        setCharCount(0);
+      }
       setIsVisible(true);
-      setCharCount(0);
       setErrorMessage('');
     };
 
@@ -42,10 +48,6 @@ function useAddCollectionModalData() {
     setCharCount(newValue?.length || 0);
   }, []);
 
-  const onImportCollectionTextChange = useCallback(newValue => {
-    importCollectionTextRef.current = newValue;
-  }, []);
-
   const onCreateCollectionPress = useCallback(() => {
     if (collectionNameRef.current.trim().length === 0) {
       Toast.show({
@@ -55,7 +57,7 @@ function useAddCollectionModalData() {
       });
       return;
     }
-    const _collectionService = collectionService();
+
     _collectionService
       .addCollection(collectionNameRef.current)
       .then(({collectionId}) => {
@@ -93,66 +95,51 @@ function useAddCollectionModalData() {
       .finally(() => {
         _collectionService.getAllCollections();
       });
-  }, [closeModal, modalData]);
+  }, [_collectionService, closeModal, modalData]);
 
-  const onImportCollectionPress = useCallback(() => {
-    if (importCollectionTextRef.current.trim().length === 0) {
+  const onUpdateCollectionPress = useCallback(() => {
+    if (collectionNameRef.current.trim().length === 0) {
       Toast.show({
         type: ToastType.Error,
-        text1: 'Import URL cannot be empty.',
+        text1: 'Archive name cannot be empty.',
         position: ToastPosition.Top,
       });
       return;
     }
-    const _collectionService = collectionService();
+    if (modalData?.name === collectionNameRef.current) {
+      closeModal?.();
+      return;
+    }
+
     _collectionService
-      .importCollection(importCollectionTextRef.current)
-      .then(({collectionId}) => {
+      .editCollection({
+        id: modalData?.id,
+        name: collectionNameRef.current,
+      })
+      .then(() => {
+        LocalEvent.emit(EventTypes.UpdateCollection);
         Toast.show({
           type: ToastType.Success,
-          text1: 'Archive imported successfully.',
+          text1: 'Archive updated successfully',
           position: ToastPosition.Top,
         });
-        if (modalData?.tweetId) {
-          _collectionService
-            .addTweetToCollection(collectionId, modalData.tweetId)
-            .then(() => {
-              modalData?.onAddToCollectionSuccess?.(
-                importCollectionTextRef.current,
-                collectionId,
-              );
-              closeModal();
-            })
-            .catch(() => {});
-        } else {
-          modalData?.onCollectionAddSuccess();
-          closeModal();
-        }
+        closeModal();
       })
       .catch(err => {
-        importCollectionTextRef.current = '';
-
-        Toast.show({
-          type: ToastType.Error,
-          text1: 'Archive could not be imported. Please try again',
-          position: ToastPosition.Top,
-        });
         setErrorMessage(err);
-      })
-      .finally(() => {
-        _collectionService.getAllCollections();
       });
-  }, [closeModal, modalData]);
+  }, [_collectionService, closeModal, modalData?.id, modalData?.name]);
 
   return {
+    isEditMode: !!modalData?.id,
+    sDefaultValue: collectionNameRef.current,
     bIsVisible: isVisible,
     nCharacterCount: charCount,
     sErrorMessage: errorMessage,
     fnOnBackdropPress: onBackdropPress,
     fnOnCollectionNameChange: onCollectionNameChange,
-    fnOnImportCollectionTextChange: onImportCollectionTextChange,
     fnOnCreateCollectionPress: onCreateCollectionPress,
-    fnOnImportCollectionPress: onImportCollectionPress,
+    fnOnUpdateCollectionPress: onUpdateCollectionPress,
   };
 }
 

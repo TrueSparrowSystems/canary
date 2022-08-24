@@ -80,6 +80,25 @@ class ListService {
     });
   }
 
+  async editList(list) {
+    return new Promise((resolve, reject) => {
+      const {id, name} = list;
+      if (find(this.lists, {name: name.trim()})) {
+        return reject('List name already exists.');
+      }
+      const _list = this.lists[id];
+      _list.name = name;
+      this.lists[id] = _list;
+      Store.set(StoreKeys.Lists, this.lists)
+        .then(() => {
+          return resolve();
+        })
+        .catch(() => {
+          return reject('Could not update list. Please try again!');
+        });
+    });
+  }
+
   async importList(list) {
     return new Promise((resolve, reject) => {
       const newListName = list.name + ' ★';

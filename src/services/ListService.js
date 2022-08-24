@@ -7,6 +7,7 @@ import {CacheKey} from './Cache/CacheStoreConstants';
 import {find, isEmpty} from 'lodash';
 import {compareFunction} from '../utils/Strings';
 import {getExportURL, getImportData} from './ShareHelper';
+import {Constants} from '../constants/Constants';
 
 const LIST_LIMIT = 30;
 
@@ -79,15 +80,44 @@ class ListService {
     });
   }
 
-  async importList(importUrl) {
-    const list = getImportData(importUrl);
+  async editList(list) {
     return new Promise((resolve, reject) => {
-      this.addList(list.name, list.userNames)
+      const {id, name} = list;
+      if (find(this.lists, {name: name.trim()})) {
+        return reject('List name already exists.');
+      }
+      const _list = this.lists[id];
+      _list.name = name;
+      this.lists[id] = _list;
+      Store.set(StoreKeys.Lists, this.lists)
+        .then(() => {
+          return resolve();
+        })
+        .catch(() => {
+          return reject('Could not update list. Please try again!');
+        });
+    });
+  }
+
+  async importList(list) {
+    return new Promise((resolve, reject) => {
+      const newListName = list.name + ' ★';
+      this.addList(newListName, list.userNames)
         .then(res => {
           return resolve(res);
         })
         .catch(err => {
-          return reject(err);
+          // TODO: move error to a common place
+          if (err === 'List name already exists.') {
+            this.importList({
+              name: newListName,
+              userNames: list.userNames,
+            }).then(res => {
+              return resolve(res);
+            });
+          } else {
+            return reject(err);
+          }
         });
     });
   }
@@ -108,16 +138,44 @@ class ListService {
     });
   }
 
-  async exportList(listId) {
+  async getMultipleListDetails(listIds = []) {
     return new Promise((resolve, reject) => {
-      this.getListDetails(listId)
-        .then(list => {
-          const exportList = {name: list.name, userNames: list.userNames};
-          const exportUrl = getExportURL(exportList);
-          return resolve(exportUrl);
+      let listDataArray = [];
+      listIds.forEach(listId => {
+        this.getListDetails(listId)
+          .then(list => {
+            listDataArray.push({name: list.name, userNames: list.userNames});
+            if (listDataArray.length === listIds.length) {
+              return resolve(listDataArray);
+            }
+          })
+          .catch(() => {
+            return reject();
+          });
+      });
+    });
+  }
+
+  async exportList(listIds = []) {
+    return new Promise((resolve, reject) => {
+      this.getMultipleListDetails(listIds)
+        .then(listDataArray => {
+          const exportData = {
+            pn: Constants.PageName.List,
+            data: listDataArray,
+          };
+          getExportURL(exportData)
+            .then(url => {
+              return resolve(url);
+            })
+            .catch(() => {
+              return reject();
+              // TODO: do nothing
+            });
         })
-        .catch(err => {
-          return reject(err);
+        .catch(() => {
+          // TODO: do nothing
+          return reject();
         });
     });
   }

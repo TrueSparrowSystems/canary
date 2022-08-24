@@ -14,14 +14,15 @@ const TEXT_INPUT_LIMIT = 25;
 function AddCollectionModal() {
   const localStyle = useStyleProcessor(styles, 'AddCollectionModal');
   const {
+    isEditMode,
     bIsVisible,
     nCharacterCount,
+    sDefaultValue,
     sErrorMessage,
     fnOnBackdropPress,
     fnOnCollectionNameChange,
-    fnOnImportCollectionTextChange,
     fnOnCreateCollectionPress,
-    fnOnImportCollectionPress,
+    fnOnUpdateCollectionPress,
   } = useAddCollectionModalData();
 
   const getBackdrop = useMemo(() => {
@@ -41,8 +42,13 @@ function AddCollectionModal() {
       <View style={[localStyle.modalStyle, {top: screenHeight / 3}]}>
         <View style={localStyle.container}>
           <View style={localStyle.view}>
-            <Text style={localStyle.enterNameStyle}>New Archive</Text>
+            <View style={localStyle.flexRow}>
+              <Text style={localStyle.enterNameStyle}>
+                {isEditMode ? 'Update Archive' : 'New Archive'}
+              </Text>
+            </View>
             <TextInput
+              defaultValue={sDefaultValue}
               autoFocus={true}
               style={localStyle.inputStyle}
               editable={true}
@@ -60,34 +66,27 @@ function AddCollectionModal() {
             </View>
             <Text style={localStyle.errorText}>{sErrorMessage}</Text>
 
-            <RoundedButton
-              style={localStyle.createButton}
-              text={'Create'}
-              textStyle={localStyle.createButtonText}
-              leftImage={AddIcon}
-              disabled={nCharacterCount === 0}
-              leftImageStyle={localStyle.addIconStyle}
-              onPress={fnOnCreateCollectionPress}
-              underlayColor={colors.GoldenTainoi80}
-            />
-            <TextInput
-              autoFocus={true}
-              style={localStyle.inputStyle}
-              editable={true}
-              onChangeText={fnOnImportCollectionTextChange}
-              placeholder={'Import URL'}
-              placeholderTextColor={getColorWithOpacity(colors.BlackPearl, 0.5)}
-              onSubmitEditing={fnOnImportCollectionPress}
-            />
-            <Text style={localStyle.errorText}>{sErrorMessage}</Text>
-
-            <RoundedButton
-              style={localStyle.createButton}
-              text={'Import'}
-              textStyle={localStyle.createButtonText}
-              onPress={fnOnImportCollectionPress}
-              underlayColor={colors.GoldenTainoi80}
-            />
+            {isEditMode ? (
+              <RoundedButton
+                style={localStyle.createButton}
+                text={'Update'}
+                textStyle={localStyle.createButtonText}
+                disabled={nCharacterCount === 0}
+                onPress={fnOnUpdateCollectionPress}
+                underlayColor={colors.GoldenTainoi80}
+              />
+            ) : (
+              <RoundedButton
+                style={localStyle.createButton}
+                text={'Create'}
+                textStyle={localStyle.createButtonText}
+                leftImage={AddIcon}
+                disabled={nCharacterCount === 0}
+                leftImageStyle={localStyle.addIconStyle}
+                onPress={fnOnCreateCollectionPress}
+                underlayColor={colors.GoldenTainoi80}
+              />
+            )}
           </View>
         </View>
       </View>
@@ -98,7 +97,7 @@ function AddCollectionModal() {
 const styles = {
   container: {
     position: 'absolute',
-    height: layoutPtToPx(350),
+    height: layoutPtToPx(200),
     width: '100%',
     borderRadius: layoutPtToPx(14),
     alignItems: 'center',
@@ -143,7 +142,7 @@ const styles = {
   },
   view: {
     width: '100%',
-    height: layoutPtToPx(350),
+    height: layoutPtToPx(200),
     padding: layoutPtToPx(20),
     alignItems: 'center',
     justifyContent: 'center',
@@ -176,7 +175,7 @@ const styles = {
   charCounterContainer: {
     position: 'absolute',
     right: 25,
-    bottom: '82%',
+    bottom: '68%',
   },
   charCounterText: {
     color: getColorWithOpacity(colors.BlackPearl, 0.4),
@@ -187,6 +186,7 @@ const styles = {
     color: colors.BitterSweet,
     fontSize: fontPtToPx(12),
   },
+  flexRow: {flexDirection: 'row'},
 };
 
 export default React.memo(AddCollectionModal);

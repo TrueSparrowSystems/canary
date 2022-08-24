@@ -45,6 +45,7 @@ function ListScreen(props) {
   useTabListener(screenName, scrollToTop);
 
   const fetchData = useCallback(() => {
+    setSwipeable(false);
     setIsLoading(true);
     const _listService = listService();
     _listService.getAllLists().then(list => {

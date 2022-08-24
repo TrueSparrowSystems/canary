@@ -9,6 +9,8 @@ import {CacheKey} from '../services/Cache/CacheStoreConstants';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
 import SplashScreen from 'react-native-splash-screen';
 import LandingScreen from '../screens/LandingScreen';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {handleDynamicUrl} from '../services/DynamicLinkingHelper';
 
 const AppStack = createSharedElementStackNavigator();
 const OnBoardingStack = createSharedElementStackNavigator();
@@ -16,7 +18,19 @@ function RootNavigation() {
   const [isAppLoaded, setAppLoaded] = useState(false);
   const [currentStack, setCurrentStack] = useState();
 
+  const handleDynamicLinking = () => {
+    dynamicLinks()
+      .getInitialLink()
+      .then(url => {
+        if (url) {
+          // Handle dynamic linking
+          handleDynamicUrl(url.url);
+        }
+      });
+  };
+
   function switchToHomeStack() {
+    handleDynamicLinking();
     setCurrentStack(HomeAppStack());
   }
 
@@ -38,11 +52,12 @@ function RootNavigation() {
     if (isAppLoaded) {
       const arePrefsSet = Cache.getValue(CacheKey.AreInitialPreferencesSet);
       if (arePrefsSet) {
-        return setCurrentStack(HomeAppStack());
+        return switchToHomeStack();
       } else {
         return setCurrentStack(LaunchStack());
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAppLoaded]);
 
   return currentStack || null;

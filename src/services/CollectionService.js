@@ -8,7 +8,8 @@ import {find} from 'lodash';
 import {isEmpty} from 'lodash-es';
 import {compareFunction} from '../utils/Strings';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
-import {getExportURL, getImportData} from './ShareHelper';
+import {getExportURL} from './ShareHelper';
+import {Constants} from '../constants/Constants';
 
 const COLLECTION_TWEET_LIMIT = 25;
 
@@ -75,16 +76,90 @@ class CollectionService {
       });
     });
   }
-  async importCollection(importUrl) {
-    const collection = getImportData(importUrl);
 
+  async editCollection(collection) {
     return new Promise((resolve, reject) => {
-      this.addCollection(collection.name, collection.tweetIds)
+      const {id, name} = collection;
+      if (find(this.collections, {name: name.trim()})) {
+        return reject('Archive name already exists.');
+      }
+      const _collection = this.collections[id];
+      _collection.name = name;
+      this.collections[id] = _collection;
+      Store.set(StoreKeys.CollectionsList, this.collections)
+        .then(() => {
+          return resolve();
+        })
+        .catch(() => {
+          return reject('Could not update archive. Please try again!');
+        });
+    });
+  }
+
+  async importCollection(collection) {
+    return new Promise((resolve, reject) => {
+      const newCollectionName = collection.name + ' ★';
+      this.addCollection(newCollectionName, collection.tweetIds)
         .then(res => {
           return resolve(res);
         })
         .catch(err => {
-          return reject(err);
+          // TODO: move error to a common place
+          if (err === 'Archive name already exists.') {
+            this.importCollection({
+              name: newCollectionName,
+              tweetIds: collection.tweetIds,
+            }).then(res => {
+              return resolve(res);
+            });
+          } else {
+            return reject(err);
+          }
+        });
+    });
+  }
+
+  async getMultipleCollectionDetails(collectionIds = []) {
+    return new Promise((resolve, reject) => {
+      let collectionDataArray = [];
+      collectionIds.forEach(collectionId => {
+        this.getCollectionDetails(collectionId)
+          .then(collection => {
+            collectionDataArray.push({
+              name: collection?.name,
+              tweetIds: collection?.tweetIds,
+            });
+            if (collectionDataArray.length === collectionIds.length) {
+              return resolve(collectionDataArray);
+            }
+          })
+          .catch(() => {
+            return reject();
+          });
+      });
+    });
+  }
+
+  async exportCollection(collectionIds = []) {
+    return new Promise((resolve, reject) => {
+      this.getMultipleCollectionDetails(collectionIds)
+        .then(collectionDataArray => {
+          const exportData = {
+            pn: Constants.PageName.Archive,
+            data: collectionDataArray,
+          };
+          getExportURL(exportData)
+            .then(url => {
+              return resolve(url);
+            })
+            .catch(() => {
+              return reject();
+              // TODO: do nothing
+            });
+        })
+        .catch(() => {
+          // TODO: do nothing
+          return reject();
         });
     });
   }
@@ -102,23 +177,6 @@ class CollectionService {
       } else {
         return resolve(this.collections[collectionId]);
       }
-    });
-  }
-
-  async exportCollection(collectionId) {
-    return new Promise((resolve, reject) => {
-      this.getCollectionDetails(collectionId)
-        .then(collection => {
-          const exportCollection = {
-            name: collection.name,
-            tweetIds: collection.tweetIds,
-          };
-
-          return resolve(getExportURL(exportCollection));
-        })
-        .catch(err => {
-          return reject(err);
-        });
     });
   }
 

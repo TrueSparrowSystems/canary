@@ -40,6 +40,7 @@ function CollectionScreen(props) {
   useTabListener(screenName, scrollToTop);
 
   const fetchData = useCallback(() => {
+    setIsDeleteEnabled(false);
     setIsLoading(true);
     const _collectionService = collectionService();
     _collectionService.getAllCollections().then(jsonObj => {
@@ -228,7 +229,7 @@ const styles = {
   },
   contentContainerStyle: {
     marginTop: layoutPtToPx(10),
-    paddingTop: layoutPtToPx(5),
+    paddingTop: layoutPtToPx(10),
     overflow: 'visible',
   },
   headerImageStyle: {

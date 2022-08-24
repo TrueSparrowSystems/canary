@@ -2,6 +2,7 @@ export const Constants = {
   PlgWorksLink: 'https://www.plgworks.com',
   GoogleDriveLink:
     'https://drive.google.com/drive/folders/1OCA8czAIVEaGfU-F6EUL8fMwdnRerKdP?usp=sharing',
+  DeepLinkUrl: 'https://plgworkscanary.page.link',
   ApiModes: {
     //Verified with relevency with context
     VerifiedRelevent: 'verified_relevent',
@@ -19,5 +20,9 @@ export const Constants = {
   SortOrder: {
     Relevancy: 'relevancy',
     Recency: 'recency',
+  },
+  PageName: {
+    Archive: 'archive',
+    List: 'list',
   },
 };

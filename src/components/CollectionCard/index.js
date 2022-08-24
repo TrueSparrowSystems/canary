@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useMemo, useRef, useEffect} from 'react';
 import {Text, TouchableWithoutFeedback, TouchableHighlight} from 'react-native';
 import {View} from 'react-native-animatable';
-import {BinIcon} from '../../assets/common';
+import {BinIcon, EditIcon} from '../../assets/common';
 import ScreenName from '../../constants/ScreenName';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import colors from '../../constants/colors';
@@ -34,6 +34,13 @@ function CollectionCard(props) {
       collectionName,
     });
   }, [collectionId, collectionName, navigation]);
+
+  const onEditCollectionPress = useCallback(() => {
+    LocalEvent.emit(EventTypes.ShowAddCollectionModal, {
+      name: collectionName,
+      id: collectionId,
+    });
+  }, [collectionId, collectionName]);
 
   const startAnimation = useCallback(() => {
     viewRef.current.setNativeProps({
@@ -111,12 +118,20 @@ function CollectionCard(props) {
         {collectionId ? (
           <View style={colorSchemeStyle.cardStyle}>
             {enableDelete ? (
-              <TouchableHighlight
-                underlayColor={colors.Transparent}
-                style={localStyle.binContainer}
-                onPress={onCollectionRemove}>
-                <Image source={BinIcon} style={localStyle.binIconStyle} />
-              </TouchableHighlight>
+              <View style={localStyle.optionsView}>
+                <TouchableHighlight
+                  underlayColor={colors.Transparent}
+                  style={localStyle.binContainer}
+                  onPress={onCollectionRemove}>
+                  <Image source={BinIcon} style={localStyle.binIconStyle} />
+                </TouchableHighlight>
+                <TouchableHighlight
+                  underlayColor={colors.Transparent}
+                  style={localStyle.binContainer}
+                  onPress={onEditCollectionPress}>
+                  <Image source={EditIcon} style={localStyle.binIconStyle} />
+                </TouchableHighlight>
+              </View>
             ) : null}
             <Text numberOfLines={3} style={colorSchemeStyle.textStyle}>
               {collectionName}
@@ -143,10 +158,12 @@ const styles = {
     flex: 1,
     aspectRatio: 1,
   },
-  binContainer: {
+  optionsView: {
     position: 'absolute',
     right: layoutPtToPx(-5),
     top: layoutPtToPx(-5),
+  },
+  binContainer: {
     height: layoutPtToPx(40),
     width: layoutPtToPx(40),
     zIndex: 2,

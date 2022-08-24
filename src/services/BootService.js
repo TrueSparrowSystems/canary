@@ -1,3 +1,4 @@
+import {Linking, Platform} from 'react-native';
 import {setCountriesWoeidsInCache} from '../utils/CountryWoeidUtils';
 import AsyncStorage from './AsyncStorage';
 import {StoreKeys} from './AsyncStorage/StoreConstants';
@@ -11,6 +12,7 @@ class BootService {
   initialize() {
     return new Promise(resolve => {
       networkConnection();
+
       AsyncStorage.getItem(StoreKeys.AreInitialPreferencesSet).then(isSet => {
         setCountriesWoeidsInCache();
         Cache.setValue(CacheKey.AreInitialPreferencesSet, isSet);

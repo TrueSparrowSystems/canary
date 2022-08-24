@@ -198,6 +198,7 @@ const Navigation = props => {
                 ? tabbarStyle
                 : {display: 'none'},
               headerShown: false,
+              lazy: false,
             };
           }}
           name={ScreenName.TimelineTab}
@@ -225,6 +226,7 @@ const Navigation = props => {
                 ? tabbarStyle
                 : {display: 'none'},
               headerShown: false,
+              lazy: false,
             };
           }}
           name={ScreenName.DiscoverTab}
@@ -252,6 +254,7 @@ const Navigation = props => {
                 ? tabbarStyle
                 : {display: 'none'},
               headerShown: false,
+              lazy: false,
             };
           }}
           name={ScreenName.ListTab}
@@ -279,6 +282,7 @@ const Navigation = props => {
                 ? tabbarStyle
                 : {display: 'none'},
               headerShown: false,
+              lazy: false,
             };
           }}
           name={ScreenName.CollectionTab}

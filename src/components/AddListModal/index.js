@@ -15,14 +15,15 @@ function AddListModal() {
   const localStyle = useStyleProcessor(styles, 'AddListModal');
 
   const {
+    sDefaultValue,
+    bIsEditMode,
     bIsVisible,
     nCharacterCount,
     sErrorMessage,
     fnOnBackdropPress,
     fnOnListNameChange,
-    fnOnImportListTextChange,
     fnOnCreateListPress,
-    fnOnImportListPress,
+    fnOnEditListPress,
   } = useAddListModalData();
 
   const getBackdrop = useMemo(() => {
@@ -42,8 +43,11 @@ function AddListModal() {
       <View style={[localStyle.modalStyle, {top: screenHeight / 3}]}>
         <View style={localStyle.container}>
           <View style={localStyle.view}>
-            <Text style={localStyle.enterNameStyle}>New List</Text>
+            <Text style={localStyle.enterNameStyle}>
+              {bIsEditMode ? 'Update list' : 'New List'}
+            </Text>
             <TextInput
+              defaultValue={sDefaultValue}
               style={localStyle.inputStyle}
               autoFocus={true}
               onChangeText={fnOnListNameChange}
@@ -59,34 +63,27 @@ function AddListModal() {
                 }>{`${nCharacterCount}/${TEXT_INPUT_LIMIT}`}</Text>
             </View>
             <Text style={localStyle.errorText}>{sErrorMessage}</Text>
-            <RoundedButton
-              style={localStyle.createButton}
-              text={'Create'}
-              textStyle={localStyle.createButtonText}
-              leftImage={AddIcon}
-              disabled={nCharacterCount === 0}
-              leftImageStyle={localStyle.addIconStyle}
-              onPress={fnOnCreateListPress}
-              underlayColor={colors.GoldenTainoi80}
-            />
-            <TextInput
-              style={localStyle.inputStyle}
-              autoFocus={true}
-              onChangeText={fnOnImportListTextChange}
-              placeholder={'Import URL'}
-              placeholderTextColor={getColorWithOpacity(colors.BlackPearl, 0.5)}
-              onSubmitEditing={fnOnImportListPress}
-            />
-            <Text style={localStyle.errorText}>{sErrorMessage}</Text>
-            <RoundedButton
-              style={localStyle.createButton}
-              text={'Import'}
-              textStyle={localStyle.createButtonText}
-              leftImage={AddIcon}
-              leftImageStyle={localStyle.addIconStyle}
-              onPress={fnOnImportListPress}
-              underlayColor={colors.GoldenTainoi80}
-            />
+            {bIsEditMode ? (
+              <RoundedButton
+                style={localStyle.createButton}
+                text={'Update'}
+                textStyle={localStyle.createButtonText}
+                disabled={nCharacterCount === 0}
+                onPress={fnOnEditListPress}
+                underlayColor={colors.GoldenTainoi80}
+              />
+            ) : (
+              <RoundedButton
+                style={localStyle.createButton}
+                text={'Create'}
+                textStyle={localStyle.createButtonText}
+                leftImage={AddIcon}
+                disabled={nCharacterCount === 0}
+                leftImageStyle={localStyle.addIconStyle}
+                onPress={fnOnCreateListPress}
+                underlayColor={colors.GoldenTainoi80}
+              />
+            )}
           </View>
         </View>
       </View>
@@ -97,7 +94,7 @@ function AddListModal() {
 const styles = {
   container: {
     position: 'absolute',
-    height: layoutPtToPx(350),
+    height: layoutPtToPx(200),
     width: '100%',
     borderRadius: layoutPtToPx(14),
     alignItems: 'center',
@@ -142,7 +139,7 @@ const styles = {
   },
   view: {
     width: '100%',
-    height: layoutPtToPx(350),
+    height: layoutPtToPx(200),
     padding: layoutPtToPx(20),
     alignItems: 'center',
     justifyContent: 'center',
@@ -175,7 +172,7 @@ const styles = {
   charCounterContainer: {
     position: 'absolute',
     right: 25,
-    bottom: '82%',
+    bottom: '68%',
   },
   charCounterText: {
     color: getColorWithOpacity(colors.BlackPearl, 0.4),

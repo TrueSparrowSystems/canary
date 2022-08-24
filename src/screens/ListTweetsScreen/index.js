@@ -13,10 +13,13 @@ import ScreenName from '../../constants/ScreenName';
 import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {EditIcon, ShareAppIcon} from '../../assets/common';
+import Toast from 'react-native-toast-message';
+import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 
 function ListTweetsScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListTweetsScreen');
-  const {listId, listName, listUserNames} = props?.route?.params;
+  const {listId, listName, listUserNames, isImport} = props?.route?.params;
+  const [isImportState, setIsImportState] = useState(isImport);
   const _listService = listService();
   const [isLoading, setIsLoading] = useState(true);
   const listDataSource = useRef(null);
@@ -37,13 +40,18 @@ function ListTweetsScreen(props) {
 
   const fetchData = useCallback(() => {
     setIsLoading(true);
-    _listService.getListDetails(listId).then(listData => {
-      const userNameArray = listData.userNames;
-      newUserNameArray.current = userNameArray;
-      initialiseDataSource(userNameArray);
+    if (isImport) {
+      initialiseDataSource(listUserNames);
       setIsLoading(false);
-    });
-  }, [_listService, initialiseDataSource, listId]);
+    } else {
+      _listService.getListDetails(listId).then(listData => {
+        const userNameArray = listData.userNames;
+        newUserNameArray.current = userNameArray;
+        initialiseDataSource(userNameArray);
+        setIsLoading(false);
+      });
+    }
+  }, [_listService, initialiseDataSource, isImport, listId, listUserNames]);
 
   useEffect(() => {
     fetchData();
@@ -55,6 +63,7 @@ function ListTweetsScreen(props) {
   }, [fetchData]);
 
   const ListEmptyComponent = useMemo(() => {
+    // TODO: handle for empty shared list
     return (
       <EmptyScreenComponent
         descriptionText={'It’s pretty empty in here 🥲'}
@@ -78,37 +87,90 @@ function ListTweetsScreen(props) {
 
   const onShareListPress = useCallback(() => {
     _listService
-      .exportList(listId)
+      .exportList([listId])
       .then(res => {
         Share.share({message: res});
       })
       .catch(() => {});
   }, [_listService, listId]);
 
+  const isImportingInProgressRef = useRef(false);
+
+  const onImportListPress = useCallback(() => {
+    if (isImportingInProgressRef.current) {
+      return;
+    }
+    isImportingInProgressRef.current = true;
+    LocalEvent.emit(EventTypes.CommonLoader.Show);
+    _listService
+      .importList({
+        name: listName,
+        userNames: listUserNames,
+      })
+      .then(() => {
+        setTimeout(() => {
+          setIsImportState(false);
+          LocalEvent.emit(EventTypes.CommonLoader.Hide);
+          LocalEvent.emit(EventTypes.UpdateList);
+          Toast.show({
+            type: ToastType.Success,
+            text1: 'List import successful.',
+            position: ToastPosition.Top,
+          });
+        }, 2000);
+      })
+      .catch(err => {
+        setTimeout(() => {
+          LocalEvent.emit(EventTypes.CommonLoader.Hide);
+          Toast.show({
+            type: ToastType.Error,
+            text1: err,
+            position: ToastPosition.Top,
+          });
+        }, 2000);
+      })
+      .finally(() => {
+        isImportingInProgressRef.current = false;
+      });
+  }, [_listService, listName, listUserNames]);
+
   return (
     <View style={localStyle.container}>
-      <Header
-        style={localStyle.header}
-        enableBackButton={true}
-        text={listName}
-        textStyle={localStyle.headerText}
-        enableRightButton={true}
-        rightButtonImage={ShareAppIcon}
-        rightButtonImageStyle={localStyle.shareIconStyle}
-        onRightButtonClick={onShareListPress}
-        enableSecondaryRightButton={true}
-        secondaryRightButtonImage={
-          currentUserNameArray.current.length !== 0 ? EditIcon : null
-        }
-        secondaryRightButtonImageStyle={localStyle.editIconStyle}
-        onSecondaryRightButtonClick={() => {
-          navigation.navigate(ScreenName.EditListUsersScreen, {
-            listId,
-            listUserNames,
-            onDonePress,
-          });
-        }}
-      />
+      {isImportState ? (
+        <Header
+          style={localStyle.header}
+          enableBackButton={true}
+          text={listName}
+          textStyle={localStyle.headerText}
+          enableRightButton={true}
+          rightButtonText={'Import'}
+          rightButtonTextStyle={localStyle.rightButtonTextStyle}
+          onRightButtonClick={onImportListPress}
+        />
+      ) : (
+        <Header
+          style={localStyle.header}
+          enableBackButton={true}
+          text={listName}
+          textStyle={localStyle.headerText}
+          enableRightButton={true}
+          rightButtonImage={ShareAppIcon}
+          rightButtonImageStyle={localStyle.shareIconStyle}
+          onRightButtonClick={onShareListPress}
+          enableSecondaryRightButton={true}
+          secondaryRightButtonImage={
+            currentUserNameArray.current.length !== 0 ? EditIcon : null
+          }
+          secondaryRightButtonImageStyle={localStyle.editIconStyle}
+          onSecondaryRightButtonClick={() => {
+            navigation.navigate(ScreenName.EditListUsersScreen, {
+              listId,
+              listUserNames,
+              onDonePress,
+            });
+          }}
+        />
+      )}
       {isLoading ? (
         <ActivityIndicator animating={isLoading} color={colors.GoldenTainoi} />
       ) : null}
@@ -172,6 +234,12 @@ const styles = {
     width: '100%',
     height: layoutPtToPx(40),
     borderRadius: layoutPtToPx(25),
+  },
+  rightButtonTextStyle: {
+    fontFamily: fonts.SoraSemiBold,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(20),
+    color: colors.GoldenTainoi,
   },
 };
 export default React.memo(ListTweetsScreen);

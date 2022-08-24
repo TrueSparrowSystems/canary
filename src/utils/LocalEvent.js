@@ -6,6 +6,10 @@ export const EventTypes = {
   BottomSheets: {
     CloseBottomSheet: 'event_types_bottom_sheets_close_bottom_sheet',
   },
+  CommonLoader: {
+    Show: 'show',
+    Hide: 'hide',
+  },
   Internet: {
     Connected: 'event_types_internet_connected',
     Disconnected: 'event_types_internet_disconnected',

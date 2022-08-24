@@ -80,15 +80,25 @@ class ListService {
     });
   }
 
-  async importList(importUrl) {
-    const list = getImportData(importUrl);
+  async importList(list) {
     return new Promise((resolve, reject) => {
-      this.addList(list.name, list.userNames)
+      const newListName = list.name + ' ★';
+      this.addList(newListName, list.userNames)
         .then(res => {
           return resolve(res);
         })
         .catch(err => {
-          return reject(err);
+          // TODO: move error to a common place
+          if (err === 'List name already exists.') {
+            this.importList({
+              name: newListName,
+              userNames: list.userNames,
+            }).then(res => {
+              return resolve(res);
+            });
+          } else {
+            return reject(err);
+          }
         });
     });
   }

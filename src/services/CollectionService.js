@@ -77,16 +77,25 @@ class CollectionService {
     });
   }
 
-  async importCollection(importUrl) {
-    const collection = getImportData(importUrl);
-
+  async importCollection(collection) {
     return new Promise((resolve, reject) => {
-      this.addCollection(collection.name, collection.tweetIds)
+      const newCollectionName = collection.name + ' ★';
+      this.addCollection(newCollectionName, collection.tweetIds)
         .then(res => {
           return resolve(res);
         })
         .catch(err => {
-          return reject(err);
+          // TODO: move error to a common place
+          if (err === 'Archive name already exists.') {
+            this.importCollection({
+              name: newCollectionName,
+              tweetIds: collection.tweetIds,
+            }).then(res => {
+              return resolve(res);
+            });
+          } else {
+            return reject(err);
+          }
         });
     });
   }

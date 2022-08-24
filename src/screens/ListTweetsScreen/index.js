@@ -13,10 +13,13 @@ import ScreenName from '../../constants/ScreenName';
 import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {EditIcon, ShareAppIcon} from '../../assets/common';
+import Toast from 'react-native-toast-message';
+import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 
 function ListTweetsScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListTweetsScreen');
   const {listId, listName, listUserNames, isImport} = props?.route?.params;
+  const [isImportState, setIsImportState] = useState(isImport);
   const _listService = listService();
   const [isLoading, setIsLoading] = useState(true);
   const listDataSource = useRef(null);
@@ -91,9 +94,49 @@ function ListTweetsScreen(props) {
       .catch(() => {});
   }, [_listService, listId]);
 
+  const isImportingInProgressRef = useRef(false);
+
+  const onImportListPress = useCallback(() => {
+    if (isImportingInProgressRef.current) {
+      return;
+    }
+    isImportingInProgressRef.current = true;
+    LocalEvent.emit(EventTypes.CommonLoader.Show);
+    _listService
+      .importList({
+        name: listName,
+        userNames: listUserNames,
+      })
+      .then(() => {
+        setTimeout(() => {
+          setIsImportState(false);
+          LocalEvent.emit(EventTypes.CommonLoader.Hide);
+          LocalEvent.emit(EventTypes.UpdateList);
+          Toast.show({
+            type: ToastType.Success,
+            text1: 'List import successful.',
+            position: ToastPosition.Top,
+          });
+        }, 2000);
+      })
+      .catch(err => {
+        setTimeout(() => {
+          LocalEvent.emit(EventTypes.CommonLoader.Hide);
+          Toast.show({
+            type: ToastType.Error,
+            text1: err,
+            position: ToastPosition.Top,
+          });
+        }, 2000);
+      })
+      .finally(() => {
+        isImportingInProgressRef.current = false;
+      });
+  }, [_listService, listName, listUserNames]);
+
   return (
     <View style={localStyle.container}>
-      {isImport ? (
+      {isImportState ? (
         <Header
           style={localStyle.header}
           enableBackButton={true}
@@ -102,9 +145,7 @@ function ListTweetsScreen(props) {
           enableRightButton={true}
           rightButtonText={'Import'}
           rightButtonTextStyle={localStyle.rightButtonTextStyle}
-          onRightButtonClick={() => {
-            console.log('---- clicked on import list');
-          }}
+          onRightButtonClick={onImportListPress}
         />
       ) : (
         <Header

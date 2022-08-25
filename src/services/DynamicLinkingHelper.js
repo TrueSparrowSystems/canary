@@ -25,17 +25,7 @@ export const handleDynamicUrl = url => {
       }
       break;
     case Constants.PageName.List:
-      if (data.length === 1) {
-        const navigationProps = {
-          listName: data[0]?.name,
-          isImport: true,
-          listUserNames: data[0]?.userNames,
-        };
-        NavigationService.navigate(
-          ScreenName.ListTweetsScreen,
-          navigationProps,
-        );
-      }
+      NavigationService.navigate(ScreenName.ImportListScreen, data);
       break;
   }
 };

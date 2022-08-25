@@ -30,6 +30,7 @@ import LocationSelectionScreen from '../screens/LocationSelectionScreen';
 import colors from '../constants/colors';
 import EditListUsersScreen from '../screens/EditListUsersScreen';
 import LandingScreen from '../screens/LandingScreen';
+import ImportListScreen from '../screens/ImportListScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -146,6 +147,8 @@ const Navigation = props => {
       case ScreenName.ImageViewScreen:
       case ScreenName.VideoPlayerScreen:
       case ScreenName.LandingScreen:
+      case ScreenName.ImportListScreen:
+      case ScreenName.ImportArchiveScreen:
         return false;
       default:
         return true;
@@ -382,6 +385,15 @@ const Navigation = props => {
         <ListStack.Screen
           name={ScreenName.ListScreen}
           component={ListScreen}
+          options={{
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+          }}
+        />
+        <ListStack.Screen
+          name={ScreenName.ImportListScreen}
+          component={ImportListScreen}
           options={{
             headerShown: false,
             tabBarVisible: false,

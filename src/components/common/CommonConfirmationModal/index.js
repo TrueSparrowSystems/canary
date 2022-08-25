@@ -1,25 +1,26 @@
 import React, {useMemo} from 'react';
 import {View, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import colors, {getColorWithOpacity} from '../../constants/colors';
-import fonts from '../../constants/fonts';
-import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
-import Checkbox from '../common/Checkbox';
-import CustomModal from '../common/CustomModal';
-import RoundedButton from '../common/RoundedButton';
-import useRedirectConfirmationModalData from './useRedirectConfirmationModalData';
+import colors, {getColorWithOpacity} from '../../../constants/colors';
+import fonts from '../../../constants/fonts';
+import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
+import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
+import CustomModal from '../CustomModal';
+import RoundedButton from '../RoundedButton';
+import useCommonConfirmationModalData from './useCommonConfirmationModalData';
 
-function RedirectConfirmationModal() {
-  const localStyle = useStyleProcessor(styles, 'RedirectConfirmationModal');
+function CommonConfirmationModal() {
+  const localStyle = useStyleProcessor(styles, 'CommonConfirmationModal');
 
   const {
     bIsVisible,
     fnOnBackdropPress,
+    sHeaderText,
+    sPrimaryText,
+    sSecondaryText,
     fnOnCancelPress,
     fnOnSureButtonPress,
-    fnOnCheckboxValueChange,
-  } = useRedirectConfirmationModalData();
+  } = useCommonConfirmationModalData();
 
   const getBackdrop = useMemo(() => {
     return <View style={localStyle.blur} />;
@@ -34,36 +35,25 @@ function RedirectConfirmationModal() {
       <View style={localStyle.modalStyle}>
         <SafeAreaView style={localStyle.container}>
           <View style={localStyle.view}>
-            <Text style={localStyle.textStyle}>
-              You’ll be redirected to Twitter and we won’t be able to keep you
-              private, are you sure?
-            </Text>
-            <Text style={localStyle.subTextStyle}>
-              You also need a Twitter account to interact with the tweet and
-              your actions will be visible to Twitter
-            </Text>
-
+            <Text style={localStyle.headerTextStyle}>{sHeaderText}</Text>
+            <Text style={localStyle.primaryTextStyle}>{sPrimaryText}</Text>
+            <Text style={localStyle.secondaryTextStyle}>{sSecondaryText}</Text>
             <View style={localStyle.flexRow}>
               <RoundedButton
                 style={localStyle.cancelButton}
-                text={'Cancel'}
+                text={'No'}
                 textStyle={localStyle.cancelButtonText}
                 onPress={fnOnCancelPress}
                 underlayColor={getColorWithOpacity(colors.White, 0.8)}
               />
               <RoundedButton
                 style={localStyle.sureButton}
-                text={'I am sure'}
+                text={'Sure'}
                 textStyle={localStyle.sureButtonText}
                 onPress={fnOnSureButtonPress}
                 underlayColor={getColorWithOpacity(colors.BitterSweet, 0.8)}
               />
             </View>
-            <Checkbox
-              onValueChange={fnOnCheckboxValueChange}
-              text={'Don’t show again'}
-              textStyle={localStyle.checkboxTextStyle}
-            />
           </View>
         </SafeAreaView>
       </View>
@@ -95,14 +85,14 @@ const styles = {
     height: '100%',
     backgroundColor: getColorWithOpacity(colors.BlackPearl, 0.5),
   },
-  textStyle: {
+  headerTextStyle: {
     fontSize: fontPtToPx(16),
     lineHeight: layoutPtToPx(20),
     fontFamily: fonts.SoraSemiBold,
     color: colors.BlackPearl,
     textAlign: 'center',
   },
-  subTextStyle: {
+  primaryTextStyle: {
     marginTop: layoutPtToPx(13),
     fontSize: fontPtToPx(14),
     lineHeight: layoutPtToPx(17),
@@ -110,16 +100,13 @@ const styles = {
     color: colors.BlackPearl,
     textAlign: 'center',
   },
-  checkboxTextStyle: {
-    marginLeft: layoutPtToPx(8),
-    fontSize: fontPtToPx(14),
-    lineHeight: layoutPtToPx(17),
+  secondaryTextStyle: {
+    marginTop: layoutPtToPx(13),
+    fontSize: fontPtToPx(12),
+    lineHeight: layoutPtToPx(15),
     fontFamily: fonts.InterMedium,
-    color: colors.Black,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    flex: 1,
+    color: colors.BlackPearl,
+    textAlign: 'center',
   },
   view: {
     width: '100%',
@@ -170,9 +157,9 @@ const styles = {
   flexRow: {
     flexDirection: 'row',
     flex: 1,
-    marginTop: layoutPtToPx(20),
-    marginBottom: layoutPtToPx(12),
+    marginTop: layoutPtToPx(25),
+    marginBottom: layoutPtToPx(15),
   },
 };
 
-export default React.memo(RedirectConfirmationModal);
+export default React.memo(CommonConfirmationModal);

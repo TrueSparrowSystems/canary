@@ -1,5 +1,11 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, ActivityIndicator, FlatList, RefreshControl} from 'react-native';
+import {
+  View,
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  Share,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionCard from '../../components/CollectionCard';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -20,6 +26,8 @@ import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 import Banner from '../../components/common/Banner';
 import {showPromotion} from '../../components/utils/ViewData';
+import {ToastType} from '../../constants/ToastConstants';
+import Toast from 'react-native-toast-message';
 
 function CollectionScreen(props) {
   const localStyle = useStyleProcessor(styles, 'CollectionScreen');
@@ -30,6 +38,8 @@ function CollectionScreen(props) {
   const scrollRef = useRef(null);
   const [showPromotionBanner, setShowPromotionBanner] = useState(false);
   const crossButtonRef = useRef(false);
+  const selectedCollectionIds = useRef([]);
+  const _collectionService = collectionService();
 
   const scrollToTop = useCallback(() => {
     scrollRef.current?.scrollToOffset({
@@ -42,7 +52,6 @@ function CollectionScreen(props) {
   const fetchData = useCallback(() => {
     setIsDeleteEnabled(false);
     setIsLoading(true);
-    const _collectionService = collectionService();
     _collectionService.getAllCollections().then(jsonObj => {
       let dataArray = [];
       Object.keys(jsonObj).map(key => {
@@ -63,7 +72,7 @@ function CollectionScreen(props) {
       setShowPromotionBanner(shouldShowPromotion);
       setIsLoading(false);
     });
-  }, []);
+  }, [_collectionService]);
 
   useEffect(() => {
     fetchData();
@@ -93,10 +102,12 @@ function CollectionScreen(props) {
   }, [onCollectionAddSuccess]);
 
   const enableCollectionDeleteOption = useCallback(() => {
+    selectedCollectionIds.current = [];
     setIsDeleteEnabled(true);
   }, []);
 
   const onDonePress = useCallback(() => {
+    selectedCollectionIds.current = [];
     setIsDeleteEnabled(false);
   }, []);
 
@@ -111,6 +122,7 @@ function CollectionScreen(props) {
           onLongPress={enableCollectionDeleteOption}
           enableDelete={isDeleteEnabled}
           disabled={isEmpty(item) ? true : false}
+          selectedCollectionIds={selectedCollectionIds.current}
         />
       );
     },
@@ -126,6 +138,21 @@ function CollectionScreen(props) {
     });
   }, []);
 
+  const onSharePress = useCallback(() => {
+    if (selectedCollectionIds.current.length > 0) {
+      _collectionService
+        .exportCollection(selectedCollectionIds.current)
+        .then(url => {
+          Share.share({message: `Checkout these archives from Canary ${url}`});
+        });
+    } else {
+      Toast.show({
+        type: ToastType.Error,
+        text1: 'Select at least one archive to share',
+      });
+    }
+  }, [_collectionService]);
+
   return (
     <SafeAreaView style={localStyle.container}>
       {isEmpty(collectionDataRef.current) ? null : (
@@ -140,6 +167,10 @@ function CollectionScreen(props) {
           rightButtonText={!isDeleteEnabled ? 'New' : 'Done'}
           rightButtonTextStyle={localStyle.newButtonTextStyle}
           rightButtonImageStyle={localStyle.newButtonImageStyle}
+          enableLeftButton={isDeleteEnabled}
+          leftButtonText={'Share'}
+          leftButtonTextStyle={localStyle.newButtonTextStyle}
+          onLeftButtonClick={onSharePress}
         />
       )}
       {showPromotionBanner && !isEmpty(collectionDataRef.current) ? (
@@ -181,7 +212,9 @@ function CollectionScreen(props) {
             numColumns={2}
             ref={scrollRef}
             refreshControl={
-              <RefreshControl refreshing={isLoading} onRefresh={fetchData} />
+              isDeleteEnabled ? null : (
+                <RefreshControl refreshing={isLoading} onRefresh={fetchData} />
+              )
             }
             contentContainerStyle={localStyle.contentContainerStyle}
             keyExtractor={item => {

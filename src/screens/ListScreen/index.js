@@ -4,6 +4,7 @@ import {
   RefreshControl,
   SafeAreaView,
   ScrollView,
+  Share,
   View,
 } from 'react-native';
 import {AddIcon, ListGolden, ListIconBig} from '../../assets/common';
@@ -25,6 +26,8 @@ import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 import Banner from '../../components/common/Banner';
 import {showPromotion} from '../../components/utils/ViewData';
+import Toast from 'react-native-toast-message';
+import {ToastType} from '../../constants/ToastConstants';
 
 function ListScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListScreen');
@@ -35,6 +38,8 @@ function ListScreen(props) {
   const crossButtonRef = useRef(null);
   const screenName = props?.route?.name;
   const scrollRef = useRef(null);
+  const selectedListIds = useRef([]);
+  const _listService = listService();
 
   const scrollToTop = useCallback(() => {
     scrollRef.current?.scrollTo({
@@ -47,7 +52,6 @@ function ListScreen(props) {
   const fetchData = useCallback(() => {
     setSwipeable(false);
     setIsLoading(true);
-    const _listService = listService();
     _listService.getAllLists().then(list => {
       listDataRef.current = list;
       const shouldShowPromotion = showPromotion(CacheKey.ShowPromotionOnLists);
@@ -58,7 +62,7 @@ function ListScreen(props) {
       setShowPromotionBanner(shouldShowPromotion);
       setIsLoading(false);
     });
-  }, []);
+  }, [_listService]);
 
   useEffect(() => {
     fetchData();
@@ -88,12 +92,27 @@ function ListScreen(props) {
   }, [onListAddSuccess]);
 
   const onCardLongPress = useCallback(() => {
+    selectedListIds.current = [];
     setSwipeable(true);
   }, []);
 
   const onDonePress = useCallback(() => {
+    selectedListIds.current = [];
     setSwipeable(false);
   }, []);
+
+  const onSharePress = useCallback(() => {
+    if (selectedListIds.current.length > 0) {
+      _listService.exportList(selectedListIds.current).then(url => {
+        Share.share({message: `Checkout these lists from Canary ${url}`});
+      });
+    } else {
+      Toast.show({
+        type: ToastType.Error,
+        text1: 'Select at least one list to share',
+      });
+    }
+  }, [_listService]);
 
   const onRemovePromotionPress = useCallback(() => {
     crossButtonRef.current?.animate('fadeOutLeftBig').then(() => {
@@ -116,6 +135,10 @@ function ListScreen(props) {
           rightButtonImageStyle={localStyle.headerRightButtonImage}
           rightButtonTextStyle={localStyle.headerRightButtonText}
           onRightButtonClick={swipeable ? onDonePress : onAddListPress}
+          enableLeftButton={swipeable}
+          leftButtonText={'Share'}
+          leftButtonTextStyle={localStyle.headerRightButtonText}
+          onLeftButtonClick={onSharePress}
         />
       ) : null}
       {showPromotionBanner && !isEmpty(listDataRef.current) ? (
@@ -155,7 +178,9 @@ function ListScreen(props) {
           style={localStyle.scrollViewStyle}
           ref={scrollRef}
           refreshControl={
-            <RefreshControl refreshing={isLoading} onRefresh={reloadList} />
+            swipeable ? null : (
+              <RefreshControl refreshing={isLoading} onRefresh={reloadList} />
+            )
           }>
           {Object.keys(listDataRef.current).map(key => {
             const list = listDataRef.current[key];
@@ -166,6 +191,7 @@ function ListScreen(props) {
                 onListRemoved={reloadList}
                 onCardLongPress={onCardLongPress}
                 enableSwipe={swipeable}
+                selectedListIds={selectedListIds.current}
               />
             );
           })}

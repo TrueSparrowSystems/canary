@@ -48,7 +48,6 @@ function useRedirectConfirmationModalData() {
 
   return {
     bIsVisible: isVisible,
-    sText: modalData?.text || '',
     fnOnBackdropPress: onBackdropPress,
     fnOnCancelPress: closeModal,
     fnOnSureButtonPress: onSureButtonPress,

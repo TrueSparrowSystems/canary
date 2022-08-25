@@ -20,6 +20,7 @@ export const EventTypes = {
   ShowDeleteCollectionConfirmationModal:
     'show_delete_collection_confirmation_modal',
   ShowRedirectConfirmationModal: 'show_redirect_confirmation_modal',
+  ShowCommonConfirmationModal: 'show_common_confirmation_modal',
   ShowAddListModal: 'event_types_show_add_list_modal',
   ShowSearchUserModal: 'event_types_show_search_user_modal',
   UpdateTimeline: 'event_types_update_timeline',

@@ -17,6 +17,7 @@ import Orientation from 'react-native-orientation';
 import RedirectConfirmationModal from './src/components/RedirectConfirmationModal';
 import NavigationService from './src/services/NavigationService';
 import CommonLoader from './src/components/common/CommonLoader';
+import CommonConfirmationModal from './src/components/common/CommonConfirmationModal';
 
 const ENABLE_YELLOW_BOX_IN_DEBUG_MODE = true;
 
@@ -47,6 +48,7 @@ function App() {
         <AddCollectionModal />
         <AddToCollectionModal />
         <ConfirmDeleteModal />
+        <CommonConfirmationModal />
         <AddListModal />
         <SearchUserModal />
         <AddToListModal />

@@ -13,7 +13,7 @@ export function backUpDataToFirebase({onBackUpSuccess}) {
     headerText: 'BackUp',
     primaryText: 'Are you Sure you want to backup your data?',
     secondaryText:
-      'Note: Your data(Preferences, Lists & Archives) will stored be with us',
+      'Note: Your data(Preferences, Lists & Archives) will be stored with us',
     onSureButtonPress: () => {
       deviceInfoModule.getUniqueId().then(deviceID => {
         AsyncStorage.getAllKeys().then(allKeys => {
@@ -45,6 +45,7 @@ export function clearData() {
     secondaryText:
       'Note: Your data(Preferences, Lists & Archives) will be cleared. \nThis will also restart the application',
     onSureButtonPress: () => {
+      clearDataFromFirebase();
       AsyncStorage.clear().then(() => {
         Toast.show({
           type: ToastType.Success,

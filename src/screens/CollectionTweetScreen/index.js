@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState, useRef} from 'react';
+import React, {useCallback, useMemo, useState, useRef, useEffect} from 'react';
 import {Share, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionTweetList from '../../components/CollectionTweetList';
@@ -23,8 +23,18 @@ function CollectionTweetScreen(props) {
   } = props?.route?.params;
   const [isImportState, setIsImportState] = useState(isImport);
   const isImportingInProgressRef = useRef(false);
+  const [isCollectionEmpty, setIsCollectionEmpty] = useState(false);
 
   const _collectionService = collectionService();
+
+  useEffect(() => {
+    if (collectionId) {
+      _collectionService.isCollectionEmpty(collectionId).then(isEmpty => {
+        setIsCollectionEmpty(isEmpty);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collectionId]);
 
   const onExportCollectionPress = useCallback(() => {
     _collectionService
@@ -78,15 +88,16 @@ function CollectionTweetScreen(props) {
       enableBackButton: true,
       text: collectionName,
       textStyle: localStyle.headerTextStyle,
-      enableRightButton: true,
     };
     if (isImportState) {
+      headerData.enableRightButton = true;
       headerData.rightButtonText = 'Import';
       headerData.rightButtonTextStyle = localStyle.rightButtonTextStyle;
       headerData.onRightButtonClick = () => {
         onImportCollectionPress();
       };
     } else {
+      headerData.enableRightButton = !isCollectionEmpty;
       headerData.rightButtonImage = ShareAppIcon;
       headerData.rightButtonImageStyle = localStyle.shareIconStyle;
       headerData.onRightButtonClick = onExportCollectionPress;
@@ -94,6 +105,7 @@ function CollectionTweetScreen(props) {
     return headerData;
   }, [
     collectionName,
+    isCollectionEmpty,
     isImportState,
     localStyle.headerTextStyle,
     localStyle.rightButtonTextStyle,

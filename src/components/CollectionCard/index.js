@@ -1,11 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useMemo, useRef, useEffect} from 'react';
+import React, {useCallback, useMemo, useRef, useEffect, useState} from 'react';
 import {Text, TouchableWithoutFeedback, TouchableHighlight} from 'react-native';
 import {View} from 'react-native-animatable';
-import {BinIcon, EditIcon} from '../../assets/common';
+import {BinIcon, EditIcon, TickIcon} from '../../assets/common';
 import ScreenName from '../../constants/ScreenName';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import colors from '../../constants/colors';
+import colors, {getColorWithOpacity} from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import Image from 'react-native-fast-image';
 import fonts from '../../constants/fonts';
@@ -21,12 +21,14 @@ function CollectionCard(props) {
     enableDelete,
     animationDelay,
     disabled,
+    selectedCollectionIds,
   } = props;
   const {name: collectionName, id: collectionId, tweetIds} = data;
   let {colorScheme} = data;
   const localStyle = useStyleProcessor(styles, 'CollectionCard');
   const navigation = useNavigation();
   const viewRef = useRef(null);
+  const [isCollectionSelected, setIsCollectionSelected] = useState(false);
 
   const onCollectionPress = useCallback(() => {
     navigation.navigate(ScreenName.CollectionTweetScreen, {
@@ -106,43 +108,78 @@ function CollectionCard(props) {
     onLongPress();
   }, [onLongPress]);
 
+  useEffect(() => {
+    if (enableDelete) {
+      setIsCollectionSelected(false);
+    }
+  }, [enableDelete]);
+
+  const onCollectionSelect = useCallback(() => {
+    setIsCollectionSelected(prevVal => {
+      if (prevVal) {
+        selectedCollectionIds.splice(
+          selectedCollectionIds.indexOf(collectionId),
+          1,
+        );
+      } else {
+        selectedCollectionIds.push(collectionId);
+      }
+      return !prevVal;
+    });
+  }, [collectionId, selectedCollectionIds]);
+
+  const binContainerStyle = useMemo(
+    () => [{opacity: isCollectionSelected ? 0.5 : 1}, localStyle.binContainer],
+    [isCollectionSelected, localStyle.binContainer],
+  );
+
   return (
     <TouchableWithoutFeedback
-      onPress={disabled || enableDelete ? null : onCollectionPress}
-      onLongPress={disabled ? null : fnOnLongPress}>
+      disabled={disabled}
+      onPress={enableDelete ? onCollectionSelect : onCollectionPress}
+      onLongPress={enableDelete ? null : fnOnLongPress}>
       <Animatable.View
         ref={viewRef}
         animation="fadeIn"
         delay={animationDelay}
         style={localStyle.container}>
         {collectionId ? (
-          <View style={colorSchemeStyle.cardStyle}>
+          <View style={localStyle.flex1}>
             {enableDelete ? (
               <View style={localStyle.optionsView}>
                 <TouchableHighlight
                   underlayColor={colors.Transparent}
-                  style={localStyle.binContainer}
-                  onPress={onCollectionRemove}>
+                  style={binContainerStyle}
+                  onPress={onCollectionRemove}
+                  disabled={isCollectionSelected}>
                   <Image source={BinIcon} style={localStyle.binIconStyle} />
                 </TouchableHighlight>
                 <TouchableHighlight
                   underlayColor={colors.Transparent}
-                  style={localStyle.binContainer}
-                  onPress={onEditCollectionPress}>
+                  style={binContainerStyle}
+                  onPress={onEditCollectionPress}
+                  disabled={isCollectionSelected}>
                   <Image source={EditIcon} style={localStyle.binIconStyle} />
                 </TouchableHighlight>
               </View>
             ) : null}
-            <Text numberOfLines={3} style={colorSchemeStyle.textStyle}>
-              {collectionName}
-            </Text>
-            {tweetIds.length > 0 ? (
-              <Text
-                numberOfLines={1}
-                style={colorSchemeStyle.tweetCountTextStyle}>
-                {tweetIds.length} {tweetIds.length > 1 ? 'tweets' : 'tweet'}
-              </Text>
+            {enableDelete && isCollectionSelected ? (
+              <View style={localStyle.tickIconContainerStyle}>
+                <Image source={TickIcon} style={localStyle.tickIconStyle} />
+              </View>
             ) : null}
+            <View style={colorSchemeStyle.cardStyle}>
+              <Text numberOfLines={3} style={colorSchemeStyle.textStyle}>
+                {collectionName}
+              </Text>
+              {tweetIds.length > 0 ? (
+                <Text
+                  numberOfLines={1}
+                  style={colorSchemeStyle.tweetCountTextStyle}>
+                  {tweetIds.length} {tweetIds.length > 1 ? 'tweets' : 'tweet'}
+                </Text>
+              ) : null}
+            </View>
           </View>
         ) : null}
       </Animatable.View>
@@ -158,7 +195,9 @@ const styles = {
     flex: 1,
     aspectRatio: 1,
   },
+  flex1: {flex: 1},
   optionsView: {
+    zIndex: 2,
     position: 'absolute',
     right: layoutPtToPx(-5),
     top: layoutPtToPx(-5),
@@ -191,6 +230,21 @@ const styles = {
     width: '100%',
     borderRadius: 6,
   },
+  tickIconContainerStyle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    backgroundColor: getColorWithOpacity(colors.White, 0.5),
+    zIndex: 1,
+    borderRadius: layoutPtToPx(12),
+    height: '100%',
+    width: '100%',
+  },
+  tickIconStyle: {
+    height: layoutPtToPx(42),
+    width: layoutPtToPx(57),
+  },
+
   cardStyle: {
     flex: 1,
     borderRadius: layoutPtToPx(12),

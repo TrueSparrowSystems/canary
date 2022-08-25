@@ -12,7 +12,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import {getInitialsFromName} from '../../utils/TextUtils';
 import fonts from '../../constants/fonts';
-import {ListIcon, SwipeIcon} from '../../assets/common';
+import {ListIcon, SwipeIcon, TickIcon} from '../../assets/common';
 import * as Animatable from 'react-native-animatable';
 import AppleStyleSwipeableRow from '../AppleStyleSwipeableRow';
 import useListCardData from './useListCardData';
@@ -30,14 +30,17 @@ function ListCard(props) {
     onAddToListSuccess,
     onRemoveFromListSuccess,
     isPressDisabled = false,
+    selectedListIds,
   } = props;
   const {id: listId, name: listName, userNames, colorCombination} = data;
   const localStyle = useStyleProcessor(styles, 'ListCard');
 
   const {
+    bIsListSelected,
     viewRef,
     fnGetDescriptionText,
     fnOnListPress,
+    fnOnListSelect,
     fnOnListRemove,
     oAddButtonData,
     fnOnLongPress,
@@ -51,6 +54,8 @@ function ListCard(props) {
     onRemoveFromListSuccess,
     shouldShowAddButton,
     onCardLongPress,
+    enableSwipe,
+    selectedListIds,
   );
 
   const listIntials = getInitialsFromName(listName);
@@ -98,11 +103,16 @@ function ListCard(props) {
     });
   }, [listId, listName]);
 
+  const swipeIconStyle = useMemo(
+    () => [localStyle.swipeIconStyle, {opacity: bIsListSelected ? 0.4 : 1}],
+    [bIsListSelected, localStyle.swipeIconStyle],
+  );
+
   return (
     <Animatable.View animation={'fadeIn'} ref={viewRef}>
       <AppleStyleSwipeableRow
         disableSwipeInteraction={disableSwipeInteraction}
-        enabled={enableSwipe}
+        enabled={enableSwipe && !bIsListSelected}
         textStyle={localStyle.removeButtonStyle}
         rightActionsArray={[
           {
@@ -118,11 +128,16 @@ function ListCard(props) {
         ]}
         shouldRenderRightAction={true}>
         <TouchableWithoutFeedback
-          onPress={fnOnListPress}
+          onPress={enableSwipe ? fnOnListSelect : fnOnListPress}
           onLongPress={fnOnLongPress}
-          disabled={enableSwipe || isPressDisabled}>
+          disabled={isPressDisabled}>
           <View style={localStyle.container}>
             <View style={localStyle.cardDetailContainer}>
+              {bIsListSelected && enableSwipe ? (
+                <View style={localStyle.tickIconContainerStyle}>
+                  <Image style={localStyle.tickIconStyle} source={TickIcon} />
+                </View>
+              ) : null}
               <View style={listIconStyle.backgroundStyle}>
                 {listIntials?.length === 0 ? (
                   <Image source={ListIcon} style={listIconStyle.listIcon} />
@@ -140,7 +155,7 @@ function ListCard(props) {
               </View>
             </View>
             {enableSwipe ? (
-              <Image source={SwipeIcon} style={localStyle.swipeIconStyle} />
+              <Image source={SwipeIcon} style={swipeIconStyle} />
             ) : null}
             {shouldShowAddButton ? (
               <TouchableOpacity
@@ -184,6 +199,20 @@ const styles = {
     flexDirection: 'row',
     flexShrink: 1,
   },
+  tickIconContainerStyle: {
+    height: layoutPtToPx(40),
+    width: layoutPtToPx(40),
+    borderRadius: layoutPtToPx(20),
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    backgroundColor: getColorWithOpacity(colors.White, 0.5),
+    zIndex: 1,
+  },
+  tickIconStyle: {
+    height: layoutPtToPx(15),
+    width: layoutPtToPx(20),
+  },
   listIconStyle: {
     height: layoutPtToPx(40),
     width: layoutPtToPx(40),
@@ -225,7 +254,7 @@ const styles = {
     lineHeight: layoutPtToPx(15),
   },
   swipeIconStyle: {
-    height: layoutPtToPx(8),
+    height: layoutPtToPx(10),
     width: layoutPtToPx(16),
     alignSelf: 'center',
   },

@@ -17,10 +17,13 @@ function useListCardData(
   onRemoveFromListSuccess,
   shouldShowAddButton,
   onCardLongPress,
+  enableSwipe,
+  selectedListIds,
 ) {
   const navigation = useNavigation();
   const dataRef = useRef({});
   const [data, setData] = useState({});
+  const [isListSelected, setIsListSelected] = useState(false);
   const onListPress = useCallback(() => {
     navigation.navigate(ScreenName.ListTweetsScreen, {
       listId,
@@ -35,6 +38,12 @@ function useListCardData(
     updateAddButtonData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (enableSwipe) {
+      setIsListSelected(false);
+    }
+  }, [enableSwipe]);
 
   const onAddToListPress = useCallback(() => {
     listService()
@@ -122,10 +131,23 @@ function useListCardData(
     onCardLongPress();
   }, [onCardLongPress]);
 
+  const onListSelect = useCallback(() => {
+    setIsListSelected(prevVal => {
+      if (prevVal) {
+        selectedListIds.splice(selectedListIds.indexOf(listId), 1);
+      } else {
+        selectedListIds.push(listId);
+      }
+      return !prevVal;
+    });
+  }, [listId, selectedListIds]);
+
   return {
+    bIsListSelected: isListSelected,
     viewRef: viewRef,
     fnOnListPress: onListPress,
     fnOnListRemove: onListRemove,
+    fnOnListSelect: onListSelect,
     fnGetDescriptionText: getDescriptionText,
     oAddButtonData: dataRef.current,
     fnOnLongPress: onLongPress,

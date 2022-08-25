@@ -153,7 +153,7 @@ function ListTweetsScreen(props) {
           enableBackButton={true}
           text={listName}
           textStyle={localStyle.headerText}
-          enableRightButton={true}
+          enableRightButton={currentUserNameArray.current.length !== 0}
           rightButtonImage={ShareAppIcon}
           rightButtonImageStyle={localStyle.shareIconStyle}
           onRightButtonClick={onShareListPress}

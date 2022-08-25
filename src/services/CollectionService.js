@@ -168,8 +168,8 @@ class CollectionService {
     return new Promise((resolve, reject) => {
       if (this.collections && Object.keys(this.collections).length === 0) {
         this.getAllCollections()
-          .then(list => {
-            return resolve(list[collectionId]);
+          .then(collectionList => {
+            return resolve(collectionList[collectionId]);
           })
           .catch(() => {
             return reject();
@@ -336,6 +336,22 @@ class CollectionService {
         })
         .catch(() => {
           return reject('Unable to remove tweet from archive');
+        });
+    });
+  }
+
+  async isCollectionEmpty(collectionId) {
+    return new Promise((resolve, reject) => {
+      this.getCollectionDetails(collectionId)
+        .then(collectionData => {
+          if (collectionData.tweetIds.length === 0) {
+            return resolve(true);
+          } else {
+            return resolve(false);
+          }
+        })
+        .catch(err => {
+          return reject(err);
         });
     });
   }

@@ -18,7 +18,11 @@ import {
 } from '../../assets/common';
 import {AppVersion} from '../../../AppVersion';
 import {Constants} from '../../constants/Constants';
-import {firebase} from '@react-native-firebase/database';
+import {
+  backUpDataToFirebase,
+  clearData,
+  restoreDataFromFirebase,
+} from '../../services/BackupRestoreService';
 
 function PreferenceScreen(props) {
   const localStyle = useStyleProcessor(style, 'PreferenceScreen');
@@ -136,33 +140,29 @@ function PreferenceScreen(props) {
             <RoundedButton {...roundedButtonStyle} />
           </View>
         </View>
-        <RoundedButton
-          text="BackUp"
-          onPress={() => {
-            const reference = firebase
-              .app()
-              .database(
-                'https://canary-8ff4c-default-rtdb.us-central1.firebasedatabase.app',
-              )
-              .ref('/deviceId/12123412');
-            reference.set({name: 'item'});
-            // .set({
-            //   name: 'PLG',
-            // })
-            // database()
-            //   .ref('/items')
-            //   .push({
-            //     name: 'item',
-            //   })
-            //   .then(res => {
-            //     console.log('data set', res);
-            //   })
-            //   .catch(err => {
-            //     console.log({err});
-            //   });
-            console.log({reference});
-          }}
-        />
+        <View style={localStyle.backupRestoreContainer}>
+          <RoundedButton
+            text="BackUp"
+            onPress={backUpDataToFirebase}
+            style={localStyle.backupRestoreButton}
+            textStyle={localStyle.continueButtonText}
+            underlayColor={colors.GoldenTainoi80}
+          />
+          <RoundedButton
+            text="Restore"
+            onPress={restoreDataFromFirebase}
+            style={localStyle.backupRestoreButton}
+            textStyle={localStyle.continueButtonText}
+            underlayColor={colors.GoldenTainoi80}
+          />
+          <RoundedButton
+            text="Clear"
+            onPress={clearData}
+            style={localStyle.backupRestoreButton}
+            textStyle={localStyle.continueButtonText}
+            underlayColor={colors.GoldenTainoi80}
+          />
+        </View>
       </ScrollView>
       <View style={localStyle.bottomContainer}>
         <View style={localStyle.flexRow}>
@@ -229,6 +229,20 @@ const style = {
     width: '100%',
     height: layoutPtToPx(40),
     borderRadius: layoutPtToPx(25),
+  },
+  backupRestoreContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: layoutPtToPx(10),
+  },
+  backupRestoreButton: {
+    backgroundColor: colors.GoldenTainoi,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    height: layoutPtToPx(40),
+    borderRadius: layoutPtToPx(25),
+    marginHorizontal: layoutPtToPx(10),
   },
   continueButtonText: {
     marginHorizontal: layoutPtToPx(10),

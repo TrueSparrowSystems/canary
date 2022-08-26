@@ -36,7 +36,7 @@ function EmptyScreenComponent(props) {
           style={buttonStyle || localStyle.createButton}
           text={buttonText}
           textStyle={localStyle.createButtonText}
-          leftImage={buttonImage || AddIcon}
+          leftImage={buttonImage ? buttonImage : null}
           leftImageStyle={buttonImageStyle || localStyle.addIconStyle}
           onPress={onButtonPress}
           underlayColor={colors.GoldenTainoi80}

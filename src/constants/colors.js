@@ -25,6 +25,7 @@ const colors = {
   BitterSweet: '#FF6363',
   EarlyDawn: '#FFF3da',
   ScreaminGreen: '#80FE44',
+  Niagara: '#33B498',
 };
 
 export default colors;

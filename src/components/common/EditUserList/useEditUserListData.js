@@ -16,9 +16,9 @@ const useEditUserListData = props => {
   const fetchData = useCallback(() => {
     setIsLoading(true);
 
+    listMembersRef.current = [];
     if (isArray(userNames) && !isEmpty(userNames)) {
       const userNamesString = userNames.join(',');
-      listMembersRef.current = [];
       TwitterAPI.getUsersByUserNames(userNamesString)
         .then(res => {
           const apiRes = res?.data?.data;

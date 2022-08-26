@@ -89,6 +89,7 @@ function AddToListModal() {
                 <UserCard userData={oUserData} />
                 <View style={localStyle.emptyComponentContainer}>
                   <EmptyScreenComponent
+                    buttonImage={AddIcon}
                     emptyImage={ListIconBig}
                     buttonText={'Create a new List'}
                     onButtonPress={fnOnAddListPress}

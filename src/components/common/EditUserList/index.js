@@ -5,6 +5,8 @@ import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import colors from '../../../constants/colors';
 import useEditUserListData from './useEditUserListData';
 import {layoutPtToPx} from '../../../utils/responsiveUI';
+import {isEmpty} from 'lodash';
+import EmptyScreenComponent from '../EmptyScreenComponent';
 
 const EditUserList = props => {
   const {onMemberRemove} = props;
@@ -17,19 +19,25 @@ const EditUserList = props => {
   ) : (
     <ScrollView
       style={localStyle.listView}
+      contentContainerStyle={localStyle.listContent}
       refreshControl={
         <RefreshControl refreshing={bIsLoading} onRefresh={fnOnRefresh} />
       }>
-      {aListMembers?.map(listMember => {
-        return (
-          <EditListUserCard
-            userData={listMember}
-            onMemberRemove={() => {
-              onMemberRemove?.();
-            }}
-          />
-        );
-      })}
+      {isEmpty(aListMembers) ? (
+        <EmptyScreenComponent descriptionText="No users to import" />
+      ) : (
+        aListMembers?.map(listMember => {
+          return (
+            <EditListUserCard
+              userData={listMember}
+              onMemberRemove={() => {
+                onMemberRemove?.(listMember?.username);
+                fnOnRefresh();
+              }}
+            />
+          );
+        })
+      )}
     </ScrollView>
   );
 };
@@ -38,7 +46,10 @@ export default React.memo(EditUserList);
 
 const styles = {
   listView: {
-    marginBottom: layoutPtToPx(50),
+    paddingBottom: layoutPtToPx(50),
     height: '100%',
+  },
+  listContent: {
+    paddingBottom: layoutPtToPx(100),
   },
 };

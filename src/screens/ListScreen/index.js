@@ -165,6 +165,7 @@ function ListScreen(props) {
       ) : isEmpty(listDataRef.current) ? (
         <EmptyScreenComponent
           emptyImage={ListIconBig}
+          buttonImage={AddIcon}
           buttonText={'Create a new List'}
           onButtonPress={onAddListPress}
           descriptionText={

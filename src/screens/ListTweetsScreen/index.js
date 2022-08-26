@@ -12,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import ScreenName from '../../constants/ScreenName';
 import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
-import {EditIcon, ShareAppIcon} from '../../assets/common';
+import {AddIcon, EditIcon, ShareAppIcon} from '../../assets/common';
 import Toast from 'react-native-toast-message';
 import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 
@@ -76,6 +76,7 @@ function ListTweetsScreen(props) {
           });
         }}
         buttonStyle={localStyle.bookmarkButtonStyle}
+        buttonImage={AddIcon}
       />
     );
   }, [

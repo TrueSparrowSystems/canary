@@ -31,6 +31,7 @@ import colors from '../constants/colors';
 import EditListUsersScreen from '../screens/EditListUsersScreen';
 import LandingScreen from '../screens/LandingScreen';
 import ImportListScreen from '../screens/ImportListScreen';
+import ImportArchiveScreen from '../screens/ImportArchiveScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -563,6 +564,15 @@ const Navigation = props => {
             tabBarVisible: false,
             detachPreviousScreen: true,
             ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <CollectionStack.Screen
+          name={ScreenName.ImportArchiveScreen}
+          component={ImportArchiveScreen}
+          options={{
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
           }}
         />
       </CollectionStack.Navigator>

@@ -16,12 +16,12 @@ const useImportArchiveScreenData = data => {
   );
 
   const onArchiveTweetRemove = useCallback(
-    username => {
-      const currentArchiveUsernameData =
-        archivesDataRef.current[selectedIndex]?.userNames;
-      if (isArray(currentArchiveUsernameData)) {
-        const selectedUserIndex = currentArchiveUsernameData?.indexOf(username);
-        currentArchiveUsernameData?.splice(selectedUserIndex, 1);
+    tweetId => {
+      const currentArchiveTweetIdsData =
+        archivesDataRef.current[selectedIndex]?.tweetIds;
+      if (isArray(currentArchiveTweetIdsData)) {
+        const selectedUserIndex = currentArchiveTweetIdsData?.indexOf(tweetId);
+        currentArchiveTweetIdsData?.splice(selectedUserIndex, 1);
         setArchiveDataState([...archivesDataRef.current]);
       }
     },

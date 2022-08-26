@@ -11,6 +11,12 @@ import useCollectionTweetListData from './useCollectionTweetListData';
 
 function CollectionTweetList(props) {
   const {
+    emptyScreenComponent,
+    shouldShowBookmarked = false,
+    contentContainerStyle,
+    onMemberRemove,
+  } = props;
+  const {
     bIsLoading,
     fnOnRefresh,
     aDataSource,
@@ -21,8 +27,8 @@ function CollectionTweetList(props) {
   return bIsLoading ? (
     <ActivityIndicator animating={bIsLoading} color={colors.GoldenTainoi} />
   ) : aDataSource.length === 0 ? (
-    props?.emptyScreenComponent ? (
-      props?.emptyScreenComponent
+    emptyScreenComponent ? (
+      emptyScreenComponent
     ) : (
       <EmptyScreenComponent
         descriptionText={'It’s pretty empty in here 🥲'}
@@ -36,11 +42,19 @@ function CollectionTweetList(props) {
     )
   ) : (
     <ScrollView
+      contentContainerStyle={contentContainerStyle}
       refreshControl={
         <RefreshControl refreshing={bIsLoading} onRefresh={fnOnRefresh} />
       }>
       {aDataSource?.map(data => {
-        return <TweetCard key={data?.id} dataSource={data} />;
+        return (
+          <TweetCard
+            key={data?.id}
+            dataSource={data}
+            showBookmarked={shouldShowBookmarked}
+            onBookmarkPress={onMemberRemove}
+          />
+        );
       })}
     </ScrollView>
   );

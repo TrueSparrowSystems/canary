@@ -65,6 +65,8 @@ function ImportArchiveScreen(props) {
             key={nSelectedIndex}
             tweetIds={aData[nSelectedIndex]?.tweetIds}
             onMemberRemove={fnOnArchiveTweetRemove}
+            shouldShowBookmarked={true}
+            contentContainerStyle={localStyle.tweetListContentContainer}
             emptyScreenComponent={
               <EmptyScreenComponent descriptionText="No tweets present in this archive" />
             }
@@ -88,6 +90,9 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: colors.White,
+  },
+  tweetListContentContainer: {
+    paddingBottom: layoutPtToPx(250),
   },
   headerRightButtonImage: {
     tintColor: colors.GoldenTainoi,

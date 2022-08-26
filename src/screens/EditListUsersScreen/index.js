@@ -18,12 +18,12 @@ import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import EditListUserCard from '../../components/common/EditListUserCard';
 
 function EditListUsersScreen(props) {
-  const {listId, listUserNames, onDonePress} = props?.route?.params;
+  const {listId, onDonePress} = props?.route?.params;
   const localStyle = useStyleProcessor(styles, 'EditListUsersScreen');
   const navigation = useNavigation();
 
   const {bIsLoading, aListMembers, fnOnMemberRemove, fnOnRefresh} =
-    useEditListUsersScreenData(listId, listUserNames);
+    useEditListUsersScreenData(listId);
 
   return (
     <SafeAreaView>

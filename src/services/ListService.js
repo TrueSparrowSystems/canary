@@ -99,6 +99,12 @@ class ListService {
     });
   }
 
+  async importMultipleLists(lists) {
+    for (const list of lists) {
+      await this.importList(list);
+    }
+  }
+
   async importList(list) {
     return new Promise((resolve, reject) => {
       const newListName = list.name + ' ★';

@@ -24,13 +24,14 @@ function ImportListScreen(props) {
     fnOnListMemberRemove,
     fnOnListRemove,
     fnNavigateToHomescreen,
+    fnOnImportPress,
   } = useImportListScreenData(data);
 
   return (
     <View style={localStyle.container}>
       <Header
         enableRightButton={!isEmpty(aData)}
-        onRightButtonClick={() => {}}
+        onRightButtonClick={fnOnImportPress}
         rightButtonImage={ImportIcon}
         rightButtonText="Import"
         rightButtonImageStyle={localStyle.headerRightButtonImage}
@@ -62,6 +63,7 @@ function ImportListScreen(props) {
           </View>
           <View style={localStyle.separator} />
           <EditUserList
+            key={nSelectedIndex}
             userNames={aData[nSelectedIndex]?.userNames}
             onMemberRemove={fnOnListMemberRemove}
           />

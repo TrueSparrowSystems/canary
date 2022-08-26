@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useRef} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Image from 'react-native-fast-image';
 import useImportCollectionCardData from './useImportCollectionCardData';
@@ -12,18 +12,22 @@ function ImportCollectionCard(props) {
   const {collectionName, tweetIds, onArchiveRemove, onArchivePress} = props;
   const localStyle = useStyleProcessor(styles, 'ImportCollectionCard');
 
+  const colorCombination = useRef(getRandomColorCombination());
   const {} = useImportCollectionCardData(tweetIds, collectionName);
+
   const colorSchemeStyle = useMemo(() => {
-    const colorScheme = getRandomColorCombination();
     return {
       cardStyle: [
         localStyle.cardStyle,
-        {backgroundColor: colorScheme?.backgroundColor},
+        {backgroundColor: colorCombination.current?.backgroundColor},
       ],
-      textStyle: [localStyle.textStyle, {color: colorScheme?.textColor}],
+      textStyle: [
+        localStyle.textStyle,
+        {color: colorCombination.current?.textColor},
+      ],
       tweetCountTextStyle: [
         localStyle.tweetCountTextStyle,
-        {color: colorScheme?.textColor},
+        {color: colorCombination.current?.textColor},
       ],
     };
   }, [

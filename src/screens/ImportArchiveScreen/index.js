@@ -2,7 +2,7 @@ import {ScrollView, View} from 'react-native';
 import React from 'react';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import Header from '../../components/common/Header';
-import {ImportIcon, ListIconBig} from '../../assets/common';
+import {ArchiveIconBig, ImportIcon} from '../../assets/common';
 import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
@@ -65,12 +65,15 @@ function ImportArchiveScreen(props) {
             key={nSelectedIndex}
             tweetIds={aData[nSelectedIndex]?.tweetIds}
             onMemberRemove={fnOnArchiveTweetRemove}
+            emptyScreenComponent={
+              <EmptyScreenComponent descriptionText="No tweets present in this archive" />
+            }
           />
         </View>
       ) : (
         <EmptyScreenComponent
-          emptyImage={ListIconBig}
-          descriptionText="No Collections to import"
+          emptyImage={ArchiveIconBig}
+          descriptionText="No Archive to import"
           buttonText="Go To Home"
           onButtonPress={fnNavigateToHomescreen}
         />

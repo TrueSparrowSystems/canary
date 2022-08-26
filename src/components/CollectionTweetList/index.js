@@ -21,15 +21,19 @@ function CollectionTweetList(props) {
   return bIsLoading ? (
     <ActivityIndicator animating={bIsLoading} color={colors.GoldenTainoi} />
   ) : aDataSource.length === 0 ? (
-    <EmptyScreenComponent
-      descriptionText={'It’s pretty empty in here 🥲'}
-      descriptionTextStyle={localStyle.descriptionTextStyle}
-      buttonText={'Bookmark Your Favorite Tweets'}
-      buttonImage={bookmarkIcon}
-      buttonImageStyle={localStyle.emptyButtonImageStyle}
-      onButtonPress={fnOnBookmarkFavouriteTweetPress}
-      buttonStyle={localStyle.bookmarkButtonStyle}
-    />
+    props?.emptyScreenComponent ? (
+      props?.emptyScreenComponent
+    ) : (
+      <EmptyScreenComponent
+        descriptionText={'It’s pretty empty in here 🥲'}
+        descriptionTextStyle={localStyle.descriptionTextStyle}
+        buttonText={'Bookmark Your Favorite Tweets'}
+        buttonImage={bookmarkIcon}
+        buttonImageStyle={localStyle.emptyButtonImageStyle}
+        onButtonPress={fnOnBookmarkFavouriteTweetPress}
+        buttonStyle={localStyle.bookmarkButtonStyle}
+      />
+    )
   ) : (
     <ScrollView
       refreshControl={

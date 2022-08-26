@@ -86,6 +86,7 @@ const styles = {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: layoutPtToPx(50),
   },
 };
 

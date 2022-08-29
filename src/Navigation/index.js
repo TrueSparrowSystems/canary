@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
@@ -32,6 +32,8 @@ import EditListUsersScreen from '../screens/EditListUsersScreen';
 import LandingScreen from '../screens/LandingScreen';
 import ImportListScreen from '../screens/ImportListScreen';
 import ImportArchiveScreen from '../screens/ImportArchiveScreen';
+import TabletNavBar from './TabletNavBar';
+import {isTablet} from 'react-native-device-info';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -167,16 +169,44 @@ const Navigation = props => {
     },
     [localStyle.bottomTabIcons],
   );
+  const tabName = useMemo(() => ['Timeline', 'Search', 'Lists', 'Archive'], []);
+  const tabIcons = useMemo(
+    () => [HomeIcon, SearchIcon, BottomBarListIcon, CollectionsIcon],
+    [],
+  );
+  const tabletOptions = useMemo(
+    () => ({
+      sceneContainerStyle: {
+        marginLeft: layoutPtToPx(90),
+      },
+      tabBar: prop => {
+        return <TabletNavBar {...prop} tabName={tabName} tabIcons={tabIcons} />;
+      },
+    }),
+    [tabIcons, tabName],
+  );
+  const tabNavigatorOptions = useMemo(() => {
+    let options = {
+      detachInactiveScreens: true,
+      initialRouteName: ScreenName.HomeScreen,
+      screenOptions: {
+        tabBarHideOnKeyboard: true,
+      },
+    };
+    if (isTablet()) {
+      options = {...options, ...tabletOptions};
+    }
+    return options;
+  }, [tabletOptions]);
 
   const bottomStack = useCallback(bottomHeight => {
     const tabbarStyle = {
-      height: 60 + bottomHeight,
+      height: isTablet() ? 0 : 60 + bottomHeight,
+      width: isTablet() ? layoutPtToPx(90) : '100%',
     };
+
     return (
-      <Tab.Navigator
-        detachInactiveScreens={true}
-        initialRouteName={ScreenName.HomeScreen}
-        screenOptions={{tabBarHideOnKeyboard: true}}>
+      <Tab.Navigator {...tabNavigatorOptions}>
         <Tab.Screen
           options={({route}) => {
             return {

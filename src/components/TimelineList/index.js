@@ -181,11 +181,9 @@ function TimelineList({
 const styles = {
   flatListPropsStyle: {flex: 1},
   contentContainerStyle: {
-    width: '100%',
     flexGrow: 1,
     tablet: {
-      width: layoutPtToPx(600),
-      alignSelf: 'center',
+      marginHorizontal: layoutPtToPx(20),
     },
   },
   container: {

@@ -40,8 +40,10 @@ class CollectionService {
           };
 
           this.collections = collectionObj;
+          var bookmarkedTweets = this.bookmarkTweets(tweetIdArray, id);
           Store.set(StoreKeys.CollectionsList, collectionObj)
             .then(() => {
+              this.updateBookmarkedTweetsInCacheAndStore(bookmarkedTweets);
               return resolve({collectionId: id});
             })
             .catch(() => {
@@ -65,8 +67,11 @@ class CollectionService {
 
           _list = {..._list, ...newCollection};
           this.collections = _list;
+          var bookmarkedTweets = this.bookmarkTweets(tweetIdArray, newId);
+
           Store.set(StoreKeys.CollectionsList, _list)
             .then(() => {
+              this.updateBookmarkedTweetsInCacheAndStore(bookmarkedTweets);
               return resolve({collectionId: newId});
             })
             .catch(() => {
@@ -94,6 +99,12 @@ class CollectionService {
           return reject('Could not update archive. Please try again!');
         });
     });
+  }
+
+  async importMultipleCollections(collections) {
+    for (const collection of collections) {
+      await this.importCollection(collection);
+    }
   }
 
   async importCollection(collection) {
@@ -215,6 +226,21 @@ class CollectionService {
     });
   }
 
+  bookmarkTweets(tweetIdArray, collectionId) {
+    var bookmarkedTweets = Cache.getValue(CacheKey.BookmarkedTweetsList) || {};
+    var newArray = [];
+    tweetIdArray.map(tweetId => {
+      if (bookmarkedTweets[tweetId]) {
+        // Add same tweet to multiple collections case
+        newArray = bookmarkedTweets[tweetId];
+      }
+      // TODO : check for existing collection id
+      newArray.push(collectionId);
+      bookmarkedTweets[tweetId] = newArray;
+    });
+    return bookmarkedTweets;
+  }
+
   async _addTweet(collectionId, tweetId) {
     return new Promise((resolve, reject) => {
       if (
@@ -225,19 +251,10 @@ class CollectionService {
           'This archive is full. Try adding it to a different archive or create a new one.',
         );
       }
-      var bookmarkedTweets =
-        Cache.getValue(CacheKey.BookmarkedTweetsList) || {};
-      var newArray = [];
-      if (bookmarkedTweets[tweetId]) {
-        // Add same tweet to multiple collections case
-        newArray = bookmarkedTweets[tweetId];
-      }
-      // TODO : check for existing collection id
-      newArray.push(collectionId);
-      bookmarkedTweets[tweetId] = newArray;
 
       this.collections?.[collectionId]?.tweetIds?.push?.(tweetId);
 
+      var bookmarkedTweets = this.bookmarkTweets([tweetId], collectionId);
       Store.set(StoreKeys.CollectionsList, this.collections)
         .then(() => {
           this.updateBookmarkedTweetsInCacheAndStore(bookmarkedTweets)
@@ -292,7 +309,13 @@ class CollectionService {
       Store.set(StoreKeys.CollectionsList, this.collections)
         .then(() => {
           tweetIdsOfThisCollection.forEach(tweetId => {
-            delete bookmarkedIds[tweetId];
+            if (bookmarkedIds[tweetId].length === 1) {
+              delete bookmarkedIds[tweetId];
+            } else {
+              const indexToRemove =
+                bookmarkedIds[tweetId].indexOf(collectionId);
+              bookmarkedIds[tweetId].splice(indexToRemove, 1);
+            }
           });
           this.updateBookmarkedTweetsInCacheAndStore(bookmarkedIds)
             .then(() => {

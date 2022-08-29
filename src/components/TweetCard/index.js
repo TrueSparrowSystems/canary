@@ -30,6 +30,8 @@ function TweetCard(props) {
     style,
     textStyle,
     linkTextStyle,
+    showBookmarked = false,
+    onBookmarkPress,
   } = props;
 
   const {
@@ -138,10 +140,20 @@ function TweetCard(props) {
                 </TouchableOpacity>
               ) : null}
               <TouchableOpacity
-                onPress={fnOnBookmarkButtonPress}
+                onPress={
+                  onBookmarkPress
+                    ? () => {
+                        onBookmarkPress(id);
+                      }
+                    : fnOnBookmarkButtonPress
+                }
                 hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                 <Image
-                  source={bIsTweetBookmarked ? bookmarkedIcon : bookmarkIcon}
+                  source={
+                    bIsTweetBookmarked || showBookmarked
+                      ? bookmarkedIcon
+                      : bookmarkIcon
+                  }
                   style={localStyle.bookmarkIconStyle}
                 />
               </TouchableOpacity>

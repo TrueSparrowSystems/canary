@@ -10,19 +10,11 @@ export const handleDynamicUrl = url => {
     return importData?.message;
   }
   const {pn: pageName, data} = importData;
+
   switch (pageName) {
     case Constants.PageName.Archive:
-      if (data.length === 1) {
-        const navigationProps = {
-          collectionName: data[0]?.name,
-          isImport: true,
-          tweetIds: data[0]?.tweetIds,
-        };
-        NavigationService.navigate(
-          ScreenName.CollectionTweetScreen,
-          navigationProps,
-        );
-      }
+      NavigationService.navigate(ScreenName.ImportArchiveScreen, data);
+
       break;
     case Constants.PageName.List:
       NavigationService.navigate(ScreenName.ImportListScreen, data);

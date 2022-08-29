@@ -24,7 +24,7 @@ const EditUserList = props => {
         <RefreshControl refreshing={bIsLoading} onRefresh={fnOnRefresh} />
       }>
       {isEmpty(aListMembers) ? (
-        <EmptyScreenComponent descriptionText="No users to import" />
+        <EmptyScreenComponent descriptionText="No users present in this list" />
       ) : (
         aListMembers?.map(listMember => {
           return (

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   View,
   ActivityIndicator,
@@ -28,6 +28,7 @@ import Banner from '../../components/common/Banner';
 import {showPromotion} from '../../components/utils/ViewData';
 import {ToastType} from '../../constants/ToastConstants';
 import Toast from 'react-native-toast-message';
+import {isTablet} from 'react-native-device-info';
 
 function CollectionScreen(props) {
   const localStyle = useStyleProcessor(styles, 'CollectionScreen');
@@ -49,6 +50,10 @@ function CollectionScreen(props) {
   }, []);
   useTabListener(screenName, scrollToTop);
 
+  const numOfColumns = useMemo(() => {
+    return isTablet() ? 3 : 2;
+  }, []);
+
   const fetchData = useCallback(() => {
     setIsDeleteEnabled(false);
     setIsLoading(true);
@@ -58,7 +63,7 @@ function CollectionScreen(props) {
         const collectionData = jsonObj[key];
         dataArray.push(collectionData);
       });
-      if (dataArray.length % 2) {
+      for (let i = 0; i < dataArray.length % numOfColumns; i++) {
         dataArray.push({});
       }
       collectionDataRef.current = dataArray;
@@ -72,7 +77,7 @@ function CollectionScreen(props) {
       setShowPromotionBanner(shouldShowPromotion);
       setIsLoading(false);
     });
-  }, [_collectionService]);
+  }, [_collectionService, numOfColumns]);
 
   useEffect(() => {
     fetchData();
@@ -210,7 +215,7 @@ function CollectionScreen(props) {
             showsVerticalScrollIndicator={false}
             data={collectionDataRef.current}
             renderItem={renderItem}
-            numColumns={2}
+            numColumns={numOfColumns}
             ref={scrollRef}
             refreshControl={
               isDeleteEnabled ? null : (

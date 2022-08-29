@@ -226,7 +226,7 @@ class CollectionService {
     });
   }
 
-  bookmarkTweets(tweetIdArray, collectionId) {
+  bookmarkTweets(tweetIdArray = [], collectionId) {
     var bookmarkedTweets = Cache.getValue(CacheKey.BookmarkedTweetsList) || {};
     var newArray = [];
     tweetIdArray.map(tweetId => {

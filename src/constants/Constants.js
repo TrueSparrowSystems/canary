@@ -28,4 +28,13 @@ export const Constants = {
     Archive: 'archive',
     List: 'list',
   },
+  WorldWideWoeidData: {
+    country: '',
+    countryCode: null,
+    name: 'Worldwide',
+    parentid: 0,
+    placeType: {code: 19, name: 'Supername'},
+    url: 'http://where.yahooapis.com/v1/place/1',
+    woeid: 1,
+  },
 };

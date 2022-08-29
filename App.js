@@ -18,6 +18,7 @@ import RedirectConfirmationModal from './src/components/RedirectConfirmationModa
 import NavigationService from './src/services/NavigationService';
 import CommonLoader from './src/components/common/CommonLoader';
 import CommonConfirmationModal from './src/components/common/CommonConfirmationModal';
+import AppStateManager from './src/services/AppStateManager';
 
 const ENABLE_YELLOW_BOX_IN_DEBUG_MODE = true;
 
@@ -45,6 +46,7 @@ function App() {
       <StatusBar barStyle={'dark-content'} backgroundColor={colors.White} />
       <NavigationContainer ref={setupNavigation}>
         <RootNavigation />
+        <AppStateManager />
         <AddCollectionModal />
         <AddToCollectionModal />
         <ConfirmDeleteModal />

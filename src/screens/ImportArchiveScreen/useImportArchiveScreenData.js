@@ -70,6 +70,14 @@ const useImportArchiveScreenData = data => {
       });
   }, []);
 
+  const onTweetCardPress = useCallback(() => {
+    Toast.show({
+      type: ToastType.Info,
+      text1: 'Import archive to interact with this tweet.',
+      position: ToastPosition.Top,
+    });
+  }, []);
+
   return {
     aData: archivesDataRef.current,
     nSelectedIndex: selectedIndex,
@@ -78,6 +86,7 @@ const useImportArchiveScreenData = data => {
     fnOnArchiveRemove: onArchiveRemove,
     fnNavigateToHomescreen: navigateToHomescreen,
     fnOnImportPress: onImportPress,
+    fnOnTweetCardPress: onTweetCardPress,
   };
 };
 

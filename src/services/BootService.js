@@ -1,4 +1,3 @@
-import {Linking, Platform} from 'react-native';
 import {setCountriesWoeidsInCache} from '../utils/CountryWoeidUtils';
 import AsyncStorage from './AsyncStorage';
 import {StoreKeys} from './AsyncStorage/StoreConstants';

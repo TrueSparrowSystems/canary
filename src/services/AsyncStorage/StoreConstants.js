@@ -10,4 +10,5 @@ export const StoreKeys = {
   ShowPromotionOnLists: 'show_promotion_on_lists',
   ShowPromotionOnArchives: 'show_promotion_on_archives',
   IsRedirectModalHidden: 'is_redirect_modal_hidden',
+  IsAppReloaded: 'is_app_reloaded',
 };

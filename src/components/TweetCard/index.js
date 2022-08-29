@@ -2,6 +2,7 @@ import {unescape} from 'lodash';
 import React, {useMemo} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {
+  BinIcon,
   bookmarkedIcon,
   bookmarkIcon,
   commentIcon,
@@ -26,12 +27,17 @@ import * as Animatable from 'react-native-animatable';
 function TweetCard(props) {
   const {
     dataSource,
+    //Used for disabling the press event on the entire card.
     isDisabled = false,
+    //Used for enabling press event on the entire card but disabling touch on any of the children components.
+    disablePointerEvents = false,
     style,
     textStyle,
     linkTextStyle,
     showBookmarked = false,
-    onBookmarkPress,
+    shouldShowRemoveOption = false,
+    onRemoveOptionPress,
+    onCardPress = null,
   } = props;
 
   const {
@@ -56,10 +62,24 @@ function TweetCard(props) {
     <Animatable.View animation="fadeIn">
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={fnOnCardPress}
+        onPress={onCardPress ? onCardPress : fnOnCardPress}
         style={style || localStyle.cardContainer}
         disabled={isDisabled}>
-        <View style={localStyle.userProfileContainer}>
+        {shouldShowRemoveOption ? (
+          <View style={localStyle.binContainerView}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={localStyle.binContainer}
+              onPress={() => {
+                onRemoveOptionPress?.(id);
+              }}>
+              <Image source={BinIcon} style={localStyle.binIconStyle} />
+            </TouchableOpacity>
+          </View>
+        ) : null}
+        <View
+          style={localStyle.userProfileContainer}
+          pointerEvents={disablePointerEvents ? 'none' : 'auto'}>
           <TouchableOpacity
             activeOpacity={0.75}
             onPress={fnOnUserNamePress}
@@ -89,7 +109,9 @@ function TweetCard(props) {
             <Text style={localStyle.displayDateText}>{displayDate}</Text>
           </View>
         </View>
-        <View style={localStyle.tweetDetailContainer}>
+        <View
+          style={localStyle.tweetDetailContainer}
+          pointerEvents={disablePointerEvents ? 'none' : 'auto'}>
           <TwitterTextView
             style={textStyle || localStyle.tweetText}
             linkStyle={linkTextStyle}
@@ -140,13 +162,7 @@ function TweetCard(props) {
                 </TouchableOpacity>
               ) : null}
               <TouchableOpacity
-                onPress={
-                  onBookmarkPress
-                    ? () => {
-                        onBookmarkPress(id);
-                      }
-                    : fnOnBookmarkButtonPress
-                }
+                onPress={fnOnBookmarkButtonPress}
                 hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                 <Image
                   source={
@@ -284,6 +300,23 @@ const styles = {
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'flex-end',
+  },
+  binContainerView: {
+    zIndex: 2,
+    position: 'absolute',
+    left: layoutPtToPx(-20),
+    top: layoutPtToPx(-5),
+  },
+  binContainer: {
+    height: layoutPtToPx(40),
+    width: layoutPtToPx(40),
+    zIndex: 2,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+  },
+  binIconStyle: {
+    height: layoutPtToPx(24),
+    width: layoutPtToPx(24),
   },
 };
 

@@ -15,6 +15,9 @@ function CollectionTweetList(props) {
     shouldShowBookmarked = false,
     contentContainerStyle,
     onTweetRemove,
+    disableTweetPress = false,
+    onTweetCardPress = null,
+    shouldShowRemoveOption = false,
   } = props;
   const {
     bIsLoading,
@@ -52,7 +55,13 @@ function CollectionTweetList(props) {
             key={data?.id}
             dataSource={data}
             showBookmarked={shouldShowBookmarked}
-            onBookmarkPress={onTweetRemove}
+            disablePointerEvents={disableTweetPress}
+            onCardPress={onTweetCardPress}
+            shouldShowRemoveOption={shouldShowRemoveOption}
+            onRemoveOptionPress={id => {
+              onTweetRemove?.(id);
+              fnOnRefresh();
+            }}
           />
         );
       })}

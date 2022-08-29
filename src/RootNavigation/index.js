@@ -21,9 +21,9 @@ function RootNavigation() {
   const [currentStack, setCurrentStack] = useState();
 
   const _handleDynamicUrl = useCallback(url => {
+    LocalEvent.emit(EventTypes.CommonLoader.Hide);
     if (url) {
       // Handle dynamic linking
-      LocalEvent.emit(EventTypes.CommonLoader.Hide);
 
       handleDynamicUrl(url.url);
     }

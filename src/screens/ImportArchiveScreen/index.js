@@ -25,11 +25,13 @@ function ImportArchiveScreen(props) {
     fnOnArchiveRemove,
     fnNavigateToHomescreen,
     fnOnImportPress,
+    fnOnTweetCardPress,
   } = useImportArchiveScreenData(data);
 
   return (
     <View style={localStyle.container}>
       <Header
+        enableBackButton={true}
         enableRightButton={!isEmpty(aData)}
         onRightButtonClick={fnOnImportPress}
         rightButtonImage={ImportIcon}
@@ -70,6 +72,9 @@ function ImportArchiveScreen(props) {
             emptyScreenComponent={
               <EmptyScreenComponent descriptionText="No tweets present in this archive" />
             }
+            disableTweetPress={true}
+            onTweetCardPress={fnOnTweetCardPress}
+            shouldShowRemoveOption={true}
           />
         </View>
       ) : (
@@ -93,6 +98,7 @@ const styles = {
   },
   tweetListContentContainer: {
     paddingBottom: layoutPtToPx(250),
+    paddingTop: layoutPtToPx(10),
   },
   headerRightButtonImage: {
     tintColor: colors.GoldenTainoi,

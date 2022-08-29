@@ -7,6 +7,7 @@ import {EventTypes, LocalEvent} from '../utils/LocalEvent';
 import AsyncStorage from './AsyncStorage';
 import Toast from 'react-native-toast-message';
 import {ToastType} from '../constants/ToastConstants';
+import {StoreKeys} from './AsyncStorage/StoreConstants';
 
 export function backUpDataToFirebase({onBackUpSuccess}) {
   LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {
@@ -47,11 +48,13 @@ export function clearData() {
     onSureButtonPress: () => {
       clearDataFromFirebase();
       AsyncStorage.clear().then(() => {
-        Toast.show({
-          type: ToastType.Success,
-          text1: 'Data Cleared Successfully',
+        AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {
+          Toast.show({
+            type: ToastType.Success,
+            text1: 'Data Cleared Successfully',
+          });
+          NativeModules.DevSettings.reload();
         });
-        NativeModules.DevSettings.reload();
       });
     },
   });
@@ -85,12 +88,14 @@ export function restoreDataFromFirebase({onRestoreSuccess}) {
           onSureButtonPress: () => {
             AsyncStorage.multiSet(responseData?.data).then(isDataSet => {
               if (isDataSet) {
-                onRestoreSuccess?.();
-                Toast.show({
-                  type: ToastType.Success,
-                  text1: 'Data Restored Successfully',
+                AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {
+                  onRestoreSuccess?.();
+                  Toast.show({
+                    type: ToastType.Success,
+                    text1: 'Data Restored Successfully',
+                  });
+                  NativeModules.DevSettings.reload();
                 });
-                NativeModules.DevSettings.reload();
               } else {
                 Toast.show({
                   type: ToastType.Error,

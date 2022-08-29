@@ -111,6 +111,7 @@ function ListCard(props) {
   return (
     <Animatable.View animation={'fadeIn'} ref={viewRef}>
       <AppleStyleSwipeableRow
+        id={listId}
         disableSwipeInteraction={disableSwipeInteraction}
         enabled={enableSwipe && !bIsListSelected}
         textStyle={localStyle.removeButtonStyle}

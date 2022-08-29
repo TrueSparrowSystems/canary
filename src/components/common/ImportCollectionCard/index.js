@@ -6,9 +6,16 @@ import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
 import fonts from '../../../constants/fonts';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import {getRandomColorCombination} from '../../../utils/RandomColorUtil';
+import colors from '../../../constants/colors';
 
 function ImportCollectionCard(props) {
-  const {collectionName, tweetIds, onArchiveRemove, onArchivePress} = props;
+  const {
+    collectionName,
+    tweetIds,
+    onArchiveRemove,
+    onArchivePress,
+    isSelected,
+  } = props;
   const localStyle = useStyleProcessor(styles, 'ImportCollectionCard');
 
   const colorCombination = useRef(getRandomColorCombination());
@@ -18,6 +25,7 @@ function ImportCollectionCard(props) {
       cardStyle: [
         localStyle.cardStyle,
         {backgroundColor: colorCombination.current?.backgroundColor},
+        {borderColor: isSelected ? colors.Niagara : colors.Transparent},
       ],
       textStyle: [
         localStyle.textStyle,
@@ -29,6 +37,7 @@ function ImportCollectionCard(props) {
       ],
     };
   }, [
+    isSelected,
     localStyle.cardStyle,
     localStyle.textStyle,
     localStyle.tweetCountTextStyle,
@@ -67,6 +76,8 @@ const styles = {
     justifyContent: 'flex-end',
     marginHorizontal: layoutPtToPx(10),
     marginVertical: layoutPtToPx(20),
+    borderWidth: layoutPtToPx(4),
+    borderColor: colors.Transparent,
   },
   textStyle: {
     fontFamily: fonts.SoraSemiBold,

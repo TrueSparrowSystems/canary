@@ -31,6 +31,7 @@ function EditListUserCard(props) {
   return (
     <Animatable.View ref={viewRef} key={userData?.username}>
       <AppleStyleSwipeableRow
+        id={userData?.username}
         enabled={true}
         rightActionsArray={[
           {

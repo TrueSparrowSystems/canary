@@ -14,7 +14,10 @@ export default class AppleStyleSwipeableRow extends Component {
     });
     const {enabled} = this.props;
     return enabled ? (
-      <RectButton style={styles.leftAction} onPress={this.close}>
+      <RectButton
+        style={styles.leftAction}
+        onPress={this.close}
+        key={this.props?.id}>
         <Animated.Text
           style={[
             styles.actionText,
@@ -37,7 +40,9 @@ export default class AppleStyleSwipeableRow extends Component {
     const {enabled, textStyle} = this.props;
 
     return enabled ? (
-      <Animated.View style={{flex: 1, transform: [{translateX: trans}]}}>
+      <Animated.View
+        style={{flex: 1, transform: [{translateX: trans}]}}
+        key={this.props?.id}>
         <RectButton
           style={[styles.rightAction, {backgroundColor: color}]}
           onPress={onPress}>
@@ -78,6 +83,7 @@ export default class AppleStyleSwipeableRow extends Component {
 
   render() {
     const {
+      id,
       children,
       // using as state update for enabling swipe
       enabled,
@@ -95,6 +101,7 @@ export default class AppleStyleSwipeableRow extends Component {
 
     return (
       <Swipeable
+        key={id}
         overshootLeft={false}
         overshootRight={false}
         enabled={enabled && !disableSwipeInteraction}

@@ -34,6 +34,7 @@ const EditUserList = props => {
                 onMemberRemove?.(listMember?.username);
                 fnOnRefresh();
               }}
+              key={listMember?.username}
             />
           );
         })

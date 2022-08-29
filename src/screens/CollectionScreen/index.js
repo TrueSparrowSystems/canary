@@ -196,6 +196,7 @@ function CollectionScreen(props) {
         </View>
       ) : isEmpty(collectionDataRef.current) ? (
         <EmptyScreenComponent
+          buttonImage={AddIcon}
           emptyImage={ArchiveIconBig}
           buttonText={'Add a new Archive'}
           onButtonPress={onAddCollectionPress}

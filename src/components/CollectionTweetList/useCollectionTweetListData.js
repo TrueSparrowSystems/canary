@@ -7,7 +7,7 @@ import {collectionService} from '../../services/CollectionService';
 import {getTweetData} from '../utils/ViewData';
 
 function useCollectionTweetListData(props) {
-  const {collectionId, tweetIds} = props;
+  const {collectionId, tweetIds = []} = props;
   const [isLoading, setIsLoading] = useState(false);
   const listDataRef = useRef([]);
   const _collectionService = collectionService();
@@ -62,7 +62,7 @@ function useCollectionTweetListData(props) {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [tweetIds, tweetIds.length]);
 
   const onRefresh = useCallback(() => {
     fetchData();

@@ -83,6 +83,7 @@ function AddToCollectionModal() {
             ) : isEmpty(oCollectionList) ? (
               <View style={localStyle.emptyComponentContainer}>
                 <EmptyScreenComponent
+                  buttonImage={AddIcon}
                   emptyImage={ArchiveIconBig}
                   buttonText={'Add a new Archive'}
                   onButtonPress={fnOnAddCollectionPress}

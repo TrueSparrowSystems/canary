@@ -18,4 +18,6 @@ export default {
   LocationSelectionScreen: 'LocationSelectionScreen',
   EditListUsersScreen: 'EditListUsersScreen',
   LandingScreen: 'LandingScreen',
+  ImportListScreen: 'ImportListScreen',
+  ImportArchiveScreen: 'ImportArchiveScreen',
 };

@@ -14,7 +14,7 @@ function CollectionTweetList(props) {
     emptyScreenComponent,
     shouldShowBookmarked = false,
     contentContainerStyle,
-    onMemberRemove,
+    onTweetRemove,
   } = props;
   const {
     bIsLoading,
@@ -52,7 +52,7 @@ function CollectionTweetList(props) {
             key={data?.id}
             dataSource={data}
             showBookmarked={shouldShowBookmarked}
-            onBookmarkPress={onMemberRemove}
+            onBookmarkPress={onTweetRemove}
           />
         );
       })}

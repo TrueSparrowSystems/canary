@@ -64,7 +64,7 @@ function ImportArchiveScreen(props) {
           <CollectionTweetList
             key={nSelectedIndex}
             tweetIds={aData[nSelectedIndex]?.tweetIds}
-            onMemberRemove={fnOnArchiveTweetRemove}
+            onTweetRemove={fnOnArchiveTweetRemove}
             shouldShowBookmarked={true}
             contentContainerStyle={localStyle.tweetListContentContainer}
             emptyScreenComponent={

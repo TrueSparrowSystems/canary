@@ -1,7 +1,6 @@
 import React, {useMemo, useRef} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Image from 'react-native-fast-image';
-import useImportCollectionCardData from './useImportCollectionCardData';
 import {BinIcon} from '../../../assets/common';
 import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
 import fonts from '../../../constants/fonts';
@@ -13,7 +12,6 @@ function ImportCollectionCard(props) {
   const localStyle = useStyleProcessor(styles, 'ImportCollectionCard');
 
   const colorCombination = useRef(getRandomColorCombination());
-  const {} = useImportCollectionCardData(tweetIds, collectionName);
 
   const colorSchemeStyle = useMemo(() => {
     return {

@@ -72,6 +72,7 @@ const styles = {
     backgroundColor: colors.White,
   },
   listComponent: {
+    width: '100%',
     tablet: {
       landscape: {
         width: '70%',

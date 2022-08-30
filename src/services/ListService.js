@@ -105,6 +105,12 @@ class ListService {
     }
   }
 
+  async removeMultipleLists(listIds) {
+    for (const listId of listIds) {
+      await this.removeList(listId);
+    }
+  }
+
   async importList(list) {
     return new Promise((resolve, reject) => {
       const newListName = list.name + ' ★';

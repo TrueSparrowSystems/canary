@@ -106,6 +106,11 @@ class CollectionService {
       await this.importCollection(collection);
     }
   }
+  async removeMultipleCollection(collectionIds) {
+    for (const collectionId of collectionIds) {
+      await this.removeCollection(collectionId);
+    }
+  }
 
   async importCollection(collection) {
     return new Promise((resolve, reject) => {

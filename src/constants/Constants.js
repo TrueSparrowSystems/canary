@@ -28,6 +28,10 @@ export const Constants = {
     Archive: 'archive',
     List: 'list',
   },
+  ConfirmDeleteModalType: {
+    Archive: 'confirm_delete_modal_type_archive',
+    List: 'confirm_delete_modal_type_list',
+  },
   WorldWideWoeidData: {
     country: '',
     countryCode: null,

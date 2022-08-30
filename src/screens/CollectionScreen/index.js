@@ -12,7 +12,13 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {collectionService} from '../../services/CollectionService';
 import colors from '../../constants/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
-import {AddIcon, ArchiveIconBig, bookmarkedIcon} from '../../assets/common';
+import {
+  AddIcon,
+  ArchiveIconBig,
+  BinIcon,
+  bookmarkedIcon,
+  ShareAppIcon,
+} from '../../assets/common';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import {isEmpty} from 'lodash';
@@ -86,18 +92,15 @@ function CollectionScreen(props) {
   }, [isPortrait]);
 
   const reloadList = useCallback(() => {
+    selectedCollectionIds.current = [];
     setIsDeleteEnabled(false);
     fetchData();
   }, [fetchData]);
 
   useEffect(() => {
-    const updateCollection = () => {
-      setIsDeleteEnabled(false);
-      fetchData();
-    };
-    LocalEvent.on(EventTypes.UpdateCollection, updateCollection);
+    LocalEvent.on(EventTypes.UpdateCollection, reloadList);
     return () => {
-      LocalEvent.off(EventTypes.UpdateCollection, updateCollection);
+      LocalEvent.off(EventTypes.UpdateCollection, reloadList);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -165,6 +168,21 @@ function CollectionScreen(props) {
     }
   }, [_collectionService]);
 
+  const onRemoveCollectionsPress = useCallback(() => {
+    if (selectedCollectionIds.current.length > 0) {
+      LocalEvent.emit(EventTypes.ShowDeleteCollectionConfirmationModal, {
+        id: selectedCollectionIds.current,
+        text: `Are you sure you want to remove these ${selectedCollectionIds.current.length} selected archives?`,
+        onCollectionRemoved: reloadList,
+      });
+    } else {
+      Toast.show({
+        type: ToastType.Error,
+        text1: 'Select at least one archive to delete',
+      });
+    }
+  }, [reloadList]);
+
   return (
     <SafeAreaView style={localStyle.container}>
       {isEmpty(collectionDataRef.current) ? null : (
@@ -172,17 +190,25 @@ function CollectionScreen(props) {
           text={'Archives'}
           textStyle={localStyle.headerTextStyle}
           enableRightButton={true}
-          rightButtonImage={!isDeleteEnabled ? AddIcon : null}
+          rightButtonImage={!isDeleteEnabled ? AddIcon : ShareAppIcon}
           onRightButtonClick={
-            !isDeleteEnabled ? onAddCollectionPress : onDonePress
+            !isDeleteEnabled ? onAddCollectionPress : onSharePress
           }
-          rightButtonText={!isDeleteEnabled ? 'New' : 'Done'}
+          rightButtonText={!isDeleteEnabled ? 'New' : null}
           rightButtonTextStyle={localStyle.newButtonTextStyle}
-          rightButtonImageStyle={localStyle.newButtonImageStyle}
+          rightButtonImageStyle={
+            !isDeleteEnabled
+              ? localStyle.newButtonImageStyle
+              : localStyle.shareButtonImageStyle
+          }
           enableLeftButton={isDeleteEnabled}
-          leftButtonText={'Share'}
+          leftButtonText={'Done'}
           leftButtonTextStyle={localStyle.newButtonTextStyle}
-          onLeftButtonClick={onSharePress}
+          onLeftButtonClick={onDonePress}
+          enableSecondaryRightButton={isDeleteEnabled}
+          secondaryRightButtonImage={BinIcon}
+          secondaryRightButtonImageStyle={localStyle.shareButtonImageStyle}
+          onSecondaryRightButtonClick={onRemoveCollectionsPress}
         />
       )}
       {showPromotionBanner && !isEmpty(collectionDataRef.current) ? (
@@ -262,6 +288,15 @@ const styles = {
     tintColor: colors.GoldenTainoi,
     height: layoutPtToPx(14),
     width: layoutPtToPx(14),
+  },
+  shareButtonImageStyle: {
+    tintColor: colors.GoldenTainoi,
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(20),
+    tablet: {
+      height: layoutPtToPx(25),
+      width: layoutPtToPx(25),
+    },
   },
   newButtonTextStyle: {
     fontFamily: fonts.SoraSemiBold,

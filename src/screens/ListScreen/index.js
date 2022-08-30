@@ -7,7 +7,13 @@ import {
   Share,
   View,
 } from 'react-native';
-import {AddIcon, ListGolden, ListIconBig} from '../../assets/common';
+import {
+  AddIcon,
+  BinIcon,
+  ListGolden,
+  ListIconBig,
+  ShareAppIcon,
+} from '../../assets/common';
 import ListCard from '../../components/ListCard';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {listService} from '../../services/ListService';
@@ -28,6 +34,7 @@ import Banner from '../../components/common/Banner';
 import {showPromotion} from '../../components/utils/ViewData';
 import Toast from 'react-native-toast-message';
 import {ToastType} from '../../constants/ToastConstants';
+import {Constants} from '../../constants/Constants';
 
 function ListScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListScreen');
@@ -114,6 +121,22 @@ function ListScreen(props) {
     }
   }, [_listService]);
 
+  const onRemoveListsPress = useCallback(() => {
+    if (selectedListIds.current.length > 0) {
+      LocalEvent.emit(EventTypes.ShowDeleteCollectionConfirmationModal, {
+        id: selectedListIds.current,
+        text: `Are you sure you want to remove these ${selectedListIds.current.length} selected lists?`,
+        onCollectionRemoved: reloadList,
+        type: Constants.ConfirmDeleteModalType.List,
+      });
+    } else {
+      Toast.show({
+        type: ToastType.Error,
+        text1: 'Select at least one archive to delete',
+      });
+    }
+  }, [reloadList]);
+
   const onRemovePromotionPress = useCallback(() => {
     crossButtonRef.current?.animate('fadeOutLeftBig').then(() => {
       setShowPromotionBanner(false);
@@ -128,17 +151,25 @@ function ListScreen(props) {
       {!isEmpty(listDataRef.current) ? (
         <Header
           text="Lists"
-          rightButtonImage={swipeable ? null : AddIcon}
+          rightButtonImage={swipeable ? ShareAppIcon : AddIcon}
           enableRightButton={true}
-          rightButtonText={swipeable ? 'Done' : 'New'}
+          rightButtonText={swipeable ? null : 'New'}
           textStyle={localStyle.headerText}
-          rightButtonImageStyle={localStyle.headerRightButtonImage}
+          rightButtonImageStyle={
+            swipeable
+              ? localStyle.shareButtonImageStyle
+              : localStyle.headerRightButtonImage
+          }
           rightButtonTextStyle={localStyle.headerRightButtonText}
-          onRightButtonClick={swipeable ? onDonePress : onAddListPress}
+          onRightButtonClick={swipeable ? onSharePress : onAddListPress}
           enableLeftButton={swipeable}
-          leftButtonText={'Share'}
+          leftButtonText={'Done'}
           leftButtonTextStyle={localStyle.headerRightButtonText}
-          onLeftButtonClick={onSharePress}
+          onLeftButtonClick={onDonePress}
+          enableSecondaryRightButton={swipeable}
+          secondaryRightButtonImage={BinIcon}
+          secondaryRightButtonImageStyle={localStyle.shareButtonImageStyle}
+          onSecondaryRightButtonClick={onRemoveListsPress}
         />
       ) : null}
       {showPromotionBanner && !isEmpty(listDataRef.current) ? (
@@ -253,6 +284,15 @@ const styles = {
     height: layoutPtToPx(18),
     width: layoutPtToPx(18),
     marginRight: layoutPtToPx(8),
+  },
+  shareButtonImageStyle: {
+    tintColor: colors.GoldenTainoi,
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(20),
+    tablet: {
+      height: layoutPtToPx(25),
+      width: layoutPtToPx(25),
+    },
   },
 };
 

@@ -42,7 +42,7 @@ export default class AppleStyleSwipeableRow extends Component {
     return enabled ? (
       <Animated.View
         style={{flex: 1, transform: [{translateX: trans}]}}
-        key={this.props?.id}>
+        key={`this.props?.id-${text}`}>
         <RectButton
           style={[styles.rightAction, {backgroundColor: color}]}
           onPress={onPress}>

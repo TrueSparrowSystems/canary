@@ -46,6 +46,7 @@ const PreferenceOptionButton = ({
   return (
     <View>
       <RoundedButton
+        testId={`preference_option_${text}`}
         text={text}
         leftImage={icon}
         leftImageStyle={localStyle.iconStyle}

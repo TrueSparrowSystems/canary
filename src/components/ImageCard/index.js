@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Text, TouchableWithoutFeedback, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {PlayIcon} from '../../assets/common';
 import ScreenName from '../../constants/ScreenName';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -13,6 +13,7 @@ import Video from 'react-native-video';
 import * as Animatable from 'react-native-animatable';
 import fonts from '../../constants/fonts';
 import {useOrientationState} from '../../hooks/useOrientation';
+import {TouchableWithoutFeedback} from '@plgworks/applogger';
 
 function ImageCard({mediaArray, tweetId}) {
   const localStyle = useStyleProcessor(styles, 'ImageCard');
@@ -101,6 +102,7 @@ function ImageCard({mediaArray, tweetId}) {
     <Animatable.View animation={'fadeIn'} style={localStyle.container}>
       <View style={containerStyle}>
         <TouchableWithoutFeedback
+          testID={`${tweetId}_tweet_image_card_1st_index_image`}
           onPress={() => {
             onImagePress(0);
           }}>
@@ -112,6 +114,7 @@ function ImageCard({mediaArray, tweetId}) {
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback
+          testID={`${tweetId}_tweet_image_card_2nd_index_image`}
           onPress={() => {
             onImagePress(1);
           }}>
@@ -125,6 +128,7 @@ function ImageCard({mediaArray, tweetId}) {
       <View
         style={mediaArray?.length >= 3 ? containerStyle : localStyle.hideImage}>
         <TouchableWithoutFeedback
+          testID={`${tweetId}_tweet_image_card_3rd_index_image`}
           onPress={() => {
             onImagePress(2);
           }}>
@@ -136,6 +140,7 @@ function ImageCard({mediaArray, tweetId}) {
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback
+          testID={`${tweetId}_tweet_image_card_4th_index_image`}
           onPress={() => {
             onImagePress(3);
           }}>
@@ -159,6 +164,7 @@ function ImageCard({mediaArray, tweetId}) {
         resizeMode={'cover'}
       />
       <TouchableWithoutFeedback
+        testID={`${tweetId}_tweet_video_card_play_button`}
         onPress={() => {
           navigation.navigate(ScreenName.VideoPlayerScreen, {
             videoUrl: videoUrl,
@@ -202,6 +208,7 @@ function ImageCard({mediaArray, tweetId}) {
 
       {shouldPlayGif ? null : (
         <TouchableWithoutFeedback
+          testID={`${tweetId}_tweet_image_card_GIF_button`}
           onPress={() => {
             setShouldPlayGif(true);
           }}>

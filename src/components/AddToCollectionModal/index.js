@@ -43,6 +43,7 @@ function AddToCollectionModal() {
 
   return bIsVisible ? (
     <CustomModal
+      testID="add_to_collection_modal"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}

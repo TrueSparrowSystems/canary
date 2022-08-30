@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
@@ -8,7 +8,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import SearchBar from '../SearchBar';
 import useSearchScreenContentData from './useSearchScreenContentData';
 import * as Animatable from 'react-native-animatable';
-import {RefreshControl, TouchableOpacity} from '@plgworks/applogger';
+import {RefreshControl, TouchableOpacity, Pressable} from '@plgworks/applogger';
 
 function SearchScreenContent(props) {
   const {style} = props;
@@ -55,6 +55,7 @@ function SearchScreenContent(props) {
           return (
             <Animatable.View key={i} animation="fadeIn">
               <Pressable
+                testID={`trending_topic_${text}`}
                 onPress={() => {
                   fnOnTopicClick(text);
                 }}

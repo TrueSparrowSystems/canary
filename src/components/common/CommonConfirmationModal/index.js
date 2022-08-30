@@ -28,6 +28,7 @@ function CommonConfirmationModal() {
 
   return bIsVisible ? (
     <CustomModal
+      testID="common_confirmation_modal"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}
@@ -40,6 +41,7 @@ function CommonConfirmationModal() {
             <Text style={localStyle.secondaryTextStyle}>{sSecondaryText}</Text>
             <View style={localStyle.flexRow}>
               <RoundedButton
+                testId={'confirmation_modal_cancel'}
                 style={localStyle.cancelButton}
                 text={'No'}
                 textStyle={localStyle.cancelButtonText}
@@ -47,6 +49,7 @@ function CommonConfirmationModal() {
                 underlayColor={getColorWithOpacity(colors.White, 0.8)}
               />
               <RoundedButton
+                testId={'confirmation_modal_sure'}
                 style={localStyle.sureButton}
                 text={'Sure'}
                 textStyle={localStyle.sureButtonText}

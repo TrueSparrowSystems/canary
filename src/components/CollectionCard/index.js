@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useMemo, useRef, useEffect, useState} from 'react';
-import {Text, TouchableWithoutFeedback, TouchableHighlight} from 'react-native';
+import {Text} from 'react-native';
 import {View} from 'react-native-animatable';
 import {BinIcon, EditIcon, TickIcon} from '../../assets/common';
 import ScreenName from '../../constants/ScreenName';
@@ -13,6 +13,10 @@ import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import * as Animatable from 'react-native-animatable';
 import {Constants} from '../../constants/Constants';
+import {
+  TouchableHighlight,
+  TouchableWithoutFeedback,
+} from '@plgworks/applogger';
 
 function CollectionCard(props) {
   const {
@@ -137,6 +141,7 @@ function CollectionCard(props) {
 
   return (
     <TouchableWithoutFeedback
+      testID={`collection_card_for_${collectionName}`}
       disabled={disabled}
       onPress={enableDelete ? onCollectionSelect : onCollectionPress}
       onLongPress={enableDelete ? null : fnOnLongPress}>
@@ -150,6 +155,7 @@ function CollectionCard(props) {
             {enableDelete ? (
               <View style={localStyle.optionsView}>
                 <TouchableHighlight
+                  testID={`collection_card_remove_button_for_${collectionName}`}
                   underlayColor={colors.Transparent}
                   style={binContainerStyle}
                   onPress={onCollectionRemove}
@@ -157,6 +163,7 @@ function CollectionCard(props) {
                   <Image source={BinIcon} style={localStyle.binIconStyle} />
                 </TouchableHighlight>
                 <TouchableHighlight
+                  testID={`collection_card_edit_button_for_${collectionName}`}
                   underlayColor={colors.Transparent}
                   style={binContainerStyle}
                   onPress={onEditCollectionPress}

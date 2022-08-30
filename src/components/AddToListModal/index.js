@@ -53,6 +53,7 @@ function AddToListModal() {
 
   return bIsVisible ? (
     <CustomModal
+      testID="add_to_list_modal"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}

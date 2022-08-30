@@ -71,6 +71,7 @@ function PreferenceScreen(props) {
     <View style={localStyle.container}>
       {isNotOnboardingScreen ? (
         <Header
+          testId={'preference_screen'}
           enableBackButton={true}
           enableRightButton={true}
           onRightButtonClick={fnOnShareAppPress}
@@ -105,6 +106,7 @@ function PreferenceScreen(props) {
 
           <View style={localStyle.toggleButtonsContainer}>
             <RoundedButton
+              testId={'preference_screen_verified_users'}
               text="Verified Users Only"
               leftImage={VerifiedIconBlack}
               style={[
@@ -119,6 +121,7 @@ function PreferenceScreen(props) {
               underlayColor={colors.GoldenTainoi20}
             />
             <RoundedButton
+              testId={'preference_screen_all_users'}
               text="All Users"
               leftImage={AllUsersIcon}
               onPress={fnToggleUserPrefSelection}
@@ -137,11 +140,15 @@ function PreferenceScreen(props) {
           </View>
 
           <View style={localStyle.continueButtonContainer}>
-            <RoundedButton {...roundedButtonStyle} />
+            <RoundedButton
+              testId={'preference_screen_continue'}
+              {...roundedButtonStyle}
+            />
           </View>
         </View>
         <View style={localStyle.backupRestoreContainer}>
           <RoundedButton
+            testId={'preference_screen_backup'}
             text="BackUp"
             onPress={backUpDataToFirebase}
             style={localStyle.backupRestoreButton}
@@ -149,6 +156,7 @@ function PreferenceScreen(props) {
             underlayColor={colors.GoldenTainoi80}
           />
           <RoundedButton
+            testId={'preference_screen_restore'}
             text="Restore"
             onPress={restoreDataFromFirebase}
             style={localStyle.backupRestoreButton}
@@ -156,6 +164,7 @@ function PreferenceScreen(props) {
             underlayColor={colors.GoldenTainoi80}
           />
           <RoundedButton
+            testId={'preference_screen_clear'}
             text="Clear"
             onPress={clearData}
             style={localStyle.backupRestoreButton}

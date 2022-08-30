@@ -1,8 +1,9 @@
 import React from 'react';
-import {Text, TouchableHighlight, View, Image} from 'react-native';
+import {Text, View, Image} from 'react-native';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
 import Colors from '../../../constants/colors';
+import {TouchableHighlight} from '@plgworks/applogger';
 
 /**
  * @param {Function} onPress Callback function which is called when button is pressed.
@@ -27,11 +28,13 @@ function RoundedButton({
   underlayColor,
   rightImage,
   rightImageStyle,
+  testId = '',
 }) {
   const localStyle = useStyleProcessor(styles, 'RoundedButton');
   const containerStyle = style || localStyle.container;
   return (
     <TouchableHighlight
+      testID={`${testId}_rounded_button`}
       underlayColor={underlayColor || Colors.Mandy30}
       disabled={disabled}
       style={[

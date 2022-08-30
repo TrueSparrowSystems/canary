@@ -40,6 +40,7 @@ function TimelineScreen(props) {
       <View style={localStyle.flexRow}>
         <View style={localStyle.listComponent}>
           <Header
+            testId={'timeline_screen'}
             enableRightButton={true}
             onRightButtonClick={fnOnSettingsPress}
             rightButtonImage={SettingsIcon}

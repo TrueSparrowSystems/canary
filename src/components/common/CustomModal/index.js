@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {BackHandler, Dimensions, View, Animated} from 'react-native';
-import {Portal} from 'react-native-paper';
 import {useOrientationState} from '../../../hooks/useOrientation';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import colors from '../../../constants/colors';

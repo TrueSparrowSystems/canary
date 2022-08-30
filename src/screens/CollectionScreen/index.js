@@ -187,6 +187,7 @@ function CollectionScreen(props) {
     <SafeAreaView style={localStyle.container}>
       {isEmpty(collectionDataRef.current) ? null : (
         <Header
+          testId={'collection_screen'}
           text={'Archives'}
           textStyle={localStyle.headerTextStyle}
           enableRightButton={true}

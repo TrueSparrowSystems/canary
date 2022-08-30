@@ -38,6 +38,7 @@ function SearchUserModal() {
 
   return (
     <CustomModal
+      testID="search_user_modal"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnCloseModal}
       onBackDropPress={fnCloseModal}

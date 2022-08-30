@@ -24,6 +24,7 @@ function EditListUsersScreen(props) {
     <SafeAreaView>
       <View style={localStyle.container}>
         <Header
+          testId={'edit_list_user_screen'}
           text="Edit List"
           textStyle={localStyle.headerText}
           enableLeftButton={true}

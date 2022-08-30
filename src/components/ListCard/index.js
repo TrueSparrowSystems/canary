@@ -1,5 +1,5 @@
 import React, {useMemo, useCallback} from 'react';
-import {Text, View, TouchableWithoutFeedback, Image} from 'react-native';
+import {Text, View, Image} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
@@ -11,7 +11,7 @@ import * as Animatable from 'react-native-animatable';
 import AppleStyleSwipeableRow from '../AppleStyleSwipeableRow';
 import useListCardData from './useListCardData';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
-import {TouchableOpacity} from '@plgworks/applogger';
+import {TouchableOpacity, TouchableWithoutFeedback} from '@plgworks/applogger';
 
 function ListCard(props) {
   const {
@@ -124,6 +124,7 @@ function ListCard(props) {
         ]}
         shouldRenderRightAction={true}>
         <TouchableWithoutFeedback
+          testID={`list_card_for_${listName}`}
           onPress={enableSwipe ? fnOnListSelect : fnOnListPress}
           onLongPress={fnOnLongPress}
           disabled={isPressDisabled}>

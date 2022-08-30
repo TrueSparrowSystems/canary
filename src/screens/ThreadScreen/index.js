@@ -36,7 +36,11 @@ function ThreadScreen(props) {
   return (
     <View style={localStyle.container}>
       <View style={localStyle.listComponent}>
-        <Header enableBackButton={true} text={'Thread'} />
+        <Header
+          testId={'thread_screen'}
+          enableBackButton={true}
+          text={'Thread'}
+        />
         <TimelineList
           reloadData={false}
           refreshData={false}

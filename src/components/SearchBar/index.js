@@ -1,12 +1,12 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {View, Image, TextInput} from 'react-native';
+import {View, Image} from 'react-native';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {CrossIcon, SearchIcon} from '../../assets/common';
 import {isEmpty} from 'lodash';
 import fonts from '../../constants/fonts';
-import {TouchableOpacity} from '@plgworks/applogger';
+import {TextInput, TouchableOpacity} from '@plgworks/applogger';
 
 function SearchBar({
   searchQuery = '',
@@ -64,6 +64,7 @@ function SearchBar({
       }>
       <Image source={SearchIcon} style={localStyle.searchIconStyle} />
       <TextInput
+        testID="search_bar_text_input"
         ref={textInputRef}
         onFocus={onTextInputFocussed}
         onBlur={onTextInputBlurred}

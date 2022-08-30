@@ -37,7 +37,7 @@ function AddListModal() {
 
   return bIsVisible ? (
     <CustomModal
-      testID="add_list_modal"
+      testID="add_list"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}
@@ -49,7 +49,7 @@ function AddListModal() {
               {bIsEditMode ? 'Update list' : 'New List'}
             </Text>
             <TextInput
-              testID="add_list_modal_text_input"
+              testID="add_list_modal"
               defaultValue={sDefaultValue}
               style={localStyle.inputStyle}
               autoFocus={true}

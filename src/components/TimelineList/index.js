@@ -77,7 +77,7 @@ function TimelineList({
           />
         </View>
         <TouchableOpacity
-          testID="share_tweet_card_cross_button"
+          testID="share_tweet_card_cross"
           hitSlop={{left: 10, right: 10, top: 10, bottom: 10}}
           onPress={fnOnCloseShareCardPress}>
           <Image source={CrossIcon} style={localStyle.crossIconStyle} />

@@ -50,7 +50,7 @@ function SearchUserModal() {
         <View>
           <View style={localStyle.headerButtonContainer}>
             <TouchableOpacity
-              testID="search_user_modal_done_button"
+              testID="search_user_modal_done"
               activeOpacity={0.8}
               onPress={fnCloseModal}>
               <Text style={localStyle.doneButtonText}>Done</Text>

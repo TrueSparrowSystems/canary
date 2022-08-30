@@ -64,7 +64,7 @@ function SearchBar({
       }>
       <Image source={SearchIcon} style={localStyle.searchIconStyle} />
       <TextInput
-        testID="search_bar_text_input"
+        testID="search_bar"
         ref={textInputRef}
         onFocus={onTextInputFocussed}
         onBlur={onTextInputBlurred}

@@ -52,7 +52,7 @@ function MiniCollectionCard(props) {
 
   return (
     <TouchableOpacity
-      testID={`mini_collection_card_toggle_button_collection_name_${collectionName}`}
+      testID={`mini_collection_card_for_collection_name_${collectionName}_toggle`}
       onPress={
         bIsTweetAddedToCollection
           ? fnOnRemoveFromCollectionPress

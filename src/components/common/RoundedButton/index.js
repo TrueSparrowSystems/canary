@@ -34,7 +34,7 @@ function RoundedButton({
   const containerStyle = style || localStyle.container;
   return (
     <TouchableHighlight
-      testID={`${testId}_rounded_button`}
+      testID={`${testId}_rounded`}
       underlayColor={underlayColor || Colors.Mandy30}
       disabled={disabled}
       style={[

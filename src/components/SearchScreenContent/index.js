@@ -43,7 +43,7 @@ function SearchScreenContent(props) {
           </Text>
 
           <TouchableOpacity
-            testID="search_screen_change_location_button"
+            testID="search_screen_change_location"
             activeOpacity={0.8}
             onPress={fnNavigateToLocationSelectionScreen}>
             <Text style={localStyle.changeLocationText}>Change Location</Text>

@@ -155,7 +155,7 @@ function CollectionCard(props) {
             {enableDelete ? (
               <View style={localStyle.optionsView}>
                 <TouchableHighlight
-                  testID={`collection_card_remove_button_for_${collectionName}`}
+                  testID={`collection_card_for_${collectionName}_remove`}
                   underlayColor={colors.Transparent}
                   style={binContainerStyle}
                   onPress={onCollectionRemove}
@@ -163,7 +163,7 @@ function CollectionCard(props) {
                   <Image source={BinIcon} style={localStyle.binIconStyle} />
                 </TouchableHighlight>
                 <TouchableHighlight
-                  testID={`collection_card_edit_button_for_${collectionName}`}
+                  testID={`collection_card_for_${collectionName}_remove`}
                   underlayColor={colors.Transparent}
                   style={binContainerStyle}
                   onPress={onEditCollectionPress}

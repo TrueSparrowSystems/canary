@@ -127,7 +127,7 @@ function TweetCard(props) {
           {bHasMedia ? <ImageCard mediaArray={media} tweetId={id} /> : null}
           <View style={localStyle.likeCommentStrip}>
             <TouchableOpacity
-              testID={`${testID}_tweet_card_with_id_${id}_like_button`}
+              testID={`${testID}_tweet_card_with_id_${id}_like`}
               style={localStyle.flexRow}
               onPress={fnOnLikePress}>
               <Image source={likeIcon} style={localStyle.iconStyle} />
@@ -138,7 +138,7 @@ function TweetCard(props) {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              testID={`${testID}_tweet_card_with_id_${id}_reply_button`}
+              testID={`${testID}_tweet_card_with_id_${id}_reply`}
               style={localStyle.flexRow}
               onPress={fnOnLikePress}>
               {public_metrics?.reply_count > 0 ? (
@@ -152,7 +152,7 @@ function TweetCard(props) {
             </TouchableOpacity>
             <View style={localStyle.optionsView}>
               <TouchableOpacity
-                testID={`${testID}_tweet_card_with_id_${id}_share_button`}
+                testID={`${testID}_tweet_card_with_id_${id}_share`}
                 onPress={fnOnSharePress}
                 style={localStyle.shareIconContainer}
                 hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
@@ -160,7 +160,7 @@ function TweetCard(props) {
               </TouchableOpacity>
               {bCanShare ? (
                 <TouchableOpacity
-                  testID={`${testID}_tweet_card_with_id_${id}_twitter_button`}
+                  testID={`${testID}_tweet_card_with_id_${id}_twitter`}
                   onPress={fnOnTwitterIconPress}
                   style={localStyle.shareIconContainer}
                   hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
@@ -171,7 +171,7 @@ function TweetCard(props) {
                 </TouchableOpacity>
               ) : null}
               <TouchableOpacity
-                testID={`${testID}_tweet_card_with_id_${id}_bookmark_button`}
+                testID={`${testID}_tweet_card_with_id_${id}_bookmark`}
                 onPress={fnOnBookmarkButtonPress}
                 hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                 <Image
@@ -184,7 +184,7 @@ function TweetCard(props) {
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                testID={`${testID}_tweet_card_with_id_${id}_list_button`}
+                testID={`${testID}_tweet_card_with_id_${id}_list`}
                 onPress={fnOnAddToListPress}
                 hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                 <Image source={ListIcon} style={localStyle.listIconStyle} />

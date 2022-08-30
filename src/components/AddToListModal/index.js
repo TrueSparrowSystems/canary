@@ -63,7 +63,7 @@ function AddToListModal() {
           <View style={localStyle.view}>
             <View style={localStyle.headerStyle}>
               <TouchableOpacity
-                testID="add_to_list_modal_new_button"
+                testID="add_to_list_modal_new"
                 onPress={fnOnAddListPress}
                 disabled={isEmpty(oList)}
                 style={addNewButtonStyleMemo}>
@@ -76,7 +76,7 @@ function AddToListModal() {
                 <Text style={localStyle.titleText}>Add user to Lists</Text>
               </View>
               <TouchableOpacity
-                testID="add_to_list_modal_done_button"
+                testID="add_to_list_modal_done"
                 style={localStyle.doneButtonContainer}
                 onPress={fnOnDonePress}>
                 <Text style={localStyle.headerTextStyle}>Done</Text>

@@ -164,7 +164,7 @@ function ImageCard({mediaArray, tweetId}) {
         resizeMode={'cover'}
       />
       <TouchableWithoutFeedback
-        testID={`${tweetId}_tweet_video_card_play_button`}
+        testID={`${tweetId}_tweet_video_card_play`}
         onPress={() => {
           navigation.navigate(ScreenName.VideoPlayerScreen, {
             videoUrl: videoUrl,
@@ -208,7 +208,7 @@ function ImageCard({mediaArray, tweetId}) {
 
       {shouldPlayGif ? null : (
         <TouchableWithoutFeedback
-          testID={`${tweetId}_tweet_image_card_GIF_button`}
+          testID={`${tweetId}_tweet_image_card_GIF`}
           onPress={() => {
             setShouldPlayGif(true);
           }}>

@@ -1,5 +1,6 @@
+import {TouchableOpacity} from '@plgworks/applogger';
 import React, {useMemo, useRef} from 'react';
-import {Text, View, Image, TouchableOpacity} from 'react-native';
+import {Text, View, Image} from 'react-native';
 import {BinIcon, ListIcon} from '../../../assets/common';
 import colors, {getColorWithOpacity} from '../../../constants/colors';
 import fonts from '../../../constants/fonts';
@@ -52,11 +53,13 @@ function MiniListCard(props) {
 
   return (
     <TouchableOpacity
+      testID={`mini_list_card_${listName}`}
       activeOpacity={0.8}
       onPress={onListPress}
       style={listIconStyle.containerStyle}>
       <View style={localStyle.optionsView}>
         <TouchableOpacity
+          testID="mini_list_card_delete_icon"
           activeOpacity={0.8}
           style={localStyle.binContainer}
           onPress={onListRemove}>

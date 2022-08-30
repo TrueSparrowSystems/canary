@@ -1,11 +1,12 @@
 import React, {useCallback} from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import colors from '../../../constants/colors';
 import {layoutPtToPx} from '../../../utils/responsiveUI';
 import {BackIcon} from '../../../assets/common';
 import {useNavigation} from '@react-navigation/native';
 import fonts from '../../../constants/fonts';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 function Header(props) {
   const {
@@ -30,6 +31,7 @@ function Header(props) {
     textStyle,
     style,
     rightButtonViewStyle,
+    testID = '',
   } = props;
 
   const navigation = useNavigation();
@@ -47,12 +49,18 @@ function Header(props) {
       <View style={localStyle.view}>
         <View style={localStyle.backButtonView}>
           {enableBackButton ? (
-            <TouchableOpacity activeOpacity={1} onPress={onBackPress}>
+            <TouchableOpacity
+              testID={`${testID}_header_back_icon`}
+              activeOpacity={1}
+              onPress={onBackPress}>
               <Image source={BackIcon} style={localStyle.backIcon} />
             </TouchableOpacity>
           ) : null}
           {enableLeftButton && (leftButtonImage || leftButtonText) ? (
             <TouchableOpacity
+              testID={`${testID}_header_left_button${
+                leftButtonText ? '_text_' + leftButtonText : null
+              }`}
               style={localStyle.leftButtonStyle}
               activeOpacity={1}
               onPress={onLeftButtonClick}>
@@ -80,6 +88,9 @@ function Header(props) {
         <View style={rightButtonViewStyle || localStyle.rightButtonView}>
           {enableRightButton && (rightButtonImage || rightButtonText) ? (
             <TouchableOpacity
+              testID={`${testID}_header_right_button${
+                rightButtonText ? '_text_' + rightButtonText : null
+              }`}
               style={localStyle.rightButtonStyle}
               activeOpacity={1}
               onPress={onRightButtonClick}>
@@ -98,6 +109,7 @@ function Header(props) {
           )}
           {enableSecondaryRightButton && secondaryRightButtonImage ? (
             <TouchableOpacity
+              testID={`${testID}_header_secondary_right_button`}
               style={localStyle.rightButtonStyle}
               activeOpacity={1}
               onPress={onSecondaryRightButtonClick}>

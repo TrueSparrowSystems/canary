@@ -1,5 +1,5 @@
 import React, {useMemo, useRef} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, View} from 'react-native';
 import Image from 'react-native-fast-image';
 import {BinIcon} from '../../../assets/common';
 import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
@@ -7,6 +7,7 @@ import fonts from '../../../constants/fonts';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import {getRandomColorCombination} from '../../../utils/RandomColorUtil';
 import colors from '../../../constants/colors';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 function ImportCollectionCard(props) {
   const {
@@ -45,10 +46,12 @@ function ImportCollectionCard(props) {
 
   return (
     <TouchableOpacity
+      testID={`import_collection_card_${collectionName}`}
       onPress={onArchivePress}
       style={colorSchemeStyle.cardStyle}>
       <View style={localStyle.optionsView}>
         <TouchableOpacity
+          testID="import_collection_card_delete_icon"
           activeOpacity={0.8}
           style={localStyle.binContainer}
           onPress={onArchiveRemove}>

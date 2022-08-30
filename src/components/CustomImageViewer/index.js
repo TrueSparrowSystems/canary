@@ -1,11 +1,4 @@
-import {
-  Image,
-  Modal,
-  SafeAreaView,
-  StatusBar,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, Modal, SafeAreaView, StatusBar, View} from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
@@ -13,6 +6,7 @@ import colors from '../../constants/colors';
 import {layoutPtToPx} from '../../utils/responsiveUI';
 import {CrossIcon} from '../../assets/common';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 const CustomImageViewer = () => {
   const localStyle = useStyleProcessor(styles, 'CustomImageViewer');
@@ -45,6 +39,7 @@ const CustomImageViewer = () => {
             <SafeAreaView>
               <View style={localStyle.headerContainer}>
                 <TouchableOpacity
+                  testID="image_viewer_cross_icon"
                   style={localStyle.crossIconContainer}
                   onPress={() => {
                     setIsVisible(false);

@@ -1,11 +1,5 @@
 import React, {useMemo, useCallback} from 'react';
-import {
-  Text,
-  View,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import {Text, View, TouchableWithoutFeedback, Image} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
@@ -17,6 +11,7 @@ import * as Animatable from 'react-native-animatable';
 import AppleStyleSwipeableRow from '../AppleStyleSwipeableRow';
 import useListCardData from './useListCardData';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 function ListCard(props) {
   const {
@@ -160,6 +155,7 @@ function ListCard(props) {
             ) : null}
             {shouldShowAddButton ? (
               <TouchableOpacity
+                testID={`list_card_toggle_button_list_name_${listName}`}
                 style={
                   oAddButtonData.buttonType === 'Primary'
                     ? localStyle.primaryAddButtonContainer

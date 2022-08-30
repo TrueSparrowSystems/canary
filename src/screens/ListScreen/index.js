@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
-  RefreshControl,
   SafeAreaView,
   ScrollView,
   Share,
@@ -35,6 +34,7 @@ import {showPromotion} from '../../components/utils/ViewData';
 import Toast from 'react-native-toast-message';
 import {ToastType} from '../../constants/ToastConstants';
 import {Constants} from '../../constants/Constants';
+import {RefreshControl} from '@plgworks/applogger';
 
 function ListScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListScreen');
@@ -214,7 +214,11 @@ function ListScreen(props) {
           ref={scrollRef}
           refreshControl={
             swipeable ? null : (
-              <RefreshControl refreshing={isLoading} onRefresh={reloadList} />
+              <RefreshControl
+                testID="list_screen_list"
+                refreshing={isLoading}
+                onRefresh={reloadList}
+              />
             )
           }>
           {Object.keys(listDataRef.current).map(key => {

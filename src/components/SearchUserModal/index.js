@@ -1,10 +1,4 @@
-import {
-  Dimensions,
-  TouchableOpacity,
-  View,
-  Text,
-  ScrollView,
-} from 'react-native';
+import {Dimensions, View, Text, ScrollView} from 'react-native';
 import React, {useMemo} from 'react';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import useSearchUserModalData from './useSearchUserModalData';
@@ -15,6 +9,7 @@ import fonts from '../../constants/fonts';
 import SearchBar from '../SearchBar';
 import SearchUserListItem from '../SearchUserListItem';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 function SearchUserModal() {
   const localStyle = useStyleProcessor(styles, 'SearchUserModal');
@@ -53,7 +48,10 @@ function SearchUserModal() {
         {/* Header */}
         <View>
           <View style={localStyle.headerButtonContainer}>
-            <TouchableOpacity activeOpacity={0.8} onPress={fnCloseModal}>
+            <TouchableOpacity
+              testID="search_user_modal_done_button"
+              activeOpacity={0.8}
+              onPress={fnCloseModal}>
               <Text style={localStyle.doneButtonText}>Done</Text>
             </TouchableOpacity>
           </View>

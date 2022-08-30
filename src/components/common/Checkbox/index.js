@@ -15,6 +15,7 @@ function CheckBox({
   uncheckedBoxContainerStyle,
   text,
   textStyle,
+  testID = '',
 }) {
   const localStyles = useStyleProcessor(styles, 'CheckBox');
 
@@ -44,7 +45,7 @@ function CheckBox({
 
   return (
     <TouchableOpacity
-      testID="check_box"
+      testID={`check_box_id_${testID}`}
       activeOpacity={1}
       disabled={disabled}
       style={localContainerStyle}

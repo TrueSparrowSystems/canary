@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Pressable,
-  RefreshControl,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Pressable, Text, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
@@ -15,6 +8,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import SearchBar from '../SearchBar';
 import useSearchScreenContentData from './useSearchScreenContentData';
 import * as Animatable from 'react-native-animatable';
+import {RefreshControl, TouchableOpacity} from '@plgworks/applogger';
 
 function SearchScreenContent(props) {
   const {style} = props;
@@ -32,7 +26,14 @@ function SearchScreenContent(props) {
   return (
     <KeyboardAwareScrollView
       showsVerticalScrollIndicator={false}
-      style={style || localStyle.container}>
+      style={style || localStyle.container}
+      refreshControl={
+        <RefreshControl
+          testID="search_screen"
+          refreshing={bIsLoading}
+          onRefresh={fnOnRefresh}
+        />
+      }>
       <SearchBar onSearchPressCallback={fnOnSearchPress} />
       <Text style={localStyle.errorText}>{sTextInputError}</Text>
       {sSelectedCountryName ? (
@@ -42,18 +43,14 @@ function SearchScreenContent(props) {
           </Text>
 
           <TouchableOpacity
+            testID="search_screen_change_location_button"
             activeOpacity={0.8}
             onPress={fnNavigateToLocationSelectionScreen}>
             <Text style={localStyle.changeLocationText}>Change Location</Text>
           </TouchableOpacity>
         </View>
       ) : null}
-      <ScrollView
-        contentContainerStyle={localStyle.trendingTopicList}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={bIsLoading} onRefresh={fnOnRefresh} />
-        }>
+      <View style={localStyle.trendingTopicList}>
         {aTrendingTopics.map((text, i) => {
           return (
             <Animatable.View key={i} animation="fadeIn">
@@ -67,7 +64,7 @@ function SearchScreenContent(props) {
             </Animatable.View>
           );
         })}
-      </ScrollView>
+      </View>
     </KeyboardAwareScrollView>
   );
 }

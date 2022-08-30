@@ -1,4 +1,4 @@
-import {ActivityIndicator, RefreshControl, ScrollView} from 'react-native';
+import {ActivityIndicator, ScrollView} from 'react-native';
 import React from 'react';
 import EditListUserCard from '../EditListUserCard';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
@@ -7,6 +7,7 @@ import useEditUserListData from './useEditUserListData';
 import {layoutPtToPx} from '../../../utils/responsiveUI';
 import {isEmpty} from 'lodash';
 import EmptyScreenComponent from '../EmptyScreenComponent';
+import {RefreshControl} from '@plgworks/applogger';
 
 const EditUserList = props => {
   const {onMemberRemove} = props;
@@ -21,7 +22,11 @@ const EditUserList = props => {
       style={localStyle.listView}
       contentContainerStyle={localStyle.listContent}
       refreshControl={
-        <RefreshControl refreshing={bIsLoading} onRefresh={fnOnRefresh} />
+        <RefreshControl
+          testID="edit_users_list"
+          refreshing={bIsLoading}
+          onRefresh={fnOnRefresh}
+        />
       }>
       {isEmpty(aListMembers) ? (
         <EmptyScreenComponent descriptionText="No users present in this list" />

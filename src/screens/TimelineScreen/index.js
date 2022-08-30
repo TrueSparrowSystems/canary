@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef} from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {Canary, SettingsIcon} from '../../assets/common';
@@ -12,6 +12,7 @@ import useTabListener from '../../hooks/useTabListener';
 import {isTablet} from 'react-native-device-info';
 import {useOrientationState} from '../../hooks/useOrientation';
 import SearchScreenContent from '../../components/SearchScreenContent';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 function TimelineScreen(props) {
   const localStyle = useStyleProcessor(styles, 'TimelineScreen');
@@ -44,6 +45,7 @@ function TimelineScreen(props) {
             rightButtonImage={SettingsIcon}
             text={
               <TouchableOpacity
+                testID="canary_title_home_screen"
                 activeOpacity={0.9}
                 onPress={scrollToTop}
                 style={localStyle.flexRow}>

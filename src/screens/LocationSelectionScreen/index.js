@@ -1,4 +1,4 @@
-import {ScrollView, Text, TouchableOpacity} from 'react-native';
+import {ScrollView, Text} from 'react-native';
 import React from 'react';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import SearchBar from '../../components/SearchBar';
@@ -8,6 +8,7 @@ import colors, {getColorWithOpacity} from '../../constants/colors';
 import fonts from '../../constants/fonts';
 import Header from '../../components/common/Header';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 function LocationSelectionScreen() {
   const localStyle = useStyleProcessor(styles, 'LocationSelectionScreen');
@@ -31,6 +32,7 @@ function LocationSelectionScreen() {
         {aData.length ? (
           aData?.map((item, index) => (
             <TouchableOpacity
+              testID={`location_item_${item}`}
               key={index}
               onPress={() => {
                 fnOnItemSelect(item);

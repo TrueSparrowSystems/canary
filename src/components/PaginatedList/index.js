@@ -1,17 +1,11 @@
 import React, {useCallback, useMemo, useRef} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Keyboard,
-  FlatList,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Text, Keyboard, FlatList, ActivityIndicator} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {usePaginatedListData, PLACE_HOLDER_CELL} from './usePaginatedListData';
 import {RecyclerListView} from 'recyclerlistview';
 import colors from '../../constants/colors';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 function PaginatedList(props) {
   // Component style
@@ -30,6 +24,7 @@ function PaginatedList(props) {
     refreshData,
     reloadData,
     useRecyclerView,
+    testID = '',
   } = props;
 
   /**
@@ -77,6 +72,7 @@ function PaginatedList(props) {
     return (
       props.errorView || (
         <TouchableOpacity
+          testID={`${testID}_paginated_list`}
           onPress={fnLoadFirstPage}
           activeOpacity={0.7}
           style={localStyle.errorViewContainer}>
@@ -96,6 +92,7 @@ function PaginatedList(props) {
     localStyle.heading,
     localStyle.subHeading,
     props.errorView,
+    testID,
   ]);
 
   /** Function returns loader view */

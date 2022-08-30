@@ -152,6 +152,9 @@ const styles = {
   emptyComponentContainer: {
     paddingVertical: layoutPtToPx(30),
     height: '80%',
+    tablet: {
+      width: '50%',
+    },
   },
   addIconStyle: {
     height: layoutPtToPx(14),
@@ -182,7 +185,6 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    justifyContent: 'flex-end',
   },
   titleContainer: {flexGrow: 1, alignItems: 'center'},
   titleText: {
@@ -205,8 +207,11 @@ const styles = {
   scrollView: {
     paddingHorizontal: layoutPtToPx(14),
     paddingVertical: layoutPtToPx(20),
+    width: '100%',
   },
-  scrollViewContentContainer: {paddingRight: layoutPtToPx(20)},
+  scrollViewContentContainer: {
+    paddingRight: layoutPtToPx(20),
+  },
 };
 
 export default React.memo(AddToCollectionModal);

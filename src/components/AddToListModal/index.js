@@ -85,7 +85,7 @@ function AddToListModal() {
                 color={colors.GoldenTainoi}
               />
             ) : isEmpty(oList) ? (
-              <View>
+              <View style={localStyle.listContainer}>
                 <UserCard userData={oUserData} />
                 <View style={localStyle.emptyComponentContainer}>
                   <EmptyScreenComponent
@@ -100,7 +100,7 @@ function AddToListModal() {
                 </View>
               </View>
             ) : (
-              <View>
+              <View style={localStyle.listContainer}>
                 <UserCard userData={oUserData} />
                 <ScrollView
                   showsVerticalScrollIndicator={false}
@@ -161,9 +161,16 @@ const styles = {
     lineHeight: layoutPtToPx(18),
     color: colors.GoldenTainoi,
   },
+  listContainer: {
+    width: '100%',
+  },
   emptyComponentContainer: {
+    alignSelf: 'center',
     paddingBottom: layoutPtToPx(30),
     height: '65%',
+    tablet: {
+      width: '50%',
+    },
   },
   blur: {
     position: 'absolute',
@@ -174,8 +181,8 @@ const styles = {
     backgroundColor: getColorWithOpacity(colors.BlackPearl, 0.5),
   },
   headerStyle: {
-    paddingTop: layoutPtToPx(20),
-    paddingBottom: layoutPtToPx(10),
+    paddingTop: layoutPtToPx(10),
+    paddingBottom: layoutPtToPx(20),
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',

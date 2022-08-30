@@ -9,7 +9,7 @@ import fonts from '../../../constants/fonts';
 import {Constants} from '../../../constants/Constants';
 
 const PATTERN_HASHTAG = /(#[^\s#]+|[^\s#]+#)(?=$|\s)/gi;
-const PATTERN_MENTION = /(@[a-z\d-_]+)/gi;
+const PATTERN_MENTION = /(^|\s)(@[a-z\d-_]+)/gi;
 const PATTERN_URL =
   /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
 

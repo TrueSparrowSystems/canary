@@ -1,4 +1,5 @@
 import TwitterAPI from '../api/helpers/TwitterAPI';
+import {Constants} from '../constants/Constants';
 import Cache from '../services/Cache';
 import {CacheKey} from '../services/Cache/CacheStoreConstants';
 
@@ -20,7 +21,8 @@ export function setCountriesWoeidsInCache() {
 export function getTrendingTopicsForCountry(countryName = 'Worldwide') {
   return new Promise((resolve, reject) => {
     const availableWoeids = Cache.getValue(CacheKey.AvailableWoeidsList);
-    const countryWoeidData = availableWoeids[countryName];
+    const countryWoeidData =
+      availableWoeids?.[countryName] || Constants.WorldWideWoeidData;
     const countryWoeid = countryWoeidData.woeid;
     TwitterAPI.getTrendsFromWoeid(countryWoeid)
       .then(res => {

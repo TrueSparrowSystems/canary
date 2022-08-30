@@ -135,13 +135,13 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
 #endif
 
-- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    while ([[UIDevice currentDevice] isGeneratingDeviceOrientationNotifications]) {
-        [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-    }
+ - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+     while ([[UIDevice currentDevice] isGeneratingDeviceOrientationNotifications] && [UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad) {
+         [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+     }
   
-    return [Orientation getOrientation];
-  }
+     return [Orientation getOrientation];
+   }
  
 
 @end

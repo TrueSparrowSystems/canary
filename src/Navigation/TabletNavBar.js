@@ -38,7 +38,8 @@ function TabletNavBar({state, descriptors, navigation, tabName, tabIcons}) {
               accessibilityState={isFocused ? {selected: true} : {}}
               accessibilityLabel={options.tabBarAccessibilityLabel}
               onPress={onPress}
-              style={localStyle.flex1}>
+              style={localStyle.flex1}
+              key={route.key}>
               <View style={localStyle.tabIconContainer}>
                 <Image
                   source={tabIcons[index]}

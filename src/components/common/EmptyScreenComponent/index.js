@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, Image, Text} from 'react-native';
-import {AddIcon} from '../../../assets/common';
+import {Image, Text} from 'react-native';
 import colors, {getColorWithOpacity} from '../../../constants/colors';
 import fonts from '../../../constants/fonts';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
@@ -87,6 +86,13 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: layoutPtToPx(50),
+    tablet: {
+      alignSelf: 'center',
+      width: '60%',
+      landscape: {
+        width: '50%',
+      },
+    },
   },
 };
 

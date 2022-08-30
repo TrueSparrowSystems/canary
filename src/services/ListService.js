@@ -6,7 +6,7 @@ import Cache from './Cache';
 import {CacheKey} from './Cache/CacheStoreConstants';
 import {find, isEmpty} from 'lodash';
 import {compareFunction} from '../utils/Strings';
-import {getExportURL, getImportData} from './ShareHelper';
+import {getExportURL} from './ShareHelper';
 import {Constants} from '../constants/Constants';
 
 const LIST_LIMIT = 30;

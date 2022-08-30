@@ -2,7 +2,7 @@ import {Dimensions, Platform} from 'react-native';
 import {useEffect, useRef, useState, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 
-export const Orientation = {
+export const OrientationType = {
   Landscape: 'landscape',
   Portrait: 'portrait',
 };
@@ -12,7 +12,9 @@ function getCurrentOrientation() {
   const isPortrait = dim.height >= dim.width;
   const isLandscape = !isPortrait;
   const orientation =
-    dim.height >= dim.width ? Orientation.Portrait : Orientation.Landscape;
+    dim.height >= dim.width
+      ? OrientationType.Portrait
+      : OrientationType.Landscape;
   return {
     isPortrait,
     isLandscape,

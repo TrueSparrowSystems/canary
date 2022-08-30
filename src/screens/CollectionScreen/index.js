@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   View,
   ActivityIndicator,
@@ -28,6 +28,8 @@ import Banner from '../../components/common/Banner';
 import {showPromotion} from '../../components/utils/ViewData';
 import {ToastType} from '../../constants/ToastConstants';
 import Toast from 'react-native-toast-message';
+import {isTablet} from 'react-native-device-info';
+import {useOrientationState} from '../../hooks/useOrientation';
 
 function CollectionScreen(props) {
   const localStyle = useStyleProcessor(styles, 'CollectionScreen');
@@ -40,6 +42,7 @@ function CollectionScreen(props) {
   const crossButtonRef = useRef(false);
   const selectedCollectionIds = useRef([]);
   const _collectionService = collectionService();
+  const {isPortrait} = useOrientationState();
 
   const scrollToTop = useCallback(() => {
     scrollRef.current?.scrollToOffset({
@@ -49,8 +52,11 @@ function CollectionScreen(props) {
   }, []);
   useTabListener(screenName, scrollToTop);
 
+  const numOfColumns = useMemo(() => {
+    return isTablet() ? (isPortrait ? 3 : 4) : 2;
+  }, [isPortrait]);
+
   const fetchData = useCallback(() => {
-    setIsDeleteEnabled(false);
     setIsLoading(true);
     _collectionService.getAllCollections().then(jsonObj => {
       let dataArray = [];
@@ -58,7 +64,7 @@ function CollectionScreen(props) {
         const collectionData = jsonObj[key];
         dataArray.push(collectionData);
       });
-      if (dataArray.length % 2) {
+      for (let i = 0; i < dataArray.length % numOfColumns; i++) {
         dataArray.push({});
       }
       collectionDataRef.current = dataArray;
@@ -72,26 +78,32 @@ function CollectionScreen(props) {
       setShowPromotionBanner(shouldShowPromotion);
       setIsLoading(false);
     });
-  }, [_collectionService]);
+  }, [_collectionService, numOfColumns]);
 
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isPortrait]);
 
   const reloadList = useCallback(() => {
+    setIsDeleteEnabled(false);
     fetchData();
   }, [fetchData]);
 
   useEffect(() => {
-    LocalEvent.on(EventTypes.UpdateCollection, fetchData);
+    const updateCollection = () => {
+      setIsDeleteEnabled(false);
+      fetchData();
+    };
+    LocalEvent.on(EventTypes.UpdateCollection, updateCollection);
     return () => {
-      LocalEvent.off(EventTypes.UpdateCollection, fetchData);
+      LocalEvent.off(EventTypes.UpdateCollection, updateCollection);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onCollectionAddSuccess = useCallback(() => {
+    setIsDeleteEnabled(false);
     fetchData();
   }, [fetchData]);
 
@@ -207,10 +219,11 @@ function CollectionScreen(props) {
       ) : (
         <View style={localStyle.flatListStyle}>
           <FlatList
+            key={`flatList_${numOfColumns}`}
             showsVerticalScrollIndicator={false}
             data={collectionDataRef.current}
             renderItem={renderItem}
-            numColumns={2}
+            numColumns={numOfColumns}
             ref={scrollRef}
             refreshControl={
               isDeleteEnabled ? null : (

@@ -146,6 +146,13 @@ const styles = {
     padding: layoutPtToPx(20),
     alignItems: 'center',
     justifyContent: 'center',
+    tablet: {
+      alignSelf: 'center',
+      width: '60%',
+      landscape: {
+        width: '50%',
+      },
+    },
   },
   createTextStyle: {
     color: colors.White,

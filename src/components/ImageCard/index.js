@@ -12,6 +12,7 @@ import colors, {getColorWithOpacity} from '../../constants/colors';
 import Video from 'react-native-video';
 import * as Animatable from 'react-native-animatable';
 import fonts from '../../constants/fonts';
+import {useOrientationState} from '../../hooks/useOrientation';
 
 function ImageCard({mediaArray, tweetId}) {
   const localStyle = useStyleProcessor(styles, 'ImageCard');
@@ -56,6 +57,7 @@ function ImageCard({mediaArray, tweetId}) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mediaArray, tweetId]);
+  const {isPortrait} = useOrientationState();
 
   const imageStyle = useMemo(() => {
     const style = [localStyle.showImage];
@@ -76,7 +78,8 @@ function ImageCard({mediaArray, tweetId}) {
       }
     }
     return style;
-  }, [localStyle.showImage, mediaArray]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localStyle.showImage, mediaArray, isPortrait]);
 
   const containerStyle = useMemo(() => {
     const style = [localStyle.flexRow];
@@ -237,6 +240,12 @@ const styles = {
     borderWidth: 0.5,
     borderColor: 'white',
     borderRadius: 4,
+    tablet: {
+      borderWidth: 1,
+      landscape: {
+        borderWidth: 2,
+      },
+    },
   },
   showVideo: {
     flex: 1,

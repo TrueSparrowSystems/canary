@@ -1,5 +1,5 @@
 import {View} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useMemo, useRef} from 'react';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import TweetCard from '../../components/TweetCard';
 import TimelineList from '../../components/TimelineList';
@@ -8,11 +8,20 @@ import Header from '../../components/common/Header';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import colors from '../../constants/colors';
 import fonts from '../../constants/fonts';
+import {useOrientationState} from '../../hooks/useOrientation';
+import {isTablet} from 'react-native-device-info';
+import SearchScreenContent from '../../components/SearchScreenContent';
 
 function ThreadScreen(props) {
   const {tweetData} = props?.route?.params;
 
   const localStyle = useStyleProcessor(styles, 'ThreadScreen');
+
+  const {isPortrait} = useOrientationState();
+  const isTabletLandscape = useMemo(
+    () => isTablet() && !isPortrait,
+    [isPortrait],
+  );
 
   const listDataSource = useRef(null);
   if (listDataSource.current === null) {
@@ -26,21 +35,24 @@ function ThreadScreen(props) {
   //TODO: Implement pull to refresh.
   return (
     <View style={localStyle.container}>
-      <Header enableBackButton={true} />
-      <TimelineList
-        reloadData={false}
-        refreshData={false}
-        timelineListDataSource={listDataSource.current}
-        listHeaderComponent={
-          <TweetCard
-            dataSource={tweetData}
-            isDisabled={true}
-            style={localStyle.cardStyle}
-            textStyle={localStyle.tweetText}
-            linkTextStyle={localStyle.tweetLinkText}
-          />
-        }
-      />
+      <View style={localStyle.listComponent}>
+        <Header enableBackButton={true} text={'Thread'} />
+        <TimelineList
+          reloadData={false}
+          refreshData={false}
+          timelineListDataSource={listDataSource.current}
+          listHeaderComponent={
+            <TweetCard
+              dataSource={tweetData}
+              isDisabled={true}
+              style={localStyle.cardStyle}
+              textStyle={localStyle.tweetText}
+              linkTextStyle={localStyle.tweetLinkText}
+            />
+          }
+        />
+      </View>
+      {isTabletLandscape ? <SearchScreenContent /> : null}
     </View>
   );
 }
@@ -51,6 +63,16 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: colors.White,
+    flexDirection: 'row',
+  },
+  listComponent: {
+    tablet: {
+      landscape: {
+        width: '70%',
+        borderRightWidth: 1,
+        borderRightColor: colors.BlackPearl20,
+      },
+    },
   },
   cardStyle: {
     borderBottomWidth: 1,

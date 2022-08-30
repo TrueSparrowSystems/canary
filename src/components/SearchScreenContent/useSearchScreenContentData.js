@@ -7,7 +7,7 @@ import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 import {getTrendingTopicsForCountry} from '../../utils/CountryWoeidUtils';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
-function useDiscoverScreenData() {
+function useSearchScreenContentData() {
   const [trendingTopics, setTrendingTopics] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [textInputError, setTextInputError] = useState('');
@@ -85,4 +85,4 @@ function useDiscoverScreenData() {
     fnNavigateToLocationSelectionScreen: navigateToLocationSelectionScreen,
   };
 }
-export default useDiscoverScreenData;
+export default useSearchScreenContentData;

@@ -44,70 +44,72 @@ function Header(props) {
 
   return (
     <View style={style || localStyle.header}>
-      <View style={localStyle.backButtonView}>
-        {enableBackButton ? (
-          <TouchableOpacity activeOpacity={1} onPress={onBackPress}>
-            <Image source={BackIcon} style={localStyle.backIcon} />
-          </TouchableOpacity>
-        ) : null}
-        {enableLeftButton && (leftButtonImage || leftButtonText) ? (
-          <TouchableOpacity
-            style={localStyle.leftButtonStyle}
-            activeOpacity={1}
-            onPress={onLeftButtonClick}>
-            {leftButtonImage ? (
-              <Image
-                source={leftButtonImage}
-                style={leftButtonImageStyle || localStyle.leftIcon}
-              />
-            ) : null}
-            {leftButtonText ? (
-              <Text style={leftButtonTextStyle}>{leftButtonText}</Text>
-            ) : null}
-          </TouchableOpacity>
-        ) : (
-          <View />
-        )}
-      </View>
-      <View style={localStyle.textView}>
-        {text ? (
-          <Text numberOfLines={1} style={textStyle || localStyle.textStyle}>
-            {text}
-          </Text>
-        ) : null}
-      </View>
-      <View style={rightButtonViewStyle || localStyle.rightButtonView}>
-        {enableRightButton && (rightButtonImage || rightButtonText) ? (
-          <TouchableOpacity
-            style={localStyle.rightButtonStyle}
-            activeOpacity={1}
-            onPress={onRightButtonClick}>
-            {rightButtonImage ? (
-              <Image
-                source={rightButtonImage}
-                style={rightButtonImageStyle || localStyle.rightIcon}
-              />
-            ) : null}
-            {rightButtonText ? (
-              <Text style={rightButtonTextStyle}>{rightButtonText}</Text>
-            ) : null}
-          </TouchableOpacity>
-        ) : (
-          <View />
-        )}
-        {enableSecondaryRightButton && secondaryRightButtonImage ? (
-          <TouchableOpacity
-            style={localStyle.rightButtonStyle}
-            activeOpacity={1}
-            onPress={onSecondaryRightButtonClick}>
-            {secondaryRightButtonImage ? (
-              <Image
-                source={secondaryRightButtonImage}
-                style={secondaryRightButtonImageStyle || localStyle.rightIcon}
-              />
-            ) : null}
-          </TouchableOpacity>
-        ) : null}
+      <View style={localStyle.view}>
+        <View style={localStyle.backButtonView}>
+          {enableBackButton ? (
+            <TouchableOpacity activeOpacity={1} onPress={onBackPress}>
+              <Image source={BackIcon} style={localStyle.backIcon} />
+            </TouchableOpacity>
+          ) : null}
+          {enableLeftButton && (leftButtonImage || leftButtonText) ? (
+            <TouchableOpacity
+              style={localStyle.leftButtonStyle}
+              activeOpacity={1}
+              onPress={onLeftButtonClick}>
+              {leftButtonImage ? (
+                <Image
+                  source={leftButtonImage}
+                  style={leftButtonImageStyle || localStyle.leftIcon}
+                />
+              ) : null}
+              {leftButtonText ? (
+                <Text style={leftButtonTextStyle}>{leftButtonText}</Text>
+              ) : null}
+            </TouchableOpacity>
+          ) : (
+            <View />
+          )}
+        </View>
+        <View style={localStyle.textView}>
+          {text ? (
+            <Text numberOfLines={1} style={textStyle || localStyle.textStyle}>
+              {text}
+            </Text>
+          ) : null}
+        </View>
+        <View style={rightButtonViewStyle || localStyle.rightButtonView}>
+          {enableRightButton && (rightButtonImage || rightButtonText) ? (
+            <TouchableOpacity
+              style={localStyle.rightButtonStyle}
+              activeOpacity={1}
+              onPress={onRightButtonClick}>
+              {rightButtonImage ? (
+                <Image
+                  source={rightButtonImage}
+                  style={rightButtonImageStyle || localStyle.rightIcon}
+                />
+              ) : null}
+              {rightButtonText ? (
+                <Text style={rightButtonTextStyle}>{rightButtonText}</Text>
+              ) : null}
+            </TouchableOpacity>
+          ) : (
+            <View />
+          )}
+          {enableSecondaryRightButton && secondaryRightButtonImage ? (
+            <TouchableOpacity
+              style={localStyle.rightButtonStyle}
+              activeOpacity={1}
+              onPress={onSecondaryRightButtonClick}>
+              {secondaryRightButtonImage ? (
+                <Image
+                  source={secondaryRightButtonImage}
+                  style={secondaryRightButtonImageStyle || localStyle.rightIcon}
+                />
+              ) : null}
+            </TouchableOpacity>
+          ) : null}
+        </View>
       </View>
     </View>
   );
@@ -117,8 +119,13 @@ export default React.memo(Header);
 
 const styles = {
   header: {
-    marginHorizontal: layoutPtToPx(20),
+    paddingHorizontal: layoutPtToPx(20),
     height: layoutPtToPx(50),
+    borderBottomWidth: 1,
+    justifyContent: 'center',
+    borderBottomColor: colors.BlackPearl20,
+  },
+  view: {
     flexDirection: 'row',
     alignItems: 'center',
   },

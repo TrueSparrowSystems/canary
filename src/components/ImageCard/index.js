@@ -19,10 +19,6 @@ function ImageCard({mediaArray, tweetId}) {
   const navigation = useNavigation();
   const onImagePress = useCallback(
     index => {
-      // navigation.navigate(ScreenName.ImageViewScreen, {
-      //   mediaArray,
-      //   imageIndex: index,
-      // });
       LocalEvent.emit(EventTypes.OpenImageViewer, {
         media: mediaArray,
         imageIndex: index,

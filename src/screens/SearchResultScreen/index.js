@@ -11,6 +11,7 @@ import RoundedButton from '../../components/common/RoundedButton';
 import {NewIcon, PopularIcon} from '../../assets/common';
 import fonts from '../../constants/fonts';
 import {Constants} from '../../constants/Constants';
+import {useOrientationState} from '../../hooks/useOrientation';
 
 function SearchResultScreen(props) {
   const {query, sortOrder = Constants.SortOrder.Relevancy} =
@@ -29,6 +30,7 @@ function SearchResultScreen(props) {
     sortOrder,
   });
 
+  useOrientationState();
   const ListEmptyComponent = useMemo(() => {
     return (
       <View style={localStyle.emptyContainer}>
@@ -39,56 +41,61 @@ function SearchResultScreen(props) {
 
   return (
     <SafeAreaView style={localStyle.flex1}>
-      <Header enableBackButton={true} />
-      <View style={localStyle.toggleButtonsContainer}>
-        <RoundedButton
-          text="Popular"
-          leftImage={PopularIcon}
-          style={[
-            localStyle.toggleButton,
-            bIsSortingPopular ? localStyle.selectedToggleButton : {},
-          ]}
-          disabled={bIsSortingPopular}
-          shouldReduceOpacityWhenDisabled={false}
-          textStyle={localStyle.toggleButtonText}
-          leftImageStyle={localStyle.toggleButtonIcon}
-          onPress={fnToggleSortOrder}
-          underlayColor={colors.GoldenTainoi20}
-        />
-        <RoundedButton
-          text="New"
-          leftImage={NewIcon}
-          onPress={fnToggleSortOrder}
-          style={[
-            localStyle.toggleButton,
-            !bIsSortingPopular ? localStyle.selectedToggleButton : {},
-          ]}
-          shouldReduceOpacityWhenDisabled={false}
-          disabled={!bIsSortingPopular}
-          textStyle={localStyle.toggleButtonText}
-          leftImageStyle={localStyle.toggleButtonIcon}
-          underlayColor={colors.GoldenTainoi20}
-        />
-      </View>
-      <SearchBar searchQuery={query} onSearchPressCallback={fnOnSearchPress} />
-      {sTextInputError ? (
-        <Text style={localStyle.errorText}>{sTextInputError}</Text>
-      ) : null}
-      {bIsLoading ? (
-        <View style={localStyle.loaderView}>
-          <ActivityIndicator
-            animating={bIsLoading}
-            color={colors.GoldenTainoi}
+      <View style={localStyle.view}>
+        <Header enableBackButton={true} />
+        <View style={localStyle.toggleButtonsContainer}>
+          <RoundedButton
+            text="Popular"
+            leftImage={PopularIcon}
+            style={[
+              localStyle.toggleButton,
+              bIsSortingPopular ? localStyle.selectedToggleButton : {},
+            ]}
+            disabled={bIsSortingPopular}
+            shouldReduceOpacityWhenDisabled={false}
+            textStyle={localStyle.toggleButtonText}
+            leftImageStyle={localStyle.toggleButtonIcon}
+            onPress={fnToggleSortOrder}
+            underlayColor={colors.GoldenTainoi20}
+          />
+          <RoundedButton
+            text="New"
+            leftImage={NewIcon}
+            onPress={fnToggleSortOrder}
+            style={[
+              localStyle.toggleButton,
+              !bIsSortingPopular ? localStyle.selectedToggleButton : {},
+            ]}
+            shouldReduceOpacityWhenDisabled={false}
+            disabled={!bIsSortingPopular}
+            textStyle={localStyle.toggleButtonText}
+            leftImageStyle={localStyle.toggleButtonIcon}
+            underlayColor={colors.GoldenTainoi20}
           />
         </View>
-      ) : null}
-      <TimelineList
-        style={localStyle.listStyle}
-        timelineListDataSource={searchResultListDataSource}
-        refreshData={bIsLoading}
-        onDataAvailable={fnOnDataAvailable}
-        listEmptyComponent={ListEmptyComponent}
-      />
+        <SearchBar
+          searchQuery={query}
+          onSearchPressCallback={fnOnSearchPress}
+        />
+        {sTextInputError ? (
+          <Text style={localStyle.errorText}>{sTextInputError}</Text>
+        ) : null}
+        {bIsLoading ? (
+          <View style={localStyle.loaderView}>
+            <ActivityIndicator
+              animating={bIsLoading}
+              color={colors.GoldenTainoi}
+            />
+          </View>
+        ) : null}
+        <TimelineList
+          style={localStyle.listStyle}
+          timelineListDataSource={searchResultListDataSource}
+          refreshData={bIsLoading}
+          onDataAvailable={fnOnDataAvailable}
+          listEmptyComponent={ListEmptyComponent}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -97,6 +104,15 @@ const styles = {
   flex1: {
     flex: 1,
     backgroundColor: colors.White,
+  },
+  view: {
+    flex: 1,
+    alignSelf: 'center',
+    tablet: {
+      landscape: {
+        width: layoutPtToPx(700),
+      },
+    },
   },
   listStyle: {
     flex: 1,

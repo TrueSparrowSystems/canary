@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {
   AddIcon,
-  BinIcon,
+  DeleteIcon,
   ListGolden,
   ListIconBig,
   ShareAppIcon,
@@ -123,16 +123,19 @@ function ListScreen(props) {
 
   const onRemoveListsPress = useCallback(() => {
     if (selectedListIds.current.length > 0) {
-      LocalEvent.emit(EventTypes.ShowDeleteCollectionConfirmationModal, {
+      LocalEvent.emit(EventTypes.ShowDeleteConfirmationModal, {
         id: selectedListIds.current,
-        text: `Are you sure you want to remove these ${selectedListIds.current.length} selected lists?`,
+        text:
+          selectedListIds.current.length > 1
+            ? `Are you sure you want to remove these ${selectedListIds.current.length} selected lists?`
+            : 'Are you sure you want to remove this selected list?',
         onCollectionRemoved: reloadList,
         type: Constants.ConfirmDeleteModalType.List,
       });
     } else {
       Toast.show({
         type: ToastType.Error,
-        text1: 'Select at least one archive to delete',
+        text1: 'Select at least one list to delete',
       });
     }
   }, [reloadList]);
@@ -167,7 +170,7 @@ function ListScreen(props) {
           leftButtonTextStyle={localStyle.headerRightButtonText}
           onLeftButtonClick={onDonePress}
           enableSecondaryRightButton={swipeable}
-          secondaryRightButtonImage={BinIcon}
+          secondaryRightButtonImage={DeleteIcon}
           secondaryRightButtonImageStyle={localStyle.shareButtonImageStyle}
           onSecondaryRightButtonClick={onRemoveListsPress}
         />
@@ -289,6 +292,7 @@ const styles = {
     tintColor: colors.GoldenTainoi,
     height: layoutPtToPx(20),
     width: layoutPtToPx(20),
+    marginLeft: layoutPtToPx(10),
     tablet: {
       height: layoutPtToPx(25),
       width: layoutPtToPx(25),

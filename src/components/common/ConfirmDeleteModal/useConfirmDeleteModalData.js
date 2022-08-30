@@ -18,16 +18,10 @@ function useConfirmDeleteModalData() {
       setIsVisible(true);
     };
 
-    LocalEvent.on(
-      EventTypes.ShowDeleteCollectionConfirmationModal,
-      onShowModal,
-    );
+    LocalEvent.on(EventTypes.ShowDeleteConfirmationModal, onShowModal);
 
     return () => {
-      LocalEvent.off(
-        EventTypes.ShowDeleteCollectionConfirmationModal,
-        onShowModal,
-      );
+      LocalEvent.off(EventTypes.ShowDeleteConfirmationModal, onShowModal);
     };
   });
 

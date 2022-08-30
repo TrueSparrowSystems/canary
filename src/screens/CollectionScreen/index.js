@@ -15,8 +15,8 @@ import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {
   AddIcon,
   ArchiveIconBig,
-  BinIcon,
   bookmarkedIcon,
+  DeleteIcon,
   ShareAppIcon,
 } from '../../assets/common';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
@@ -36,6 +36,7 @@ import {ToastType} from '../../constants/ToastConstants';
 import Toast from 'react-native-toast-message';
 import {isTablet} from 'react-native-device-info';
 import {useOrientationState} from '../../hooks/useOrientation';
+import {Constants} from '../../constants/Constants';
 
 function CollectionScreen(props) {
   const localStyle = useStyleProcessor(styles, 'CollectionScreen');
@@ -170,10 +171,14 @@ function CollectionScreen(props) {
 
   const onRemoveCollectionsPress = useCallback(() => {
     if (selectedCollectionIds.current.length > 0) {
-      LocalEvent.emit(EventTypes.ShowDeleteCollectionConfirmationModal, {
+      LocalEvent.emit(EventTypes.ShowDeleteConfirmationModal, {
         id: selectedCollectionIds.current,
-        text: `Are you sure you want to remove these ${selectedCollectionIds.current.length} selected archives?`,
+        text:
+          selectedCollectionIds.current.length > 1
+            ? `Are you sure you want to remove these ${selectedCollectionIds.current.length} selected archives?`
+            : 'Are you sure you want to remove this selected archive?',
         onCollectionRemoved: reloadList,
+        type: Constants.ConfirmDeleteModalType.Archive,
       });
     } else {
       Toast.show({
@@ -206,7 +211,7 @@ function CollectionScreen(props) {
           leftButtonTextStyle={localStyle.newButtonTextStyle}
           onLeftButtonClick={onDonePress}
           enableSecondaryRightButton={isDeleteEnabled}
-          secondaryRightButtonImage={BinIcon}
+          secondaryRightButtonImage={DeleteIcon}
           secondaryRightButtonImageStyle={localStyle.shareButtonImageStyle}
           onSecondaryRightButtonClick={onRemoveCollectionsPress}
         />
@@ -293,6 +298,7 @@ const styles = {
     tintColor: colors.GoldenTainoi,
     height: layoutPtToPx(20),
     width: layoutPtToPx(20),
+    marginLeft: layoutPtToPx(10),
     tablet: {
       height: layoutPtToPx(25),
       width: layoutPtToPx(25),

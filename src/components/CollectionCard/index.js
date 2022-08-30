@@ -12,6 +12,7 @@ import fonts from '../../constants/fonts';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import * as Animatable from 'react-native-animatable';
+import {Constants} from '../../constants/Constants';
 
 function CollectionCard(props) {
   const {
@@ -75,7 +76,7 @@ function CollectionCard(props) {
   }, [enableDelete]);
 
   const onCollectionRemove = useCallback(() => {
-    LocalEvent.emit(EventTypes.ShowDeleteCollectionConfirmationModal, {
+    LocalEvent.emit(EventTypes.ShowDeleteConfirmationModal, {
       id: collectionId,
       name: collectionName,
       onCollectionRemoved: () => {
@@ -83,6 +84,7 @@ function CollectionCard(props) {
           onCollectionRemoved();
         });
       },
+      type: Constants.ConfirmDeleteModalType.Archive,
     });
   }, [collectionId, collectionName, onCollectionRemoved]);
 

@@ -34,3 +34,4 @@ export const CheckMarkIcon = require('./checkmark.png');
 export const Information = require('./information.png');
 export const ShareAppIcon = require('./ShareAppIcon.png');
 export const ImportIcon = require('./import.png');
+export const DeleteIcon = require('./delete.png');

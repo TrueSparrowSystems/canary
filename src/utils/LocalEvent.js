@@ -17,8 +17,7 @@ export const EventTypes = {
   ShowAddToCollectionModal: 'event_types_show_add_to_collection_modal',
   ShowAddToListModal: 'event_types_show_add_to_list_modal',
   ShowAddCollectionModal: 'event_types_show_add_collection_modal',
-  ShowDeleteCollectionConfirmationModal:
-    'show_delete_collection_confirmation_modal',
+  ShowDeleteConfirmationModal: 'show_delete_confirmation_modal',
   ShowRedirectConfirmationModal: 'show_redirect_confirmation_modal',
   ShowCommonConfirmationModal: 'show_common_confirmation_modal',
   ShowAddListModal: 'event_types_show_add_list_modal',

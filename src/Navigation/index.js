@@ -137,6 +137,18 @@ const Navigation = props => {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         />
+
+        <TimelineStack.Screen
+          name={ScreenName.LocationSelectionScreen}
+          component={LocationSelectionScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
       </TimelineStack.Navigator>
     );
   }

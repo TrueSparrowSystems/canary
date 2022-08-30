@@ -182,6 +182,7 @@ const styles = {
   flatListPropsStyle: {flex: 1},
   contentContainerStyle: {
     flexGrow: 1,
+    paddingTop: layoutPtToPx(20),
     tablet: {
       marginHorizontal: layoutPtToPx(20),
     },

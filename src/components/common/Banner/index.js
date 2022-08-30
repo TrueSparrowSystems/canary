@@ -42,12 +42,11 @@ function Banner(props) {
 const styles = {
   banner: {
     width: '100%',
-    alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: layoutPtToPx(20),
     borderBottomWidth: 1,
     borderBottomColor: getColorWithOpacity(colors.BlackPearl, 0.5),
-    paddingBottom: layoutPtToPx(12),
+    paddingVertical: layoutPtToPx(12),
   },
   crossButton: {
     flexGrow: 1,

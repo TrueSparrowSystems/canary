@@ -193,6 +193,9 @@ const style = {
     padding: layoutPtToPx(15),
     tablet: {
       alignItems: 'center',
+      landscape: {
+        maxWidth: '60%',
+      },
     },
   },
   cancelTextStyle: {

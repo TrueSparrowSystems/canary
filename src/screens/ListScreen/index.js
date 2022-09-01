@@ -131,6 +131,7 @@ function ListScreen(props) {
             : 'Are you sure you want to remove this selected list?',
         onCollectionRemoved: reloadList,
         type: Constants.ConfirmDeleteModalType.List,
+        testID: 'remove_multiple_list',
       });
     } else {
       Toast.show({
@@ -179,6 +180,7 @@ function ListScreen(props) {
       {showPromotionBanner && !isEmpty(listDataRef.current) ? (
         <Animatable.View ref={crossButtonRef}>
           <Banner
+            testID="list_screen"
             headerImage={ListGolden}
             headerImageStyle={localStyle.headerImageStyle}
             headerText={'How is our Lists different from Twitter’s?'}

@@ -174,6 +174,7 @@ function CollectionScreen(props) {
             : 'Are you sure you want to remove this selected archive?',
         onCollectionRemoved: reloadList,
         type: Constants.ConfirmDeleteModalType.Archive,
+        testID: 'remove_multiple_collection',
       });
     } else {
       Toast.show({
@@ -215,6 +216,7 @@ function CollectionScreen(props) {
       {showPromotionBanner && !isEmpty(collectionDataRef.current) ? (
         <Animatable.View ref={crossButtonRef}>
           <Banner
+            testID="collection_screen"
             headerImage={bookmarkedIcon}
             headerImageStyle={localStyle.headerImageStyle}
             headerText={'Archives lets you save your tweets privately'}

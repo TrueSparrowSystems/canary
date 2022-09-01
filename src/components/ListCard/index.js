@@ -156,7 +156,7 @@ function ListCard(props) {
             ) : null}
             {shouldShowAddButton ? (
               <TouchableOpacity
-                testID={`list_card_for_${listName}__toggle`}
+                testID={`list_card_for_${listName}_toggle`}
                 style={
                   oAddButtonData.buttonType === 'Primary'
                     ? localStyle.primaryAddButtonContainer

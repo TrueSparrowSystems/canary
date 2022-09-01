@@ -16,6 +16,7 @@ function Banner(props) {
     style,
     textStyle,
     onRemovePromotionPress,
+    testID = '',
   } = props;
   const localStyle = useStyleProcessor(styles, 'Banner');
 
@@ -27,7 +28,7 @@ function Banner(props) {
           <Text style={textStyle || localStyle.flexShrink}>{headerText}</Text>
         </View>
         <RoundedButton
-          testId={'banner_cross'}
+          testId={`${testID}_banner_cross`}
           style={localStyle.crossButton}
           leftImage={CrossIcon}
           leftImageStyle={localStyle.crossIconStyle}

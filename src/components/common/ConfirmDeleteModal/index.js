@@ -16,6 +16,7 @@ function ConfirmDeleteModal() {
     bIsVisible,
     fnOnBackdropPress,
     sText,
+    sTestID,
     fnOnCancelPress,
     fnOnSureButtonPress,
   } = useConfirmDeleteModalData();
@@ -26,7 +27,7 @@ function ConfirmDeleteModal() {
 
   return bIsVisible ? (
     <CustomModal
-      testID="confirm_delete"
+      testID={`${sTestID}_confirm_delete`}
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}
@@ -37,7 +38,7 @@ function ConfirmDeleteModal() {
             <Text style={localStyle.textStyle}>{sText}</Text>
             <View style={localStyle.flexRow}>
               <RoundedButton
-                testId={'confirm_delete_modal_cancel'}
+                testId={`${sTestID}_confirm_delete_modal_cancel`}
                 style={localStyle.cancelButton}
                 text={'Cancel'}
                 textStyle={localStyle.cancelButtonText}
@@ -45,7 +46,7 @@ function ConfirmDeleteModal() {
                 underlayColor={getColorWithOpacity(colors.White, 0.8)}
               />
               <RoundedButton
-                testId={'confirm_delete_modal_sure'}
+                testId={`${sTestID}_confirm_delete_modal_sure`}
                 style={localStyle.sureButton}
                 text={'I am sure'}
                 textStyle={localStyle.sureButtonText}

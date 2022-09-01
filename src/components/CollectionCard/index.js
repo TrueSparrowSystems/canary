@@ -89,6 +89,7 @@ function CollectionCard(props) {
         });
       },
       type: Constants.ConfirmDeleteModalType.Archive,
+      testID: 'remove_collection',
     });
   }, [collectionId, collectionName, onCollectionRemoved]);
 

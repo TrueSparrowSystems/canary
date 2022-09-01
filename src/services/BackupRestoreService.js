@@ -15,6 +15,7 @@ export function backUpDataToFirebase({onBackUpSuccess}) {
     primaryText: 'Are you Sure you want to backup your data?',
     secondaryText:
       'Note: Your data(Preferences, Lists & Archives) will be stored with us',
+    testID: 'back_up',
     onSureButtonPress: () => {
       deviceInfoModule.getUniqueId().then(deviceID => {
         AsyncStorage.getAllKeys().then(allKeys => {
@@ -45,6 +46,7 @@ export function clearData() {
     primaryText: 'Are you Sure you want to clear your data?',
     secondaryText:
       'Note: Your data(Preferences, Lists & Archives) will be cleared. \nThis will also restart the application',
+    testID: 'clear',
     onSureButtonPress: () => {
       clearDataFromFirebase();
       AsyncStorage.clear().then(() => {
@@ -85,6 +87,7 @@ export function restoreDataFromFirebase({onRestoreSuccess}) {
             responseData.timeStamp,
           ).format('DD MMM YYYY hh:mm a')}`,
           secondaryText: 'Note: This will restart the application',
+          testID: 'restore',
           onSureButtonPress: () => {
             AsyncStorage.multiSet(responseData?.data).then(isDataSet => {
               if (isDataSet) {

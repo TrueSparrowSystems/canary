@@ -200,6 +200,12 @@ const style = {
   },
   contentContainer: {
     padding: layoutPtToPx(15),
+    tablet: {
+      alignItems: 'center',
+      landscape: {
+        maxWidth: '60%',
+      },
+    },
   },
   cancelTextStyle: {
     color: colors.GoldenTainoi,
@@ -212,15 +218,24 @@ const style = {
     fontSize: fontPtToPx(30),
     lineHeight: layoutPtToPx(40),
     fontFamily: fonts.SoraSemiBold,
+    tablet: {
+      textAlign: 'center',
+    },
   },
   titleSection: {
     marginTop: layoutPtToPx(20),
+    tablet: {
+      alignItems: 'center',
+    },
   },
   subTitleText: {
     color: colors.BlackPearl,
     fontSize: fontPtToPx(20),
     lineHeight: layoutPtToPx(25),
     fontFamily: fonts.SoraSemiBold,
+    tablet: {
+      textAlign: 'center',
+    },
   },
   subText: {
     color: colors.BlackPearl50,
@@ -229,6 +244,9 @@ const style = {
   },
   continueButtonContainer: {
     marginVertical: layoutPtToPx(30),
+    tablet: {
+      width: '40%',
+    },
   },
   continueButton: {
     backgroundColor: colors.GoldenTainoi,

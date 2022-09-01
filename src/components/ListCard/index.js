@@ -12,6 +12,7 @@ import AppleStyleSwipeableRow from '../AppleStyleSwipeableRow';
 import useListCardData from './useListCardData';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {TouchableOpacity, TouchableWithoutFeedback} from '@plgworks/applogger';
+import {isTablet} from 'react-native-device-info';
 
 function ListCard(props) {
   const {
@@ -114,11 +115,13 @@ function ListCard(props) {
           {
             actionName: 'Remove',
             color: colors.BitterSweet,
+            width: isTablet() ? 80 : 64,
             onPress: onRemovePress,
           },
           {
             actionName: 'Edit',
             color: colors.LightGrey,
+            width: isTablet() ? 80 : 64,
             onPress: onEditPress,
           },
         ]}

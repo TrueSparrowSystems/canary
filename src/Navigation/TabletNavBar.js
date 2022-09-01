@@ -4,11 +4,14 @@ import {Image, View} from 'react-native';
 import BottomNavigationText from '../components/BottomNavigationText';
 import colors from '../constants/colors';
 import fonts from '../constants/fonts';
+import {useOrientationState} from '../hooks/useOrientation';
 import {useStyleProcessor} from '../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../utils/responsiveUI';
 
 function TabletNavBar({state, descriptors, navigation, tabName, tabIcons}) {
   const localStyle = useStyleProcessor(styles, 'TabletNavBar');
+
+  useOrientationState();
 
   const getBottomTabIconStyle = useCallback(
     isFocused => {
@@ -70,7 +73,14 @@ const styles = {
     width: layoutPtToPx(90),
     borderRightWidth: 1,
   },
-  tabBar: {height: '30%'},
+  tabBar: {
+    height: '30%',
+    tablet: {
+      landscape: {
+        height: '45%',
+      },
+    },
+  },
   flex1: {flex: 1},
   text: {
     fontFamily: fonts.SoraSemiBold,

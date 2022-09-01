@@ -20,6 +20,7 @@ import EmptyScreenComponent from '../common/EmptyScreenComponent';
 import {isEmpty} from 'lodash';
 import UserCard from '../common/UserCard';
 import {TouchableOpacity} from '@plgworks/applogger';
+import {useOrientationState} from '../../hooks/useOrientation';
 
 function AddToListModal() {
   const localStyle = useStyleProcessor(styles, 'AddToListModal');
@@ -41,11 +42,15 @@ function AddToListModal() {
     return <View style={localStyle.blur} />;
   }, [localStyle.blur]);
 
+  const {isPortrait} = useOrientationState();
+
   const maxHeightStyle = useMemo(() => {
+    const denominator = isPortrait ? 1.33 : 2;
     return {
-      maxHeight: Dimensions.get('window').height / 1.33,
+      maxHeight: Dimensions.get('window').height / denominator,
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPortrait]);
 
   const addNewButtonStyleMemo = useMemo(() => {
     return [{opacity: !isEmpty(oList) ? 1 : 0}, localStyle.addNewButton];

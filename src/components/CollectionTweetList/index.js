@@ -58,6 +58,7 @@ function CollectionTweetList(props) {
       {aDataSource?.map(data => {
         return (
           <TweetCard
+            testID="collection_tweet_list"
             key={data?.id}
             dataSource={data}
             showBookmarked={shouldShowBookmarked}

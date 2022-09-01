@@ -76,6 +76,7 @@ function SearchResultScreen(props) {
           />
         </View>
         <SearchBar
+          testID="search_result"
           searchQuery={query}
           onSearchPressCallback={fnOnSearchPress}
         />
@@ -91,6 +92,7 @@ function SearchResultScreen(props) {
           </View>
         ) : null}
         <TimelineList
+          testID="Search Result"
           style={localStyle.listStyle}
           timelineListDataSource={searchResultListDataSource}
           refreshData={bIsLoading}

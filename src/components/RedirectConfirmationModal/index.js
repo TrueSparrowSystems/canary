@@ -27,7 +27,7 @@ function RedirectConfirmationModal() {
 
   return bIsVisible ? (
     <CustomModal
-      testID="redirect_confirmation_modal"
+      testID="redirect_confirmation"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}
@@ -63,6 +63,7 @@ function RedirectConfirmationModal() {
               />
             </View>
             <Checkbox
+              testID="redirect_confirmation_modal"
               onValueChange={fnOnCheckboxValueChange}
               text={'Don’t show again'}
               textStyle={localStyle.checkboxTextStyle}

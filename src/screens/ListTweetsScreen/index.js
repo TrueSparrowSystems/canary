@@ -118,6 +118,7 @@ function ListTweetsScreen(props) {
       ) : null}
       {currentUserNameArray.current.length !== 0 ? (
         <TimelineList
+          testID="list_tweet"
           timelineListDataSource={listDataSource.current}
           listEmptyComponent={ListEmptyComponent}
           onRefresh={fetchData}

@@ -34,7 +34,10 @@ function SearchScreenContent(props) {
           onRefresh={fnOnRefresh}
         />
       }>
-      <SearchBar onSearchPressCallback={fnOnSearchPress} />
+      <SearchBar
+        testID="search_screen"
+        onSearchPressCallback={fnOnSearchPress}
+      />
       <Text style={localStyle.errorText}>{sTextInputError}</Text>
       {sSelectedCountryName ? (
         <View style={localStyle.trendingCountryContainer}>

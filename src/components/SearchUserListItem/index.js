@@ -9,7 +9,7 @@ import useSearchUserListItemData from './useSearchUserListItemData';
 import {TouchableOpacity} from '@plgworks/applogger';
 
 function SearchUserListItem(props) {
-  const {userName, fullName, profileImageUrl, isVerified, testID = ''} = props;
+  const {userName, fullName, profileImageUrl, isVerified} = props;
 
   const {oAddButtonData} = useSearchUserListItemData(props);
 
@@ -31,7 +31,7 @@ function SearchUserListItem(props) {
       </View>
       <View style={localStyle.addButtonContainer}>
         <TouchableOpacity
-          testID={`search_user_add_toggle_button_for_${testID}`}
+          testID={`search_user_add_toggle_button_for_${userName}`}
           style={
             oAddButtonData.buttonType === 'Primary'
               ? localStyle.primaryAddButtonContainer

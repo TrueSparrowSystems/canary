@@ -42,11 +42,13 @@ function ThreadScreen(props) {
           text={'Thread'}
         />
         <TimelineList
+          testID="thread_screen"
           reloadData={false}
           refreshData={false}
           timelineListDataSource={listDataSource.current}
           listHeaderComponent={
             <TweetCard
+              testID="thread_screen"
               dataSource={tweetData}
               isDisabled={true}
               style={localStyle.cardStyle}

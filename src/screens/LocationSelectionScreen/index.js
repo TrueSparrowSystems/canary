@@ -26,6 +26,7 @@ function LocationSelectionScreen() {
         textStyle={localStyle.headerText}
       />
       <SearchBar
+        testID="search_location"
         onQueryChange={fnOnSearchInput}
         placeholderText={'Search Location'}
       />

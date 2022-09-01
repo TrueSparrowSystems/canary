@@ -38,7 +38,7 @@ function SearchUserModal() {
 
   return (
     <CustomModal
-      testID="search_user_modal"
+      testID="search_user"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnCloseModal}
       onBackDropPress={fnCloseModal}
@@ -62,6 +62,7 @@ function SearchUserModal() {
         </View>
         {/* SearchBox */}
         <SearchBar
+          testID="search_user"
           placeholderText="Search Users"
           onSearchPressCallback={fnOnSearchPress}
           onQueryChange={fnOnQueryChange}

@@ -102,12 +102,18 @@ function TimelineList({
   const renderItem = useCallback(
     ({item}) => {
       if (item.card_type === Constants.CardTypes.TweetCard) {
-        return <TweetCard dataSource={item} isDisabled={disableTweetPress} />;
+        return (
+          <TweetCard
+            testID={`${testID}_list`}
+            dataSource={item}
+            isDisabled={disableTweetPress}
+          />
+        );
       } else if (item.card_type === Constants.CardTypes.ShareCard) {
         return ShareCard;
       }
     },
-    [ShareCard, disableTweetPress],
+    [ShareCard, disableTweetPress, testID],
   );
 
   const keyExtractor = useCallback(item => {
@@ -164,6 +170,7 @@ function TimelineList({
   return (
     <View style={style || localStyle.container}>
       <PaginatedList
+        testID={testID}
         useRecyclerView={false}
         flatListProps={flatListProps}
         dataSource={listDataSource.current}

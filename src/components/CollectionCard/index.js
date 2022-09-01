@@ -163,7 +163,7 @@ function CollectionCard(props) {
                   <Image source={BinIcon} style={localStyle.binIconStyle} />
                 </TouchableHighlight>
                 <TouchableHighlight
-                  testID={`collection_card_for_${collectionName}_remove`}
+                  testID={`collection_card_for_${collectionName}_edit`}
                   underlayColor={colors.Transparent}
                   style={binContainerStyle}
                   onPress={onEditCollectionPress}

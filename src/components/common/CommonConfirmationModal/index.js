@@ -28,7 +28,7 @@ function CommonConfirmationModal() {
 
   return bIsVisible ? (
     <CustomModal
-      testID="common_confirmation_modal"
+      testID="common_confirmation"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}

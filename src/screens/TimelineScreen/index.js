@@ -57,6 +57,7 @@ function TimelineScreen(props) {
           />
 
           <TimelineList
+            testID="timeline_screen"
             listRef={scrollRef}
             refreshData={bRefreshing}
             reloadData={false}

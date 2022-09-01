@@ -26,7 +26,7 @@ function ConfirmDeleteModal() {
 
   return bIsVisible ? (
     <CustomModal
-      testID="confirm_delete_modal"
+      testID="confirm_delete"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}

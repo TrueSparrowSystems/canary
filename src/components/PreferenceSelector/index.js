@@ -36,6 +36,9 @@ const styles = {
     flexWrap: 'wrap',
     flexDirection: 'row',
     marginTop: layoutPtToPx(20),
+    tablet: {
+      justifyContent: 'center',
+    },
   },
   searchBar: {
     color: colors.SherpaBlue,

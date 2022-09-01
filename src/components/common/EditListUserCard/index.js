@@ -1,6 +1,7 @@
 import React, {useRef, useMemo} from 'react';
 import {Image, View, Text} from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import {isTablet} from 'react-native-device-info';
 import {SwipeIcon, UserIcon} from '../../../assets/common';
 import colors, {getColorWithOpacity} from '../../../constants/colors';
 import fonts from '../../../constants/fonts';
@@ -37,6 +38,7 @@ function EditListUserCard(props) {
           {
             actionName: 'Remove',
             color: colors.BitterSweet,
+            width: isTablet() ? 80 : 64,
             onPress: () => {
               viewRef.current.setNativeProps({
                 useNativeDriver: true,

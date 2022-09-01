@@ -10,6 +10,7 @@ import SearchBar from '../SearchBar';
 import SearchUserListItem from '../SearchUserListItem';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {TouchableOpacity} from '@plgworks/applogger';
+import {useOrientationState} from '../../hooks/useOrientation';
 
 function SearchUserModal() {
   const localStyle = useStyleProcessor(styles, 'SearchUserModal');
@@ -28,9 +29,12 @@ function SearchUserModal() {
     return <View style={localStyle.blur} />;
   }, [localStyle.blur]);
 
+  const {isPortrait} = useOrientationState();
+
   const screenHeight = useMemo(() => {
     return Dimensions.get('window').height;
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPortrait]);
 
   const modalContainerStyle = useMemo(() => {
     return [localStyle.contentContainer, {height: screenHeight / 1.1}];

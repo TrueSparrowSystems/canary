@@ -41,8 +41,6 @@ function RootNavigation() {
   }, [_handleDynamicUrl]);
 
   const handleDynamicLinkingOnAppStateChange = useCallback(() => {
-    LocalEvent.emit(EventTypes.CommonLoader.Show);
-
     dynamicLinks().onLink(_handleDynamicUrl);
   }, [_handleDynamicUrl]);
 

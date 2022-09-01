@@ -23,6 +23,7 @@ import {
   clearData,
   restoreDataFromFirebase,
 } from '../../services/BackupRestoreService';
+import {useOrientationState} from '../../hooks/useOrientation';
 
 function PreferenceScreen(props) {
   const localStyle = useStyleProcessor(style, 'PreferenceScreen');
@@ -38,6 +39,8 @@ function PreferenceScreen(props) {
   } = usePreferenceScreenData();
 
   const isNotOnboardingScreen = !!data?.enableBackButton;
+
+  useOrientationState();
 
   const roundedButtonStyle = useMemo(() => {
     const options = {
@@ -203,7 +206,8 @@ const style = {
     tablet: {
       alignItems: 'center',
       landscape: {
-        maxWidth: '60%',
+        alignSelf: 'center',
+        width: '60%',
       },
     },
   },
@@ -225,6 +229,7 @@ const style = {
   titleSection: {
     marginTop: layoutPtToPx(20),
     tablet: {
+      marginTop: layoutPtToPx(40),
       alignItems: 'center',
     },
   },
@@ -246,6 +251,9 @@ const style = {
     marginVertical: layoutPtToPx(30),
     tablet: {
       width: '40%',
+      landscape: {
+        width: '60%',
+      },
     },
   },
   continueButton: {

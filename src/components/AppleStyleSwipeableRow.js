@@ -55,15 +55,15 @@ export default class AppleStyleSwipeableRow extends Component {
   renderRightActions = (progress, _dragAnimatedValue) => {
     const {rightActionsArray} = this.props;
     let index = rightActionsArray.length + 1;
+    let totalWidth = rightActionsArray[0].width * rightActionsArray.length;
     return (
-      <View
-        style={{width: rightActionsArray.length * 64, flexDirection: 'row'}}>
+      <View style={{width: totalWidth, flexDirection: 'row'}}>
         {rightActionsArray.map((val, ind) => {
           index -= 1;
           return this.renderRightAction(
             val?.actionName,
             val?.color,
-            64 * index,
+            val.width * index,
             progress,
             rightActionsArray[ind]?.onPress,
           );

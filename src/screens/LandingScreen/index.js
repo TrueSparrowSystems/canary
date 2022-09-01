@@ -27,16 +27,15 @@ function LandingScreen(props) {
     fnOnContinuePress,
   } = useLandingScreenData({isNotOnboardingScreen});
 
-  const renderItemStyle = useMemo(
-    () => [
+  const renderItemStyle = useMemo(() => {
+    return [
       localStyle.renderItemContainer,
       {
         width: nWindowWidth,
         height: nWindowHeight / 2,
       },
-    ],
-    [localStyle.renderItemContainer, nWindowHeight, nWindowWidth],
-  );
+    ];
+  }, [localStyle.renderItemContainer, nWindowHeight, nWindowWidth]);
 
   const renderItem = useCallback(
     ({item, index}) => {
@@ -166,6 +165,13 @@ const style = {
   },
   continueButtonContainer: {
     paddingHorizontal: layoutPtToPx(10),
+    tablet: {
+      alignSelf: 'center',
+      width: '60%',
+      landscape: {
+        width: '40%',
+      },
+    },
   },
   continueButton: {
     backgroundColor: colors.GoldenTainoi,

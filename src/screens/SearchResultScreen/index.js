@@ -42,9 +42,10 @@ function SearchResultScreen(props) {
   return (
     <SafeAreaView style={localStyle.flex1}>
       <View style={localStyle.view}>
-        <Header enableBackButton={true} />
+        <Header testId={'search_result_screen'} enableBackButton={true} />
         <View style={localStyle.toggleButtonsContainer}>
           <RoundedButton
+            testId={'search_result_screen_popular'}
             text="Popular"
             leftImage={PopularIcon}
             style={[
@@ -59,6 +60,7 @@ function SearchResultScreen(props) {
             underlayColor={colors.GoldenTainoi20}
           />
           <RoundedButton
+            testId={'search_result_screen_new'}
             text="New"
             leftImage={NewIcon}
             onPress={fnToggleSortOrder}
@@ -74,6 +76,7 @@ function SearchResultScreen(props) {
           />
         </View>
         <SearchBar
+          testID="search_result"
           searchQuery={query}
           onSearchPressCallback={fnOnSearchPress}
         />
@@ -89,6 +92,7 @@ function SearchResultScreen(props) {
           </View>
         ) : null}
         <TimelineList
+          testID="Search Result"
           style={localStyle.listStyle}
           timelineListDataSource={searchResultListDataSource}
           refreshData={bIsLoading}
@@ -106,6 +110,7 @@ const styles = {
     backgroundColor: colors.White,
   },
   view: {
+    width: '100%',
     flex: 1,
     alignSelf: 'center',
     tablet: {

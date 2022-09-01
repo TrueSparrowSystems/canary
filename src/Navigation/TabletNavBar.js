@@ -1,5 +1,6 @@
+import {TouchableOpacity} from '@plgworks/applogger';
 import React, {useCallback} from 'react';
-import {Image, TouchableOpacity, View} from 'react-native';
+import {Image, View} from 'react-native';
 import BottomNavigationText from '../components/BottomNavigationText';
 import colors from '../constants/colors';
 import fonts from '../constants/fonts';
@@ -34,6 +35,7 @@ function TabletNavBar({state, descriptors, navigation, tabName, tabIcons}) {
 
           return (
             <TouchableOpacity
+              testID="tablet_nav_bar"
               accessibilityRole="button"
               accessibilityState={isFocused ? {selected: true} : {}}
               accessibilityLabel={options.tabBarAccessibilityLabel}

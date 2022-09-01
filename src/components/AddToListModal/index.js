@@ -4,7 +4,6 @@ import {
   Text,
   SafeAreaView,
   Image,
-  TouchableOpacity,
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
@@ -20,6 +19,7 @@ import fonts from '../../constants/fonts';
 import EmptyScreenComponent from '../common/EmptyScreenComponent';
 import {isEmpty} from 'lodash';
 import UserCard from '../common/UserCard';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 function AddToListModal() {
   const localStyle = useStyleProcessor(styles, 'AddToListModal');
@@ -53,6 +53,7 @@ function AddToListModal() {
 
   return bIsVisible ? (
     <CustomModal
+      testID="add_to_list"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}
@@ -62,6 +63,7 @@ function AddToListModal() {
           <View style={localStyle.view}>
             <View style={localStyle.headerStyle}>
               <TouchableOpacity
+                testID="add_to_list_modal_new"
                 onPress={fnOnAddListPress}
                 disabled={isEmpty(oList)}
                 style={addNewButtonStyleMemo}>
@@ -74,6 +76,7 @@ function AddToListModal() {
                 <Text style={localStyle.titleText}>Add user to Lists</Text>
               </View>
               <TouchableOpacity
+                testID="add_to_list_modal_done"
                 style={localStyle.doneButtonContainer}
                 onPress={fnOnDonePress}>
                 <Text style={localStyle.headerTextStyle}>Done</Text>

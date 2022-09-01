@@ -1,12 +1,5 @@
 import React, {useMemo} from 'react';
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Image,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Text, SafeAreaView, Image, ActivityIndicator} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import CustomModal from '../common/CustomModal';
 import colors, {getColorWithOpacity} from '../../constants/colors';
@@ -18,6 +11,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
 import EmptyScreenComponent from '../common/EmptyScreenComponent';
 import {isEmpty} from 'lodash';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 function AddToCollectionModal() {
   const localStyle = useStyleProcessor(styles, 'AddToCollectionModal');
@@ -49,6 +43,7 @@ function AddToCollectionModal() {
 
   return bIsVisible ? (
     <CustomModal
+      testID="add_to_collection"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}
@@ -58,6 +53,7 @@ function AddToCollectionModal() {
           <View style={localStyle.view}>
             <View style={localStyle.headerStyle}>
               <TouchableOpacity
+                testID="add_to_collection_modal_new"
                 onPress={fnOnAddCollectionPress}
                 disabled={isEmpty(oCollectionList)}
                 style={addNewButtonStyleMemo}>
@@ -70,6 +66,7 @@ function AddToCollectionModal() {
                 <Text style={localStyle.titleText}>Add Tweets to Archives</Text>
               </View>
               <TouchableOpacity
+                testID="add_to_collection_modal_done"
                 style={localStyle.doneButtonContainer}
                 onPress={fnOnDonePress}>
                 <Text style={localStyle.headerTextStyle}>Done</Text>

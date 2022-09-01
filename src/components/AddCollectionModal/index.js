@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {View, Text, TextInput, Dimensions} from 'react-native';
+import {View, Text, Dimensions} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import CustomModal from '../common/CustomModal';
 import colors, {getColorWithOpacity} from '../../constants/colors';
@@ -8,6 +8,7 @@ import RoundedButton from '../common/RoundedButton';
 import {AddIcon} from '../../assets/common';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
+import {TextInput} from '@plgworks/applogger';
 
 const TEXT_INPUT_LIMIT = 25;
 
@@ -35,6 +36,7 @@ function AddCollectionModal() {
 
   return bIsVisible ? (
     <CustomModal
+      testID="add_collection"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}
@@ -48,6 +50,7 @@ function AddCollectionModal() {
               </Text>
             </View>
             <TextInput
+              testID="add_collection_modal"
               defaultValue={sDefaultValue}
               autoFocus={true}
               style={localStyle.inputStyle}
@@ -68,6 +71,7 @@ function AddCollectionModal() {
 
             {isEditMode ? (
               <RoundedButton
+                testId={'add_collection_modal_update'}
                 style={localStyle.createButton}
                 text={'Update'}
                 textStyle={localStyle.createButtonText}
@@ -77,6 +81,7 @@ function AddCollectionModal() {
               />
             ) : (
               <RoundedButton
+                testId={'add_collection_modal_create'}
                 style={localStyle.createButton}
                 text={'Create'}
                 textStyle={localStyle.createButtonText}

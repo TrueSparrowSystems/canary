@@ -1,12 +1,6 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {
-  ActivityIndicator,
-  RefreshControl,
-  SafeAreaView,
-  ScrollView,
-  View,
-} from 'react-native';
+import {ActivityIndicator, SafeAreaView, ScrollView, View} from 'react-native';
 import {AddIcon} from '../../assets/common';
 import Header from '../../components/common/Header';
 import colors from '../../constants/colors';
@@ -16,6 +10,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useEditListUsersScreenData from './useEditListUsersScreenData';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import EditListUserCard from '../../components/common/EditListUserCard';
+import {RefreshControl} from '@plgworks/applogger';
 
 function EditListUsersScreen(props) {
   const {listId, onDonePress} = props?.route?.params;
@@ -29,6 +24,7 @@ function EditListUsersScreen(props) {
     <SafeAreaView>
       <View style={localStyle.container}>
         <Header
+          testId={'edit_list_user_screen'}
           text="Edit List"
           textStyle={localStyle.headerText}
           enableLeftButton={true}
@@ -56,7 +52,11 @@ function EditListUsersScreen(props) {
           <ScrollView
             style={localStyle.listView}
             refreshControl={
-              <RefreshControl refreshing={bIsLoading} onRefresh={fnOnRefresh} />
+              <RefreshControl
+                testID={`edit_list_users_screen_list_${listId}`}
+                refreshing={bIsLoading}
+                onRefresh={fnOnRefresh}
+              />
             }>
             {aListMembers?.map(listMember => {
               return (

@@ -91,6 +91,7 @@ function ListTweetsScreen(props) {
   return (
     <View style={localStyle.container}>
       <Header
+        testId={'list_tweet_screen'}
         style={localStyle.header}
         enableBackButton={true}
         text={listName}
@@ -117,6 +118,7 @@ function ListTweetsScreen(props) {
       ) : null}
       {currentUserNameArray.current.length !== 0 ? (
         <TimelineList
+          testID="list_tweet"
           timelineListDataSource={listDataSource.current}
           listEmptyComponent={ListEmptyComponent}
           onRefresh={fetchData}

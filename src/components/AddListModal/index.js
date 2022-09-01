@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {View, Text, TextInput, Dimensions} from 'react-native';
+import {View, Text, Dimensions} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import CustomModal from '../common/CustomModal';
 import colors, {getColorWithOpacity} from '../../constants/colors';
@@ -8,6 +8,7 @@ import {AddIcon} from '../../assets/common';
 import RoundedButton from '../common/RoundedButton';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
+import {TextInput} from '@plgworks/applogger';
 
 const TEXT_INPUT_LIMIT = 25;
 
@@ -36,6 +37,7 @@ function AddListModal() {
 
   return bIsVisible ? (
     <CustomModal
+      testID="add_list"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}
@@ -47,6 +49,7 @@ function AddListModal() {
               {bIsEditMode ? 'Update list' : 'New List'}
             </Text>
             <TextInput
+              testID="add_list_modal"
               defaultValue={sDefaultValue}
               style={localStyle.inputStyle}
               autoFocus={true}
@@ -65,6 +68,7 @@ function AddListModal() {
             <Text style={localStyle.errorText}>{sErrorMessage}</Text>
             {bIsEditMode ? (
               <RoundedButton
+                testId={'add_list_modal_update'}
                 style={localStyle.createButton}
                 text={'Update'}
                 textStyle={localStyle.createButtonText}
@@ -74,6 +78,7 @@ function AddListModal() {
               />
             ) : (
               <RoundedButton
+                testId={'add_list_modal_create'}
                 style={localStyle.createButton}
                 text={'Create'}
                 textStyle={localStyle.createButtonText}

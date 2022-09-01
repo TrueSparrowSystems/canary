@@ -1,11 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {
-  View,
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-  Share,
-} from 'react-native';
+import {View, ActivityIndicator, FlatList, Share} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionCard from '../../components/CollectionCard';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -37,6 +31,7 @@ import Toast from 'react-native-toast-message';
 import {isTablet} from 'react-native-device-info';
 import {useOrientationState} from '../../hooks/useOrientation';
 import {Constants} from '../../constants/Constants';
+import {RefreshControl} from '@plgworks/applogger';
 
 function CollectionScreen(props) {
   const localStyle = useStyleProcessor(styles, 'CollectionScreen');
@@ -179,6 +174,7 @@ function CollectionScreen(props) {
             : 'Are you sure you want to remove this selected archive?',
         onCollectionRemoved: reloadList,
         type: Constants.ConfirmDeleteModalType.Archive,
+        testID: 'remove_multiple_collection',
       });
     } else {
       Toast.show({
@@ -192,6 +188,7 @@ function CollectionScreen(props) {
     <SafeAreaView style={localStyle.container}>
       {isEmpty(collectionDataRef.current) ? null : (
         <Header
+          testId={'collection_screen'}
           text={'Archives'}
           textStyle={localStyle.headerTextStyle}
           enableRightButton={true}
@@ -219,6 +216,7 @@ function CollectionScreen(props) {
       {showPromotionBanner && !isEmpty(collectionDataRef.current) ? (
         <Animatable.View ref={crossButtonRef}>
           <Banner
+            testID="collection_screen"
             headerImage={bookmarkedIcon}
             headerImageStyle={localStyle.headerImageStyle}
             headerText={'Archives lets you save your tweets privately'}
@@ -258,7 +256,11 @@ function CollectionScreen(props) {
             ref={scrollRef}
             refreshControl={
               isDeleteEnabled ? null : (
-                <RefreshControl refreshing={isLoading} onRefresh={fetchData} />
+                <RefreshControl
+                  testID="archive_screen_list"
+                  refreshing={isLoading}
+                  onRefresh={fetchData}
+                />
               )
             }
             contentContainerStyle={localStyle.contentContainerStyle}

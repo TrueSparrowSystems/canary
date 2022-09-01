@@ -20,6 +20,7 @@ import CommonLoader from './src/components/common/CommonLoader';
 import CommonConfirmationModal from './src/components/common/CommonConfirmationModal';
 import AppStateManager from './src/services/AppStateManager';
 import {isTablet} from 'react-native-device-info';
+import {HelperMenu, useAppLogger} from '@plgworks/applogger';
 
 const ENABLE_YELLOW_BOX_IN_DEBUG_MODE = true;
 
@@ -34,12 +35,27 @@ function App() {
     }
   }, []);
 
+  const apploggerConfig = {
+    port: 8000,
+    loggerConfig: {
+      writeFrequencyInSeconds: 5,
+      isTrackingDisabled: false,
+    },
+  };
+
+  const {navigationRef: appLoggerNavigationRef, onNavigationStateChange} =
+    useAppLogger(apploggerConfig);
+
   const navigationRef = useRef(null);
 
-  const setupNavigation = useCallback(navigation => {
-    NavigationService.setCurrentNavigator(navigation);
-    navigationRef.current = navigation;
-  }, []);
+  const setupNavigation = useCallback(
+    navigation => {
+      NavigationService.setCurrentNavigator(navigation);
+      navigationRef.current = navigation;
+      appLoggerNavigationRef(navigation);
+    },
+    [appLoggerNavigationRef],
+  );
 
   if (ENABLE_YELLOW_BOX_IN_DEBUG_MODE) {
     LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
@@ -49,9 +65,12 @@ function App() {
   return (
     <SafeAreaView style={localStyle.container}>
       <StatusBar barStyle={'dark-content'} backgroundColor={colors.White} />
-      <NavigationContainer ref={setupNavigation}>
+      <NavigationContainer
+        ref={setupNavigation}
+        onStateChange={onNavigationStateChange}>
         <RootNavigation />
         <AppStateManager />
+        <HelperMenu />
         <AddCollectionModal />
         <AddToCollectionModal />
         <ConfirmDeleteModal />

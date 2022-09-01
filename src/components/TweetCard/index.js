@@ -1,6 +1,6 @@
 import {unescape} from 'lodash';
 import React, {useMemo} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {
   BinIcon,
   bookmarkedIcon,
@@ -23,6 +23,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {getDisplayDate} from '../../utils/TimeUtils';
 import fonts from '../../constants/fonts';
 import * as Animatable from 'react-native-animatable';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 function TweetCard(props) {
   const {
@@ -38,6 +39,7 @@ function TweetCard(props) {
     shouldShowRemoveOption = false,
     onRemoveOptionPress,
     onCardPress = null,
+    testID = '',
   } = props;
 
   const {
@@ -61,6 +63,7 @@ function TweetCard(props) {
   return (
     <Animatable.View animation="fadeIn">
       <TouchableOpacity
+        testID={`${testID}_tweet_card_with_id_${id}`}
         activeOpacity={0.8}
         onPress={onCardPress ? onCardPress : fnOnCardPress}
         style={style || localStyle.cardContainer}
@@ -68,6 +71,7 @@ function TweetCard(props) {
         {shouldShowRemoveOption ? (
           <View style={localStyle.binContainerView}>
             <TouchableOpacity
+              testID={`${testID}_tweet_card_with_id_${id}_delete_icon`}
               activeOpacity={0.8}
               style={localStyle.binContainer}
               onPress={() => {
@@ -81,6 +85,7 @@ function TweetCard(props) {
           style={localStyle.userProfileContainer}
           pointerEvents={disablePointerEvents ? 'none' : 'auto'}>
           <TouchableOpacity
+            testID={`${testID}_tweet_card_with_id_${id}_user_details`}
             activeOpacity={0.75}
             onPress={fnOnUserNamePress}
             style={localStyle.userNameView}>
@@ -122,6 +127,7 @@ function TweetCard(props) {
           {bHasMedia ? <ImageCard mediaArray={media} tweetId={id} /> : null}
           <View style={localStyle.likeCommentStrip}>
             <TouchableOpacity
+              testID={`${testID}_tweet_card_with_id_${id}_like`}
               style={localStyle.flexRow}
               onPress={fnOnLikePress}>
               <Image source={likeIcon} style={localStyle.iconStyle} />
@@ -132,6 +138,7 @@ function TweetCard(props) {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
+              testID={`${testID}_tweet_card_with_id_${id}_reply`}
               style={localStyle.flexRow}
               onPress={fnOnLikePress}>
               {public_metrics?.reply_count > 0 ? (
@@ -145,6 +152,7 @@ function TweetCard(props) {
             </TouchableOpacity>
             <View style={localStyle.optionsView}>
               <TouchableOpacity
+                testID={`${testID}_tweet_card_with_id_${id}_share`}
                 onPress={fnOnSharePress}
                 style={localStyle.shareIconContainer}
                 hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
@@ -152,6 +160,7 @@ function TweetCard(props) {
               </TouchableOpacity>
               {bCanShare ? (
                 <TouchableOpacity
+                  testID={`${testID}_tweet_card_with_id_${id}_twitter`}
                   onPress={fnOnTwitterIconPress}
                   style={localStyle.shareIconContainer}
                   hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
@@ -162,6 +171,7 @@ function TweetCard(props) {
                 </TouchableOpacity>
               ) : null}
               <TouchableOpacity
+                testID={`${testID}_tweet_card_with_id_${id}_bookmark`}
                 onPress={fnOnBookmarkButtonPress}
                 hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                 <Image
@@ -174,6 +184,7 @@ function TweetCard(props) {
                 />
               </TouchableOpacity>
               <TouchableOpacity
+                testID={`${testID}_tweet_card_with_id_${id}_list`}
                 onPress={fnOnAddToListPress}
                 hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                 <Image source={ListIcon} style={localStyle.listIconStyle} />

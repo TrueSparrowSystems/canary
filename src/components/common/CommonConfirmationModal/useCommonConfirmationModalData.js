@@ -33,6 +33,7 @@ function useCommonConfirmationModalData() {
 
   return {
     bIsVisible: isVisible,
+    sTestID: modalData?.testID,
     fnOnBackdropPress: onBackdropPress,
     sHeaderText: modalData?.headerText,
     sPrimaryText: modalData?.primaryText,

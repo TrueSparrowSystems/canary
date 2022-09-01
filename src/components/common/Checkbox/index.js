@@ -1,5 +1,6 @@
+import {TouchableOpacity} from '@plgworks/applogger';
 import React, {useState, useMemo, useEffect, useCallback} from 'react';
-import {View, Image, TouchableOpacity, Text} from 'react-native';
+import {View, Image, Text} from 'react-native';
 import {CheckMarkIcon} from '../../../assets/common';
 import colors from '../../../constants/colors';
 import fonts from '../../../constants/fonts';
@@ -14,6 +15,7 @@ function CheckBox({
   uncheckedBoxContainerStyle,
   text,
   textStyle,
+  testID = '',
 }) {
   const localStyles = useStyleProcessor(styles, 'CheckBox');
 
@@ -43,6 +45,7 @@ function CheckBox({
 
   return (
     <TouchableOpacity
+      testID={`check_box_id_${testID}`}
       activeOpacity={1}
       disabled={disabled}
       style={localContainerStyle}

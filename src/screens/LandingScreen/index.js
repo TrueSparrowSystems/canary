@@ -107,7 +107,9 @@ function LandingScreen(props) {
 
   return (
     <View style={localStyle.container}>
-      {isNotOnboardingScreen ? <Header enableBackButton={true} /> : null}
+      {isNotOnboardingScreen ? (
+        <Header testId={'onboarding_screen'} enableBackButton={true} />
+      ) : null}
       <View style={localStyle.contentContainer}>
         <FlatList
           ref={fnSetFlatListRef}
@@ -139,6 +141,7 @@ function LandingScreen(props) {
             {activeIndexData?.secondaryText}
           </Text>
           <RoundedButton
+            testId={'landing_screen_continue'}
             style={localStyle.continueButton}
             textStyle={localStyle.continueButtonText}
             onPress={fnOnContinuePress}

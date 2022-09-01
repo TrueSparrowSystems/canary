@@ -1,12 +1,5 @@
 import React, {useCallback, useMemo, useRef} from 'react';
-import {
-  ActivityIndicator,
-  Image,
-  RefreshControl,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, Image, Text, View} from 'react-native';
 import PaginatedList from '../PaginatedList';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import TimelineListDataSource from './TimelineListDataSource';
@@ -20,6 +13,7 @@ import {Canary, CrossIcon} from '../../assets/common';
 import fonts from '../../constants/fonts';
 import * as Animatable from 'react-native-animatable';
 import {Constants} from '../../constants/Constants';
+import {RefreshControl, TouchableOpacity} from '@plgworks/applogger';
 
 const _isTablet = isTablet();
 const ITEM_WIDTH = 276;
@@ -35,6 +29,7 @@ function TimelineList({
   listHeaderComponent = null,
   disableTweetPress = false,
   listEmptyComponent = null,
+  testID = '',
 }) {
   const listDataSource = useRef(timelineListDataSource);
   if (listDataSource.current === null) {
@@ -73,6 +68,7 @@ function TimelineList({
             Share the app with your friends and support data privacy! 💯
           </Text>
           <RoundedButton
+            testId={'timeline_list_share_app'}
             underlayColor={getColorWithOpacity(colors.Black, 0.2)}
             style={localStyle.shareAppButton}
             text={'Share App'}
@@ -81,6 +77,7 @@ function TimelineList({
           />
         </View>
         <TouchableOpacity
+          testID="share_tweet_card_cross"
           hitSlop={{left: 10, right: 10, top: 10, bottom: 10}}
           onPress={fnOnCloseShareCardPress}>
           <Image source={CrossIcon} style={localStyle.crossIconStyle} />
@@ -105,12 +102,18 @@ function TimelineList({
   const renderItem = useCallback(
     ({item}) => {
       if (item.card_type === Constants.CardTypes.TweetCard) {
-        return <TweetCard dataSource={item} isDisabled={disableTweetPress} />;
+        return (
+          <TweetCard
+            testID={`${testID}_list`}
+            dataSource={item}
+            isDisabled={disableTweetPress}
+          />
+        );
       } else if (item.card_type === Constants.CardTypes.ShareCard) {
         return ShareCard;
       }
     },
-    [ShareCard, disableTweetPress],
+    [ShareCard, disableTweetPress, testID],
   );
 
   const keyExtractor = useCallback(item => {
@@ -143,6 +146,7 @@ function TimelineList({
       ),
       refreshControl: (
         <RefreshControl
+          testID={`${testID}_paginated_list`}
           refreshing={bIsLoading}
           onRefresh={fnOnRefresh}
           tintColor="transparent"
@@ -160,11 +164,13 @@ function TimelineList({
     localStyle.emptyViewContainer,
     localStyle.flatListPropsStyle,
     renderItem,
+    testID,
   ]);
 
   return (
     <View style={style || localStyle.container}>
       <PaginatedList
+        testID={testID}
         useRecyclerView={false}
         flatListProps={flatListProps}
         dataSource={listDataSource.current}

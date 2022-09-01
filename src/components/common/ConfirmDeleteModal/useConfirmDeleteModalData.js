@@ -104,6 +104,7 @@ function useConfirmDeleteModalData() {
       replace('Are you sure you want to remove “{{name}}” from archives?', {
         name: modalData?.name,
       }),
+    sTestID: modalData?.testID,
     fnOnCancelPress: closeModal,
     fnOnSureButtonPress: onSureButtonPress,
   };

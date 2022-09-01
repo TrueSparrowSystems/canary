@@ -1,15 +1,9 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  BackHandler,
-  Dimensions,
-  TouchableOpacity,
-  View,
-  Animated,
-} from 'react-native';
-import {Portal} from 'react-native-paper';
+import {BackHandler, Dimensions, View, Animated} from 'react-native';
 import {useOrientationState} from '../../../hooks/useOrientation';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import colors from '../../../constants/colors';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 /**
  * @param {Boolean} visible Boolean to indicate if the modal is open or not.
@@ -30,8 +24,7 @@ function CustomModal({
   backdropColor,
   customBackdrop,
   children,
-  innerContainer,
-  shouldUsePortal = false,
+  testID = '',
 }) {
   // Opacity value for the container.
   const opacityOffset = React.useRef(new Animated.Value(0)).current;
@@ -140,32 +133,6 @@ function CustomModal({
     [innerStyle, localStyle.innerContainer],
   );
 
-  const portalModalContent = useMemo(
-    () => (
-      <Portal>
-        <Animated.View style={animatedViewStyle}>
-          {customBackdrop}
-        </Animated.View>
-        <Animated.View style={innerContainerStyle}>
-          <TouchableOpacity
-            style={localStyle.backdrop}
-            activeOpacity={1}
-            onPress={onBackDropPress}
-          />
-          {children}
-        </Animated.View>
-      </Portal>
-    ),
-    [
-      animatedViewStyle,
-      children,
-      customBackdrop,
-      innerContainerStyle,
-      localStyle.backdrop,
-      onBackDropPress,
-    ],
-  );
-
   const viewModalContent = useMemo(
     () => (
       <View style={localStyle.container}>
@@ -174,6 +141,7 @@ function CustomModal({
         </Animated.View>
         <Animated.View style={innerContainerStyle}>
           <TouchableOpacity
+            testID={`${testID}_custom_modal_backdrop_press`}
             style={localStyle.backdrop}
             activeOpacity={1}
             onPress={onBackDropPress}
@@ -183,21 +151,18 @@ function CustomModal({
       </View>
     ),
     [
+      localStyle.container,
+      localStyle.backdrop,
       animatedViewStyle,
-      children,
       customBackdrop,
       innerContainerStyle,
-      localStyle.backdrop,
+      testID,
       onBackDropPress,
-      localStyle.container,
+      children,
     ],
   );
 
-  return visibility
-    ? shouldUsePortal
-      ? portalModalContent
-      : viewModalContent
-    : null;
+  return visibility ? viewModalContent : null;
 }
 export default React.memo(CustomModal);
 

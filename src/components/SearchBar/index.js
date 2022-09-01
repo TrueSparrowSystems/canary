@@ -1,17 +1,19 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {TouchableOpacity, View, Image, TextInput} from 'react-native';
+import {View, Image} from 'react-native';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {CrossIcon, SearchIcon} from '../../assets/common';
 import {isEmpty} from 'lodash';
 import fonts from '../../constants/fonts';
+import {TextInput, TouchableOpacity} from '@plgworks/applogger';
 
 function SearchBar({
   searchQuery = '',
   onSearchPressCallback,
   onQueryChange,
   placeholderText,
+  testID = '',
 }) {
   let displayText = searchQuery;
   if (!isEmpty(searchQuery)) {
@@ -62,6 +64,7 @@ function SearchBar({
       }>
       <Image source={SearchIcon} style={localStyle.searchIconStyle} />
       <TextInput
+        testID="search_bar"
         ref={textInputRef}
         onFocus={onTextInputFocussed}
         onBlur={onTextInputBlurred}
@@ -78,6 +81,7 @@ function SearchBar({
 
       {query.length > 0 && (
         <TouchableOpacity
+          testID={`${testID}_search_bar`}
           onPress={clearQuery}
           style={localStyle.crossContainer}>
           <Image source={CrossIcon} style={localStyle.crossButtonStyle} />

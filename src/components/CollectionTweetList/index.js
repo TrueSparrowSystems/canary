@@ -1,5 +1,6 @@
+import {RefreshControl} from '@plgworks/applogger';
 import React from 'react';
-import {ScrollView, ActivityIndicator, RefreshControl} from 'react-native';
+import {ScrollView, ActivityIndicator} from 'react-native';
 import {bookmarkIcon} from '../../assets/common';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import fonts from '../../constants/fonts';
@@ -18,6 +19,7 @@ function CollectionTweetList(props) {
     disableTweetPress = false,
     onTweetCardPress = null,
     shouldShowRemoveOption = false,
+    collectionId,
   } = props;
   const {
     bIsLoading,
@@ -47,11 +49,16 @@ function CollectionTweetList(props) {
     <ScrollView
       contentContainerStyle={contentContainerStyle}
       refreshControl={
-        <RefreshControl refreshing={bIsLoading} onRefresh={fnOnRefresh} />
+        <RefreshControl
+          testID={`collection_tweets_list_${collectionId}`}
+          refreshing={bIsLoading}
+          onRefresh={fnOnRefresh}
+        />
       }>
       {aDataSource?.map(data => {
         return (
           <TweetCard
+            testID="collection_tweet_list"
             key={data?.id}
             dataSource={data}
             showBookmarked={shouldShowBookmarked}

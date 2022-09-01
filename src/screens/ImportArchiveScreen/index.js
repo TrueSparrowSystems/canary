@@ -31,6 +31,7 @@ function ImportArchiveScreen(props) {
   return (
     <View style={localStyle.container}>
       <Header
+        testId={'import_archive_screen'}
         enableBackButton={true}
         enableRightButton={!isEmpty(aData)}
         onRightButtonClick={fnOnImportPress}

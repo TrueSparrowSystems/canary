@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import Image from 'react-native-fast-image';
 import {getRandomColorCombination} from '../../utils/RandomColorUtil';
@@ -8,6 +8,7 @@ import fonts from '../../constants/fonts';
 import {TickIcon} from '../../assets/common';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import useMiniCollectionCardData from './useMiniCollectionCardData';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 function MiniCollectionCard(props) {
   const {
@@ -51,6 +52,7 @@ function MiniCollectionCard(props) {
 
   return (
     <TouchableOpacity
+      testID={`mini_collection_card_for_collection_name_${collectionName}_toggle`}
       onPress={
         bIsTweetAddedToCollection
           ? fnOnRemoveFromCollectionPress

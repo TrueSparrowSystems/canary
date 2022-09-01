@@ -1,4 +1,4 @@
-import {Image, Text, View, TouchableOpacity} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import React from 'react';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import colors, {getColorWithOpacity} from '../../constants/colors';
@@ -6,6 +6,7 @@ import fonts from '../../constants/fonts';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {verifiedIcon} from '../../assets/common';
 import useSearchUserListItemData from './useSearchUserListItemData';
+import {TouchableOpacity} from '@plgworks/applogger';
 
 function SearchUserListItem(props) {
   const {userName, fullName, profileImageUrl, isVerified} = props;
@@ -30,6 +31,7 @@ function SearchUserListItem(props) {
       </View>
       <View style={localStyle.addButtonContainer}>
         <TouchableOpacity
+          testID={`search_user_add_toggle_button_for_${userName}`}
           style={
             oAddButtonData.buttonType === 'Primary'
               ? localStyle.primaryAddButtonContainer

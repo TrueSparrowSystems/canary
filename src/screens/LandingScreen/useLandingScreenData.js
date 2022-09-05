@@ -3,6 +3,7 @@ import {useCallback, useMemo, useRef, useState, useEffect} from 'react';
 import {Dimensions, Platform} from 'react-native';
 import ScreenName from '../../constants/ScreenName';
 import {useOrientationState} from '../../hooks/useOrientation';
+import AsyncStoreHelper from '../../services/AsyncStoreHelper';
 import LandingScreenCarousalData from './LandingScreenCarousalData';
 
 export default function useLandingScreenData({isNotOnboardingScreen}) {
@@ -61,6 +62,13 @@ export default function useLandingScreenData({isNotOnboardingScreen}) {
       setActiveIndex(activeIndexRef.current);
     }
   }, [carousalData.length, isNotOnboardingScreen, navigation]);
+
+  useEffect(() => {
+    if (!isNotOnboardingScreen) {
+      AsyncStoreHelper.setInitialStoreValues();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {
     aCarousalData: carousalData,

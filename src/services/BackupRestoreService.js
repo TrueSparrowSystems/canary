@@ -1,6 +1,5 @@
 import {firebase} from '@react-native-firebase/database';
 import moment from 'moment';
-import {NativeModules} from 'react-native';
 import deviceInfoModule from 'react-native-device-info';
 import {Constants} from '../constants/Constants';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
@@ -8,6 +7,9 @@ import AsyncStorage from './AsyncStorage';
 import Toast from 'react-native-toast-message';
 import {ToastType} from '../constants/ToastConstants';
 import {StoreKeys} from './AsyncStorage/StoreConstants';
+import RNRestart from 'react-native-restart';
+
+const BackupKeys = Object.values(StoreKeys);
 
 export function backUpDataToFirebase({onBackUpSuccess}) {
   LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {
@@ -18,22 +20,20 @@ export function backUpDataToFirebase({onBackUpSuccess}) {
     testID: 'back_up',
     onSureButtonPress: () => {
       deviceInfoModule.getUniqueId().then(deviceID => {
-        AsyncStorage.getAllKeys().then(allKeys => {
-          AsyncStorage.multiGet(allKeys).then(storeData => {
-            const reference = firebase
-              .app()
-              .database(Constants.FirebaseDatabaseUrl)
-              .ref(`${Constants.FirebaseDatabasePath}${deviceID}`);
-            reference
-              .set({id: deviceID, data: storeData, timeStamp: moment.now()})
-              .then(() => {
-                Toast.show({
-                  type: ToastType.Success,
-                  text1: 'Data Backed Up Successfully',
-                });
-                onBackUpSuccess?.();
+        AsyncStorage.multiGet(BackupKeys).then(storeData => {
+          const reference = firebase
+            .app()
+            .database(Constants.FirebaseDatabaseUrl)
+            .ref(`${Constants.FirebaseDatabasePath}${deviceID}`);
+          reference
+            .set({id: deviceID, data: storeData, timeStamp: moment.now()})
+            .then(() => {
+              Toast.show({
+                type: ToastType.Success,
+                text1: 'Data Backed Up Successfully',
               });
-          });
+              onBackUpSuccess?.();
+            });
         });
       });
     },
@@ -54,7 +54,7 @@ export function clearData() {
             type: ToastType.Success,
             text1: 'Data Cleared Successfully',
           });
-          NativeModules.DevSettings.reload();
+          RNRestart.Restart();
         });
       });
     },
@@ -96,7 +96,7 @@ export function restoreDataFromFirebase({onRestoreSuccess}) {
                     type: ToastType.Success,
                     text1: 'Data Restored Successfully',
                   });
-                  NativeModules.DevSettings.reload();
+                  RNRestart.Restart();
                 });
               } else {
                 Toast.show({

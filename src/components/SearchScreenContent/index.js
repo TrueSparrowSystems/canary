@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import colors from '../../constants/colors';
+import colors, {getColorWithOpacity} from '../../constants/colors';
 import fonts from '../../constants/fonts';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
@@ -54,16 +54,19 @@ function SearchScreenContent(props) {
         </View>
       ) : null}
       <View style={localStyle.trendingTopicList}>
-        {aTrendingTopics.map((text, i) => {
+        {aTrendingTopics.map((trend, i) => {
           return (
             <Animatable.View key={i} animation="fadeIn">
               <Pressable
-                testID={`trending_topic_${text}`}
+                testID={`trending_topic_${trend.topic}`}
                 onPress={() => {
-                  fnOnTopicClick(text);
+                  fnOnTopicClick(trend.topic);
                 }}
                 style={localStyle.trendingTopicBox}>
-                <Text style={localStyle.topicText}>{text}</Text>
+                <Text style={localStyle.topicText}>{trend.topic}</Text>
+                {trend.count ? (
+                  <Text style={localStyle.tweetCountText}>{trend.count}</Text>
+                ) : null}
               </Pressable>
             </Animatable.View>
           );
@@ -86,8 +89,16 @@ const styles = {
   topicText: {
     fontSize: fontPtToPx(14),
     color: colors.BlackPearl,
-    fontFamily: fonts.InterRegular,
+    fontFamily: fonts.InterMedium,
     lineHeight: layoutPtToPx(17),
+    paddingTop: layoutPtToPx(2),
+  },
+  tweetCountText: {
+    fontSize: fontPtToPx(12),
+    color: getColorWithOpacity(colors.BlackPearl, 0.7),
+    fontFamily: fonts.InterRegular,
+    lineHeight: layoutPtToPx(15),
+    paddingTop: layoutPtToPx(2),
   },
   trendingTopicList: {
     paddingBottom: '1%',

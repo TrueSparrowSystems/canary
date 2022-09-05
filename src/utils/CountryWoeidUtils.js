@@ -2,6 +2,7 @@ import TwitterAPI from '../api/helpers/TwitterAPI';
 import {Constants} from '../constants/Constants';
 import Cache from '../services/Cache';
 import {CacheKey} from '../services/Cache/CacheStoreConstants';
+import {getFormattedStat} from './TextUtils';
 
 export function setCountriesWoeidsInCache() {
   const countryWoeids = {};
@@ -29,7 +30,12 @@ export function getTrendingTopicsForCountry(countryName = 'Worldwide') {
         const trendsArray = res.data[0].trends;
         const trendingTopicArray = [];
         trendsArray.map(trend => {
-          trendingTopicArray.push(trend.name);
+          trendingTopicArray.push({
+            topic: trend.name,
+            count: trend.tweet_volume
+              ? `${getFormattedStat(trend.tweet_volume)} Tweets`
+              : null,
+          });
         });
         resolve(trendingTopicArray);
       })

@@ -48,7 +48,7 @@ export function clearData() {
       'Note: Your data(Preferences, Lists & Archives) will be cleared. \nThis will also restart the application',
     testID: 'clear',
     onSureButtonPress: () => {
-      AsyncStorage.clear().then(() => {
+      AsyncStorage.multiRemove(BackupKeys).then(() => {
         AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {
           Toast.show({
             type: ToastType.Success,

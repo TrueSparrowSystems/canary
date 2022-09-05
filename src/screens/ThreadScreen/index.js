@@ -72,6 +72,7 @@ const styles = {
     flexDirection: 'row',
   },
   listComponent: {
+    width: '100%',
     tablet: {
       landscape: {
         width: '70%',

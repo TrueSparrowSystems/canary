@@ -18,27 +18,24 @@ const TabAction = {
 
 export default (screenName, scrollToTop) => {
   const navigation = useNavigation();
+  function onTabPress() {
+    const parentIndex = navigation.getParent().getState().index;
+    const {index} = navigation.getState();
+    let state = Cache.getValue(CacheKey.tabPressCount[screenName]) || 0;
+    if (parentIndex === ScreenIndex[screenName] && index !== 0) {
+      navigation.popToTop();
+      Cache.setValue(CacheKey.tabPressCount[screenName], TabAction.ScrollToTop);
+    } else if (parentIndex !== ScreenIndex[screenName]) {
+      Cache.setValue(CacheKey.tabPressCount[screenName], TabAction.ScrollToTop);
+    } else if (index === 0 || state === TabAction.ScrollToTop) {
+      scrollToTop?.();
+      Cache.setValue(CacheKey.tabPressCount[screenName], TabAction.NoAction);
+    }
+  }
   useEffect(() => {
-    const tabHandler = navigation.getParent().addListener('tabPress', e => {
-      const parentIndex = navigation.getParent().getState().index;
-      const {index} = navigation.getState();
-      let state = Cache.getValue(CacheKey.tabPressCount[screenName]) || 0;
-      if (parentIndex === ScreenIndex[screenName] && index !== 0) {
-        navigation.popToTop();
-        Cache.setValue(
-          CacheKey.tabPressCount[screenName],
-          TabAction.ScrollToTop,
-        );
-      } else if (parentIndex !== ScreenIndex[screenName]) {
-        Cache.setValue(
-          CacheKey.tabPressCount[screenName],
-          TabAction.ScrollToTop,
-        );
-      } else if (index === 0 || state === TabAction.ScrollToTop) {
-        scrollToTop?.();
-        Cache.setValue(CacheKey.tabPressCount[screenName], TabAction.NoAction);
-      }
-    });
+    const tabHandler = navigation
+      .getParent()
+      .addListener('tabPress', onTabPress);
     return tabHandler;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);

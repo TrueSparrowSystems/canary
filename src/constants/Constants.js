@@ -41,4 +41,5 @@ export const Constants = {
     url: 'http://where.yahooapis.com/v1/place/1',
     woeid: 1,
   },
+  Encryption: {salt: 'plg_canary', cost: 5000, length: 256},
 };

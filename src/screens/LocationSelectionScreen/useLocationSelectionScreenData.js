@@ -29,7 +29,7 @@ const useLocationSelectionScreenData = () => {
         setMainArray([...originalDataArray]);
       } else {
         let filteredData = originalDataArray.filter(item => {
-          return item.includes(searchText);
+          return item.toLowerCase().includes(searchText.toLowerCase());
         });
 
         setMainArray([...filteredData]);

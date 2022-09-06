@@ -150,14 +150,16 @@ function PreferenceScreen(props) {
           </View>
         </View>
         <View style={localStyle.backupRestoreContainer}>
-          <RoundedButton
-            testId={'preference_screen_backup'}
-            text="BackUp"
-            onPress={backUpDataToFirebase}
-            style={localStyle.backupRestoreButton}
-            textStyle={localStyle.continueButtonText}
-            underlayColor={colors.GoldenTainoi80}
-          />
+          {isNotOnboardingScreen ? (
+            <RoundedButton
+              testId={'preference_screen_backup'}
+              text="BackUp"
+              onPress={backUpDataToFirebase}
+              style={localStyle.backupRestoreButton}
+              textStyle={localStyle.continueButtonText}
+              underlayColor={colors.GoldenTainoi80}
+            />
+          ) : null}
           <RoundedButton
             testId={'preference_screen_restore'}
             text="Restore"
@@ -166,14 +168,16 @@ function PreferenceScreen(props) {
             textStyle={localStyle.continueButtonText}
             underlayColor={colors.GoldenTainoi80}
           />
-          <RoundedButton
-            testId={'preference_screen_clear'}
-            text="Clear"
-            onPress={clearData}
-            style={localStyle.backupRestoreButton}
-            textStyle={localStyle.continueButtonText}
-            underlayColor={colors.GoldenTainoi80}
-          />
+          {isNotOnboardingScreen ? (
+            <RoundedButton
+              testId={'preference_screen_clear'}
+              text="Clear"
+              onPress={clearData}
+              style={localStyle.backupRestoreButton}
+              textStyle={localStyle.continueButtonText}
+              underlayColor={colors.GoldenTainoi80}
+            />
+          ) : null}
         </View>
       </ScrollView>
       <View style={localStyle.bottomContainer}>

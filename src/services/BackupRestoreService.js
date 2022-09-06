@@ -23,21 +23,38 @@ export function backUpDataToFirebase({onBackUpSuccess}) {
       deviceInfoModule.getUniqueId().then(deviceID => {
         AsyncStorage.multiGet(BackupKeys).then(storeData => {
           //replace the 'password' with user entered password
-          encrypt(storeData, 'password').then(encryptedData => {
-            const reference = firebase
-              .app()
-              .database(Constants.FirebaseDatabaseUrl)
-              .ref(`${Constants.FirebaseDatabasePath}${deviceID}`);
-            reference
-              .set({id: deviceID, data: encryptedData, timeStamp: moment.now()})
-              .then(() => {
-                Toast.show({
-                  type: ToastType.Success,
-                  text1: 'Data Backed Up Successfully',
+          encrypt(storeData, 'password')
+            .then(encryptedData => {
+              const reference = firebase
+                .app()
+                .database(Constants.FirebaseDatabaseUrl)
+                .ref(`${Constants.FirebaseDatabasePath}${deviceID}`);
+              reference
+                .set({
+                  id: deviceID,
+                  data: encryptedData,
+                  timeStamp: moment.now(),
+                })
+                .then(() => {
+                  Toast.show({
+                    type: ToastType.Success,
+                    text1: 'Data Backed Up Successfully',
+                  });
+                  onBackUpSuccess?.();
+                })
+                .catch(() => {
+                  Toast.show({
+                    type: ToastType.Error,
+                    text1: 'Data Backup Failed. Please Try Again',
+                  });
                 });
-                onBackUpSuccess?.();
+            })
+            .catch(() => {
+              Toast.show({
+                type: ToastType.Error,
+                text1: 'Data Backup Failed. Please Try Again',
               });
-          });
+            });
         });
       });
     },
@@ -85,35 +102,42 @@ export function restoreDataFromFirebase({onRestoreSuccess}) {
       if (JSON.stringify(databaseData) !== 'null') {
         const responseData = JSON.parse(JSON.stringify(databaseData));
         //replace the 'password' with user entered password
-        decrypt(responseData.data, 'password').then(data => {
-          LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {
-            headerText: 'Restore',
-            primaryText: `Are you Sure you want to Restore your data? \n\n Last Backup: ${moment(
-              responseData.timeStamp,
-            ).format('DD MMM YYYY hh:mm a')}`,
-            secondaryText: 'Note: This will restart the application',
-            testID: 'restore',
-            onSureButtonPress: () => {
-              AsyncStorage.multiSet(JSON.parse(data)).then(isDataSet => {
-                if (isDataSet) {
-                  AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {
-                    onRestoreSuccess?.();
-                    Toast.show({
-                      type: ToastType.Success,
-                      text1: 'Data Restored Successfully',
+        decrypt(responseData.data, 'password')
+          .then(data => {
+            LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {
+              headerText: 'Restore',
+              primaryText: `Are you Sure you want to Restore your data? \n\n Last Backup: ${moment(
+                responseData.timeStamp,
+              ).format('DD MMM YYYY hh:mm a')}`,
+              secondaryText: 'Note: This will restart the application',
+              testID: 'restore',
+              onSureButtonPress: () => {
+                AsyncStorage.multiSet(JSON.parse(data)).then(isDataSet => {
+                  if (isDataSet) {
+                    AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {
+                      onRestoreSuccess?.();
+                      Toast.show({
+                        type: ToastType.Success,
+                        text1: 'Data Restored Successfully',
+                      });
+                      RNRestart.Restart();
                     });
-                    RNRestart.Restart();
-                  });
-                } else {
-                  Toast.show({
-                    type: ToastType.Error,
-                    text1: 'Data Restore Failed. Please Try Again',
-                  });
-                }
-              });
-            },
+                  } else {
+                    Toast.show({
+                      type: ToastType.Error,
+                      text1: 'Data Restore Failed. Please Try Again',
+                    });
+                  }
+                });
+              },
+            });
+          })
+          .catch(() => {
+            Toast.show({
+              type: ToastType.Error,
+              text1: 'Data Restore Failed. Please Try Again',
+            });
           });
-        });
       } else {
         Toast.show({
           type: ToastType.Error,
@@ -138,21 +162,29 @@ function generateKeyFromPassword(password) {
 }
 
 function encrypt(data, password) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     generateKeyFromPassword(password).then(key => {
-      encryptData(JSON.stringify(data), key).then(encryptedData => {
-        return resolve(encryptedData);
-      });
+      encryptData(JSON.stringify(data), key)
+        .then(encryptedData => {
+          return resolve(encryptedData);
+        })
+        .catch(err => {
+          return reject(err);
+        });
     });
   });
 }
 
 function decrypt(encryptedData, password) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     generateKeyFromPassword(password).then(key => {
-      decryptData(encryptedData, key).then(text => {
-        return resolve(text);
-      });
+      decryptData(encryptedData, key)
+        .then(text => {
+          return resolve(text);
+        })
+        .catch(err => {
+          return reject(err);
+        });
     });
   });
 }

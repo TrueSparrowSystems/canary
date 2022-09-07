@@ -20,4 +20,5 @@ export default {
   LandingScreen: 'LandingScreen',
   ImportListScreen: 'ImportListScreen',
   ImportArchiveScreen: 'ImportArchiveScreen',
+  SettingScreen: 'SettingScreen',
 };

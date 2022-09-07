@@ -11,6 +11,7 @@ import RNRestart from 'react-native-restart';
 import {decryptData, encryptData, generateKey} from './DataSecureService';
 
 const BackupKeys = Object.values(StoreKeys);
+BackupKeys.splice(BackupKeys.indexOf(StoreKeys.IsAppReloaded), 1);
 
 export function backUpDataToFirebase({onBackUpSuccess}) {
   LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {

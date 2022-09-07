@@ -68,14 +68,12 @@ function ImportArchiveScreen(props) {
             key={nSelectedIndex}
             tweetIds={aData[nSelectedIndex]?.tweetIds}
             onTweetRemove={fnOnArchiveTweetRemove}
-            shouldShowBookmarked={true}
             contentContainerStyle={localStyle.tweetListContentContainer}
+            isImportMode={true}
             emptyScreenComponent={
               <EmptyScreenComponent descriptionText="No tweets present in this archive" />
             }
-            disableTweetPress={true}
             onTweetCardPress={fnOnTweetCardPress}
-            shouldShowRemoveOption={true}
           />
         </View>
       ) : (

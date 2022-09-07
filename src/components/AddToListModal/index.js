@@ -49,7 +49,6 @@ function AddToListModal() {
     return {
       maxHeight: Dimensions.get('window').height / denominator,
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPortrait]);
 
   const addNewButtonStyleMemo = useMemo(() => {
@@ -95,7 +94,7 @@ function AddToListModal() {
             ) : isEmpty(oList) ? (
               <View style={localStyle.listContainer}>
                 <UserCard userData={oUserData} />
-                <View style={localStyle.emptyComponentContainer}>
+                <ScrollView style={localStyle.emptyComponentContainer}>
                   <EmptyScreenComponent
                     buttonImage={AddIcon}
                     emptyImage={ListIconBig}
@@ -105,7 +104,7 @@ function AddToListModal() {
                       'Stay up-to-date on the favorite topics by users you love, without being tracked 😉'
                     }
                   />
-                </View>
+                </ScrollView>
               </View>
             ) : (
               <View style={localStyle.listContainer}>
@@ -175,7 +174,7 @@ const styles = {
   emptyComponentContainer: {
     alignSelf: 'center',
     paddingBottom: layoutPtToPx(30),
-    height: '65%',
+    height: '60%',
     tablet: {
       width: '50%',
     },

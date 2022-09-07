@@ -7,7 +7,7 @@ import {collectionService} from '../../services/CollectionService';
 import {getTweetData} from '../utils/ViewData';
 
 function useCollectionTweetListData(props) {
-  const {collectionId, tweetIds = []} = props;
+  const {collectionId, tweetIds = [], isImportMode = false} = props;
   const [isLoading, setIsLoading] = useState(false);
   const listDataRef = useRef([]);
   const _collectionService = collectionService();
@@ -23,7 +23,21 @@ function useCollectionTweetListData(props) {
           const newData = data?.data;
           const errors = data?.errors;
           if (errors) {
-            _collectionService.handleTweetError(collectionId, errors);
+            if (isImportMode) {
+              errors.forEach(error => {
+                if (
+                  error?.title === 'Not Found Error' &&
+                  error?.parameter === 'ids'
+                ) {
+                  const tweetId = error?.value;
+                  if (tweetId) {
+                    array.push({isDeletedTweet: true, id: tweetId});
+                  }
+                }
+              });
+            } else {
+              _collectionService.handleTweetError(collectionId, errors);
+            }
           }
           if (newData && newData.length > 0) {
             newData.forEach(tweet => {
@@ -39,7 +53,7 @@ function useCollectionTweetListData(props) {
           setIsLoading(false);
         });
     },
-    [_collectionService, collectionId],
+    [_collectionService, collectionId, isImportMode],
   );
 
   const fetchData = useCallback(() => {

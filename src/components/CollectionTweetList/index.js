@@ -1,7 +1,7 @@
-import {RefreshControl} from '@plgworks/applogger';
+import {RefreshControl, TouchableOpacity} from '@plgworks/applogger';
 import React from 'react';
-import {ScrollView, ActivityIndicator} from 'react-native';
-import {bookmarkIcon} from '../../assets/common';
+import {ScrollView, ActivityIndicator, View, Text, Image} from 'react-native';
+import {BinIcon, bookmarkIcon} from '../../assets/common';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import fonts from '../../constants/fonts';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
@@ -13,12 +13,10 @@ import useCollectionTweetListData from './useCollectionTweetListData';
 function CollectionTweetList(props) {
   const {
     emptyScreenComponent,
-    shouldShowBookmarked = false,
     contentContainerStyle,
     onTweetRemove,
-    disableTweetPress = false,
+    isImportMode = false,
     onTweetCardPress = null,
-    shouldShowRemoveOption = false,
     collectionId,
   } = props;
   const {
@@ -56,15 +54,33 @@ function CollectionTweetList(props) {
         />
       }>
       {aDataSource?.map(data => {
-        return (
+        return data?.isDeletedTweet ? (
+          <View style={localStyle.cardContainer}>
+            <View style={localStyle.flexRow}>
+              <Text style={localStyle.deletedTweetTextStyle}>
+                This Tweet is Deleted
+              </Text>
+              <TouchableOpacity
+                testID={'deleted_tweet_card_delete_icon'}
+                activeOpacity={0.8}
+                style={localStyle.binContainer}
+                onPress={() => {
+                  onTweetRemove?.(data?.id);
+                  fnOnRefresh();
+                }}>
+                <Image source={BinIcon} style={localStyle.binIconStyle} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : (
           <TweetCard
             testID="collection_tweet_list"
             key={data?.id}
             dataSource={data}
-            showBookmarked={shouldShowBookmarked}
-            disablePointerEvents={disableTweetPress}
+            showBookmarked={isImportMode}
+            disablePointerEvents={isImportMode}
             onCardPress={onTweetCardPress}
-            shouldShowRemoveOption={shouldShowRemoveOption}
+            shouldShowRemoveOption={isImportMode}
             onRemoveOptionPress={id => {
               onTweetRemove?.(id);
               fnOnRefresh();
@@ -77,6 +93,15 @@ function CollectionTweetList(props) {
 }
 
 const styles = {
+  cardContainer: {
+    borderWidth: 1,
+    borderColor: colors.BlackPearl20,
+    marginHorizontal: layoutPtToPx(8),
+    marginBottom: layoutPtToPx(12),
+    borderRadius: layoutPtToPx(8),
+    flex: 1,
+  },
+
   descriptionTextStyle: {
     fontSize: fontPtToPx(16),
     lineHeight: layoutPtToPx(21),
@@ -96,6 +121,27 @@ const styles = {
     width: '100%',
     height: layoutPtToPx(40),
     borderRadius: layoutPtToPx(25),
+  },
+  flexRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  deletedTweetTextStyle: {
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(21),
+    fontFamily: fonts.SoraRegular,
+    color: getColorWithOpacity(colors.Black, 0.7),
+  },
+  binContainer: {
+    margin: layoutPtToPx(10),
+    zIndex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  binIconStyle: {
+    height: layoutPtToPx(20),
+    width: layoutPtToPx(20),
   },
 };
 

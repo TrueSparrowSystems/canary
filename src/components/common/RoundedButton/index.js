@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Text, View, Image} from 'react-native';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../../utils/responsiveUI';
-import Colors from '../../../constants/colors';
+import colors, {getColorWithOpacity} from '../../../constants/colors';
 import {TouchableHighlight} from '@plgworks/applogger';
 
 /**
@@ -31,16 +31,21 @@ function RoundedButton({
   testId = '',
 }) {
   const localStyle = useStyleProcessor(styles, 'RoundedButton');
-  const containerStyle = style || localStyle.container;
+
+  const buttonContainerStyle = useMemo(() => {
+    const containerStyle = style || localStyle.container;
+    return [
+      containerStyle,
+      disabled && shouldReduceOpacityWhenDisabled ? {opacity: 0.5} : {},
+    ];
+  }, [disabled, localStyle.container, shouldReduceOpacityWhenDisabled, style]);
+
   return (
     <TouchableHighlight
       testID={`${testId}_rounded`}
-      underlayColor={underlayColor || Colors.Mandy30}
+      underlayColor={underlayColor || getColorWithOpacity(colors.Mandy, 0.3)}
       disabled={disabled}
-      style={[
-        containerStyle,
-        disabled && shouldReduceOpacityWhenDisabled ? {opacity: 0.5} : {},
-      ]}
+      style={buttonContainerStyle}
       onPress={onPress}>
       <View style={localStyle.buttonContainer}>
         {leftImage ? (
@@ -71,10 +76,10 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     width: 'auto',
-    backgroundColor: Colors.White,
+    backgroundColor: colors.White,
     height: layoutPtToPx(30),
     borderRadius: layoutPtToPx(30),
-    borderColor: Colors.Mandy,
+    borderColor: colors.Mandy,
     borderWidth: layoutPtToPx(1),
   },
   btnText: {
@@ -82,7 +87,7 @@ const styles = {
     fontSize: fontPtToPx(10),
     justifyContent: 'center',
     alignItems: 'center',
-    color: Colors.WildWaterMelon,
+    color: colors.WildWaterMelon,
   },
   btnLeftImage: {
     marginRight: layoutPtToPx(2),

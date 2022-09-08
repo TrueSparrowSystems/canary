@@ -34,6 +34,7 @@ import ImportListScreen from '../screens/ImportListScreen';
 import ImportArchiveScreen from '../screens/ImportArchiveScreen';
 import TabletNavBar from './TabletNavBar';
 import {isTablet} from 'react-native-device-info';
+import SettingScreen from '../screens/SettingScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -149,6 +150,17 @@ const Navigation = props => {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         />
+        <TimelineStack.Screen
+          name={ScreenName.SettingScreen}
+          component={SettingScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
       </TimelineStack.Navigator>
     );
   }
@@ -164,6 +176,7 @@ const Navigation = props => {
       case ScreenName.LandingScreen:
       case ScreenName.ImportListScreen:
       case ScreenName.ImportArchiveScreen:
+      case ScreenName.SettingScreen:
         return false;
       default:
         return true;

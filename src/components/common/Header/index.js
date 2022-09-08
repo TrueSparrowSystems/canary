@@ -133,9 +133,7 @@ const styles = {
   header: {
     paddingHorizontal: layoutPtToPx(20),
     height: layoutPtToPx(50),
-    borderBottomWidth: 1,
     justifyContent: 'center',
-    borderBottomColor: colors.BlackPearl20,
   },
   view: {
     flexDirection: 'row',

@@ -83,7 +83,11 @@ function SettingScreen() {
           <Card
             titleText={'Backup your data'}
             subTitleText={'Save your preferences, lists and archives.'}
-            onPress={_backUpRestoreHelper.backUpDataToFirebase}
+            onPress={() => {
+              _backUpRestoreHelper.backUpDataToFirebase({
+                onBackUpSuccess: () => {},
+              });
+            }}
           />
           <Card
             titleText={'Restore your data'}
@@ -92,12 +96,18 @@ function SettingScreen() {
                 ? `Restore data from (backup ${sLastBackUpTimeStamp})`
                 : 'Restore data from ...'
             }
-            onPress={_backUpRestoreHelper.restoreDataFromFirebase}
+            onPress={() => {
+              _backUpRestoreHelper.restoreDataFromFirebase({
+                onRestoreSuccess: () => {},
+              });
+            }}
           />
           <RoundedButton
             testId="setting_screen_clear"
             text={'Clear all Data'}
-            onPress={_backUpRestoreHelper.clearData}
+            onPress={() => {
+              _backUpRestoreHelper.clearData();
+            }}
             style={localStyle.buttonStyle}
             textStyle={localStyle.buttonTextStyle}
           />

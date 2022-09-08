@@ -27,9 +27,8 @@ class BackupRestoreHelper {
   }
   backUpDataToFirebase({onBackUpSuccess}) {
     LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {
-      headerText: 'BackUp',
-      primaryText: 'Are you Sure you want to backup your data?',
-      secondaryText:
+      headerText: 'Are you Sure you want to backup your data?',
+      primaryText:
         'Note: Your data(Preferences, Lists & Archives) will be stored with us',
       testID: 'back_up',
       onSureButtonPress: () => {
@@ -138,18 +137,19 @@ class BackupRestoreHelper {
 
   async restoreDataFromFirebase({onRestoreSuccess}) {
     return new Promise((resolve, reject) => {
-      this.getResponseDataFromFirebase().then(() => {
-        //replace the 'password' with user entered password
-        this.decrypt(this.responseData.data, 'password')
-          .then(data => {
-            LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {
-              headerText: 'Restore',
-              primaryText: `Are you Sure you want to Restore your data? \n\n Last Backup: ${moment(
-                this.responseData.timeStamp,
-              ).format('MMM Do YYYY, hh:mma')}`,
-              secondaryText: 'Note: This will restart the application',
-              testID: 'restore',
-              onSureButtonPress: () => {
+      this.getResponseDataFromFirebase()
+        .then(() => {
+          LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {
+            headerText: 'Are you Sure you want to Restore your data? ',
+            primaryText: ` Restore Data from: ${moment(
+              this.responseData.timeStamp,
+            ).format(
+              'MMM Do YYYY, hh:mma',
+            )} \n This also will restart the application`,
+            testID: 'restore',
+            onSureButtonPress: () => {
+              //replace the 'password' with user entered password
+              this.decrypt(this.responseData.data, 'password').then(data => {
                 AsyncStorage.multiSet(JSON.parse(data)).then(isDataSet => {
                   if (isDataSet) {
                     AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {
@@ -169,16 +169,16 @@ class BackupRestoreHelper {
                     return reject();
                   }
                 });
-              },
-            });
-          })
-          .catch(() => {
-            Toast.show({
-              type: ToastType.Error,
-              text1: 'Data Restore Failed. Please Try Again',
-            });
+              });
+            },
           });
-      });
+        })
+        .catch(() => {
+          Toast.show({
+            type: ToastType.Error,
+            text1: 'Data Restore Failed. Please Try Again',
+          });
+        });
     });
   }
 

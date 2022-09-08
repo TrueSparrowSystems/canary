@@ -37,9 +37,17 @@ function CommonConfirmationModal() {
       <View style={localStyle.modalStyle}>
         <SafeAreaView style={localStyle.container}>
           <View style={localStyle.view}>
-            <Text style={localStyle.headerTextStyle}>{sHeaderText}</Text>
-            <Text style={localStyle.primaryTextStyle}>{sPrimaryText}</Text>
-            <Text style={localStyle.secondaryTextStyle}>{sSecondaryText}</Text>
+            {sHeaderText ? (
+              <Text style={localStyle.headerTextStyle}>{sHeaderText}</Text>
+            ) : null}
+            {sPrimaryText ? (
+              <Text style={localStyle.primaryTextStyle}>{sPrimaryText}</Text>
+            ) : null}
+            {sSecondaryText ? (
+              <Text style={localStyle.secondaryTextStyle}>
+                {sSecondaryText}
+              </Text>
+            ) : null}
             <View style={localStyle.flexRow}>
               <RoundedButton
                 testId={`${sTestID}_confirmation_modal_cancel`}

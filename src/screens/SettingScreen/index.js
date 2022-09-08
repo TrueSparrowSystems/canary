@@ -14,18 +14,19 @@ import colors from '../../constants/colors';
 import {Constants} from '../../constants/Constants';
 import fonts from '../../constants/fonts';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import {
-  backUpDataToFirebase,
-  clearData,
-  restoreDataFromFirebase,
-} from '../../services/BackupRestoreService';
+import BackupRestoreHelper from '../../services/BackupRestoreHelper';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import useSettingScreenData from './useSettingScreenData';
 
 function SettingScreen() {
   const localStyle = useStyleProcessor(styles, 'SettingScreen');
-  const {fnOnInfoPress, fnOnShareAppPress, fnOnPersonalizeFeedPress} =
-    useSettingScreenData();
+  const {
+    sLastBackUpTimeStamp,
+    fnOnInfoPress,
+    fnOnShareAppPress,
+    fnOnPersonalizeFeedPress,
+  } = useSettingScreenData();
+  const _backUpRestoreHelper = BackupRestoreHelper;
 
   const Card = useMemo(
     () =>
@@ -82,17 +83,21 @@ function SettingScreen() {
           <Card
             titleText={'Backup your data'}
             subTitleText={'Save your preferences, lists and archives.'}
-            onPress={backUpDataToFirebase}
+            onPress={_backUpRestoreHelper.backUpDataToFirebase}
           />
           <Card
             titleText={'Restore your data'}
-            subTitleText={'Restore data from (backup Aug 24th 2022, 3:40pm)'}
-            onPress={restoreDataFromFirebase}
+            subTitleText={
+              sLastBackUpTimeStamp
+                ? `Restore data from (backup ${sLastBackUpTimeStamp})`
+                : 'Restore data from ...'
+            }
+            onPress={_backUpRestoreHelper.restoreDataFromFirebase}
           />
           <RoundedButton
             testId="setting_screen_clear"
             text={'Clear all Data'}
-            onPress={clearData}
+            onPress={_backUpRestoreHelper.clearData}
             style={localStyle.buttonStyle}
             textStyle={localStyle.buttonTextStyle}
           />

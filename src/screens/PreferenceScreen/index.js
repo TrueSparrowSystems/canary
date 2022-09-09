@@ -17,7 +17,8 @@ import {useOrientationState} from '../../hooks/useOrientation';
 
 function PreferenceScreen(props) {
   const localStyle = useStyleProcessor(style, 'PreferenceScreen');
-  const {isNotOnboardingScreen = false} = props?.route?.params;
+  const data = props?.route?.params;
+  const isNotOnboardingScreen = !!data?.isNotOnboardingScreen;
   const {
     bIsDoneButtonEnabled,
     bIsVerifiedUsersSelected,

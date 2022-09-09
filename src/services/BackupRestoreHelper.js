@@ -8,7 +8,7 @@ import {ToastType} from '../constants/ToastConstants';
 import {StoreKeys} from './AsyncStorage/StoreConstants';
 import RNRestart from 'react-native-restart';
 import {decryptData, encryptData, generateKey} from './DataSecureService';
-import uuid from 'react-native-uuid';
+import ShortUniqueId from 'short-unique-id';
 import Cache from './Cache';
 import {CacheKey} from './Cache/CacheStoreConstants';
 
@@ -48,22 +48,13 @@ class BackupRestoreHelper {
   async backupData({password, onBackupSuccess, isPasswordProtected}) {
     return new Promise((resolve, reject) => {
       AsyncStorage.multiGet(this.backupKeys).then(storeData => {
-        let canaryId = '';
-        AsyncStorage.get(StoreKeys.DeviceCanaryId)
-          .then(deviceCanaryId => {
-            if (deviceCanaryId) {
-              canaryId = deviceCanaryId;
-            } else {
-              canaryId = uuid.v4();
-              AsyncStorage.set(StoreKeys.DeviceCanaryId, canaryId);
-              Cache.setValue(CacheKey.DeviceCanaryId, canaryId);
-            }
-          })
-          .catch(() => {
-            canaryId = uuid.v4();
-            AsyncStorage.set(StoreKeys.DeviceCanaryId, canaryId);
-            Cache.setValue(CacheKey.DeviceCanaryId, canaryId);
-          });
+        let canaryId = Cache.getValue(CacheKey.DeviceCanaryId) || '';
+        if (canaryId.length === 0) {
+          const uid = new ShortUniqueId({length: 8});
+          canaryId = `canary_${uid()}`;
+          AsyncStorage.set(StoreKeys.DeviceCanaryId, canaryId);
+          Cache.setValue(CacheKey.DeviceCanaryId, canaryId);
+        }
         this.encrypt(storeData, password)
           .then(encryptedData => {
             const reference = firebase
@@ -115,16 +106,25 @@ class BackupRestoreHelper {
         'All your preferances, lists & archives will be cleared. \nThis will also restart the app.',
       testID: 'clear',
       onSureButtonPress: () => {
-        AsyncStorage.multiRemove(this.backupKeys).then(() => {
-          AsyncStorage.remove(StoreKeys.BackupPassword);
-          AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {
-            Toast.show({
-              type: ToastType.Success,
-              text1: 'Data Cleared Successfully',
+        LocalEvent.emit(EventTypes.CommonLoader.Show);
+        AsyncStorage.multiRemove(this.backupKeys)
+          .then(() => {
+            AsyncStorage.remove(StoreKeys.BackupPassword);
+            AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {
+              Toast.show({
+                type: ToastType.Success,
+                text1: 'Data Cleared Successfully',
+              });
+
+              setTimeout(() => {
+                LocalEvent.emit(EventTypes.CommonLoader.Hide);
+                RNRestart.Restart();
+              }, 5000);
             });
-            RNRestart.Restart();
+          })
+          .catch(() => {
+            LocalEvent.emit(EventTypes.CommonLoader.Hide);
           });
-        });
       },
     });
   }
@@ -233,6 +233,7 @@ class BackupRestoreHelper {
 
   async restoreData({canaryId, password, onRestoreSuccess}) {
     return new Promise((resolve, reject) => {
+      LocalEvent.emit(EventTypes.CommonLoader.Show);
       this.getResponseDataFromFirebase(canaryId)
         .then(() => {
           this.decrypt(this.responseData?.[canaryId]?.data, password)
@@ -245,7 +246,10 @@ class BackupRestoreHelper {
                       type: ToastType.Success,
                       text1: 'Data Restored Successfully',
                     });
-                    RNRestart.Restart();
+                    setTimeout(() => {
+                      LocalEvent.emit(EventTypes.CommonLoader.Hide);
+                      RNRestart.Restart();
+                    }, 5000);
                     return resolve();
                   });
                 } else {
@@ -253,15 +257,18 @@ class BackupRestoreHelper {
                     type: ToastType.Error,
                     text1: 'Data Restore Failed. Please Try Again',
                   });
+                  LocalEvent.emit(EventTypes.CommonLoader.Hide);
                   return reject();
                 }
               });
             })
             .catch(() => {
+              LocalEvent.emit(EventTypes.CommonLoader.Hide);
               return reject();
             });
         })
         .catch(() => {
+          LocalEvent.emit(EventTypes.CommonLoader.Hide);
           return reject();
         });
     });

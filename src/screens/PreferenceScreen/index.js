@@ -60,7 +60,7 @@ function PreferenceScreen(props) {
   return (
     <View style={localStyle.container}>
       {isNotOnboardingScreen ? (
-        <Header testId={'preference_screen'} enableBackButton={true} />
+        <Header testID={'preference_screen'} enableBackButton={true} />
       ) : null}
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={localStyle.contentContainer}>
@@ -82,7 +82,7 @@ function PreferenceScreen(props) {
 
           <View style={localStyle.toggleButtonsContainer}>
             <RoundedButton
-              testId={'preference_screen_verified_users'}
+              testID={'preference_screen_verified_users'}
               text="Verified Users Only"
               leftImage={VerifiedIconBlack}
               style={[
@@ -97,7 +97,7 @@ function PreferenceScreen(props) {
               underlayColor={colors.GoldenTainoi20}
             />
             <RoundedButton
-              testId={'preference_screen_all_users'}
+              testID={'preference_screen_all_users'}
               text="All Users"
               leftImage={AllUsersIcon}
               onPress={fnToggleUserPrefSelection}
@@ -117,7 +117,7 @@ function PreferenceScreen(props) {
 
           <View style={localStyle.continueButtonContainer}>
             <RoundedButton
-              testId={'preference_screen_continue'}
+              testID={'preference_screen_continue'}
               {...roundedButtonStyle}
             />
           </View>

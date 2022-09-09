@@ -20,7 +20,7 @@ function LocationSelectionScreen() {
       showsVerticalScrollIndicator={false}
       style={localStyle.container}>
       <Header
-        testId={'location_selection_screen'}
+        testID={'location_selection_screen'}
         enableBackButton={true}
         text="Change Location"
         textStyle={localStyle.headerText}

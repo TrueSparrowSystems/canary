@@ -37,7 +37,7 @@ function ThreadScreen(props) {
     <View style={localStyle.container}>
       <View style={localStyle.listComponent}>
         <Header
-          testId={'thread_screen'}
+          testID={'thread_screen'}
           enableBackButton={true}
           text={'Thread'}
         />

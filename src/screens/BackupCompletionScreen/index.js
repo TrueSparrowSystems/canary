@@ -8,7 +8,7 @@ function BackupCompletionScreen() {
   const localStyle = useStyleProcessor(styles, 'BackupCompletionScreen');
   return (
     <View style={localStyle.container}>
-      <Header enableBackButton={true} />
+      <Header testID="backup_completion_screen" enableBackButton={true} />
       <Text>Backup completed</Text>
     </View>
   );

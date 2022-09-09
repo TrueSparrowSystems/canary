@@ -63,6 +63,7 @@
     "react-navigation-shared-element": "3.1.3",
     "recyclerlistview": "4.1.1",
     "recyclerlistview-gridlayoutprovider": "1.0.1",
+    "short-unique-id": "4.4.4",
     "url": "0.11.0"
   },
   "devDependencies": {

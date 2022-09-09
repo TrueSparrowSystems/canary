@@ -1,5 +1,6 @@
+import {ComponentWrapper, TextInput} from '@plgworks/applogger';
 import React from 'react';
-import {Text, TextInput, View} from 'react-native';
+import {Text, View} from 'react-native';
 import Header from '../../components/common/Header';
 import RoundedButton from '../../components/common/RoundedButton';
 import colors, {getColorWithOpacity} from '../../constants/colors';
@@ -20,9 +21,9 @@ function BackupConfirmationScreen() {
   const localStyle = useStyleProcessor(styles, 'BackupConfirmationScreen');
   return (
     <View style={localStyle.container}>
-      <Header enableBackButton={true} />
+      <Header testID="backup_confirmation_screen" enableBackButton={true} />
       <TextInput
-        testID="add_list_modal"
+        testID="backup_confirmation_screen_enter_password"
         style={localStyle.inputStyle}
         autoFocus={true}
         onChangeText={fnOnPasswordChange}
@@ -34,6 +35,7 @@ function BackupConfirmationScreen() {
       />
       <Text style={localStyle.errorText}>{sErrorText}</Text>
       <RoundedButton
+        testID="backup_confirmation_screen_continue"
         style={localStyle.roundedButton}
         disabled={bIsButtonDisabled}
         text={'Continue'}
@@ -42,11 +44,14 @@ function BackupConfirmationScreen() {
         underlayColor={colors.GoldenTainoi80}
       />
       {bShowContinueWithPreviousPassword ? (
-        <Text
-          style={localStyle.linkText}
-          onPress={fnOnContinueWithPreviousPasswordPress}>
-          Continue with Previous password
-        </Text>
+        <ComponentWrapper>
+          <Text
+            testID="continue_with_previous_password_text_button"
+            style={localStyle.linkText}
+            onPress={fnOnContinueWithPreviousPasswordPress}>
+            Continue with Previous password
+          </Text>
+        </ComponentWrapper>
       ) : null}
     </View>
   );

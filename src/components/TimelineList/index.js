@@ -68,7 +68,7 @@ function TimelineList({
             Share the app with your friends and support data privacy! 💯
           </Text>
           <RoundedButton
-            testId={'timeline_list_share_app'}
+            testID={'timeline_list_share_app'}
             underlayColor={getColorWithOpacity(colors.Black, 0.2)}
             style={localStyle.shareAppButton}
             text={'Share App'}

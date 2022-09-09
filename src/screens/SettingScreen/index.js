@@ -1,4 +1,4 @@
-import {TouchableOpacity} from '@plgworks/applogger';
+import {ComponentWrapper, TouchableOpacity} from '@plgworks/applogger';
 import React, {useMemo} from 'react';
 import {Image, Linking, Text, View} from 'react-native';
 import {AppVersion} from '../../../AppVersion';
@@ -58,7 +58,7 @@ function SettingScreen() {
   return (
     <View style={localStyle.screen}>
       <Header
-        testId={'setting_screen'}
+        testID={'setting_screen'}
         enableBackButton={true}
         enableRightButton={true}
         onRightButtonClick={fnOnShareAppPress}
@@ -93,7 +93,7 @@ function SettingScreen() {
             onPress={fnOnRestorePress}
           />
           <RoundedButton
-            testId="setting_screen_clear"
+            testID="setting_screen_clear_all_data"
             text={'Clear all Data'}
             onPress={() => {
               _backupRestoreHelper.clearData();
@@ -108,13 +108,16 @@ function SettingScreen() {
             <Text style={localStyle.appNameText}>Canary</Text>
             <Text style={localStyle.appVersionText}>v{AppVersion}</Text>
           </View>
-          <Text
-            style={localStyle.madeByText}
-            onPress={() => {
-              Linking.openURL(Constants.PlgWorksLink);
-            }}>
-            Made with 🖤 by PLG Works
-          </Text>
+          <ComponentWrapper>
+            <Text
+              testID="setting_screen_plg_works_link"
+              style={localStyle.madeByText}
+              onPress={() => {
+                Linking.openURL(Constants.PlgWorksLink);
+              }}>
+              Made with 🖤 by PLG Works
+            </Text>
+          </ComponentWrapper>
         </View>
       </View>
     </View>

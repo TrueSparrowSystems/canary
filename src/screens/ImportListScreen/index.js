@@ -30,7 +30,7 @@ function ImportListScreen(props) {
   return (
     <View style={localStyle.container}>
       <Header
-        testId={'import_list_screen'}
+        testID={'import_list_screen'}
         enableBackButton={true}
         enableRightButton={!isEmpty(aData)}
         onRightButtonClick={fnOnImportPress}

@@ -1,5 +1,6 @@
+import {TextInput} from '@plgworks/applogger';
 import React from 'react';
-import {Text, TextInput, View} from 'react-native';
+import {Text, View} from 'react-native';
 import Header from '../../components/common/Header';
 import RoundedButton from '../../components/common/RoundedButton';
 import colors, {getColorWithOpacity} from '../../constants/colors';
@@ -21,9 +22,9 @@ function RestoreScreen() {
   } = useRestoreScreenData();
   return (
     <View style={localStyle.container}>
-      <Header enableBackButton={true} />
+      <Header testID="restore_screen" enableBackButton={true} />
       <TextInput
-        testID="add_list_modal"
+        testID="restore_screen_canary_id"
         style={localStyle.inputStyle}
         defaultValue={sCanaryId}
         autoFocus={true}
@@ -35,7 +36,7 @@ function RestoreScreen() {
       />
       {bShowPasswordField ? (
         <TextInput
-          testID="add_list_modal"
+          testID="restore_screen_password"
           style={localStyle.inputStyle}
           autoFocus={true}
           onChangeText={fnOnPasswordChange}
@@ -48,6 +49,7 @@ function RestoreScreen() {
       ) : null}
       <Text style={localStyle.errorText}>{sErrorText}</Text>
       <RoundedButton
+        testID="restore_screen_continue"
         style={localStyle.roundedButton}
         text={'Continue'}
         textStyle={localStyle.roundedButtonText}

@@ -1,3 +1,4 @@
+import {ComponentWrapper} from '@plgworks/applogger';
 import React from 'react';
 import {Text, View} from 'react-native';
 import Header from '../../components/common/Header';
@@ -14,7 +15,7 @@ function BackupScreen() {
     useBackupScreenData();
   return (
     <View style={localStyle.container}>
-      <Header enableBackButton={true} />
+      <Header testID="backup_screen" enableBackButton={true} />
       <View>
         <Text style={localStyle.headText}>
           Preferences, Lists & Archives will be encrypted & stored with us
@@ -25,17 +26,21 @@ function BackupScreen() {
           register your email address.
         </Text>
         <RoundedButton
+          testID="backup_with_encryption"
           style={localStyle.roundedButton}
           text={'Continue with encryption'}
           textStyle={localStyle.roundedButtonText}
           onPress={fnOnContinueButtonPress}
           underlayColor={colors.GoldenTainoi80}
         />
-        <Text
-          style={localStyle.linkText}
-          onPress={fnOnBackupWithoutEncryptionPress}>
-          Continue without encryption
-        </Text>
+        <ComponentWrapper>
+          <Text
+            testID="backup_without_encryption_text_button"
+            style={localStyle.linkText}
+            onPress={fnOnBackupWithoutEncryptionPress}>
+            Continue without encryption
+          </Text>
+        </ComponentWrapper>
       </View>
     </View>
   );

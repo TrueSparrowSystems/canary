@@ -68,7 +68,7 @@ function AddListModal() {
             <Text style={localStyle.errorText}>{sErrorMessage}</Text>
             {bIsEditMode ? (
               <RoundedButton
-                testId={'add_list_modal_update'}
+                testID={'add_list_modal_update'}
                 style={localStyle.createButton}
                 text={'Update'}
                 textStyle={localStyle.createButtonText}
@@ -78,7 +78,7 @@ function AddListModal() {
               />
             ) : (
               <RoundedButton
-                testId={'add_list_modal_create'}
+                testID={'add_list_modal_create'}
                 style={localStyle.createButton}
                 text={'Create'}
                 textStyle={localStyle.createButtonText}

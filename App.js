@@ -40,6 +40,7 @@ function App() {
     loggerConfig: {
       writeFrequencyInSeconds: 5,
       isTrackingDisabled: false,
+      logRotateDurationInHours: 48,
     },
   };
 

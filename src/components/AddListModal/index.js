@@ -20,6 +20,7 @@ function AddListModal() {
     bIsEditMode,
     bIsVisible,
     nCharacterCount,
+    sWarningText,
     sErrorMessage,
     fnOnBackdropPress,
     fnOnListNameChange,
@@ -35,6 +36,13 @@ function AddListModal() {
     return Dimensions.get('window').height;
   }, []);
 
+  const charCountTextStyle = useMemo(() => {
+    if (nCharacterCount > TEXT_INPUT_LIMIT) {
+      return [localStyle.charCounterText, {color: colors.GoldenTainoi}];
+    }
+    return localStyle.charCounterText;
+  }, [localStyle.charCounterText, nCharacterCount]);
+
   return bIsVisible ? (
     <CustomModal
       testID="add_list"
@@ -48,24 +56,30 @@ function AddListModal() {
             <Text style={localStyle.enterNameStyle}>
               {bIsEditMode ? 'Update list' : 'New List'}
             </Text>
-            <TextInput
-              testID="add_list_modal"
-              defaultValue={sDefaultValue}
-              style={localStyle.inputStyle}
-              autoFocus={true}
-              onChangeText={fnOnListNameChange}
-              placeholder={'Enter List Name'}
-              placeholderTextColor={getColorWithOpacity(colors.BlackPearl, 0.5)}
-              onSubmitEditing={fnOnCreateListPress}
-              maxLength={TEXT_INPUT_LIMIT}
-            />
-            <View style={localStyle.charCounterContainer}>
+            <View style={localStyle.textInputContainer}>
+              <TextInput
+                testID="add_list_modal"
+                defaultValue={sDefaultValue}
+                style={localStyle.inputStyle}
+                autoFocus={true}
+                onChangeText={fnOnListNameChange}
+                placeholder={'Enter List Name'}
+                placeholderTextColor={getColorWithOpacity(
+                  colors.BlackPearl,
+                  0.5,
+                )}
+                onSubmitEditing={fnOnCreateListPress}
+              />
               <Text
                 style={
-                  localStyle.charCounterText
+                  charCountTextStyle
                 }>{`${nCharacterCount}/${TEXT_INPUT_LIMIT}`}</Text>
             </View>
-            <Text style={localStyle.errorText}>{sErrorMessage}</Text>
+            {sErrorMessage ? (
+              <Text style={localStyle.errorText}>{sErrorMessage}</Text>
+            ) : (
+              <Text style={localStyle.warningText}>{sWarningText}</Text>
+            )}
             {bIsEditMode ? (
               <RoundedButton
                 testId={'add_list_modal_update'}
@@ -129,18 +143,25 @@ const styles = {
     fontFamily: fonts.SoraSemiBold,
     color: colors.BlackPearl,
   },
-  inputStyle: {
-    marginTop: layoutPtToPx(20),
-    fontFamily: fonts.InterRegular,
+  textInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     height: layoutPtToPx(48),
     borderWidth: 1,
     borderColor: getColorWithOpacity(colors.Black, 0.2),
+    marginTop: layoutPtToPx(20),
+    borderRadius: layoutPtToPx(8),
+    flex: 1,
+    paddingHorizontal: layoutPtToPx(10),
+    width: '100%',
+  },
+  inputStyle: {
+    fontFamily: fonts.InterRegular,
+    height: layoutPtToPx(48),
     color: colors.BlackPearl,
     fontSize: fontPtToPx(14),
     lineHeight: layoutPtToPx(18),
-    width: '100%',
-    borderRadius: layoutPtToPx(8),
-    paddingHorizontal: layoutPtToPx(10),
+    width: '90%',
   },
   view: {
     width: '100%',
@@ -181,19 +202,21 @@ const styles = {
     height: layoutPtToPx(18),
     width: layoutPtToPx(18),
   },
-  charCounterContainer: {
-    position: 'absolute',
-    right: 25,
-    bottom: '68%',
-  },
   charCounterText: {
     color: getColorWithOpacity(colors.BlackPearl, 0.4),
     fontSize: fontPtToPx(10),
+    paddingLeft: layoutPtToPx(5),
   },
   errorText: {
     fontFamily: fonts.InterRegular,
     color: colors.BitterSweet,
     fontSize: fontPtToPx(12),
+  },
+  warningText: {
+    fontFamily: fonts.InterRegular,
+    color: colors.GoldenTainoi,
+    fontSize: fontPtToPx(12),
+    textAlign: 'center',
   },
 };
 

@@ -17,4 +17,5 @@ export const CacheKey = {
   ShowPromotionOnArchives: 'show_promotion_on_archives',
   IsRedirectModalHidden: 'cache_key_is_redirect_modal_hidden',
   DeviceCanaryId: 'cache_device_canary_id',
+  BackupPassword: 'cache_backup_password',
 };

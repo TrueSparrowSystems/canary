@@ -11,7 +11,9 @@ import useBackupConfirmationScreenData from './useBackupConfirmationScreenData';
 function BackupConfirmationScreen() {
   const {
     bIsButtonDisabled,
+    bShowContinueWithPreviousPassword,
     sErrorText,
+    fnOnContinueWithPreviousPasswordPress,
     fnOnContinueButtonPress,
     fnOnPasswordChange,
   } = useBackupConfirmationScreenData();
@@ -39,6 +41,13 @@ function BackupConfirmationScreen() {
         onPress={fnOnContinueButtonPress}
         underlayColor={colors.GoldenTainoi80}
       />
+      {bShowContinueWithPreviousPassword ? (
+        <Text
+          style={localStyle.linkText}
+          onPress={fnOnContinueWithPreviousPasswordPress}>
+          Continue with Previous password
+        </Text>
+      ) : null}
     </View>
   );
 }
@@ -82,6 +91,10 @@ const styles = {
     color: colors.BlackPearl,
     fontFamily: fonts.SoraSemiBold,
     textTransform: 'capitalize',
+  },
+  linkText: {
+    color: colors.GoldenTainoi,
+    textAlign: 'center',
   },
 };
 export default React.memo(BackupConfirmationScreen);

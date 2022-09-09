@@ -1,12 +1,15 @@
 import {useNavigation} from '@react-navigation/native';
-import {useCallback, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import ScreenName from '../../constants/ScreenName';
 import BackupRestoreHelper from '../../services/BackupRestoreHelper';
+import Cache from '../../services/Cache';
+import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 
 function useBackupConfirmationScreenData() {
   const [password, setPassword] = useState('');
   const [errorText, setErrorText] = useState('');
   const navigation = useNavigation();
+  const _password = useMemo(() => Cache.getValue(CacheKey.BackupPassword), []);
 
   const onPasswordChange = useCallback(
     value => {
@@ -34,10 +37,20 @@ function useBackupConfirmationScreenData() {
     }
   }, [onBackupSuccess, password]);
 
+  const onContinueWithPreviousPasswordPress = useCallback(() => {
+    BackupRestoreHelper.backupData({
+      password: _password,
+      onBackupSuccess,
+      isPasswordProtected: true,
+    });
+  }, [_password, onBackupSuccess]);
+
   return {
     bIsButtonDisabled: password.length < 8,
+    bShowContinueWithPreviousPassword: !!_password,
     sErrorText: errorText,
     fnOnContinueButtonPress: onContinueButtonPress,
+    fnOnContinueWithPreviousPasswordPress: onContinueWithPreviousPasswordPress,
     fnOnPasswordChange: onPasswordChange,
   };
 }

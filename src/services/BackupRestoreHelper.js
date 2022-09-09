@@ -83,6 +83,10 @@ class BackupRestoreHelper {
                   text1: 'Data Backed Up Successfully',
                 });
                 delete this.responseData?.[canaryId];
+                if (isPasswordProtected) {
+                  AsyncStorage.set(StoreKeys.BackupPassword, password);
+                  Cache.setValue(CacheKey.BackupPassword, password);
+                }
                 onBackupSuccess?.();
                 return resolve();
               })

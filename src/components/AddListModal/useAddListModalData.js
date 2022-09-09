@@ -28,11 +28,14 @@ function useAddListModalData() {
     };
 
     LocalEvent.on(EventTypes.ShowAddListModal, onShowModal);
+    LocalEvent.on(EventTypes.CloseAllModals, closeModal);
 
     return () => {
       LocalEvent.off(EventTypes.ShowAddListModal, onShowModal);
+      LocalEvent.off(EventTypes.CloseAllModals, closeModal);
     };
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const closeModal = useCallback(() => {
     listNameRef.current = '';

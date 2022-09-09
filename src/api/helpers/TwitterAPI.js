@@ -122,7 +122,7 @@ class TwitterApi {
     nextPageIdentifier,
   ) {
     const data = {
-      max_results: 10,
+      max_results: sortOrder === Constants.SortOrder.Relevancy ? 100 : 20,
       sort_order: sortOrder,
       query: `${query} (-is:retweet -is:reply -is:quote)`,
       ...API_REQUEST_PARAMETERS,

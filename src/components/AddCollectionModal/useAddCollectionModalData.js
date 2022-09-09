@@ -8,6 +8,7 @@ function useAddCollectionModalData() {
   const [isVisible, setIsVisible] = useState(false);
   const collectionNameRef = useRef('');
   const [modalData, setModalData] = useState(null);
+  const warningText = useRef('');
   const [charCount, setCharCount] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -35,7 +36,7 @@ function useAddCollectionModalData() {
 
   const closeModal = useCallback(() => {
     collectionNameRef.current = '';
-
+    warningText.current = '';
     setIsVisible(false);
   }, []);
 
@@ -46,6 +47,11 @@ function useAddCollectionModalData() {
   const onCollectionNameChange = useCallback(newValue => {
     collectionNameRef.current = newValue;
     setCharCount(newValue?.length || 0);
+    if (newValue?.length > 25) {
+      warningText.current = 'Recommended name less than 25 chars';
+    } else {
+      warningText.current = '';
+    }
   }, []);
 
   const onCreateCollectionPress = useCallback(() => {
@@ -135,6 +141,7 @@ function useAddCollectionModalData() {
     sDefaultValue: collectionNameRef.current,
     bIsVisible: isVisible,
     nCharacterCount: charCount,
+    sWarningText: warningText.current,
     sErrorMessage: errorMessage,
     fnOnBackdropPress: onBackdropPress,
     fnOnCollectionNameChange: onCollectionNameChange,

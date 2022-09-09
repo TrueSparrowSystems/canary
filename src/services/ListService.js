@@ -9,8 +9,6 @@ import {compareFunction} from '../utils/Strings';
 import {getExportURL} from './ShareHelper';
 import {Constants} from '../constants/Constants';
 
-const LIST_LIMIT = 30;
-
 class ListService {
   constructor() {
     this.lists = null;
@@ -47,10 +45,6 @@ class ListService {
             });
         } else {
           var _list = JSON.parse(list);
-          const listLength = Object.keys(_list).length;
-          if (listLength >= LIST_LIMIT) {
-            return reject('List Limit exceeded');
-          }
 
           if (find(_list, {name: listName.trim()})) {
             return reject('List name already exists.');

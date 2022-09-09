@@ -21,4 +21,8 @@ export default {
   ImportListScreen: 'ImportListScreen',
   ImportArchiveScreen: 'ImportArchiveScreen',
   SettingScreen: 'SettingScreen',
+  BackupScreen: 'BackupScreen',
+  BackupConfirmationScreen: 'BackupConfirmationScreen',
+  BackupCompletionScreen: 'BackupCompletionScreen',
+  RestoreScreen: 'RestoreScreen',
 };

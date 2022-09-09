@@ -35,6 +35,10 @@ import ImportArchiveScreen from '../screens/ImportArchiveScreen';
 import TabletNavBar from './TabletNavBar';
 import {isTablet} from 'react-native-device-info';
 import SettingScreen from '../screens/SettingScreen';
+import BackupScreen from '../screens/BackupScreen';
+import RestoreScreen from '../screens/RestoreScreen';
+import BackupConfirmationScreen from '../screens/BackupConfirmationScreen';
+import BackupCompletionScreen from '../screens/BackupCompletionScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -161,6 +165,50 @@ const Navigation = props => {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         />
+        <TimelineStack.Screen
+          name={ScreenName.BackupScreen}
+          component={BackupScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <TimelineStack.Screen
+          name={ScreenName.BackupConfirmationScreen}
+          component={BackupConfirmationScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <TimelineStack.Screen
+          name={ScreenName.BackupCompletionScreen}
+          component={BackupCompletionScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <TimelineStack.Screen
+          name={ScreenName.RestoreScreen}
+          component={RestoreScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
       </TimelineStack.Navigator>
     );
   }
@@ -177,6 +225,10 @@ const Navigation = props => {
       case ScreenName.ImportListScreen:
       case ScreenName.ImportArchiveScreen:
       case ScreenName.SettingScreen:
+      case ScreenName.BackupScreen:
+      case ScreenName.BackupConfirmationScreen:
+      case ScreenName.BackupCompletionScreen:
+      case ScreenName.RestoreScreen:
         return false;
       default:
         return true;

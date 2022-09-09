@@ -7,7 +7,9 @@ import BackupRestoreHelper from '../../services/BackupRestoreHelper';
 
 function useSettingScreenData() {
   const navigation = useNavigation();
-  const [lastBackupTimeStamp, setLastBackUpTimeStamp] = useState();
+  const [restoreDataText, setRestoreDataText] = useState(
+    'Restore data from ...',
+  );
 
   const onInfoPress = useCallback(() => {
     navigation.navigate(ScreenName.LandingScreen, {enableBackButton: true});
@@ -25,17 +27,31 @@ function useSettingScreenData() {
     });
   }, [navigation]);
 
+  const onBackupPress = useCallback(() => {
+    navigation.navigate(ScreenName.BackupScreen);
+  }, [navigation]);
+
+  const onRestorePress = useCallback(() => {
+    navigation.navigate(ScreenName.RestoreScreen);
+  }, [navigation]);
+
   useEffect(() => {
     BackupRestoreHelper.getLastBackupTimeStamp().then(timeStamp => {
-      setLastBackUpTimeStamp(timeStamp);
+      if (timeStamp) {
+        setRestoreDataText(`Restore data from (backup ${timeStamp})`);
+      } else {
+        setRestoreDataText('No data to restore');
+      }
     });
   }, []);
 
   return {
-    sLastBackUpTimeStamp: lastBackupTimeStamp,
+    sRestoreDataText: restoreDataText,
     fnOnInfoPress: onInfoPress,
     fnOnShareAppPress: onShareAppPress,
+    fnOnBackupPress: onBackupPress,
     fnOnPersonalizeFeedPress: onPersonalizeFeedPress,
+    fnOnRestorePress: onRestorePress,
   };
 }
 export default useSettingScreenData;

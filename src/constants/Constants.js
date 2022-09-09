@@ -1,3 +1,5 @@
+import {StoreKeys} from '../services/AsyncStorage/StoreConstants';
+
 export const Constants = {
   PlgWorksLink: 'https://www.plgworks.com',
   GoogleDriveLink:
@@ -42,4 +44,9 @@ export const Constants = {
     woeid: 1,
   },
   Encryption: {salt: 'plg_canary', cost: 5000, length: 256},
+  KeysIgnoredForBackup: [
+    StoreKeys.BackupPassword,
+    StoreKeys.IsAppReloaded,
+    StoreKeys.DeviceCanaryId,
+  ],
 };

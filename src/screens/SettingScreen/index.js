@@ -21,12 +21,14 @@ import useSettingScreenData from './useSettingScreenData';
 function SettingScreen() {
   const localStyle = useStyleProcessor(styles, 'SettingScreen');
   const {
-    sLastBackUpTimeStamp,
+    sRestoreDataText,
     fnOnInfoPress,
     fnOnShareAppPress,
+    fnOnBackupPress,
     fnOnPersonalizeFeedPress,
+    fnOnRestorePress,
   } = useSettingScreenData();
-  const _backUpRestoreHelper = BackupRestoreHelper;
+  const _backupRestoreHelper = BackupRestoreHelper;
 
   const Card = useMemo(
     () =>
@@ -83,30 +85,18 @@ function SettingScreen() {
           <Card
             titleText={'Backup your data'}
             subTitleText={'Save your preferences, lists and archives.'}
-            onPress={() => {
-              _backUpRestoreHelper.backUpDataToFirebase({
-                onBackUpSuccess: () => {},
-              });
-            }}
+            onPress={fnOnBackupPress}
           />
           <Card
             titleText={'Restore your data'}
-            subTitleText={
-              sLastBackUpTimeStamp
-                ? `Restore data from (backup ${sLastBackUpTimeStamp})`
-                : 'Restore data from ...'
-            }
-            onPress={() => {
-              _backUpRestoreHelper.restoreDataFromFirebase({
-                onRestoreSuccess: () => {},
-              });
-            }}
+            subTitleText={sRestoreDataText}
+            onPress={fnOnRestorePress}
           />
           <RoundedButton
             testId="setting_screen_clear"
             text={'Clear all Data'}
             onPress={() => {
-              _backUpRestoreHelper.clearData();
+              _backupRestoreHelper.clearData();
             }}
             style={localStyle.buttonStyle}
             textStyle={localStyle.buttonTextStyle}

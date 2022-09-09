@@ -60,9 +60,11 @@ function useAddToListModalData() {
     };
 
     LocalEvent.on(EventTypes.ShowAddToListModal, onShowModal);
+    LocalEvent.on(EventTypes.CloseAllModals, closeModal);
 
     return () => {
       LocalEvent.off(EventTypes.ShowAddToListModal, onShowModal);
+      LocalEvent.off(EventTypes.CloseAllModals, closeModal);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

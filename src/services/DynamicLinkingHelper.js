@@ -1,5 +1,6 @@
 import {Constants} from '../constants/Constants';
 import ScreenName from '../constants/ScreenName';
+import {EventTypes, LocalEvent} from '../utils/LocalEvent';
 import NavigationService from './NavigationService';
 import {getImportData} from './ShareHelper';
 
@@ -10,6 +11,7 @@ export const handleDynamicUrl = url => {
     return importData?.message;
   }
   const {pn: pageName, data} = importData;
+  LocalEvent.emit(EventTypes.CloseAllModals);
 
   switch (pageName) {
     case Constants.PageName.Archive:

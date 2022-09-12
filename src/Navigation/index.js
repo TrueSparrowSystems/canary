@@ -194,7 +194,7 @@ const Navigation = props => {
     },
     [localStyle.bottomTabIcons],
   );
-  const tabName = useMemo(() => ['Timeline', 'Search', 'Lists', 'Archive'], []);
+  const tabName = useMemo(() => ['Home', 'Search', 'Lists', 'Archive'], []);
   const tabIcons = useMemo(
     () => [HomeIcon, SearchIcon, BottomBarListIcon, CollectionsIcon],
     [],

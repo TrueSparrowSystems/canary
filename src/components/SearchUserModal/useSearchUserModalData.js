@@ -60,9 +60,12 @@ const useSearchUserModalData = () => {
       setIsVisible(true);
     };
     LocalEvent.on(EventTypes.ShowSearchUserModal, onShowModal);
+    LocalEvent.on(EventTypes.CloseAllModals, closeModal);
     return () => {
       LocalEvent.off(EventTypes.ShowSearchUserModal, onShowModal);
+      LocalEvent.off(EventTypes.CloseAllModals, closeModal);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const closeModal = useCallback(() => {

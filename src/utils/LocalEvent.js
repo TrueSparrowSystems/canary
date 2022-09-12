@@ -22,6 +22,7 @@ export const EventTypes = {
   ShowCommonConfirmationModal: 'show_common_confirmation_modal',
   ShowAddListModal: 'event_types_show_add_list_modal',
   ShowSearchUserModal: 'event_types_show_search_user_modal',
+  CloseAllModals: 'close_all_modals',
   UpdateTimeline: 'event_types_update_timeline',
   UpdateCollection: 'event_types_update_collection',
   UpdateList: 'event_types_update_list',

@@ -7,6 +7,7 @@ import {ToastPosition, ToastType} from '../../constants/ToastConstants';
 function useAddListModalData() {
   const [isVisible, setIsVisible] = useState(false);
   const listNameRef = useRef('');
+  const warningText = useRef('');
   const [modalData, setModalData] = useState(null);
   const [charCount, setCharCount] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
@@ -27,14 +28,18 @@ function useAddListModalData() {
     };
 
     LocalEvent.on(EventTypes.ShowAddListModal, onShowModal);
+    LocalEvent.on(EventTypes.CloseAllModals, closeModal);
 
     return () => {
       LocalEvent.off(EventTypes.ShowAddListModal, onShowModal);
+      LocalEvent.off(EventTypes.CloseAllModals, closeModal);
     };
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const closeModal = useCallback(() => {
     listNameRef.current = '';
+    warningText.current = '';
 
     setIsVisible(false);
   }, []);
@@ -46,6 +51,11 @@ function useAddListModalData() {
   const onListNameChange = useCallback(newValue => {
     listNameRef.current = newValue;
     setCharCount(newValue?.length || 0);
+    if (newValue?.length > 25) {
+      warningText.current = 'Recommended name less than 25 chars';
+    } else {
+      warningText.current = '';
+    }
   }, []);
 
   const onCreateListPress = useCallback(() => {
@@ -131,6 +141,7 @@ function useAddListModalData() {
     sDefaultValue: modalData?.name,
     bIsVisible: isVisible,
     nCharacterCount: charCount,
+    sWarningText: warningText.current,
     sErrorMessage: errorMessage,
     fnOnBackdropPress: onBackdropPress,
     fnOnListNameChange: onListNameChange,

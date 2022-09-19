@@ -61,6 +61,7 @@ function TimelineScreen(props) {
             listRef={scrollRef}
             refreshData={bRefreshing}
             reloadData={false}
+            shouldShowSearchContent={true}
           />
         </View>
         {isTabletLandscape ? <SearchScreenContent /> : null}

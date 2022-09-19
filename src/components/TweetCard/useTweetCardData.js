@@ -12,7 +12,7 @@ import Cache from '../../services/Cache';
 import {Constants} from '../../constants/Constants';
 
 function useTweetCardData(props) {
-  const {dataSource} = props;
+  const {dataSource, shouldShowSearchContent} = props;
   const {public_metrics, user, id, media} = dataSource;
   const [isTweetBookmarked, setIsTweetBookmarked] = useState(
     checkIsTweetBookmarked(id),
@@ -59,7 +59,10 @@ function useTweetCardData(props) {
     if (public_metrics?.reply_count > 0) {
       dataSource.isBookmarked = checkIsTweetBookmarked(id);
       navigation.dispatch(
-        StackActions.push(ScreenName.ThreadScreen, {tweetData: dataSource}),
+        StackActions.push(ScreenName.ThreadScreen, {
+          tweetData: dataSource,
+          shouldShowSearchContent: shouldShowSearchContent,
+        }),
       );
     } else {
       Toast.show({
@@ -68,7 +71,13 @@ function useTweetCardData(props) {
         position: ToastPosition.Top,
       });
     }
-  }, [dataSource, id, navigation, public_metrics?.reply_count]);
+  }, [
+    dataSource,
+    id,
+    navigation,
+    public_metrics?.reply_count,
+    shouldShowSearchContent,
+  ]);
 
   const onUserNamePress = useCallback(() => {
     navigation.push(ScreenName.SearchResultScreen, {

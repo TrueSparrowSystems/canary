@@ -13,7 +13,7 @@ import {isTablet} from 'react-native-device-info';
 import SearchScreenContent from '../../components/SearchScreenContent';
 
 function ThreadScreen(props) {
-  const {tweetData} = props?.route?.params;
+  const {tweetData, shouldShowSearchContent = false} = props?.route?.params;
 
   const localStyle = useStyleProcessor(styles, 'ThreadScreen');
 
@@ -32,10 +32,19 @@ function ThreadScreen(props) {
     });
   }
 
+  const listComponentStyle = useMemo(() => {
+    return [
+      localStyle.listComponent,
+      isTabletLandscape && shouldShowSearchContent
+        ? {borderRightWidth: 1, borderRightColor: colors.BlackPearl20}
+        : {},
+    ];
+  }, [isTabletLandscape, localStyle.listComponent, shouldShowSearchContent]);
+
   //TODO: Implement pull to refresh.
   return (
     <View style={localStyle.container}>
-      <View style={localStyle.listComponent}>
+      <View style={listComponentStyle}>
         <Header
           testId={'thread_screen'}
           enableBackButton={true}
@@ -58,7 +67,9 @@ function ThreadScreen(props) {
           }
         />
       </View>
-      {isTabletLandscape ? <SearchScreenContent /> : null}
+      {isTabletLandscape && shouldShowSearchContent ? (
+        <SearchScreenContent />
+      ) : null}
     </View>
   );
 }
@@ -70,14 +81,13 @@ const styles = {
     flex: 1,
     backgroundColor: colors.White,
     flexDirection: 'row',
+    justifyContent: 'center',
   },
   listComponent: {
     width: '100%',
     tablet: {
       landscape: {
         width: '70%',
-        borderRightWidth: 1,
-        borderRightColor: colors.BlackPearl20,
       },
     },
   },

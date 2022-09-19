@@ -30,6 +30,7 @@ function TimelineList({
   disableTweetPress = false,
   listEmptyComponent = null,
   testID = '',
+  shouldShowSearchContent = false,
 }) {
   const listDataSource = useRef(timelineListDataSource);
   if (listDataSource.current === null) {
@@ -107,13 +108,14 @@ function TimelineList({
             testID={`${testID}_list`}
             dataSource={item}
             isDisabled={disableTweetPress}
+            shouldShowSearchContent={shouldShowSearchContent}
           />
         );
       } else if (item.card_type === Constants.CardTypes.ShareCard) {
         return ShareCard;
       }
     },
-    [ShareCard, disableTweetPress, testID],
+    [ShareCard, disableTweetPress, shouldShowSearchContent, testID],
   );
 
   const keyExtractor = useCallback(item => {

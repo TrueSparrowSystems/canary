@@ -115,7 +115,7 @@ const styles = {
     alignSelf: 'center',
     tablet: {
       landscape: {
-        width: layoutPtToPx(700),
+        width: '70%',
       },
     },
   },

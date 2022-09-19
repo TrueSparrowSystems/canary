@@ -32,10 +32,19 @@ function ThreadScreen(props) {
     });
   }
 
+  const listComponentStyle = useMemo(() => {
+    return [
+      localStyle.listComponent,
+      isTabletLandscape && shouldShowSearchContent
+        ? {borderRightWidth: 1, borderRightColor: colors.BlackPearl20}
+        : {},
+    ];
+  }, [isTabletLandscape, localStyle.listComponent, shouldShowSearchContent]);
+
   //TODO: Implement pull to refresh.
   return (
     <View style={localStyle.container}>
-      <View style={localStyle.listComponent}>
+      <View style={listComponentStyle}>
         <Header
           testId={'thread_screen'}
           enableBackButton={true}

@@ -9,6 +9,7 @@ import RoundedButton from '../common/RoundedButton';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
 import {TextInput} from '@plgworks/applogger';
+import {useOrientationState} from '../../hooks/useOrientation';
 
 const TEXT_INPUT_LIMIT = 25;
 
@@ -32,9 +33,12 @@ function AddListModal() {
     return <View style={localStyle.blur} />;
   }, [localStyle.blur]);
 
+  const {isPortrait} = useOrientationState();
+
   const screenHeight = useMemo(() => {
     return Dimensions.get('window').height;
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPortrait]);
 
   const charCountTextStyle = useMemo(() => {
     if (nCharacterCount > TEXT_INPUT_LIMIT) {
@@ -43,6 +47,13 @@ function AddListModal() {
     return localStyle.charCounterText;
   }, [localStyle.charCounterText, nCharacterCount]);
 
+  const modalStyle = useMemo(() => {
+    return [
+      localStyle.modalStyle,
+      {top: isPortrait ? screenHeight / 3 : screenHeight / 4},
+    ];
+  }, [isPortrait, localStyle.modalStyle, screenHeight]);
+
   return bIsVisible ? (
     <CustomModal
       testID="add_list"
@@ -50,7 +61,7 @@ function AddListModal() {
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}
       customBackdrop={getBackdrop}>
-      <View style={[localStyle.modalStyle, {top: screenHeight / 3}]}>
+      <View style={modalStyle}>
         <View style={localStyle.container}>
           <View style={localStyle.view}>
             <Text style={localStyle.enterNameStyle}>

@@ -12,7 +12,7 @@
     "generate-keystore": "sh ./android/keystore/sample/generate_keystore.sh "
   },
   "dependencies": {
-    "@plgworks/applogger": "1.0.1",
+    "@plgworks/applogger": "1.0.2",
     "@react-native-community/netinfo": "9.3.0",
     "@react-native-community/slider": "4.2.4",
     "@react-native-firebase/app": "15.3.0",

@@ -27,6 +27,7 @@ export const Constants = {
   PageName: {
     Archive: 'archive',
     List: 'list',
+    Thread: 'thread',
   },
   ConfirmDeleteModalType: {
     Archive: 'confirm_delete_modal_type_archive',

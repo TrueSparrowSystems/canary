@@ -66,9 +66,8 @@ function useTweetCardData(props) {
 
   const onUserNamePress = useCallback(
     ({userName = null}) => {
-      navigation.push(ScreenName.SearchResultScreen, {
-        query: `from:${userName ? userName : dataSource.user?.username}`,
-        sortOrder: Constants.SortOrder.Recency,
+      navigation.push(ScreenName.UserProfileScreen, {
+        userName: userName ? userName : dataSource.user?.username,
       });
     },
     [dataSource, navigation],

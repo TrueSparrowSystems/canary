@@ -12,4 +12,5 @@ export const StoreKeys = {
   IsRedirectModalHidden: 'is_redirect_modal_hidden',
   IsAppReloaded: 'is_app_reloaded',
   DeviceCanaryId: 'device_canary_id',
+  DeviceBackupUrl: 'device_backup_url',
 };

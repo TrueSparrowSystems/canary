@@ -41,6 +41,10 @@ class BackupRestoreHelper {
           canaryId = `canary_${uid()}`;
           AsyncStorage.set(StoreKeys.DeviceCanaryId, canaryId);
           Cache.setValue(CacheKey.DeviceCanaryId, canaryId);
+          this.getBackupUrl().then(url => {
+            AsyncStorage.set(StoreKeys.DeviceBackupUrl, url);
+            Cache.setValue(CacheKey.DeviceBackupUrl, url);
+          });
         }
         this.encrypt(storeData, 'canary')
           .then(encryptedData => {
@@ -59,7 +63,7 @@ class BackupRestoreHelper {
                   type: ToastType.Success,
                   text1: 'Data Backed Up Successfully',
                 });
-                this.responseData = null;
+                this.responseData = {};
 
                 LocalEvent.emit(EventTypes.CommonLoader.Hide);
                 onBackupSuccess?.();
@@ -137,7 +141,7 @@ class BackupRestoreHelper {
         databaseData => {
           if (JSON.stringify(databaseData) !== 'null') {
             const parsedDatabaseData = JSON.parse(JSON.stringify(databaseData));
-            this.responseData = parsedDatabaseData;
+            this.responseData[canaryId] = parsedDatabaseData;
             return resolve();
           } else {
             return reject();

@@ -4,12 +4,14 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {Share} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {ToastType} from '../../constants/ToastConstants';
+import Cache from '../../services/Cache';
+import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 
 function useBackupScreenData() {
   const _backupRestoreHelper = BackupRestoreHelper;
 
   const [backupTimeStamp, setBackupTimeStamp] = useState('...');
-  const backupUrl = useRef('');
+  const backupUrl = useRef(Cache.getValue(CacheKey.DeviceBackupUrl));
 
   useEffect(() => {
     fetchData();
@@ -17,10 +19,8 @@ function useBackupScreenData() {
   }, []);
   const fetchData = useCallback(() => {
     _backupRestoreHelper.getLastBackupTimeStamp().then(lastBackupTimeStamp => {
-      _backupRestoreHelper.getBackupUrl().then(url => {
-        backupUrl.current = url;
-        setBackupTimeStamp(lastBackupTimeStamp);
-      });
+      backupUrl.current = Cache.getValue(CacheKey.DeviceBackupUrl);
+      setBackupTimeStamp(lastBackupTimeStamp);
     });
   }, [_backupRestoreHelper]);
 

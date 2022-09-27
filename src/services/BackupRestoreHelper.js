@@ -15,7 +15,7 @@ class BackupRestoreHelper {
     this.backupKeys = Object.values(StoreKeys);
     this.backupKeys.splice(this.backupKeys.indexOf(StoreKeys.IsAppReloaded), 1);
     this.responseData = null;
-    this.backUpDataToFirebase.bind(this);
+    this.backupDataToFirebase.bind(this);
     this.clearData.bind(this);
     this.clearDataFromFirebase.bind(this);
     this.getResponseDataFromFirebase.bind(this);
@@ -25,7 +25,7 @@ class BackupRestoreHelper {
     this.encrypt.bind(this);
     this.decrypt.bind(this);
   }
-  backUpDataToFirebase({onBackUpSuccess}) {
+  backupDataToFirebase({onBackupSuccess}) {
     LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {
       headerText: 'Are you Sure you want to backup your data?',
       primaryText:
@@ -33,42 +33,43 @@ class BackupRestoreHelper {
       testID: 'back_up',
       onSureButtonPress: () => {
         deviceInfoModule.getUniqueId().then(deviceID => {
-          AsyncStorage.multiGet(this.backupKeys).then(storeData => {
-            //replace the 'password' with user entered password
-            this.encrypt(storeData, 'password')
-              .then(encryptedData => {
-                const reference = firebase
-                  .app()
-                  .database(Constants.FirebaseDatabaseUrl)
-                  .ref(`${Constants.FirebaseDatabasePath}${deviceID}`);
-                reference
-                  .set({
-                    id: deviceID,
-                    data: encryptedData,
-                    timeStamp: moment.now(),
-                  })
-                  .then(() => {
-                    Toast.show({
-                      type: ToastType.Success,
-                      text1: 'Data Backed Up Successfully',
+          AsyncStorage.multiGet(this.backupKeys)
+            .then(storeData => {
+              this.encrypt(storeData, 'canary')
+                .then(encryptedData => {
+                  const reference = firebase
+                    .app()
+                    .database(Constants.FirebaseDatabaseUrl)
+                    .ref(`${Constants.FirebaseDatabasePath}${deviceID}`);
+                  reference
+                    .set({
+                      id: deviceID,
+                      data: encryptedData,
+                      timeStamp: moment.now(),
+                    })
+                    .then(() => {
+                      Toast.show({
+                        type: ToastType.Success,
+                        text1: 'Data Backed Up Successfully',
+                      });
+                      this.responseData = null;
+                      onBackupSuccess?.();
+                    })
+                    .catch(() => {
+                      Toast.show({
+                        type: ToastType.Error,
+                        text1: 'Data Backup Failed. Please Try Again',
+                      });
                     });
-                    this.responseData = null;
-                    onBackUpSuccess?.();
-                  })
-                  .catch(() => {
-                    Toast.show({
-                      type: ToastType.Error,
-                      text1: 'Data Backup Failed. Please Try Again',
-                    });
+                })
+                .catch(() => {
+                  Toast.show({
+                    type: ToastType.Error,
+                    text1: 'Data Backup Failed. Please Try Again',
                   });
-              })
-              .catch(() => {
-                Toast.show({
-                  type: ToastType.Error,
-                  text1: 'Data Backup Failed. Please Try Again',
                 });
-              });
-          });
+            })
+            .catch(() => {});
         });
       },
     });
@@ -148,8 +149,7 @@ class BackupRestoreHelper {
             )} \n This also will restart the application`,
             testID: 'restore',
             onSureButtonPress: () => {
-              //replace the 'password' with user entered password
-              this.decrypt(this.responseData.data, 'password').then(data => {
+              this.decrypt(this.responseData.data, 'canary').then(data => {
                 AsyncStorage.multiSet(JSON.parse(data)).then(isDataSet => {
                   if (isDataSet) {
                     AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {

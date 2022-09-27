@@ -28,7 +28,7 @@ function Banner(props) {
           <Text style={textStyle || localStyle.flexShrink}>{headerText}</Text>
         </View>
         <RoundedButton
-          testId={`${testID}_banner_cross`}
+          testID={`${testID}_banner_cross`}
           style={localStyle.crossButton}
           leftImage={CrossIcon}
           leftImageStyle={localStyle.crossIconStyle}

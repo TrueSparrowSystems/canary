@@ -32,7 +32,7 @@ function EmptyScreenComponent(props) {
       ) : null}
       {buttonText ? (
         <RoundedButton
-          testId={`empty_screen_component_${buttonText}`}
+          testID={`empty_screen_component_${buttonText}`}
           style={buttonStyle || localStyle.createButton}
           text={buttonText}
           textStyle={localStyle.createButtonText}

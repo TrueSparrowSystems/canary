@@ -91,7 +91,7 @@ function ListTweetsScreen(props) {
   return (
     <View style={localStyle.container}>
       <Header
-        testId={'list_tweet_screen'}
+        testID={'list_tweet_screen'}
         style={localStyle.header}
         enableBackButton={true}
         text={listName}

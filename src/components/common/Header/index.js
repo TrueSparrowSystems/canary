@@ -89,7 +89,7 @@ function Header(props) {
           {enableRightButton && (rightButtonImage || rightButtonText) ? (
             <TouchableOpacity
               testID={`${testID}_header_right_button${
-                rightButtonText ? '_text_' + rightButtonText : null
+                rightButtonText ? '_text_' + rightButtonText : '_image'
               }`}
               style={localStyle.rightButtonStyle}
               activeOpacity={1}

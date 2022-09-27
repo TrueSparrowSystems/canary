@@ -57,7 +57,7 @@ function CollectionTweetScreen(props) {
   return (
     <SafeAreaView>
       <View style={localStyle.container}>
-        <Header testId={'collection_tweet_screen'} {...headerOptions} />
+        <Header testID={'collection_tweet_screen'} {...headerOptions} />
 
         <CollectionTweetList collectionId={collectionId} />
       </View>

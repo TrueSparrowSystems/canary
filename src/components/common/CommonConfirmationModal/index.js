@@ -50,7 +50,7 @@ function CommonConfirmationModal() {
             ) : null}
             <View style={localStyle.flexRow}>
               <RoundedButton
-                testId={`${sTestID}_confirmation_modal_cancel`}
+                testID={`${sTestID}_confirmation_modal_cancel`}
                 style={localStyle.cancelButton}
                 text={'No'}
                 textStyle={localStyle.cancelButtonText}
@@ -58,7 +58,7 @@ function CommonConfirmationModal() {
                 underlayColor={getColorWithOpacity(colors.White, 0.8)}
               />
               <RoundedButton
-                testId={`${sTestID}_confirmation_modal_sure`}
+                testID={`${sTestID}_confirmation_modal_sure`}
                 style={localStyle.sureButton}
                 text={'Sure'}
                 textStyle={localStyle.sureButtonText}

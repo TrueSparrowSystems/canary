@@ -28,7 +28,7 @@ function RoundedButton({
   underlayColor,
   rightImage,
   rightImageStyle,
-  testId = '',
+  testID = '',
 }) {
   const localStyle = useStyleProcessor(styles, 'RoundedButton');
 
@@ -42,7 +42,7 @@ function RoundedButton({
 
   return (
     <TouchableHighlight
-      testID={`${testId}_rounded`}
+      testID={`${testID}_rounded`}
       underlayColor={underlayColor || getColorWithOpacity(colors.Mandy, 0.3)}
       disabled={disabled}
       style={buttonContainerStyle}

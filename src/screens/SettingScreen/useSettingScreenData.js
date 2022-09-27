@@ -23,10 +23,15 @@ function useSettingScreenData() {
     });
   }, [navigation]);
 
+  const onRestorePress = useCallback(() => {
+    navigation.navigate(ScreenName.RestoreScreen);
+  }, [navigation]);
+
   return {
     fnOnInfoPress: onInfoPress,
     fnOnShareAppPress: onShareAppPress,
     fnOnPersonalizeFeedPress: onPersonalizeFeedPress,
+    fnOnRestorePress: onRestorePress,
   };
 }
 export default useSettingScreenData;

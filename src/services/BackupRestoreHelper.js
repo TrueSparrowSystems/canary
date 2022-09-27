@@ -9,6 +9,8 @@ import {ToastType} from '../constants/ToastConstants';
 import {StoreKeys} from './AsyncStorage/StoreConstants';
 import RNRestart from 'react-native-restart';
 import {decryptData, encryptData, generateKey} from './DataSecureService';
+import Cache from './Cache';
+import {CacheKey} from './Cache/CacheStoreConstants';
 
 class BackupRestoreHelper {
   constructor() {
@@ -105,34 +107,74 @@ class BackupRestoreHelper {
     });
   }
 
-  async getResponseDataFromFirebase() {
-    return new Promise(resolve => {
-      if (this.responseData) {
+  async getResponseDataFromFirebase(canaryId) {
+    return new Promise((resolve, reject) => {
+      if (this.responseData[canaryId]) {
         return resolve();
       }
-      deviceInfoModule.getUniqueId().then(deviceID => {
-        const reference = firebase
-          .app()
-          .database(Constants.FirebaseDatabaseUrl)
-          .ref(`${Constants.FirebaseDatabasePath}${deviceID}`);
-        reference.once('value', databaseData => {
+      const reference = firebase
+        .app()
+        .database(Constants.FirebaseDatabaseUrl)
+        .ref(`${Constants.FirebaseDatabasePath}${canaryId}`);
+      reference.once(
+        'value',
+        databaseData => {
           if (JSON.stringify(databaseData) !== 'null') {
             const responseData = JSON.parse(JSON.stringify(databaseData));
-            this.responseData = responseData;
+            this.responseData[canaryId] = responseData;
             return resolve();
+          } else {
+            return reject();
           }
-        });
-      });
+        },
+        err => {
+          return reject(err);
+        },
+      );
     });
   }
 
   async getLastBackupTimeStamp() {
     return new Promise(resolve => {
-      this.getResponseDataFromFirebase().then(() => {
-        return resolve(
-          moment(this.responseData.timeStamp).format('MMM Do YYYY, hh:mma'),
-        );
-      });
+      let canaryId = Cache.getValue(CacheKey.DeviceCanaryId);
+      console.log({canaryId});
+      if (canaryId) {
+        this.getResponseDataFromFirebase(canaryId)
+          .then(() => {
+            return resolve(
+              moment(this.responseData?.[canaryId]?.timeStamp).format(
+                'MMM Do YYYY, hh:mma',
+              ),
+            );
+          })
+          .catch(() => {
+            return resolve();
+          });
+      } else {
+        return resolve();
+      }
+    });
+  }
+
+  async restoreData({backupUrl, onRestoreSuccess}) {
+    return new Promise((resolve, reject) => {
+      LocalEvent.emit(EventTypes.CommonLoader.Show);
+      // Decrypt backup url and get canary id
+      let canaryId = '';
+      this.getResponseDataFromFirebase(canaryId)
+        .then(() => {
+          // decrypt data if req
+          // set in async store
+          // restart app
+          return resolve();
+        })
+        .catch(() => {
+          // TODO: remove timeout
+          setTimeout(() => {
+            LocalEvent.emit(EventTypes.CommonLoader.Hide);
+          }, 2000);
+          return reject();
+        });
     });
   }
 

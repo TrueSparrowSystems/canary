@@ -16,4 +16,6 @@ export const CacheKey = {
   ShowPromotionOnLists: 'show_promotion_on_lists',
   ShowPromotionOnArchives: 'show_promotion_on_archives',
   IsRedirectModalHidden: 'cache_key_is_redirect_modal_hidden',
+  DeviceCanaryId: 'device_canary_id',
+  BackupUrl: 'backup_url',
 };

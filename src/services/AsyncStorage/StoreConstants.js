@@ -11,4 +11,5 @@ export const StoreKeys = {
   ShowPromotionOnArchives: 'show_promotion_on_archives',
   IsRedirectModalHidden: 'is_redirect_modal_hidden',
   IsAppReloaded: 'is_app_reloaded',
+  DeviceCanaryId: 'device_canary_id',
 };

@@ -20,8 +20,12 @@ import useSettingScreenData from './useSettingScreenData';
 
 function SettingScreen() {
   const localStyle = useStyleProcessor(styles, 'SettingScreen');
-  const {fnOnInfoPress, fnOnShareAppPress, fnOnPersonalizeFeedPress} =
-    useSettingScreenData();
+  const {
+    fnOnBackupPress,
+    fnOnInfoPress,
+    fnOnShareAppPress,
+    fnOnPersonalizeFeedPress,
+  } = useSettingScreenData();
   const _backupRestoreHelper = BackupRestoreHelper;
 
   const Card = useMemo(
@@ -79,11 +83,7 @@ function SettingScreen() {
           <Card
             titleText={'Backup your data'}
             subTitleText={'Save your preferences, lists and archives.'}
-            onPress={() => {
-              _backupRestoreHelper.backupDataToFirebase({
-                onBackupSuccess: () => {},
-              });
-            }}
+            onPress={fnOnBackupPress}
           />
           <Card
             titleText={'Restore your data'}

@@ -1,6 +1,5 @@
 import {firebase} from '@react-native-firebase/database';
 import moment from 'moment';
-import deviceInfoModule from 'react-native-device-info';
 import {Constants} from '../constants/Constants';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
 import AsyncStorage from './AsyncStorage';
@@ -9,70 +8,81 @@ import {ToastType} from '../constants/ToastConstants';
 import {StoreKeys} from './AsyncStorage/StoreConstants';
 import RNRestart from 'react-native-restart';
 import {decryptData, encryptData, generateKey} from './DataSecureService';
+import ShortUniqueId from 'short-unique-id';
+import Cache from './Cache';
+import {CacheKey} from './Cache/CacheStoreConstants';
+import {getExportURL} from './ShareHelper';
 
 class BackupRestoreHelper {
   constructor() {
     this.backupKeys = Object.values(StoreKeys);
-    this.backupKeys.splice(this.backupKeys.indexOf(StoreKeys.IsAppReloaded), 1);
-    this.responseData = null;
+    Constants.KeysIgnoredForBackup.map(key => {
+      this.backupKeys.splice(this.backupKeys.indexOf(key), 1);
+    });
+    this.responseData = {};
     this.backupDataToFirebase.bind(this);
     this.clearData.bind(this);
     this.clearDataFromFirebase.bind(this);
     this.getResponseDataFromFirebase.bind(this);
     this.getLastBackupTimeStamp.bind(this);
+    this.getBackupUrl.bind(this);
     this.restoreDataFromFirebase.bind(this);
     this.generateKeyFromPassword.bind(this);
     this.encrypt.bind(this);
     this.decrypt.bind(this);
   }
   backupDataToFirebase({onBackupSuccess}) {
-    LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {
-      headerText: 'Are you Sure you want to backup your data?',
-      primaryText:
-        'Note: Your data(Preferences, Lists & Archives) will be stored with us',
-      testID: 'back_up',
-      onSureButtonPress: () => {
-        deviceInfoModule.getUniqueId().then(deviceID => {
-          AsyncStorage.multiGet(this.backupKeys)
-            .then(storeData => {
-              this.encrypt(storeData, 'canary')
-                .then(encryptedData => {
-                  const reference = firebase
-                    .app()
-                    .database(Constants.FirebaseDatabaseUrl)
-                    .ref(`${Constants.FirebaseDatabasePath}${deviceID}`);
-                  reference
-                    .set({
-                      id: deviceID,
-                      data: encryptedData,
-                      timeStamp: moment.now(),
-                    })
-                    .then(() => {
-                      Toast.show({
-                        type: ToastType.Success,
-                        text1: 'Data Backed Up Successfully',
-                      });
-                      this.responseData = null;
-                      onBackupSuccess?.();
-                    })
-                    .catch(() => {
-                      Toast.show({
-                        type: ToastType.Error,
-                        text1: 'Data Backup Failed. Please Try Again',
-                      });
-                    });
-                })
-                .catch(() => {
-                  Toast.show({
-                    type: ToastType.Error,
-                    text1: 'Data Backup Failed. Please Try Again',
-                  });
+    LocalEvent.emit(EventTypes.CommonLoader.Show);
+    AsyncStorage.multiGet(this.backupKeys)
+      .then(storeData => {
+        let canaryId = Cache.getValue(CacheKey.DeviceCanaryId) || '';
+        if (canaryId.length === 0) {
+          const uid = new ShortUniqueId({length: 8});
+          canaryId = `canary_${uid()}`;
+          AsyncStorage.set(StoreKeys.DeviceCanaryId, canaryId);
+          Cache.setValue(CacheKey.DeviceCanaryId, canaryId);
+        }
+        this.encrypt(storeData, 'canary')
+          .then(encryptedData => {
+            const reference = firebase
+              .app()
+              .database(Constants.FirebaseDatabaseUrl)
+              .ref(`${Constants.FirebaseDatabasePath}${canaryId}`);
+            reference
+              .set({
+                id: canaryId,
+                data: encryptedData,
+                timeStamp: moment.now(),
+              })
+              .then(() => {
+                Toast.show({
+                  type: ToastType.Success,
+                  text1: 'Data Backed Up Successfully',
                 });
-            })
-            .catch(() => {});
-        });
-      },
-    });
+                this.responseData = null;
+
+                LocalEvent.emit(EventTypes.CommonLoader.Hide);
+                onBackupSuccess?.();
+              })
+              .catch(() => {
+                LocalEvent.emit(EventTypes.CommonLoader.Hide);
+                Toast.show({
+                  type: ToastType.Error,
+                  text1: 'Data Backup Failed. Please Try Again',
+                });
+              });
+          })
+          .catch(() => {
+            LocalEvent.emit(EventTypes.CommonLoader.Hide);
+            Toast.show({
+              type: ToastType.Error,
+              text1: 'Data Backup Failed. Please Try Again',
+            });
+          });
+      })
+      .catch(() => {
+        LocalEvent.emit(EventTypes.CommonLoader.Hide);
+      });
   }
   clearData() {
     LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {
@@ -81,58 +91,104 @@ class BackupRestoreHelper {
         'All your preferances, lists & archives will be cleared. \nThis will also restart the app.',
       testID: 'clear',
       onSureButtonPress: () => {
-        AsyncStorage.multiRemove(this.backupKeys).then(() => {
-          AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {
-            Toast.show({
-              type: ToastType.Success,
-              text1: 'Data Cleared Successfully',
+        LocalEvent.emit(EventTypes.CommonLoader.Show);
+        AsyncStorage.multiRemove(this.backupKeys)
+          .then(() => {
+            AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {
+              Toast.show({
+                type: ToastType.Success,
+                text1: 'Data Cleared Successfully',
+              });
+
+              setTimeout(() => {
+                LocalEvent.emit(EventTypes.CommonLoader.Hide);
+                RNRestart.Restart();
+              }, 5000);
             });
-            RNRestart.Restart();
+          })
+          .catch(() => {
+            LocalEvent.emit(EventTypes.CommonLoader.Hide);
           });
-        });
       },
     });
   }
 
-  clearDataFromFirebase() {
-    deviceInfoModule.getUniqueId().then(deviceID => {
+  async clearDataFromFirebase() {
+    AsyncStorage.get(StoreKeys.DeviceCanaryId).then(canaryId => {
       const reference = firebase
         .app()
         .database(Constants.FirebaseDatabaseUrl)
-        .ref(`${Constants.FirebaseDatabasePath}${deviceID}`);
+        .ref(`${Constants.FirebaseDatabasePath}${canaryId}`);
       reference.remove();
-      this.responseData = null;
+      delete this.responseData?.canaryId;
     });
   }
-
-  async getResponseDataFromFirebase() {
-    return new Promise(resolve => {
-      if (this.responseData) {
+  async getResponseDataFromFirebase(canaryId) {
+    return new Promise((resolve, reject) => {
+      if (this.responseData?.[canaryId]) {
         return resolve();
       }
-      deviceInfoModule.getUniqueId().then(deviceID => {
-        const reference = firebase
-          .app()
-          .database(Constants.FirebaseDatabaseUrl)
-          .ref(`${Constants.FirebaseDatabasePath}${deviceID}`);
-        reference.once('value', databaseData => {
+      const reference = firebase
+        .app()
+        .database(Constants.FirebaseDatabaseUrl)
+        .ref(`${Constants.FirebaseDatabasePath}${canaryId}`);
+      reference.once(
+        'value',
+        databaseData => {
           if (JSON.stringify(databaseData) !== 'null') {
-            const responseData = JSON.parse(JSON.stringify(databaseData));
-            this.responseData = responseData;
+            const parsedDatabaseData = JSON.parse(JSON.stringify(databaseData));
+            this.responseData = parsedDatabaseData;
             return resolve();
+          } else {
+            return reject();
           }
-        });
-      });
+        },
+        err => {
+          return reject(err);
+        },
+      );
     });
   }
 
   async getLastBackupTimeStamp() {
     return new Promise(resolve => {
-      this.getResponseDataFromFirebase().then(() => {
-        return resolve(
-          moment(this.responseData.timeStamp).format('MMM Do YYYY, hh:mma'),
-        );
-      });
+      let canaryId = Cache.getValue(CacheKey.DeviceCanaryId);
+      if (canaryId) {
+        this.getResponseDataFromFirebase(canaryId)
+          .then(() => {
+            return resolve(
+              moment(this.responseData?.[canaryId]?.timeStamp).format(
+                'MMM Do YYYY, hh:mma',
+              ),
+            );
+          })
+          .catch(() => {
+            return resolve();
+          });
+      } else {
+        return resolve();
+      }
+    });
+  }
+
+  async getBackupUrl() {
+    return new Promise(resolve => {
+      let canaryId = Cache.getValue(CacheKey.DeviceCanaryId);
+      if (canaryId) {
+        const exportData = {
+          pn: Constants.PageName.Restore,
+          data: canaryId,
+        };
+        getExportURL(exportData)
+          .then(backupUrl => {
+            return resolve(backupUrl);
+          })
+          .catch(() => {
+            return resolve();
+          });
+      } else {
+        return resolve();
+      }
     });
   }
 

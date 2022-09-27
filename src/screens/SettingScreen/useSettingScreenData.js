@@ -3,9 +3,20 @@ import {useCallback} from 'react';
 import {Share} from 'react-native';
 import {Constants} from '../../constants/Constants';
 import ScreenName from '../../constants/ScreenName';
+import Cache from '../../services/Cache';
+import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 
 function useSettingScreenData() {
   const navigation = useNavigation();
+
+  const onBackupPress = useCallback(() => {
+    let canaryId = Cache.getValue(CacheKey.DeviceCanaryId) || '';
+    if (canaryId.length === 0) {
+      navigation.navigate(ScreenName.BackupIntroductionScreen);
+    } else {
+      navigation.navigate(ScreenName.BackupScreen);
+    }
+  }, [navigation]);
 
   const onInfoPress = useCallback(() => {
     navigation.navigate(ScreenName.LandingScreen, {enableBackButton: true});
@@ -24,6 +35,7 @@ function useSettingScreenData() {
   }, [navigation]);
 
   return {
+    fnOnBackupPress: onBackupPress,
     fnOnInfoPress: onInfoPress,
     fnOnShareAppPress: onShareAppPress,
     fnOnPersonalizeFeedPress: onPersonalizeFeedPress,

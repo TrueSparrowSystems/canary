@@ -29,6 +29,7 @@ export const Constants = {
   PageName: {
     Archive: 'archive',
     List: 'list',
+    Restore: 'restore',
   },
   ConfirmDeleteModalType: {
     Archive: 'confirm_delete_modal_type_archive',
@@ -44,9 +45,5 @@ export const Constants = {
     woeid: 1,
   },
   Encryption: {salt: 'plg_canary', cost: 5000, length: 256},
-  KeysIgnoredForBackup: [
-    StoreKeys.BackupPassword,
-    StoreKeys.IsAppReloaded,
-    StoreKeys.DeviceCanaryId,
-  ],
+  KeysIgnoredForBackup: [StoreKeys.IsAppReloaded, StoreKeys.DeviceCanaryId],
 };

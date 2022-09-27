@@ -24,6 +24,9 @@ class BootService {
             Cache.setValue(CacheKey.ShowPromotionOnArchives, newValue);
           }
         });
+        AsyncStorage.get(StoreKeys.DeviceCanaryId).then(res => {
+          Cache.setValue(CacheKey.DeviceCanaryId, res);
+        });
         AsyncStorage.get(StoreKeys.ShowPromotionOnLists).then(res => {
           let newValue = 0;
           if (!res && JSON.parse(res) !== 0) {

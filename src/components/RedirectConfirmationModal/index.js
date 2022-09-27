@@ -46,7 +46,7 @@ function RedirectConfirmationModal() {
 
             <View style={localStyle.flexRow}>
               <RoundedButton
-                testId={'redirect_confiramtion_modal_cancel'}
+                testID={'redirect_confiramtion_modal_cancel'}
                 style={localStyle.cancelButton}
                 text={'Cancel'}
                 textStyle={localStyle.cancelButtonText}
@@ -54,7 +54,7 @@ function RedirectConfirmationModal() {
                 underlayColor={getColorWithOpacity(colors.White, 0.8)}
               />
               <RoundedButton
-                testId={'redirect_confiramtion_modal_sure'}
+                testID={'redirect_confiramtion_modal_sure'}
                 style={localStyle.sureButton}
                 text={'I am sure'}
                 textStyle={localStyle.sureButtonText}

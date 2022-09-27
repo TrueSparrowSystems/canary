@@ -1,4 +1,4 @@
-import {TouchableOpacity} from '@plgworks/applogger';
+import {ComponentWrapper, TouchableOpacity} from '@plgworks/applogger';
 import React, {useMemo} from 'react';
 import {Image, Linking, Text, View} from 'react-native';
 import {AppVersion} from '../../../AppVersion';
@@ -20,13 +20,9 @@ import useSettingScreenData from './useSettingScreenData';
 
 function SettingScreen() {
   const localStyle = useStyleProcessor(styles, 'SettingScreen');
-  const {
-    sLastBackUpTimeStamp,
-    fnOnInfoPress,
-    fnOnShareAppPress,
-    fnOnPersonalizeFeedPress,
-  } = useSettingScreenData();
-  const _backUpRestoreHelper = BackupRestoreHelper;
+  const {fnOnInfoPress, fnOnShareAppPress, fnOnPersonalizeFeedPress} =
+    useSettingScreenData();
+  const _backupRestoreHelper = BackupRestoreHelper;
 
   const Card = useMemo(
     () =>
@@ -56,7 +52,7 @@ function SettingScreen() {
   return (
     <View style={localStyle.screen}>
       <Header
-        testId={'setting_screen'}
+        testID={'setting_screen'}
         enableBackButton={true}
         enableRightButton={true}
         onRightButtonClick={fnOnShareAppPress}
@@ -84,29 +80,25 @@ function SettingScreen() {
             titleText={'Backup your data'}
             subTitleText={'Save your preferences, lists and archives.'}
             onPress={() => {
-              _backUpRestoreHelper.backUpDataToFirebase({
-                onBackUpSuccess: () => {},
+              _backupRestoreHelper.backupDataToFirebase({
+                onBackupSuccess: () => {},
               });
             }}
           />
           <Card
             titleText={'Restore your data'}
-            subTitleText={
-              sLastBackUpTimeStamp
-                ? `Restore data from (backup ${sLastBackUpTimeStamp})`
-                : 'Restore data from ...'
-            }
+            subTitleText={'Restore data using URL'}
             onPress={() => {
-              _backUpRestoreHelper.restoreDataFromFirebase({
+              _backupRestoreHelper.restoreDataFromFirebase({
                 onRestoreSuccess: () => {},
               });
             }}
           />
           <RoundedButton
-            testId="setting_screen_clear"
+            testID="setting_screen_clear_all_data"
             text={'Clear all Data'}
             onPress={() => {
-              _backUpRestoreHelper.clearData();
+              _backupRestoreHelper.clearData();
             }}
             style={localStyle.buttonStyle}
             textStyle={localStyle.buttonTextStyle}
@@ -118,13 +110,16 @@ function SettingScreen() {
             <Text style={localStyle.appNameText}>Canary</Text>
             <Text style={localStyle.appVersionText}>v{AppVersion}</Text>
           </View>
-          <Text
-            style={localStyle.madeByText}
-            onPress={() => {
-              Linking.openURL(Constants.PlgWorksLink);
-            }}>
-            Made with 🖤 by PLG Works
-          </Text>
+          <ComponentWrapper>
+            <Text
+              testID="setting_screen_plg_works_link"
+              style={localStyle.madeByText}
+              onPress={() => {
+                Linking.openURL(Constants.PlgWorksLink);
+              }}>
+              Made with 🖤 by PLG Works
+            </Text>
+          </ComponentWrapper>
         </View>
       </View>
     </View>

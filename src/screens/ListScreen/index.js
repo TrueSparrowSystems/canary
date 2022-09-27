@@ -154,7 +154,7 @@ function ListScreen(props) {
     <SafeAreaView style={localStyle.container}>
       {!isEmpty(listDataRef.current) ? (
         <Header
-          testId={'list_screen'}
+          testID={'list_screen'}
           text="Lists"
           rightButtonImage={swipeable ? ShareAppIcon : AddIcon}
           enableRightButton={true}

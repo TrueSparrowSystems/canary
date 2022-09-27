@@ -96,7 +96,7 @@ function AddCollectionModal() {
 
             {isEditMode ? (
               <RoundedButton
-                testId={'add_collection_modal_update'}
+                testID={'add_collection_modal_update'}
                 style={localStyle.createButton}
                 text={'Update'}
                 textStyle={localStyle.createButtonText}
@@ -106,7 +106,7 @@ function AddCollectionModal() {
               />
             ) : (
               <RoundedButton
-                testId={'add_collection_modal_create'}
+                testID={'add_collection_modal_create'}
                 style={localStyle.createButton}
                 text={'Create'}
                 textStyle={localStyle.createButtonText}

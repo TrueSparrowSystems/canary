@@ -129,7 +129,7 @@ function ListCard(props) {
         <TouchableWithoutFeedback
           testID={`list_card_for_${listName}`}
           onPress={enableSwipe ? fnOnListSelect : fnOnListPress}
-          onLongPress={fnOnLongPress}
+          onLongPress={enableSwipe ? null : fnOnLongPress}
           disabled={isPressDisabled}>
           <View style={localStyle.container}>
             <View style={localStyle.cardDetailContainer}>
@@ -148,7 +148,9 @@ function ListCard(props) {
                 )}
               </View>
               <View style={localStyle.listNameContainer}>
-                <Text style={localStyle.listNameStyle}>{listName}</Text>
+                <Text style={localStyle.listNameStyle} numberOfLines={1}>
+                  {listName}
+                </Text>
                 <Text style={localStyle.descriptionTextStyle} numberOfLines={1}>
                   {fnGetDescriptionText()}
                 </Text>
@@ -227,7 +229,7 @@ const styles = {
     fontSize: fontPtToPx(16),
     lineHeight: layoutPtToPx(20),
   },
-  listNameContainer: {width: '80%'},
+  listNameContainer: {flexShrink: 1},
   listNameStyle: {
     color: colors.Black,
     fontFamily: fonts.InterSemiBold,

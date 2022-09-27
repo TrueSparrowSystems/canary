@@ -315,8 +315,8 @@ const styles = {
   binContainerView: {
     zIndex: 2,
     position: 'absolute',
-    left: layoutPtToPx(-20),
-    top: layoutPtToPx(-5),
+    right: layoutPtToPx(-5),
+    top: layoutPtToPx(-10),
   },
   binContainer: {
     height: layoutPtToPx(40),

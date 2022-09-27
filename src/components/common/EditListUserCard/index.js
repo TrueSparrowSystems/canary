@@ -118,7 +118,7 @@ const styles = {
     lineHeight: layoutPtToPx(15),
   },
   swipeIconStyle: {
-    height: layoutPtToPx(8),
+    height: layoutPtToPx(10),
     width: layoutPtToPx(16),
     alignSelf: 'center',
   },

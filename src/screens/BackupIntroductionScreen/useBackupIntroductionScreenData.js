@@ -1,5 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {useCallback} from 'react';
+import {Constants} from '../../constants/Constants';
 import ScreenName from '../../constants/ScreenName';
 import BackupRestoreHelper from '../../services/BackupRestoreHelper';
 
@@ -15,8 +16,10 @@ function useBackupIntroductionScreenData() {
   }, [navigation]);
 
   const onLinkTextPress = useCallback(() => {
-    // TODO: Open in-app web backup screen
-  }, []);
+    navigation.navigate(ScreenName.InAppPdfViewerScreen, {
+      pdfUrl: Constants.Pdf,
+    });
+  }, [navigation]);
 
   return {
     fnOnBackupButtonPress: onBackupButtonPress,

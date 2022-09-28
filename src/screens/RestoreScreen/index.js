@@ -20,6 +20,7 @@ function RestoreScreen(props) {
     sErrorText,
     fnOnBackupUrlChange,
     fnOnConfirmButtonPress,
+    fnOnLinkTextPress,
   } = useRestoreScreenData(params);
 
   return (
@@ -60,7 +61,7 @@ function RestoreScreen(props) {
             onPress={fnOnConfirmButtonPress}
             underlayColor={colors.GoldenTainoi80}
           />
-          <Text style={localStyle.cantFindText}>
+          <Text style={localStyle.cantFindText} onPress={fnOnLinkTextPress}>
             Can’t find your backup URL! Read this.
           </Text>
           <View style={localStyle.restartTextView}>

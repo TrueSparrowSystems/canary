@@ -38,6 +38,7 @@ import SettingScreen from '../screens/SettingScreen';
 import BackupScreen from '../screens/BackupScreen';
 import BackupIntroductionScreen from '../screens/BackupIntroductionScreen';
 import RestoreScreen from '../screens/RestoreScreen';
+import InAppPdfViewerScreen from '../screens/InAppPdfViewerScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -197,6 +198,17 @@ const Navigation = props => {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         />
+        <TimelineStack.Screen
+          name={ScreenName.InAppPdfViewerScreen}
+          component={InAppPdfViewerScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
       </TimelineStack.Navigator>
     );
   }
@@ -216,6 +228,7 @@ const Navigation = props => {
       case ScreenName.BackupIntroductionScreen:
       case ScreenName.BackupScreen:
       case ScreenName.RestoreScreen:
+      case ScreenName.InAppPdfViewerScreen:
         return false;
       default:
         return true;

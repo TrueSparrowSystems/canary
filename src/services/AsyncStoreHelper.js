@@ -1,13 +1,10 @@
+import {Constants} from '../constants/Constants';
 import AsyncStorage from './AsyncStorage';
-import {StoreKeys} from './AsyncStorage/StoreConstants';
 
 class AsyncStoreHelper {
-  constructor() {
-    this.backupKeys = Object.values(StoreKeys);
-  }
   async setInitialStoreValues() {
     const initialData = [];
-    for (const key of this.backupKeys) {
+    for (const key of Constants.KeysForClear) {
       const data = [key];
       data.push('');
       initialData.push(data);

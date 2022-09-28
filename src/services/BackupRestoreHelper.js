@@ -137,7 +137,6 @@ class BackupRestoreHelper {
   async getLastBackupTimeStamp() {
     return new Promise(resolve => {
       let canaryId = Cache.getValue(CacheKey.DeviceCanaryId);
-      console.log({canaryId});
       if (canaryId) {
         this.getResponseDataFromFirebase(canaryId)
           .then(() => {

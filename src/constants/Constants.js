@@ -66,4 +66,6 @@ export const Constants = {
     StoreKeys.ShowPromotionOnArchives,
     StoreKeys.ShowPromotionOnLists,
   ],
+  //Todo: update pdf link when available
+  Pdf: 'https://www.wto.org/english/thewto_e/procurement_e/terms_conditions_e.pdf',
 };

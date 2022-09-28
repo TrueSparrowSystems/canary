@@ -1,4 +1,7 @@
+import {useNavigation} from '@react-navigation/native';
 import {useCallback, useEffect, useState} from 'react';
+import {Constants} from '../../constants/Constants';
+import ScreenName from '../../constants/ScreenName';
 import BackupRestoreHelper from '../../services/BackupRestoreHelper';
 import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
@@ -9,6 +12,7 @@ function useRestoreScreenData(params) {
   const [backupUrl, setBackupUrl] = useState(backupURL);
   const [restoreText, setRestoreText] = useState('');
   const [errorText, setErrorText] = useState();
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (backupUrl?.length === 0) {
@@ -48,6 +52,12 @@ function useRestoreScreenData(params) {
     }).catch(() => {});
   }, [backupUrl]);
 
+  const onLinkTextPress = useCallback(() => {
+    navigation.navigate(ScreenName.InAppPdfViewerScreen, {
+      pdfUrl: Constants.Pdf,
+    });
+  }, [navigation]);
+
   return {
     bIsLoading: isLoading,
     sErrorText: errorText,
@@ -55,6 +65,7 @@ function useRestoreScreenData(params) {
     sBackupUrl: backupUrl,
     fnOnBackupUrlChange: onBackupUrlChange,
     fnOnConfirmButtonPress: onConfirmButtonPress,
+    fnOnLinkTextPress: onLinkTextPress,
   };
 }
 

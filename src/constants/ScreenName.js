@@ -24,4 +24,5 @@ export default {
   BackupScreen: 'BackupScreen',
   BackupIntroductionScreen: 'BackupIntroductionScreen',
   RestoreScreen: 'RestoreScreen',
+  InAppPdfViewerScreen: 'InAppPdfViewerScreen',
 };

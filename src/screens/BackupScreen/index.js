@@ -66,7 +66,7 @@ function BackupScreen() {
               rightImage={ShareIcon}
               rightImageStyle={localStyle.buttonImageStyle}
               onPress={fnOnShareButtonPress}
-              underlayColor={colors.GoldenTainoi80}
+              underlayColor={getColorWithOpacity(colors.Black, 0.2)}
             />
           </View>
         )}

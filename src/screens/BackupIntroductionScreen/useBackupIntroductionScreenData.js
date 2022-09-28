@@ -9,7 +9,7 @@ function useBackupIntroductionScreenData() {
   const onBackupButtonPress = useCallback(() => {
     BackupRestoreHelper.backupDataToFirebase({
       onBackupSuccess: () => {
-        navigation.navigate(ScreenName.BackupScreen);
+        navigation.replace(ScreenName.BackupScreen);
       },
     });
   }, [navigation]);

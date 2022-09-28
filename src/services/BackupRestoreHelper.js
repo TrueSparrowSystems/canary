@@ -11,7 +11,7 @@ import {decryptData, encryptData, generateKey} from './DataSecureService';
 import ShortUniqueId from 'short-unique-id';
 import Cache from './Cache';
 import {CacheKey} from './Cache/CacheStoreConstants';
-import {getExportURL} from './ShareHelper';
+import {getExportURL, resolveAndGetImportData} from './ShareHelper';
 
 class BackupRestoreHelper {
   constructor() {
@@ -26,7 +26,6 @@ class BackupRestoreHelper {
     this.getResponseDataFromFirebase.bind(this);
     this.getLastBackupTimeStamp.bind(this);
     this.getBackupUrl.bind(this);
-    this.restoreDataFromFirebase.bind(this);
     this.generateKeyFromPassword.bind(this);
     this.encrypt.bind(this);
     this.decrypt.bind(this);
@@ -86,6 +85,10 @@ class BackupRestoreHelper {
       })
       .catch(() => {
         LocalEvent.emit(EventTypes.CommonLoader.Hide);
+        Toast.show({
+          type: ToastType.Error,
+          text1: 'Data Backup Failed. Please Try Again',
+        });
       });
   }
   clearData() {
@@ -129,9 +132,6 @@ class BackupRestoreHelper {
   }
   async getResponseDataFromFirebase(canaryId) {
     return new Promise((resolve, reject) => {
-      if (this.responseData?.[canaryId]) {
-        return resolve();
-      }
       const reference = firebase
         .app()
         .database(Constants.FirebaseDatabaseUrl)
@@ -181,7 +181,7 @@ class BackupRestoreHelper {
       if (canaryId) {
         const exportData = {
           pn: Constants.PageName.Restore,
-          data: canaryId,
+          data: {canary_id: canaryId},
         };
         getExportURL(exportData)
           .then(backupUrl => {
@@ -199,109 +199,116 @@ class BackupRestoreHelper {
   async restoreData({backupUrl, onRestoreSuccess}) {
     return new Promise((resolve, reject) => {
       LocalEvent.emit(EventTypes.CommonLoader.Show);
-      // Decrypt backup url and get canary id
-      let canaryId = '';
-      this.getResponseDataFromFirebase(canaryId)
-        .then(() => {
-          // decrypt data if req
-          // set in async store
-          // restart app
-          return resolve();
+      resolveAndGetImportData(backupUrl)
+        .then(importData => {
+          let canaryId = importData?.data?.canary_id || '';
+          this.getResponseDataFromFirebase(canaryId)
+            .then(() => {
+              this.decrypt(this.responseData?.[canaryId]?.data, 'canary')
+                .then(data => {
+                  AsyncStorage.multiSet(JSON.parse(data)).then(isDataSet => {
+                    if (isDataSet) {
+                      AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(
+                        () => {
+                          onRestoreSuccess?.();
+                          Toast.show({
+                            type: ToastType.Success,
+                            text1: 'Data Restored Successfully',
+                          });
+                          LocalEvent.emit(EventTypes.CommonLoader.Hide);
+                          RNRestart.Restart();
+                          return resolve();
+                        },
+                      );
+                    } else {
+                      LocalEvent.emit(EventTypes.CommonLoader.Hide);
+                      Toast.show({
+                        type: ToastType.Error,
+                        text1: 'Data Restore Failed. Please Try Again',
+                      });
+                      return reject();
+                    }
+                  });
+                })
+                .catch(() => {
+                  Toast.show({
+                    type: ToastType.Error,
+                    text1: 'Data Restore Failed. Please Try Again',
+                  });
+                  LocalEvent.emit(EventTypes.CommonLoader.Hide);
+                  return reject();
+                });
+            })
+            .catch(() => {
+              Toast.show({
+                type: ToastType.Error,
+                text1: 'Data Restore Failed. Please Try Again',
+              });
+              LocalEvent.emit(EventTypes.CommonLoader.Hide);
+              return reject();
+            });
         })
         .catch(() => {
-          // TODO: remove timeout
-          setTimeout(() => {
-            LocalEvent.emit(EventTypes.CommonLoader.Hide);
-          }, 2000);
+          LocalEvent.emit(EventTypes.CommonLoader.Hide);
+          Toast.show({
+            type: ToastType.Error,
+            text1: 'Data Restore Failed. Please Try Again',
+          });
           return reject();
         });
     });
   }
 
-  async restoreDataFromFirebase({onRestoreSuccess}) {
-    return new Promise((resolve, reject) => {
-      this.getResponseDataFromFirebase()
-        .then(() => {
-          LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {
-            headerText: 'Are you Sure you want to Restore your data? ',
-            primaryText: ` Restore Data from: ${moment(
-              this.responseData.timeStamp,
-            ).format(
-              'MMM Do YYYY, hh:mma',
-            )} \n This also will restart the application`,
-            testID: 'restore',
-            onSureButtonPress: () => {
-              this.decrypt(this.responseData.data, 'canary').then(data => {
-                AsyncStorage.multiSet(JSON.parse(data)).then(isDataSet => {
-                  if (isDataSet) {
-                    AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {
-                      onRestoreSuccess?.();
-                      Toast.show({
-                        type: ToastType.Success,
-                        text1: 'Data Restored Successfully',
-                      });
-                      RNRestart.Restart();
-                      return resolve();
-                    });
-                  } else {
-                    Toast.show({
-                      type: ToastType.Error,
-                      text1: 'Data Restore Failed. Please Try Again',
-                    });
-                    return reject();
-                  }
-                });
-              });
-            },
-          });
-        })
-        .catch(() => {
-          Toast.show({
-            type: ToastType.Error,
-            text1: 'Data Restore Failed. Please Try Again',
-          });
-        });
-    });
-  }
-
   async generateKeyFromPassword(password) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       generateKey(
         password,
         Constants.Encryption.salt,
         Constants.Encryption.cost,
         Constants.Encryption.length,
-      ).then(key => {
-        return resolve(key);
-      });
+      )
+        .then(key => {
+          return resolve(key);
+        })
+        .catch(err => {
+          return reject(err);
+        });
     });
   }
 
   async encrypt(data, password) {
     return new Promise((resolve, reject) => {
-      this.generateKeyFromPassword(password).then(key => {
-        encryptData(JSON.stringify(data), key)
-          .then(encryptedData => {
-            return resolve(encryptedData);
-          })
-          .catch(err => {
-            return reject(err);
-          });
-      });
+      this.generateKeyFromPassword(password)
+        .then(key => {
+          encryptData(JSON.stringify(data), key)
+            .then(encryptedData => {
+              return resolve(encryptedData);
+            })
+            .catch(err => {
+              return reject(err);
+            });
+        })
+        .catch(err => {
+          return reject(err);
+        });
     });
   }
 
   async decrypt(encryptedData, password) {
     return new Promise((resolve, reject) => {
-      this.generateKeyFromPassword(password).then(key => {
-        decryptData(encryptedData, key)
-          .then(text => {
-            return resolve(text);
-          })
-          .catch(err => {
-            return reject(err);
-          });
-      });
+      this.generateKeyFromPassword(password)
+        .then(key => {
+          decryptData(encryptedData, key)
+            .then(text => {
+              return resolve(text);
+            })
+            .catch(err => {
+              return reject(err);
+            });
+        })
+        .catch(err => {
+          return reject(err);
+        });
     });
   }
 }

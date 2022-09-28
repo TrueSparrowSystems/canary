@@ -10,7 +10,8 @@ import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 function useBackupScreenData() {
   const _backupRestoreHelper = BackupRestoreHelper;
 
-  const [backupTimeStamp, setBackupTimeStamp] = useState('...');
+  const [isLoading, setIsLoading] = useState(false);
+  const backupTimeStamp = useRef('');
   const backupUrl = useRef(Cache.getValue(CacheKey.DeviceBackupUrl));
 
   useEffect(() => {
@@ -18,9 +19,11 @@ function useBackupScreenData() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const fetchData = useCallback(() => {
+    setIsLoading(true);
     _backupRestoreHelper.getLastBackupTimeStamp().then(lastBackupTimeStamp => {
       backupUrl.current = Cache.getValue(CacheKey.DeviceBackupUrl);
-      setBackupTimeStamp(lastBackupTimeStamp);
+      backupTimeStamp.current = lastBackupTimeStamp;
+      setIsLoading(false);
     });
   }, [_backupRestoreHelper]);
 
@@ -43,7 +46,8 @@ function useBackupScreenData() {
   }, []);
 
   return {
-    sBackupTimeStamp: backupTimeStamp,
+    bIsLoading: isLoading,
+    sBackupTimeStamp: backupTimeStamp.current,
     sBackupUrl: backupUrl.current,
     fnOnBackupButtonPress: onBackupButtonPress,
     fnOnCopyLinkPress: onCopyLinkPress,

@@ -38,3 +38,20 @@ export function getImportData(importUrl) {
     message: 'Invalid import url',
   };
 }
+
+export async function resolveAndGetImportData(importUrl) {
+  return new Promise((resolve, reject) => {
+    dynamicLinks()
+      .resolveLink(importUrl)
+      .then(response => {
+        const importData = getImportData(response?.url);
+        if (importData?.error) {
+          return reject();
+        }
+        return resolve(importData);
+      })
+      .catch(() => {
+        return reject();
+      });
+  });
+}

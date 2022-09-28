@@ -21,9 +21,7 @@ function RestoreScreen() {
     fnOnConfirmButtonPress,
   } = useRestoreScreenData();
 
-  return bIsLoading ? (
-    <ActivityIndicator animating={bIsLoading} />
-  ) : (
+  return (
     <View style={localStyle.container}>
       <Header
         style={localStyle.headerStyle}
@@ -31,40 +29,46 @@ function RestoreScreen() {
         enableBackButton={true}
       />
       <Text style={localStyle.headerText}>Restore Data</Text>
-      <Text style={localStyle.secondaryHeaderText}>
-        Please enter your backup URL
-      </Text>
-      {sRestoreText ? (
-        <Text style={localStyle.restoreTimeText}>{sRestoreText}</Text>
-      ) : null}
-      <TextInput
-        testID="restore_screen_canary_id"
-        style={localStyle.inputStyle}
-        defaultValue={sBackupUrl}
-        autoFocus={true}
-        onChangeText={fnOnBackupUrlChange}
-        placeholder={'Paste your backup URL'}
-        placeholderTextColor={getColorWithOpacity(colors.BlackPearl, 0.5)}
-        onSubmitEditing={fnOnConfirmButtonPress}
-        maxLength={64}
-      />
-      <Text style={localStyle.errorText}>{sErrorText}</Text>
-      <RoundedButton
-        testID="restore_screen_submit"
-        style={localStyle.roundedButton}
-        text={'Restore Data'}
-        textStyle={localStyle.roundedButtonText}
-        onPress={fnOnConfirmButtonPress}
-        underlayColor={colors.GoldenTainoi80}
-      />
-      <Text style={localStyle.cantFindText}>
-        Can’t find your backup URL! Read this.
-      </Text>
-      <View style={localStyle.restartTextView}>
-        <Text style={localStyle.restartText}>
-          Restoring data will restart your app!
-        </Text>
-      </View>
+      {bIsLoading ? (
+        <ActivityIndicator animating={bIsLoading} />
+      ) : (
+        <View>
+          <Text style={localStyle.secondaryHeaderText}>
+            Please enter your backup URL
+          </Text>
+          {sRestoreText ? (
+            <Text style={localStyle.restoreTimeText}>{sRestoreText}</Text>
+          ) : null}
+          <TextInput
+            testID="restore_screen_canary_id"
+            style={localStyle.inputStyle}
+            defaultValue={sBackupUrl}
+            autoFocus={true}
+            onChangeText={fnOnBackupUrlChange}
+            placeholder={'Paste your backup URL'}
+            placeholderTextColor={getColorWithOpacity(colors.BlackPearl, 0.5)}
+            onSubmitEditing={fnOnConfirmButtonPress}
+            maxLength={64}
+          />
+          <Text style={localStyle.errorText}>{sErrorText}</Text>
+          <RoundedButton
+            testID="restore_screen_submit"
+            style={localStyle.roundedButton}
+            text={'Restore Data'}
+            textStyle={localStyle.roundedButtonText}
+            onPress={fnOnConfirmButtonPress}
+            underlayColor={colors.GoldenTainoi80}
+          />
+          <Text style={localStyle.cantFindText}>
+            Can’t find your backup URL! Read this.
+          </Text>
+          <View style={localStyle.restartTextView}>
+            <Text style={localStyle.restartText}>
+              Restoring data will restart your app!
+            </Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 }

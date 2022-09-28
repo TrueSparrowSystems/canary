@@ -1,6 +1,6 @@
 import {TouchableOpacity} from '@plgworks/applogger';
 import React from 'react';
-import {Image, Text, View} from 'react-native';
+import {ActivityIndicator, Image, Text, View} from 'react-native';
 import {CopyIcon, ShareIcon} from '../../assets/common';
 import Header from '../../components/common/Header';
 import RoundedButton from '../../components/common/RoundedButton';
@@ -14,6 +14,7 @@ function BackupScreen() {
   const localStyle = useStyleProcessor(styles, 'BackupScreen');
 
   const {
+    bIsLoading,
     sBackupTimeStamp,
     sBackupUrl,
     fnOnBackupButtonPress,
@@ -26,41 +27,47 @@ function BackupScreen() {
       <Header testID="backup_intro_screen" enableBackButton={true} />
       <View style={localStyle.contentContainer}>
         <Text style={localStyle.titleText}>Data backup</Text>
-        <View style={localStyle.card}>
-          <Text style={localStyle.cardHeadText}>
-            Your data is encrypted and backed up with us!
-          </Text>
-          <Text style={localStyle.lastBackupText}>
-            Last backup dated {sBackupTimeStamp}
-          </Text>
-          <View style={localStyle.copyBackupUrlContainer}>
-            <Text style={localStyle.backupUrlText}>{sBackupUrl}</Text>
-            <TouchableOpacity onPress={fnOnCopyLinkPress}>
-              <Image style={localStyle.copyUrlIcon} source={CopyIcon} />
-            </TouchableOpacity>
+        {bIsLoading ? (
+          <ActivityIndicator animating={bIsLoading} />
+        ) : (
+          <View>
+            <View style={localStyle.card}>
+              <Text style={localStyle.cardHeadText}>
+                Your data is encrypted and backed up with us!
+              </Text>
+              <Text style={localStyle.lastBackupText}>
+                Last backup dated {sBackupTimeStamp}
+              </Text>
+              <View style={localStyle.copyBackupUrlContainer}>
+                <Text style={localStyle.backupUrlText}>{sBackupUrl}</Text>
+                <TouchableOpacity onPress={fnOnCopyLinkPress}>
+                  <Image style={localStyle.copyUrlIcon} source={CopyIcon} />
+                </TouchableOpacity>
+              </View>
+              <Text style={localStyle.cardFootText}>
+                We recommend you to copy this url and keep it safe
+              </Text>
+            </View>
+            <RoundedButton
+              testID="backup_screen_backup"
+              style={localStyle.roundedButton}
+              text={'Back Up'}
+              textStyle={localStyle.roundedButtonText}
+              onPress={fnOnBackupButtonPress}
+              underlayColor={colors.GoldenTainoi80}
+            />
+            <RoundedButton
+              testID="backup_screen_share"
+              style={localStyle.secondaryRoundedButton}
+              text={'Share'}
+              textStyle={localStyle.secondaryRoundedButtonText}
+              rightImage={ShareIcon}
+              rightImageStyle={localStyle.buttonImageStyle}
+              onPress={fnOnShareButtonPress}
+              underlayColor={colors.GoldenTainoi80}
+            />
           </View>
-          <Text style={localStyle.cardFootText}>
-            We recommend you to copy this url and keep it safe
-          </Text>
-        </View>
-        <RoundedButton
-          testID="backup_screen_backup"
-          style={localStyle.roundedButton}
-          text={'Back Up'}
-          textStyle={localStyle.roundedButtonText}
-          onPress={fnOnBackupButtonPress}
-          underlayColor={colors.GoldenTainoi80}
-        />
-        <RoundedButton
-          testID="backup_screen_share"
-          style={localStyle.secondaryRoundedButton}
-          text={'Share'}
-          textStyle={localStyle.secondaryRoundedButtonText}
-          rightImage={ShareIcon}
-          rightImageStyle={localStyle.buttonImageStyle}
-          onPress={fnOnShareButtonPress}
-          underlayColor={colors.GoldenTainoi80}
-        />
+        )}
       </View>
     </View>
   );

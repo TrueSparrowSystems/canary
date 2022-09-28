@@ -169,9 +169,10 @@ function ListCard(props) {
     ];
     return (
       <View>
-        {components.map(item => {
+        {components.map((item, index) => {
           return (
             <TouchableOpacity
+              key={index}
               activeOpacity={0.7}
               onPress={item.onPress}
               style={localStyle.listPopupMenuItemContainer}>

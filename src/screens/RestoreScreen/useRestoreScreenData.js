@@ -3,23 +3,28 @@ import BackupRestoreHelper from '../../services/BackupRestoreHelper';
 import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 
-function useRestoreScreenData() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [backupUrl, setBackupUrl] = useState('');
+function useRestoreScreenData(params) {
+  const backupURL = params?.backupUrl || '';
+  const [isLoading, setIsLoading] = useState(false);
+  const [backupUrl, setBackupUrl] = useState(backupURL);
   const [restoreText, setRestoreText] = useState('');
   const [errorText, setErrorText] = useState();
 
   useEffect(() => {
-    setBackupUrl(Cache.getValue(CacheKey.DeviceBackupUrl));
-    BackupRestoreHelper.getLastBackupTimeStamp()
-      .then(timeStamp => {
-        if (timeStamp) {
-          setRestoreText(`Last backup dated ${timeStamp}`);
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    if (backupUrl.length === 0) {
+      setIsLoading(true);
+      setBackupUrl(Cache.getValue(CacheKey.DeviceBackupUrl));
+      BackupRestoreHelper.getLastBackupTimeStamp()
+        .then(timeStamp => {
+          if (timeStamp) {
+            setRestoreText(`Last backup dated ${timeStamp}`);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onBackupUrlChange = useCallback(

@@ -83,7 +83,7 @@ function useListCardData(props) {
     hidePopover();
     LocalEvent.emit(EventTypes.ShowDeleteConfirmationModal, {
       id: listId,
-      name: listName,
+      text: `Are you sure you want to remove "${listName}" from lists?`,
       onCollectionRemoved: () => {},
       type: Constants.ConfirmDeleteModalType.List,
       testID: 'remove_list',

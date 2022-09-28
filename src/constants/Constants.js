@@ -45,5 +45,19 @@ export const Constants = {
     woeid: 1,
   },
   Encryption: {salt: 'plg_canary', cost: 5000, length: 256},
-  KeysIgnoredForBackup: [StoreKeys.IsAppReloaded, StoreKeys.DeviceCanaryId],
+  KeysForBackup: [
+    StoreKeys.PreferenceList,
+    StoreKeys.AreInitialPreferencesSet,
+    StoreKeys.CollectionsList,
+    StoreKeys.Lists,
+    StoreKeys.BookmarkedTweetsList,
+    StoreKeys.UserToListMap,
+    StoreKeys.ShouldShowTimelineFromVerifiedUsersOnly,
+  ],
+  KeysForClear: [
+    ...Constants.KeysForBackup,
+    StoreKeys.IsRedirectModalHidden,
+    StoreKeys.ShowPromotionOnArchives,
+    StoreKeys.ShowPromotionOnLists,
+  ],
 };

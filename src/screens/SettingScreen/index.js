@@ -21,10 +21,11 @@ import useSettingScreenData from './useSettingScreenData';
 function SettingScreen() {
   const localStyle = useStyleProcessor(styles, 'SettingScreen');
   const {
+    fnOnBackupPress,
     fnOnInfoPress,
-    fnOnShareAppPress,
     fnOnPersonalizeFeedPress,
     fnOnRestorePress,
+    fnOnShareAppPress,
   } = useSettingScreenData();
   const _backupRestoreHelper = BackupRestoreHelper;
 
@@ -83,11 +84,7 @@ function SettingScreen() {
           <Card
             titleText={'Backup your data'}
             subTitleText={'Save your preferences, lists and archives.'}
-            onPress={() => {
-              _backupRestoreHelper.backupDataToFirebase({
-                onBackupSuccess: () => {},
-              });
-            }}
+            onPress={fnOnBackupPress}
           />
           <Card
             titleText={'Restore your data'}

@@ -10,7 +10,7 @@ function useRestoreScreenData() {
   const [errorText, setErrorText] = useState();
 
   useEffect(() => {
-    setBackupUrl(Cache.getValue(CacheKey.BackupUrl));
+    setBackupUrl(Cache.getValue(CacheKey.DeviceBackupUrl));
     BackupRestoreHelper.getLastBackupTimeStamp()
       .then(timeStamp => {
         if (timeStamp) {

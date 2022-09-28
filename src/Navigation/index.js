@@ -35,6 +35,8 @@ import ImportArchiveScreen from '../screens/ImportArchiveScreen';
 import TabletNavBar from './TabletNavBar';
 import {isTablet} from 'react-native-device-info';
 import SettingScreen from '../screens/SettingScreen';
+import BackupScreen from '../screens/BackupScreen';
+import BackupIntroductionScreen from '../screens/BackupIntroductionScreen';
 import RestoreScreen from '../screens/RestoreScreen';
 
 // TODO: Please correct he screen names.
@@ -163,6 +165,28 @@ const Navigation = props => {
           }}
         />
         <TimelineStack.Screen
+          name={ScreenName.BackupIntroductionScreen}
+          component={BackupIntroductionScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <TimelineStack.Screen
+          name={ScreenName.BackupScreen}
+          component={BackupScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
+        <TimelineStack.Screen
           name={ScreenName.RestoreScreen}
           component={RestoreScreen}
           options={{
@@ -189,6 +213,8 @@ const Navigation = props => {
       case ScreenName.ImportListScreen:
       case ScreenName.ImportArchiveScreen:
       case ScreenName.SettingScreen:
+      case ScreenName.BackupIntroductionScreen:
+      case ScreenName.BackupScreen:
       case ScreenName.RestoreScreen:
         return false;
       default:

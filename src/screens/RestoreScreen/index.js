@@ -33,7 +33,7 @@ function RestoreScreen(props) {
       {bIsLoading ? (
         <ActivityIndicator animating={bIsLoading} />
       ) : (
-        <View>
+        <View style={localStyle.flex}>
           <Text style={localStyle.secondaryHeaderText}>
             Please enter your backup URL
           </Text>
@@ -90,6 +90,9 @@ const styles = {
     lineHeight: layoutPtToPx(40),
     color: colors.BlackPearl,
   },
+  flex: {
+    flex: 1,
+  },
   secondaryHeaderText: {
     marginTop: layoutPtToPx(40),
     fontFamily: fonts.SoraSemiBold,
@@ -140,6 +143,7 @@ const styles = {
   restartTextView: {
     justifyContent: 'flex-end',
     flex: 1,
+    marginBottom: layoutPtToPx(20),
   },
   restartText: {
     fontFamily: fonts.InterRegular,

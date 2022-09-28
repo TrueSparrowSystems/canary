@@ -40,7 +40,9 @@ function BackupScreen() {
               </Text>
               <View style={localStyle.copyBackupUrlContainer}>
                 <Text style={localStyle.backupUrlText}>{sBackupUrl}</Text>
-                <TouchableOpacity onPress={fnOnCopyLinkPress}>
+                <TouchableOpacity
+                  onPress={fnOnCopyLinkPress}
+                  testID={'backup_screen_copy_button'}>
                   <Image style={localStyle.copyUrlIcon} source={CopyIcon} />
                 </TouchableOpacity>
               </View>
@@ -120,6 +122,7 @@ const styles = {
     marginTop: 0,
     borderRadius: layoutPtToPx(4),
     padding: layoutPtToPx(10),
+    alignItems: 'center',
   },
   backupUrlText: {
     color: colors.GoldenTainoi,
@@ -131,7 +134,7 @@ const styles = {
   copyUrlIcon: {
     height: layoutPtToPx(17),
     width: layoutPtToPx(17),
-    marginHorizontal: layoutPtToPx(10),
+    margin: layoutPtToPx(10),
   },
   cardFootText: {
     color: getColorWithOpacity(colors.BlackPearl, 0.5),

@@ -15,10 +15,6 @@ import {getExportURL, resolveAndGetImportData} from './ShareHelper';
 
 class BackupRestoreHelper {
   constructor() {
-    this.backupKeys = Object.values(StoreKeys);
-    Constants.KeysIgnoredForBackup.map(key => {
-      this.backupKeys.splice(this.backupKeys.indexOf(key), 1);
-    });
     this.responseData = {};
     this.backupDataToFirebase.bind(this);
     this.clearData.bind(this);
@@ -30,9 +26,10 @@ class BackupRestoreHelper {
     this.encrypt.bind(this);
     this.decrypt.bind(this);
   }
+
   backupDataToFirebase({onBackupSuccess}) {
     LocalEvent.emit(EventTypes.CommonLoader.Show);
-    AsyncStorage.multiGet(this.backupKeys)
+    AsyncStorage.multiGet(Constants.KeysForBackup)
       .then(storeData => {
         let canaryId = Cache.getValue(CacheKey.DeviceCanaryId) || '';
         if (canaryId.length === 0) {
@@ -91,6 +88,7 @@ class BackupRestoreHelper {
         });
       });
   }
+
   clearData() {
     LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {
       headerText: 'Are you sure you want to clear your data',
@@ -99,7 +97,7 @@ class BackupRestoreHelper {
       testID: 'clear',
       onSureButtonPress: () => {
         LocalEvent.emit(EventTypes.CommonLoader.Show);
-        AsyncStorage.multiRemove(this.backupKeys)
+        AsyncStorage.multiRemove(Constants.KeysForClear)
           .then(() => {
             AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {
               Toast.show({
@@ -130,6 +128,7 @@ class BackupRestoreHelper {
       delete this.responseData?.canaryId;
     });
   }
+
   async getResponseDataFromFirebase(canaryId) {
     return new Promise((resolve, reject) => {
       const reference = firebase

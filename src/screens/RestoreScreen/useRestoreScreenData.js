@@ -24,7 +24,8 @@ function useRestoreScreenData(params) {
           setIsLoading(false);
         });
     }
-  }, [backupUrl]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onBackupUrlChange = useCallback(
     value => {

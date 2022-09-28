@@ -38,24 +38,45 @@ function useConfirmDeleteModalData() {
 
   const onSureButtonPress = useCallback(() => {
     if (modalData?.type === Constants.ConfirmDeleteModalType.List) {
-      listService()
-        .removeMultipleLists(modalData?.id)
-        .then(() => {
-          modalData?.onCollectionRemoved?.();
-          Toast.show({
-            type: ToastType.Success,
-            text1: 'Removed lists.',
+      if (isArray(modalData?.id)) {
+        listService()
+          .removeMultipleLists(modalData?.id)
+          .then(() => {
+            modalData?.onCollectionRemoved?.();
+            Toast.show({
+              type: ToastType.Success,
+              text1: 'Removed lists.',
+            });
+          })
+          .catch(() => {
+            Toast.show({
+              type: ToastType.Error,
+              text1: 'Error in removing list.',
+            });
+          })
+          .finally(() => {
+            closeModal();
           });
-        })
-        .catch(() => {
-          Toast.show({
-            type: ToastType.Error,
-            text1: 'Error in removing list.',
+      } else {
+        listService()
+          .removeList(modalData?.id)
+          .then(() => {
+            modalData?.onCollectionRemoved?.();
+            Toast.show({
+              type: ToastType.Success,
+              text1: 'Removed lists.',
+            });
+          })
+          .catch(() => {
+            Toast.show({
+              type: ToastType.Error,
+              text1: 'Error in removing list.',
+            });
+          })
+          .finally(() => {
+            closeModal();
           });
-        })
-        .finally(() => {
-          closeModal();
-        });
+      }
     } else {
       if (isArray(modalData?.id)) {
         collectionService()

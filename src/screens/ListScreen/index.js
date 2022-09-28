@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
   ScrollView,
-  Share,
   View,
+  Text,
 } from 'react-native';
 import {
   AddIcon,
@@ -15,38 +15,23 @@ import {
 } from '../../assets/common';
 import ListCard from '../../components/ListCard';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
-import {listService} from '../../services/ListService';
 import colors from '../../constants/colors';
-import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import Header from '../../components/common/Header';
 import fonts from '../../constants/fonts';
 import {isEmpty} from 'lodash-es';
 import useTabListener from '../../hooks/useTabListener';
-import AsyncStorage from '../../services/AsyncStorage';
-import {StoreKeys} from '../../services/AsyncStorage/StoreConstants';
 import * as Animatable from 'react-native-animatable';
-import Cache from '../../services/Cache';
-import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 import Banner from '../../components/common/Banner';
-import {showPromotion} from '../../components/utils/ViewData';
-import Toast from 'react-native-toast-message';
-import {ToastType} from '../../constants/ToastConstants';
-import {Constants} from '../../constants/Constants';
 import {RefreshControl} from '@plgworks/applogger';
+import useListScreenData from './useListScreenData';
 
 function ListScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListScreen');
-  const [isLoading, setIsLoading] = useState(true);
-  const [swipeable, setSwipeable] = useState(false);
-  const listDataRef = useRef({});
-  const [showPromotionBanner, setShowPromotionBanner] = useState(false);
-  const crossButtonRef = useRef(null);
+
   const screenName = props?.route?.name;
   const scrollRef = useRef(null);
-  const selectedListIds = useRef([]);
-  const _listService = listService();
 
   const scrollToTop = useCallback(() => {
     scrollRef.current?.scrollTo({
@@ -54,131 +39,58 @@ function ListScreen(props) {
       animated: true,
     });
   }, []);
+
   useTabListener(screenName, scrollToTop);
 
-  const fetchData = useCallback(() => {
-    setSwipeable(false);
-    setIsLoading(true);
-    _listService.getAllLists().then(list => {
-      listDataRef.current = list;
-      const shouldShowPromotion = showPromotion(CacheKey.ShowPromotionOnLists);
-      if (!shouldShowPromotion && !isEmpty(listDataRef.current)) {
-        const oldCacheVal = Cache.getValue(CacheKey.ShowPromotionOnLists);
-        AsyncStorage.set(StoreKeys.ShowPromotionOnLists, oldCacheVal);
-      }
-      setShowPromotionBanner(shouldShowPromotion);
-      setIsLoading(false);
-    });
-  }, [_listService]);
-
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const reloadList = useCallback(() => {
-    fetchData();
-  }, [fetchData]);
-
-  useEffect(() => {
-    LocalEvent.on(EventTypes.UpdateList, fetchData);
-    return () => {
-      LocalEvent.off(EventTypes.UpdateList, fetchData);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const onListAddSuccess = useCallback(() => {
-    fetchData();
-  }, [fetchData]);
-
-  const onAddListPress = useCallback(() => {
-    LocalEvent.emit(EventTypes.ShowAddListModal, {
-      onListAddSuccess,
-    });
-  }, [onListAddSuccess]);
-
-  const onCardLongPress = useCallback(() => {
-    selectedListIds.current = [];
-    setSwipeable(true);
-  }, []);
-
-  const onDonePress = useCallback(() => {
-    selectedListIds.current = [];
-    setSwipeable(false);
-  }, []);
-
-  const onSharePress = useCallback(() => {
-    if (selectedListIds.current.length > 0) {
-      _listService.exportList(selectedListIds.current).then(url => {
-        Share.share({message: `Checkout these lists from Canary ${url}`});
-      });
-    } else {
-      Toast.show({
-        type: ToastType.Error,
-        text1: 'Select at least one list to share',
-      });
-    }
-  }, [_listService]);
-
-  const onRemoveListsPress = useCallback(() => {
-    if (selectedListIds.current.length > 0) {
-      LocalEvent.emit(EventTypes.ShowDeleteConfirmationModal, {
-        id: selectedListIds.current,
-        text:
-          selectedListIds.current.length > 1
-            ? `Are you sure you want to remove these ${selectedListIds.current.length} selected lists?`
-            : 'Are you sure you want to remove this selected list?',
-        onCollectionRemoved: reloadList,
-        type: Constants.ConfirmDeleteModalType.List,
-        testID: 'remove_multiple_list',
-      });
-    } else {
-      Toast.show({
-        type: ToastType.Error,
-        text1: 'Select at least one list to delete',
-      });
-    }
-  }, [reloadList]);
-
-  const onRemovePromotionPress = useCallback(() => {
-    crossButtonRef.current?.animate('fadeOutLeftBig').then(() => {
-      setShowPromotionBanner(false);
-      const oldCacheVal = Cache.getValue(CacheKey.ShowPromotionOnLists);
-      AsyncStorage.set(StoreKeys.ShowPromotionOnLists, oldCacheVal);
-      Cache.setValue(CacheKey.ShowPromotionOnLists, false);
-    });
-  }, []);
+  const {
+    bIsEditMode,
+    bIsLoading,
+    bShowPromotionBanner,
+    oListDataRef,
+    oCrossButtonRef,
+    aSelectedListIds,
+    fnOnAddListPress,
+    fnOnCardLongPress,
+    fnOnDonePress,
+    fnOnRemoveListsPress,
+    fnOnRemovePromotionPress,
+    fnOnSharePress,
+    fnReloadList,
+  } = useListScreenData();
 
   return (
     <SafeAreaView style={localStyle.container}>
-      {!isEmpty(listDataRef.current) ? (
+      {!isEmpty(oListDataRef.current) ? (
         <Header
           testID={'list_screen'}
           text="Lists"
-          rightButtonImage={swipeable ? ShareAppIcon : AddIcon}
+          rightButtonImage={bIsEditMode ? ShareAppIcon : AddIcon}
           enableRightButton={true}
-          rightButtonText={swipeable ? null : 'New'}
+          rightButtonText={bIsEditMode ? null : 'New'}
           textStyle={localStyle.headerText}
           rightButtonImageStyle={
-            swipeable
+            bIsEditMode
               ? localStyle.shareButtonImageStyle
               : localStyle.headerRightButtonImage
           }
           rightButtonTextStyle={localStyle.headerRightButtonText}
-          onRightButtonClick={swipeable ? onSharePress : onAddListPress}
-          enableLeftButton={swipeable}
-          leftButtonText={'Done'}
+          onRightButtonClick={bIsEditMode ? fnOnSharePress : fnOnAddListPress}
+          enableLeftButton={true}
+          leftButtonText={bIsEditMode ? 'Done' : 'Select'}
           leftButtonTextStyle={localStyle.headerRightButtonText}
-          onLeftButtonClick={onDonePress}
-          enableSecondaryRightButton={swipeable}
+          onLeftButtonClick={bIsEditMode ? fnOnDonePress : fnOnCardLongPress}
+          enableSecondaryRightButton={bIsEditMode}
           secondaryRightButtonImage={DeleteIcon}
           secondaryRightButtonImageStyle={localStyle.shareButtonImageStyle}
-          onSecondaryRightButtonClick={onRemoveListsPress}
+          onSecondaryRightButtonClick={fnOnRemoveListsPress}
         />
       ) : null}
-      {showPromotionBanner && !isEmpty(listDataRef.current) ? (
-        <Animatable.View ref={crossButtonRef}>
+      {bIsEditMode ? (
+        <Text style={localStyle.selectInfoTextStyle}>
+          Tap on cards to select them
+        </Text>
+      ) : bShowPromotionBanner && !isEmpty(oListDataRef.current) ? (
+        <Animatable.View ref={oCrossButtonRef}>
           <Banner
             testID="list_screen"
             headerImage={ListGolden}
@@ -187,24 +99,24 @@ function ListScreen(props) {
             descriptionText={
               'This is a version of Lists which doesn’t track any of your data, and keeps your information to yourself'
             }
-            onRemovePromotionPress={onRemovePromotionPress}
-            crossButtonRef={crossButtonRef}
+            onRemovePromotionPress={fnOnRemovePromotionPress}
+            crossButtonRef={oCrossButtonRef}
           />
         </Animatable.View>
       ) : null}
-      {isLoading ? (
+      {bIsLoading ? (
         <View style={localStyle.loaderStyle}>
           <ActivityIndicator
-            animating={isLoading}
+            animating={bIsLoading}
             color={colors.GoldenTainoi}
           />
         </View>
-      ) : isEmpty(listDataRef.current) ? (
+      ) : isEmpty(oListDataRef.current) ? (
         <EmptyScreenComponent
           emptyImage={ListIconBig}
           buttonImage={AddIcon}
           buttonText={'Create a new List'}
-          onButtonPress={onAddListPress}
+          onButtonPress={fnOnAddListPress}
           descriptionText={
             'Stay up-to-date on the favorite topics by users you love, without being tracked 😉'
           }
@@ -216,24 +128,24 @@ function ListScreen(props) {
           style={localStyle.scrollViewStyle}
           ref={scrollRef}
           refreshControl={
-            swipeable ? null : (
+            bIsEditMode ? null : (
               <RefreshControl
                 testID="list_screen_list"
-                refreshing={isLoading}
-                onRefresh={reloadList}
+                refreshing={bIsLoading}
+                onRefresh={fnReloadList}
               />
             )
           }>
-          {Object.keys(listDataRef.current).map(key => {
-            const list = listDataRef.current[key];
+          {Object.keys(oListDataRef.current).map(key => {
+            const list = oListDataRef.current[key];
             return (
               <ListCard
                 key={list.id}
                 data={list}
-                onListRemoved={reloadList}
-                onCardLongPress={onCardLongPress}
-                enableSwipe={swipeable}
-                selectedListIds={selectedListIds.current}
+                onListRemoved={fnReloadList}
+                onCardLongPress={fnOnCardLongPress}
+                enableSwipe={bIsEditMode}
+                selectedListIds={aSelectedListIds.current}
               />
             );
           })}
@@ -248,6 +160,13 @@ const styles = {
   container: {
     backgroundColor: 'white',
     flex: 1,
+  },
+  selectInfoTextStyle: {
+    fontFamily: fonts.SoraRegular,
+    fontSize: fontPtToPx(14),
+    lineHeight: layoutPtToPx(20),
+    color: colors.BlackPearl,
+    alignSelf: 'center',
   },
   headerView: {
     backgroundColor: 'white',

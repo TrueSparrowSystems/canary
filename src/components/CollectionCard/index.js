@@ -1,59 +1,44 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useMemo, useRef, useEffect, useState} from 'react';
-import {Text} from 'react-native';
+import React, {useCallback, useMemo, useEffect} from 'react';
+import {Text, TouchableWithoutFeedback} from 'react-native';
 import {View} from 'react-native-animatable';
-import {BinIcon, EditIcon, TickIcon} from '../../assets/common';
-import ScreenName from '../../constants/ScreenName';
+import {TickIcon} from '../../assets/common';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import Image from 'react-native-fast-image';
 import fonts from '../../constants/fonts';
-import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import * as Animatable from 'react-native-animatable';
-import {Constants} from '../../constants/Constants';
-import {
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-} from '@plgworks/applogger';
+import {TouchableOpacity} from '@plgworks/applogger';
+import useCollectionCardData from './useCollectionCardData';
+import Popover from 'react-native-popover-view';
 
-function CollectionCard(props) {
+const CollectionCard = props => {
+  const {data, enableDelete, animationDelay, disabled} = props;
+
+  const localStyle = useStyleProcessor(styles, 'CollectionCard');
+
   const {
-    data,
-    onCollectionRemoved,
-    onLongPress,
-    enableDelete,
-    animationDelay,
-    disabled,
-    selectedCollectionIds,
-  } = props;
+    oViewRef,
+    bIsCollectionSelected,
+    bIsPopOverVisible,
+    fnOnCollectionRemove,
+    fnOnCollectionSelect,
+    fnOnCollectionPress,
+    fnOnEditCollectionPress,
+    fnOnLongPress,
+    fnHidePopover,
+    fnOnShareCollectionPress,
+  } = useCollectionCardData(props);
+
   const {name: collectionName, id: collectionId, tweetIds} = data;
   let {colorScheme} = data;
-  const localStyle = useStyleProcessor(styles, 'CollectionCard');
-  const navigation = useNavigation();
-  const viewRef = useRef(null);
-  const [isCollectionSelected, setIsCollectionSelected] = useState(false);
-
-  const onCollectionPress = useCallback(() => {
-    navigation.navigate(ScreenName.CollectionTweetScreen, {
-      collectionId,
-      collectionName,
-    });
-  }, [collectionId, collectionName, navigation]);
-
-  const onEditCollectionPress = useCallback(() => {
-    LocalEvent.emit(EventTypes.ShowAddCollectionModal, {
-      name: collectionName,
-      id: collectionId,
-    });
-  }, [collectionId, collectionName]);
 
   const startAnimation = useCallback(() => {
-    viewRef.current.setNativeProps({
+    oViewRef.current.setNativeProps({
       useNativeDriver: true,
     });
-    viewRef.current.animate({
+    oViewRef.current.animate({
       0: {
         rotate: '2.5deg',
       },
@@ -70,7 +55,7 @@ function CollectionCard(props) {
         rotate: '0deg',
       },
     });
-  }, []);
+  }, [oViewRef]);
 
   useEffect(() => {
     if (enableDelete) {
@@ -78,20 +63,6 @@ function CollectionCard(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enableDelete]);
-
-  const onCollectionRemove = useCallback(() => {
-    LocalEvent.emit(EventTypes.ShowDeleteConfirmationModal, {
-      id: collectionId,
-      name: collectionName,
-      onCollectionRemoved: () => {
-        viewRef.current.animate('bounceOut').then(() => {
-          onCollectionRemoved();
-        });
-      },
-      type: Constants.ConfirmDeleteModalType.Archive,
-      testID: 'remove_collection',
-    });
-  }, [collectionId, collectionName, onCollectionRemoved]);
 
   const colorSchemeStyle = useMemo(() => {
     if (!colorScheme) {
@@ -111,91 +82,133 @@ function CollectionCard(props) {
     };
   }, [colorScheme, localStyle.cardStyle]);
 
-  const fnOnLongPress = useCallback(() => {
-    onLongPress();
-  }, [onLongPress]);
+  const renderArchivePopupMenu = useMemo(() => {
+    const components = [
+      {
+        title: 'Edit',
+        onPress: fnOnEditCollectionPress,
+      },
+      {
+        title: 'Share',
+        onPress: fnOnShareCollectionPress,
+      },
+    ];
+    return (
+      <View>
+        {components.map(item => {
+          return (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={item.onPress}
+              style={localStyle.archivePopupMenuItemContainer}>
+              <Text style={localStyle.archivePopupMenuItemText}>
+                {item.title}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
 
-  useEffect(() => {
-    if (enableDelete) {
-      setIsCollectionSelected(false);
-    }
-  }, [enableDelete]);
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={fnOnCollectionRemove}
+          style={[
+            localStyle.archivePopupMenuItemContainer,
+            localStyle.archivePopupMenuItemDeleteItemContainer,
+          ]}>
+          <Text
+            style={[
+              localStyle.archivePopupMenuItemText,
+              localStyle.archivePopupMenuItemDeleteItemText,
+            ]}>
+            Delete
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }, [
+    fnOnCollectionRemove,
+    fnOnEditCollectionPress,
+    fnOnShareCollectionPress,
+    localStyle.archivePopupMenuItemContainer,
+    localStyle.archivePopupMenuItemDeleteItemContainer,
+    localStyle.archivePopupMenuItemDeleteItemText,
+    localStyle.archivePopupMenuItemText,
+  ]);
 
-  const onCollectionSelect = useCallback(() => {
-    setIsCollectionSelected(prevVal => {
-      if (prevVal) {
-        selectedCollectionIds.splice(
-          selectedCollectionIds.indexOf(collectionId),
-          1,
-        );
-      } else {
-        selectedCollectionIds.push(collectionId);
-      }
-      return !prevVal;
-    });
-  }, [collectionId, selectedCollectionIds]);
-
-  const binContainerStyle = useMemo(
-    () => [{opacity: isCollectionSelected ? 0.5 : 1}, localStyle.binContainer],
-    [isCollectionSelected, localStyle.binContainer],
+  const renderCollectionCard = useCallback(
+    sourceRef => {
+      return (
+        <TouchableWithoutFeedback
+          ref={sourceRef}
+          disabled={disabled}
+          onPress={enableDelete ? fnOnCollectionSelect : fnOnCollectionPress}
+          onLongPress={fnOnLongPress}>
+          <Animatable.View
+            ref={oViewRef}
+            animation="fadeIn"
+            delay={animationDelay}
+            style={localStyle.container}>
+            {collectionId ? (
+              <View style={localStyle.flex1}>
+                {enableDelete && bIsCollectionSelected ? (
+                  <View style={localStyle.tickIconContainerStyle}>
+                    <Image source={TickIcon} style={localStyle.tickIconStyle} />
+                  </View>
+                ) : null}
+                <View style={colorSchemeStyle.cardStyle}>
+                  <Text numberOfLines={3} style={colorSchemeStyle.textStyle}>
+                    {collectionName}
+                  </Text>
+                  {tweetIds.length > 0 ? (
+                    <Text
+                      numberOfLines={1}
+                      style={colorSchemeStyle.tweetCountTextStyle}>
+                      {tweetIds.length}{' '}
+                      {tweetIds.length > 1 ? 'tweets' : 'tweet'}
+                    </Text>
+                  ) : null}
+                </View>
+              </View>
+            ) : null}
+          </Animatable.View>
+        </TouchableWithoutFeedback>
+      );
+    },
+    [
+      animationDelay,
+      bIsCollectionSelected,
+      collectionId,
+      collectionName,
+      colorSchemeStyle.cardStyle,
+      colorSchemeStyle.textStyle,
+      colorSchemeStyle.tweetCountTextStyle,
+      disabled,
+      enableDelete,
+      fnOnCollectionPress,
+      fnOnCollectionSelect,
+      fnOnLongPress,
+      localStyle.container,
+      localStyle.flex1,
+      localStyle.tickIconContainerStyle,
+      localStyle.tickIconStyle,
+      oViewRef,
+      tweetIds,
+    ],
   );
 
   return (
-    <TouchableWithoutFeedback
-      testID={`collection_card_for_${collectionName}`}
-      disabled={disabled}
-      onPress={enableDelete ? onCollectionSelect : onCollectionPress}
-      onLongPress={enableDelete ? null : fnOnLongPress}>
-      <Animatable.View
-        ref={viewRef}
-        animation="fadeIn"
-        delay={animationDelay}
-        style={localStyle.container}>
-        {collectionId ? (
-          <View style={localStyle.flex1}>
-            {enableDelete ? (
-              <View style={localStyle.optionsView}>
-                <TouchableHighlight
-                  testID={`collection_card_for_${collectionName}_remove`}
-                  underlayColor={colors.Transparent}
-                  style={binContainerStyle}
-                  onPress={onCollectionRemove}
-                  disabled={isCollectionSelected}>
-                  <Image source={BinIcon} style={localStyle.binIconStyle} />
-                </TouchableHighlight>
-                <TouchableHighlight
-                  testID={`collection_card_for_${collectionName}_edit`}
-                  underlayColor={colors.Transparent}
-                  style={binContainerStyle}
-                  onPress={onEditCollectionPress}
-                  disabled={isCollectionSelected}>
-                  <Image source={EditIcon} style={localStyle.binIconStyle} />
-                </TouchableHighlight>
-              </View>
-            ) : null}
-            {enableDelete && isCollectionSelected ? (
-              <View style={localStyle.tickIconContainerStyle}>
-                <Image source={TickIcon} style={localStyle.tickIconStyle} />
-              </View>
-            ) : null}
-            <View style={colorSchemeStyle.cardStyle}>
-              <Text numberOfLines={3} style={colorSchemeStyle.textStyle}>
-                {collectionName}
-              </Text>
-              {tweetIds.length > 0 ? (
-                <Text
-                  numberOfLines={1}
-                  style={colorSchemeStyle.tweetCountTextStyle}>
-                  {tweetIds.length} {tweetIds.length > 1 ? 'tweets' : 'tweet'}
-                </Text>
-              ) : null}
-            </View>
-          </View>
-        ) : null}
-      </Animatable.View>
-    </TouchableWithoutFeedback>
+    <Popover
+      onRequestClose={fnHidePopover}
+      isVisible={bIsPopOverVisible}
+      from={renderCollectionCard}
+      popoverStyle={localStyle.archivePopupMenuContainer}
+      backgroundStyle={{
+        backgroundColor: getColorWithOpacity(colors.BlackPearl, 0.6),
+      }}>
+      {renderArchivePopupMenu}
+    </Popover>
   );
-}
+};
 
 const styles = {
   container: {
@@ -254,12 +267,35 @@ const styles = {
     height: layoutPtToPx(42),
     width: layoutPtToPx(57),
   },
-
   cardStyle: {
     flex: 1,
     borderRadius: layoutPtToPx(12),
     justifyContent: 'flex-end',
     paddingBottom: layoutPtToPx(8),
+  },
+  archivePopupMenuContainer: {
+    borderRadius: 10,
+    backgroundColor: getColorWithOpacity(colors.Black, 1),
+  },
+  archivePopupMenuItemContainer: {
+    width: layoutPtToPx(150),
+    paddingHorizontal: layoutPtToPx(20),
+    paddingVertical: layoutPtToPx(10),
+    borderBottomWidth: 1,
+    borderBottomColor: getColorWithOpacity(colors.White, 0.4),
+  },
+  archivePopupMenuItemText: {
+    fontSize: fontPtToPx(18),
+    fontFamily: fonts.InterRegular,
+    color: 'white',
+  },
+  archivePopupMenuItemDeleteItemContainer: {
+    borderTopWidth: 2,
+    borderBottomWidth: 0,
+    borderTopColor: getColorWithOpacity(colors.White, 0.4),
+  },
+  archivePopupMenuItemDeleteItemText: {
+    color: 'red',
   },
 };
 

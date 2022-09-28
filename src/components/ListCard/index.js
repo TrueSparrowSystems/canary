@@ -6,53 +6,36 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import {getRandomColorCombination} from '../../utils/RandomColorUtil';
 import {getInitialsFromName} from '../../utils/TextUtils';
 import fonts from '../../constants/fonts';
-import {ListIcon, SwipeIcon, TickIcon} from '../../assets/common';
+import {ListIcon, TickIcon} from '../../assets/common';
 import * as Animatable from 'react-native-animatable';
-import AppleStyleSwipeableRow from '../AppleStyleSwipeableRow';
 import useListCardData from './useListCardData';
-import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {TouchableOpacity, TouchableWithoutFeedback} from '@plgworks/applogger';
-import {isTablet} from 'react-native-device-info';
+import Popover from 'react-native-popover-view';
 
 function ListCard(props) {
   const {
     data,
-    onListRemoved,
-    onCardLongPress,
     enableSwipe,
-    disableSwipeInteraction = false,
     shouldShowAddButton,
-    userName,
-    onAddToListSuccess,
-    onRemoveFromListSuccess,
     isPressDisabled = false,
-    selectedListIds,
   } = props;
-  const {id: listId, name: listName, userNames, colorCombination} = data;
+  const {id: listId, name: listName, colorCombination} = data;
   const localStyle = useStyleProcessor(styles, 'ListCard');
 
   const {
     bIsListSelected,
-    viewRef,
+    oViewRef,
+    oAddButtonData,
+    bIsPopOverVisible,
+    fnHidePopover,
     fnGetDescriptionText,
     fnOnListPress,
     fnOnListSelect,
-    fnOnListRemove,
-    oAddButtonData,
     fnOnLongPress,
-  } = useListCardData(
-    onListRemoved,
-    userName,
-    userNames,
-    listId,
-    listName,
-    onAddToListSuccess,
-    onRemoveFromListSuccess,
-    shouldShowAddButton,
-    onCardLongPress,
-    enableSwipe,
-    selectedListIds,
-  );
+    fnOnEditPress,
+    fnOnRemovePress,
+    fnOnShareListPress,
+  } = useListCardData(props);
 
   const listIntials = getInitialsFromName(listName);
   const listIconStyle = useMemo(() => {
@@ -83,49 +66,9 @@ function ListCard(props) {
     localStyle.listImageStyle,
   ]);
 
-  const onRemovePress = useCallback(() => {
-    viewRef.current.setNativeProps({
-      useNativeDriver: true,
-    });
-    viewRef.current.animate('bounceOutLeft').then(() => {
-      fnOnListRemove();
-    });
-  }, [fnOnListRemove, viewRef]);
-
-  const onEditPress = useCallback(() => {
-    LocalEvent.emit(EventTypes.ShowAddListModal, {
-      name: listName,
-      id: listId,
-    });
-  }, [listId, listName]);
-
-  const swipeIconStyle = useMemo(
-    () => [localStyle.swipeIconStyle, {opacity: bIsListSelected ? 0.4 : 1}],
-    [bIsListSelected, localStyle.swipeIconStyle],
-  );
-
-  return (
-    <Animatable.View animation={'fadeIn'} ref={viewRef} key={listId}>
-      <AppleStyleSwipeableRow
-        id={listId}
-        disableSwipeInteraction={disableSwipeInteraction}
-        enabled={enableSwipe && !bIsListSelected}
-        textStyle={localStyle.removeButtonStyle}
-        rightActionsArray={[
-          {
-            actionName: 'Remove',
-            color: colors.BitterSweet,
-            width: isTablet() ? 80 : 64,
-            onPress: onRemovePress,
-          },
-          {
-            actionName: 'Edit',
-            color: colors.LightGrey,
-            width: isTablet() ? 80 : 64,
-            onPress: onEditPress,
-          },
-        ]}
-        shouldRenderRightAction={true}>
+  const renderListCard = useCallback(() => {
+    return (
+      <Animatable.View animation={'fadeIn'} ref={oViewRef} key={listId}>
         <TouchableWithoutFeedback
           testID={`list_card_for_${listName}`}
           onPress={enableSwipe ? fnOnListSelect : fnOnListPress}
@@ -156,9 +99,6 @@ function ListCard(props) {
                 </Text>
               </View>
             </View>
-            {enableSwipe ? (
-              <Image source={SwipeIcon} style={swipeIconStyle} />
-            ) : null}
             {shouldShowAddButton ? (
               <TouchableOpacity
                 testID={`list_card_for_${listName}_toggle`}
@@ -182,8 +122,102 @@ function ListCard(props) {
             ) : null}
           </View>
         </TouchableWithoutFeedback>
-      </AppleStyleSwipeableRow>
-    </Animatable.View>
+      </Animatable.View>
+    );
+  }, [
+    bIsListSelected,
+    enableSwipe,
+    fnGetDescriptionText,
+    fnOnListPress,
+    fnOnListSelect,
+    fnOnLongPress,
+    isPressDisabled,
+    listIconStyle.backgroundStyle,
+    listIconStyle.listIcon,
+    listIconStyle.textStyle,
+    listId,
+    listIntials,
+    listName,
+    localStyle.cardDetailContainer,
+    localStyle.container,
+    localStyle.descriptionTextStyle,
+    localStyle.listNameContainer,
+    localStyle.listNameStyle,
+    localStyle.primaryAddButtonContainer,
+    localStyle.primaryAddText,
+    localStyle.secondaryAddButtonContainer,
+    localStyle.secondaryAddText,
+    localStyle.tickIconContainerStyle,
+    localStyle.tickIconStyle,
+    oAddButtonData.buttonText,
+    oAddButtonData.buttonType,
+    oAddButtonData.onPress,
+    shouldShowAddButton,
+    oViewRef,
+  ]);
+
+  const renderListPopupMenu = useMemo(() => {
+    const components = [
+      {
+        title: 'Edit',
+        onPress: fnOnEditPress,
+      },
+      {
+        title: 'Share',
+        onPress: fnOnShareListPress,
+      },
+    ];
+    return (
+      <View>
+        {components.map(item => {
+          return (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={item.onPress}
+              style={localStyle.listPopupMenuItemContainer}>
+              <Text style={localStyle.listPopupMenuItemText}>{item.title}</Text>
+            </TouchableOpacity>
+          );
+        })}
+
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={fnOnRemovePress}
+          style={[
+            localStyle.listPopupMenuItemContainer,
+            localStyle.listPopupMenuItemDeleteItemContainer,
+          ]}>
+          <Text
+            style={[
+              localStyle.listPopupMenuItemText,
+              localStyle.listPopupMenuItemDeleteItemText,
+            ]}>
+            Delete
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }, [
+    fnOnEditPress,
+    fnOnRemovePress,
+    fnOnShareListPress,
+    localStyle.listPopupMenuItemContainer,
+    localStyle.listPopupMenuItemDeleteItemContainer,
+    localStyle.listPopupMenuItemDeleteItemText,
+    localStyle.listPopupMenuItemText,
+  ]);
+
+  return (
+    <Popover
+      onRequestClose={fnHidePopover}
+      isVisible={bIsPopOverVisible}
+      from={renderListCard}
+      popoverStyle={localStyle.listPopupMenuContainer}
+      backgroundStyle={{
+        backgroundColor: getColorWithOpacity(colors.BlackPearl, 0.6),
+      }}>
+      {renderListPopupMenu}
+    </Popover>
   );
 }
 
@@ -300,6 +334,30 @@ const styles = {
   listImageStyle: {
     height: layoutPtToPx(20),
     width: layoutPtToPx(20),
+  },
+  listPopupMenuContainer: {
+    borderRadius: 10,
+    backgroundColor: getColorWithOpacity(colors.Black, 1),
+  },
+  listPopupMenuItemContainer: {
+    width: layoutPtToPx(150),
+    paddingHorizontal: layoutPtToPx(20),
+    paddingVertical: layoutPtToPx(10),
+    borderBottomWidth: 1,
+    borderBottomColor: getColorWithOpacity(colors.White, 0.4),
+  },
+  listPopupMenuItemText: {
+    fontSize: fontPtToPx(18),
+    fontFamily: fonts.InterRegular,
+    color: 'white',
+  },
+  listPopupMenuItemDeleteItemContainer: {
+    borderTopWidth: 2,
+    borderBottomWidth: 0,
+    borderTopColor: getColorWithOpacity(colors.White, 0.4),
+  },
+  listPopupMenuItemDeleteItemText: {
+    color: 'red',
   },
 };
 

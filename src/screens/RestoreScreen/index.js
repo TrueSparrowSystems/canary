@@ -140,6 +140,7 @@ const styles = {
     lineHeight: layoutPtToPx(17),
     color: colors.GoldenTainoi,
     textAlign: 'center',
+    textDecorationLine: 'underline',
   },
   restartTextView: {
     justifyContent: 'flex-end',

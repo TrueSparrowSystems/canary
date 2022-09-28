@@ -34,6 +34,7 @@ function SettingScreen() {
       ({titleText, subTitleText, onPress}) => {
         return (
           <TouchableOpacity
+            activeOpacity={0.8}
             testID={`setting_screen_${titleText}_card`}
             onPress={onPress}
             style={localStyle.cardContainer}>

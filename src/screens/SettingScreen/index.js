@@ -20,8 +20,12 @@ import useSettingScreenData from './useSettingScreenData';
 
 function SettingScreen() {
   const localStyle = useStyleProcessor(styles, 'SettingScreen');
-  const {fnOnInfoPress, fnOnShareAppPress, fnOnPersonalizeFeedPress} =
-    useSettingScreenData();
+  const {
+    fnOnInfoPress,
+    fnOnShareAppPress,
+    fnOnPersonalizeFeedPress,
+    fnOnRestorePress,
+  } = useSettingScreenData();
   const _backupRestoreHelper = BackupRestoreHelper;
 
   const Card = useMemo(
@@ -88,11 +92,7 @@ function SettingScreen() {
           <Card
             titleText={'Restore your data'}
             subTitleText={'Restore data using URL'}
-            onPress={() => {
-              _backupRestoreHelper.restoreDataFromFirebase({
-                onRestoreSuccess: () => {},
-              });
-            }}
+            onPress={fnOnRestorePress}
           />
           <RoundedButton
             testID="setting_screen_clear_all_data"

@@ -45,5 +45,9 @@ export const Constants = {
     woeid: 1,
   },
   Encryption: {salt: 'plg_canary', cost: 5000, length: 256},
-  KeysIgnoredForBackup: [StoreKeys.IsAppReloaded, StoreKeys.DeviceCanaryId],
+  KeysIgnoredForBackup: [
+    StoreKeys.IsAppReloaded,
+    StoreKeys.DeviceCanaryId,
+    StoreKeys.DeviceBackupUrl,
+  ],
 };

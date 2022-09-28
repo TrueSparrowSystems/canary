@@ -9,8 +9,9 @@ import {getColorWithOpacity} from '../../constants/colors';
 import RoundedButton from '../../components/common/RoundedButton';
 import useRestoreScreenData from './useRestoreScreenData';
 
-function RestoreScreen() {
+function RestoreScreen(props) {
   const localStyle = useStyleProcessor(styles, 'RestoreScreen');
+  const params = props?.route?.params;
 
   const {
     bIsLoading,
@@ -19,7 +20,7 @@ function RestoreScreen() {
     sErrorText,
     fnOnBackupUrlChange,
     fnOnConfirmButtonPress,
-  } = useRestoreScreenData();
+  } = useRestoreScreenData(params);
 
   return (
     <View style={localStyle.container}>

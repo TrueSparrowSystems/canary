@@ -196,6 +196,28 @@ class BackupRestoreHelper {
     });
   }
 
+  async restoreData({backupUrl, onRestoreSuccess}) {
+    return new Promise((resolve, reject) => {
+      LocalEvent.emit(EventTypes.CommonLoader.Show);
+      // Decrypt backup url and get canary id
+      let canaryId = '';
+      this.getResponseDataFromFirebase(canaryId)
+        .then(() => {
+          // decrypt data if req
+          // set in async store
+          // restart app
+          return resolve();
+        })
+        .catch(() => {
+          // TODO: remove timeout
+          setTimeout(() => {
+            LocalEvent.emit(EventTypes.CommonLoader.Hide);
+          }, 2000);
+          return reject();
+        });
+    });
+  }
+
   async restoreDataFromFirebase({onRestoreSuccess}) {
     return new Promise((resolve, reject) => {
       this.getResponseDataFromFirebase()

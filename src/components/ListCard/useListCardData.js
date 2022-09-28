@@ -1,29 +1,36 @@
 import {useNavigation} from '@react-navigation/native';
 import {useCallback, useEffect, useRef, useState} from 'react';
-import Toast from 'react-native-toast-message';
+import {Share} from 'react-native';
+import {Constants} from '../../constants/Constants';
 import ScreenName from '../../constants/ScreenName';
-import {ToastType} from '../../constants/ToastConstants';
 import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 import {listService} from '../../services/ListService';
+import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
-function useListCardData(
-  onListRemoved,
-  userName,
-  userNames,
-  listId,
-  listName,
-  onAddToListSuccess,
-  onRemoveFromListSuccess,
-  shouldShowAddButton,
-  onCardLongPress,
-  enableSwipe,
-  selectedListIds,
-) {
-  const navigation = useNavigation();
-  const dataRef = useRef({});
+function useListCardData(props) {
+  const {
+    data: propsData,
+    enableSwipe,
+    shouldShowAddButton,
+    userName,
+    onAddToListSuccess,
+    onRemoveFromListSuccess,
+    selectedListIds,
+  } = props;
+  const {id: listId, name: listName, userNames} = propsData;
+
   const [data, setData] = useState({});
   const [isListSelected, setIsListSelected] = useState(false);
+  const [isPopOverVisible, setIsPopOverVisible] = useState(false);
+
+  const dataRef = useRef({});
+  const viewRef = useRef(null);
+
+  const navigation = useNavigation();
+
+  const _listService = listService();
+
   const onListPress = useCallback(() => {
     navigation.navigate(ScreenName.ListTweetsScreen, {
       listId,
@@ -31,8 +38,6 @@ function useListCardData(
       listUserNames: userNames,
     });
   }, [listId, listName, navigation, userNames]);
-
-  const viewRef = useRef();
 
   useEffect(() => {
     updateAddButtonData();
@@ -46,23 +51,27 @@ function useListCardData(
   }, [enableSwipe]);
 
   const onAddToListPress = useCallback(() => {
-    listService()
-      .addUserToList(listId, userName)
-      .then(() => {
-        updateAddButtonData();
-        onAddToListSuccess(listName, listId);
-      });
-  }, [listId, listName, onAddToListSuccess, updateAddButtonData, userName]);
+    _listService.addUserToList(listId, userName).then(() => {
+      updateAddButtonData();
+      onAddToListSuccess(listName, listId);
+    });
+  }, [
+    _listService,
+    listId,
+    listName,
+    onAddToListSuccess,
+    updateAddButtonData,
+    userName,
+  ]);
 
   const onRemoveFromListPress = useCallback(() => {
-    listService()
-      .removeUserFromList(listId, userName)
-      .then(() => {
-        updateAddButtonData();
-        onRemoveFromListSuccess?.(listName, listId);
-        //Show Remove from list toast
-      });
+    _listService.removeUserFromList(listId, userName).then(() => {
+      updateAddButtonData();
+      onRemoveFromListSuccess?.(listName, listId);
+      //Show Remove from list toast
+    });
   }, [
+    _listService,
     listId,
     listName,
     onRemoveFromListSuccess,
@@ -71,22 +80,15 @@ function useListCardData(
   ]);
 
   const onListRemove = useCallback(() => {
-    listService()
-      .removeList(listId)
-      .then(() => {
-        onListRemoved();
-        Toast.show({
-          type: ToastType.Success,
-          text1: 'Removed list.',
-        });
-      })
-      .catch(() => {
-        Toast.show({
-          type: ToastType.Error,
-          text1: 'Error in removing list.',
-        });
-      });
-  }, [listId, onListRemoved]);
+    hidePopover();
+    LocalEvent.emit(EventTypes.ShowDeleteConfirmationModal, {
+      id: listId,
+      name: listName,
+      onCollectionRemoved: () => {},
+      type: Constants.ConfirmDeleteModalType.List,
+      testID: 'remove_list',
+    });
+  }, [hidePopover, listId, listName]);
 
   const getDescriptionText = useCallback(() => {
     if (userNames.length === 0) {
@@ -124,12 +126,8 @@ function useListCardData(
   ]);
 
   const onLongPress = useCallback(() => {
-    viewRef.current.setNativeProps({
-      useNativeDriver: true,
-    });
-    viewRef.current.animate('pulse');
-    onCardLongPress();
-  }, [onCardLongPress]);
+    showPopover();
+  }, [showPopover]);
 
   const onListSelect = useCallback(() => {
     setIsListSelected(prevVal => {
@@ -142,15 +140,51 @@ function useListCardData(
     });
   }, [listId, selectedListIds]);
 
+  const showPopover = useCallback(() => {
+    setIsPopOverVisible(true);
+  }, []);
+
+  const hidePopover = useCallback(() => {
+    setIsPopOverVisible(false);
+  }, []);
+
+  const onRemovePress = useCallback(() => {
+    hidePopover();
+
+    onListRemove();
+  }, [hidePopover, onListRemove]);
+
+  const onEditPress = useCallback(() => {
+    hidePopover();
+
+    LocalEvent.emit(EventTypes.ShowAddListModal, {
+      name: listName,
+      id: listId,
+    });
+  }, [hidePopover, listId, listName]);
+
+  const onShareListPress = useCallback(() => {
+    _listService
+      .exportList([listId])
+      .then(res => {
+        Share.share({message: res});
+      })
+      .catch(() => {});
+  }, [_listService, listId]);
+
   return {
     bIsListSelected: isListSelected,
-    viewRef: viewRef,
+    oViewRef: viewRef,
+    bIsPopOverVisible: isPopOverVisible,
+    oAddButtonData: dataRef.current,
+    fnHidePopover: hidePopover,
     fnOnListPress: onListPress,
-    fnOnListRemove: onListRemove,
+    fnOnRemovePress: onRemovePress,
     fnOnListSelect: onListSelect,
     fnGetDescriptionText: getDescriptionText,
-    oAddButtonData: dataRef.current,
     fnOnLongPress: onLongPress,
+    fnOnEditPress: onEditPress,
+    fnOnShareListPress: onShareListPress,
   };
 }
 export default useListCardData;

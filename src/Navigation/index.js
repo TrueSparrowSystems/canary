@@ -37,6 +37,7 @@ import {isTablet} from 'react-native-device-info';
 import SettingScreen from '../screens/SettingScreen';
 import BackupScreen from '../screens/BackupScreen';
 import BackupIntroductionScreen from '../screens/BackupIntroductionScreen';
+import RestoreScreen from '../screens/RestoreScreen';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -185,6 +186,17 @@ const Navigation = props => {
             ...TransitionPresets.SlideFromRightIOS,
           }}
         />
+        <TimelineStack.Screen
+          name={ScreenName.RestoreScreen}
+          component={RestoreScreen}
+          options={{
+            gestureEnabled: true,
+            headerShown: false,
+            tabBarVisible: false,
+            detachPreviousScreen: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          }}
+        />
       </TimelineStack.Navigator>
     );
   }
@@ -203,6 +215,7 @@ const Navigation = props => {
       case ScreenName.SettingScreen:
       case ScreenName.BackupIntroductionScreen:
       case ScreenName.BackupScreen:
+      case ScreenName.RestoreScreen:
         return false;
       default:
         return true;

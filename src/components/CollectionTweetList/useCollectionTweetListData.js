@@ -76,7 +76,7 @@ function useCollectionTweetListData(props) {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [tweetIds?.length]);
 
   const onRefresh = useCallback(() => {
     fetchData();

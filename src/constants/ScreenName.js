@@ -23,4 +23,5 @@ export default {
   SettingScreen: 'SettingScreen',
   BackupScreen: 'BackupScreen',
   BackupIntroductionScreen: 'BackupIntroductionScreen',
+  RestoreScreen: 'RestoreScreen',
 };

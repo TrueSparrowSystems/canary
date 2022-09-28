@@ -23,8 +23,9 @@ function SettingScreen() {
   const {
     fnOnBackupPress,
     fnOnInfoPress,
-    fnOnShareAppPress,
     fnOnPersonalizeFeedPress,
+    fnOnRestorePress,
+    fnOnShareAppPress,
   } = useSettingScreenData();
   const _backupRestoreHelper = BackupRestoreHelper;
 
@@ -88,11 +89,7 @@ function SettingScreen() {
           <Card
             titleText={'Restore your data'}
             subTitleText={'Restore data using URL'}
-            onPress={() => {
-              _backupRestoreHelper.restoreDataFromFirebase({
-                onRestoreSuccess: () => {},
-              });
-            }}
+            onPress={fnOnRestorePress}
           />
           <RoundedButton
             testID="setting_screen_clear_all_data"

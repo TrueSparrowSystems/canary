@@ -34,11 +34,16 @@ function useSettingScreenData() {
     });
   }, [navigation]);
 
+  const onRestorePress = useCallback(() => {
+    navigation.navigate(ScreenName.RestoreScreen);
+  }, [navigation]);
+
   return {
     fnOnBackupPress: onBackupPress,
     fnOnInfoPress: onInfoPress,
     fnOnShareAppPress: onShareAppPress,
     fnOnPersonalizeFeedPress: onPersonalizeFeedPress,
+    fnOnRestorePress: onRestorePress,
   };
 }
 export default useSettingScreenData;

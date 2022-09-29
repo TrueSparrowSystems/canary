@@ -125,72 +125,74 @@ function TweetCard(props) {
             {unescape(text)}
           </TwitterTextView>
           {bHasMedia ? <ImageCard mediaArray={media} tweetId={id} /> : null}
-          <View style={localStyle.likeCommentStrip}>
-            <TouchableOpacity
-              testID={`${testID}_tweet_card_with_id_${id}_like`}
-              style={localStyle.flexRow}
-              onPress={fnOnLikePress}>
-              <Image source={likeIcon} style={localStyle.iconStyle} />
-              <Text style={localStyle.publicMetricText}>
-                {public_metrics?.like_count === 0
-                  ? 0
-                  : getFormattedStat(public_metrics?.like_count)}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              testID={`${testID}_tweet_card_with_id_${id}_reply`}
-              style={localStyle.flexRow}
-              onPress={fnOnLikePress}>
-              {public_metrics?.reply_count > 0 ? (
-                <View style={localStyle.flexRow}>
-                  <Image source={commentIcon} style={localStyle.iconStyle} />
-                  <Text style={localStyle.publicMetricText}>
-                    {getFormattedStat(public_metrics?.reply_count)}
-                  </Text>
-                </View>
-              ) : null}
-            </TouchableOpacity>
-            <View style={localStyle.optionsView}>
+          {disablePointerEvents ? null : (
+            <View style={localStyle.likeCommentStrip}>
               <TouchableOpacity
-                testID={`${testID}_tweet_card_with_id_${id}_share`}
-                onPress={fnOnSharePress}
-                style={localStyle.shareIconContainer}
-                hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
-                <Image source={ShareIcon} style={localStyle.shareIconStyle} />
+                testID={`${testID}_tweet_card_with_id_${id}_like`}
+                style={localStyle.flexRow}
+                onPress={fnOnLikePress}>
+                <Image source={likeIcon} style={localStyle.iconStyle} />
+                <Text style={localStyle.publicMetricText}>
+                  {public_metrics?.like_count === 0
+                    ? 0
+                    : getFormattedStat(public_metrics?.like_count)}
+                </Text>
               </TouchableOpacity>
-              {bCanShare ? (
+              <TouchableOpacity
+                testID={`${testID}_tweet_card_with_id_${id}_reply`}
+                style={localStyle.flexRow}
+                onPress={fnOnLikePress}>
+                {public_metrics?.reply_count > 0 ? (
+                  <View style={localStyle.flexRow}>
+                    <Image source={commentIcon} style={localStyle.iconStyle} />
+                    <Text style={localStyle.publicMetricText}>
+                      {getFormattedStat(public_metrics?.reply_count)}
+                    </Text>
+                  </View>
+                ) : null}
+              </TouchableOpacity>
+              <View style={localStyle.optionsView}>
                 <TouchableOpacity
-                  testID={`${testID}_tweet_card_with_id_${id}_twitter`}
-                  onPress={fnOnTwitterIconPress}
+                  testID={`${testID}_tweet_card_with_id_${id}_share`}
+                  onPress={fnOnSharePress}
                   style={localStyle.shareIconContainer}
                   hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
+                  <Image source={ShareIcon} style={localStyle.shareIconStyle} />
+                </TouchableOpacity>
+                {bCanShare ? (
+                  <TouchableOpacity
+                    testID={`${testID}_tweet_card_with_id_${id}_twitter`}
+                    onPress={fnOnTwitterIconPress}
+                    style={localStyle.shareIconContainer}
+                    hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
+                    <Image
+                      source={TwitterIcon}
+                      style={localStyle.twitterIconStyle}
+                    />
+                  </TouchableOpacity>
+                ) : null}
+                <TouchableOpacity
+                  testID={`${testID}_tweet_card_with_id_${id}_bookmark`}
+                  onPress={fnOnBookmarkButtonPress}
+                  hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
                   <Image
-                    source={TwitterIcon}
-                    style={localStyle.twitterIconStyle}
+                    source={
+                      bIsTweetBookmarked || showBookmarked
+                        ? bookmarkedIcon
+                        : bookmarkIcon
+                    }
+                    style={localStyle.bookmarkIconStyle}
                   />
                 </TouchableOpacity>
-              ) : null}
-              <TouchableOpacity
-                testID={`${testID}_tweet_card_with_id_${id}_bookmark`}
-                onPress={fnOnBookmarkButtonPress}
-                hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
-                <Image
-                  source={
-                    bIsTweetBookmarked || showBookmarked
-                      ? bookmarkedIcon
-                      : bookmarkIcon
-                  }
-                  style={localStyle.bookmarkIconStyle}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                testID={`${testID}_tweet_card_with_id_${id}_list`}
-                onPress={fnOnAddToListPress}
-                hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
-                <Image source={ListIcon} style={localStyle.listIconStyle} />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  testID={`${testID}_tweet_card_with_id_${id}_list`}
+                  onPress={fnOnAddToListPress}
+                  hitSlop={{top: 10, left: 10, right: 10, bottom: 10}}>
+                  <Image source={ListIcon} style={localStyle.listIconStyle} />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          )}
         </View>
       </TouchableOpacity>
     </Animatable.View>

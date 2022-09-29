@@ -1,0 +1,85 @@
+diff --git a/node_modules/react-native-pdf/DoubleTapView.js b/node_modules/react-native-pdf/DoubleTapView.js
+index f0f38db..622780c 100644
+--- a/node_modules/react-native-pdf/DoubleTapView.js
++++ b/node_modules/react-native-pdf/DoubleTapView.js
+@@ -11,10 +11,11 @@ import React, {Component} from 'react';
+ import {
+     View,
+     PanResponder,
+-    ViewPropTypes,
+ } from 'react-native';
+ import PropTypes from 'prop-types';
+ 
++import {ViewPropTypes} from 'deprecated-react-native-prop-types'
++
+ export default class DoubleTapView extends Component {
+ 
+     static propTypes = {
+diff --git a/node_modules/react-native-pdf/PdfPageView.js b/node_modules/react-native-pdf/PdfPageView.js
+index 888fc3a..7fa18a3 100644
+--- a/node_modules/react-native-pdf/PdfPageView.js
++++ b/node_modules/react-native-pdf/PdfPageView.js
+@@ -11,9 +11,9 @@
+ import React, {PureComponent} from 'react';
+ import PropTypes from 'prop-types';
+ import {
+-    ViewPropTypes,
+     requireNativeComponent,
+ } from 'react-native';
++import {ViewPropTypes} from 'deprecated-react-native-prop-types'
+ 
+ export default class PdfPageView extends PureComponent {
+     _getStylePropsProps = () => {
+diff --git a/node_modules/react-native-pdf/PdfView.js b/node_modules/react-native-pdf/PdfView.js
+index cd1153d..c1afebe 100644
+--- a/node_modules/react-native-pdf/PdfView.js
++++ b/node_modules/react-native-pdf/PdfView.js
+@@ -8,7 +8,7 @@
+ 
+ 'use strict';
+ import React, {Component} from 'react';
+-import {ScrollView, FlatList, View, StyleSheet, ViewPropTypes} from 'react-native';
++import {ScrollView, FlatList, View, StyleSheet} from 'react-native';
+ 
+ import PropTypes from 'prop-types';
+ 
+@@ -17,6 +17,7 @@ import PdfPageView from './PdfPageView';
+ import DoubleTapView from './DoubleTapView';
+ import PinchZoomView from './PinchZoomView';
+ import PdfViewFlatList from './PdfViewFlatList';
++import {ViewPropTypes} from 'deprecated-react-native-prop-types'
+ 
+ const MIN_SCALE = 1;
+ const MAX_SCALE = 3;
+diff --git a/node_modules/react-native-pdf/PinchZoomView.js b/node_modules/react-native-pdf/PinchZoomView.js
+index 4533480..1cd5358 100644
+--- a/node_modules/react-native-pdf/PinchZoomView.js
++++ b/node_modules/react-native-pdf/PinchZoomView.js
+@@ -13,8 +13,8 @@ import {
+     View,
+     StyleSheet,
+     PanResponder,
+-    ViewPropTypes,
+ } from 'react-native';
++import {ViewPropTypes} from 'deprecated-react-native-prop-types'
+ 
+ export default class PinchZoomView extends Component {
+ 
+diff --git a/node_modules/react-native-pdf/index.js b/node_modules/react-native-pdf/index.js
+index 10d65e4..48a5899 100644
+--- a/node_modules/react-native-pdf/index.js
++++ b/node_modules/react-native-pdf/index.js
+@@ -13,12 +13,12 @@ import {
+     requireNativeComponent,
+     View,
+     Platform,
+-    ViewPropTypes,
+     StyleSheet,
+     Image,
+     Text
+ } from 'react-native';
+ 
++import {ViewPropTypes} from 'deprecated-react-native-prop-types'
+ import ReactNativeBlobUtil from 'react-native-blob-util'
+ 
+ const SHA1 = require('crypto-js/sha1');

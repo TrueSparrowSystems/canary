@@ -63,6 +63,12 @@ export default function useLandingScreenData({isNotOnboardingScreen}) {
     }
   }, [carousalData.length, isNotOnboardingScreen, navigation]);
 
+  const onRestorePress = useCallback(() => {
+    navigation.navigate(ScreenName.RestoreScreen, {
+      isOnboardingFlow: !isNotOnboardingScreen,
+    });
+  }, [isNotOnboardingScreen, navigation]);
+
   useEffect(() => {
     if (!isNotOnboardingScreen) {
       AsyncStoreHelper.setInitialStoreValues();
@@ -77,6 +83,7 @@ export default function useLandingScreenData({isNotOnboardingScreen}) {
     nActiveIndex: activeIndexRef.current,
     fnSetFlatListRef: setFlatListRef,
     fnOnMomentumScrollEnd: _onMomentumScrollEnd,
+    fnOnRestorePress: onRestorePress,
     fnOnContinuePress: onContinuePress,
   };
 }

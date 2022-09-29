@@ -25,6 +25,7 @@ function LandingScreen(props) {
     fnOnMomentumScrollEnd,
     fnSetFlatListRef,
     fnOnContinuePress,
+    fnOnRestorePress,
   } = useLandingScreenData({isNotOnboardingScreen});
 
   const renderItemStyle = useMemo(() => {
@@ -147,6 +148,18 @@ function LandingScreen(props) {
             underlayColor={colors.GoldenTainoi80}
             {...buttonOptions}
           />
+          {!isNotOnboardingScreen && nActiveIndex === 0 ? (
+            <RoundedButton
+              testID={'landing_screen_backup'}
+              style={localStyle.secondaryRoundedButton}
+              textStyle={localStyle.secondaryRoundedButtonText}
+              onPress={fnOnRestorePress}
+              underlayColor={getColorWithOpacity(colors.Black, 0.2)}
+              text={'I am Using Canary Already'}
+            />
+          ) : (
+            <View />
+          )}
         </View>
       </View>
     </View>
@@ -194,6 +207,24 @@ const style = {
   continueButtonIcon: {
     height: layoutPtToPx(12),
     width: layoutPtToPx(16.5),
+  },
+  secondaryRoundedButton: {
+    borderWidth: 1,
+    borderColor: colors.BlackPearl,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: layoutPtToPx(40),
+    borderRadius: layoutPtToPx(25),
+    marginTop: layoutPtToPx(20),
+  },
+  secondaryRoundedButtonText: {
+    fontSize: fontPtToPx(14),
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: colors.BlackPearl,
+    fontFamily: fonts.SoraSemiBold,
   },
   primaryText: {
     fontFamily: fonts.SoraSemiBold,

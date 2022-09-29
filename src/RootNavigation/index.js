@@ -14,6 +14,7 @@ import {handleDynamicUrl} from '../services/DynamicLinkingHelper';
 import AsyncStorage from '../services/AsyncStorage';
 import {StoreKeys} from '../services/AsyncStorage/StoreConstants';
 import RestoreScreen from '../screens/RestoreScreen';
+import InAppPdfViewerScreen from '../screens/InAppPdfViewerScreen';
 
 const AppStack = createSharedElementStackNavigator();
 const OnBoardingStack = createSharedElementStackNavigator();
@@ -133,6 +134,13 @@ const LaunchStack = () => (
     <OnBoardingStack.Screen
       name={ScreenName.RestoreScreen}
       component={RestoreScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <OnBoardingStack.Screen
+      name={ScreenName.InAppPdfViewerScreen}
+      component={InAppPdfViewerScreen}
       options={{
         headerShown: false,
       }}

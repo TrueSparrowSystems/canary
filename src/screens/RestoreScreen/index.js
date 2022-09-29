@@ -35,10 +35,16 @@ function RestoreScreen(props) {
         <ActivityIndicator animating={bIsLoading} />
       ) : (
         <View style={localStyle.flex}>
+          {params?.isOnboardingFlow ? (
+            <Text style={localStyle.alreadyUsingCanaryText}>
+              If you are already using Canary you can use you backup URL to
+              restore all your data.
+            </Text>
+          ) : null}
           <Text style={localStyle.secondaryHeaderText}>
             Please enter your backup URL
           </Text>
-          {sRestoreText ? (
+          {!params?.isOnboardingFlow && sRestoreText ? (
             <Text style={localStyle.restoreTimeText}>{sRestoreText}</Text>
           ) : null}
           <TextInput
@@ -84,6 +90,13 @@ const styles = {
   headerStyle: {
     height: layoutPtToPx(50),
     justifyContent: 'center',
+  },
+  alreadyUsingCanaryText: {
+    fontFamily: fonts.InterMedium,
+    fontSize: fontPtToPx(16),
+    lineHeight: layoutPtToPx(24),
+    color: colors.BlackPearl,
+    marginTop: layoutPtToPx(5),
   },
   headerText: {
     fontFamily: fonts.SoraSemiBold,

@@ -13,6 +13,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {handleDynamicUrl} from '../services/DynamicLinkingHelper';
 import AsyncStorage from '../services/AsyncStorage';
 import {StoreKeys} from '../services/AsyncStorage/StoreConstants';
+import RestoreScreen from '../screens/RestoreScreen';
 
 const AppStack = createSharedElementStackNavigator();
 const OnBoardingStack = createSharedElementStackNavigator();
@@ -125,6 +126,13 @@ const LaunchStack = () => (
     <OnBoardingStack.Screen
       name={ScreenName.PreferenceScreen}
       component={PreferenceScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <OnBoardingStack.Screen
+      name={ScreenName.RestoreScreen}
+      component={RestoreScreen}
       options={{
         headerShown: false,
       }}

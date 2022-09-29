@@ -155,7 +155,7 @@ function LandingScreen(props) {
               textStyle={localStyle.secondaryRoundedButtonText}
               onPress={fnOnRestorePress}
               underlayColor={getColorWithOpacity(colors.Black, 0.2)}
-              text={'I am Using Canary Already'}
+              text={'I am using Canary already'}
             />
           ) : (
             <View />

@@ -86,6 +86,9 @@ const styles = {
   },
   imageStyle: {
     maxHeight: layoutPtToPx(150),
+    tablet: {
+      maxHeight: layoutPtToPx(250),
+    },
     width: '100%',
     alignSelf: 'center',
     borderRadius: layoutPtToPx(8),

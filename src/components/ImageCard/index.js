@@ -1,8 +1,6 @@
-import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Text, View} from 'react-native';
 import {PlayIcon} from '../../assets/common';
-import ScreenName from '../../constants/ScreenName';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import Image from 'react-native-fast-image';
 import TwitterAPI from '../../api/helpers/TwitterAPI';
@@ -17,7 +15,6 @@ import {TouchableWithoutFeedback} from '@plgworks/applogger';
 
 function ImageCard({mediaArray, tweetId}) {
   const localStyle = useStyleProcessor(styles, 'ImageCard');
-  const navigation = useNavigation();
   const onImagePress = useCallback(
     index => {
       LocalEvent.emit(EventTypes.OpenImageViewer, {
@@ -166,8 +163,8 @@ function ImageCard({mediaArray, tweetId}) {
       <TouchableWithoutFeedback
         testID={`${tweetId}_tweet_video_card_play`}
         onPress={() => {
-          navigation.navigate(ScreenName.VideoPlayerScreen, {
-            videoUrl: videoUrl,
+          LocalEvent.emit(EventTypes.OpenVideoPlayer, {
+            videoUrl,
             aspectRatio: aspectRatio.current,
           });
         }}>
@@ -251,9 +248,6 @@ const styles = {
     },
   },
   showVideo: {
-    flex: 1,
-    borderWidth: 0.5,
-    borderColor: 'white',
     borderRadius: 4,
     aspectRatio: 1,
   },

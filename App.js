@@ -21,6 +21,7 @@ import CommonConfirmationModal from './src/components/common/CommonConfirmationM
 import AppStateManager from './src/services/AppStateManager';
 import {isTablet} from 'react-native-device-info';
 import {HelperMenu, useAppLogger} from '@plgworks/applogger';
+import VideoPlayerScreen from './src/screens/VideoPlayerScreen';
 
 const ENABLE_YELLOW_BOX_IN_DEBUG_MODE = true;
 
@@ -80,6 +81,7 @@ function App() {
         <SearchUserModal />
         <AddToListModal />
         <CustomImageViewer />
+        <VideoPlayerScreen />
         <CommonLoader />
         <RedirectConfirmationModal />
       </NavigationContainer>

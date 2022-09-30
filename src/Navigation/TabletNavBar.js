@@ -1,18 +1,34 @@
 import {TouchableOpacity} from '@plgworks/applogger';
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {Image, View} from 'react-native';
-import {Canary} from '../assets/common';
+import {
+  BottomBarListIcon,
+  Canary,
+  CollectionsIcon,
+  HomeIcon,
+  SearchIcon,
+} from '../assets/common';
 import BottomNavigationText from '../components/BottomNavigationText';
 import colors from '../constants/colors';
 import fonts from '../constants/fonts';
+import ScreenName from '../constants/ScreenName';
 import {useOrientationState} from '../hooks/useOrientation';
 import {useStyleProcessor} from '../hooks/useStyleProcessor';
+import {getTabBarVisibilityForTablet} from '../services/NavigationHelper';
+import NavigationService from '../services/NavigationService';
 import {fontPtToPx, layoutPtToPx} from '../utils/responsiveUI';
 
-function TabletNavBar({state, descriptors, navigation, tabName, tabIcons}) {
+function TabletNavBar({state, descriptors, navigation}) {
   const localStyle = useStyleProcessor(styles, 'TabletNavBar');
+  const tabName = useMemo(() => ['Home', 'Search', 'Lists', 'Archives'], []);
+  const tabIcons = useMemo(
+    () => [HomeIcon, SearchIcon, BottomBarListIcon, CollectionsIcon],
+    [],
+  );
 
   useOrientationState();
+  const currentRouteName = NavigationService.getCurrentRouteName();
+  const isTabBarVisible = getTabBarVisibilityForTablet(currentRouteName);
 
   const getBottomTabIconStyle = useCallback(
     isFocused => {
@@ -82,15 +98,15 @@ function TabletNavBar({state, descriptors, navigation, tabName, tabIcons}) {
     ],
   );
 
-  return (
+  return isTabBarVisible ? (
     <View style={localStyle.container}>
       <View style={localStyle.tabBar}>
         {RenderComponent({
-          isHidden: state.index === 0,
+          isHidden: currentRouteName === ScreenName.TimelineScreen,
           isFocused: false,
           options: descriptors[state.routes[0].key].options,
           onPress: () => {
-            navigation.navigate(state.routes[0].name);
+            navigation.navigate(ScreenName.TimelineScreen);
           },
           route: state.routes[0],
           index: 0,
@@ -110,7 +126,7 @@ function TabletNavBar({state, descriptors, navigation, tabName, tabIcons}) {
         })}
       </View>
     </View>
-  );
+  ) : null;
 }
 
 const styles = {

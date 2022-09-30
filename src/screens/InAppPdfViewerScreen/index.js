@@ -1,5 +1,4 @@
 import React from 'react';
-import {View} from 'react-native';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import Header from '../../components/common/Header';
 import colors from '../../constants/colors';
@@ -7,13 +6,14 @@ import PdfViewer from 'react-native-pdf';
 import {ActivityIndicator} from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 import {ToastType} from '../../constants/ToastConstants';
+import * as Animatable from 'react-native-animatable';
 
 function InAppPdfViewerScreen(props) {
   const {pdfUrl} = props.route.params;
   const localStyle = useStyleProcessor(styles, 'InAppPdfViewerScreen');
 
   return (
-    <View style={localStyle.container}>
+    <Animatable.View style={localStyle.container} animation="fadeInUpBig">
       <Header enableBackButton={true} />
       <PdfViewer
         trustAllCerts={false}
@@ -32,7 +32,7 @@ function InAppPdfViewerScreen(props) {
         }}
         style={localStyle.fullScreen}
       />
-    </View>
+    </Animatable.View>
   );
 }
 

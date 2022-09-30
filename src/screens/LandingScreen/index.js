@@ -9,6 +9,7 @@ import useLandingScreenData from './useLandingScreenData';
 import {Pagination as PaginationDots} from 'react-native-snap-carousel';
 import LottieView from 'lottie-react-native';
 import Header from '../../components/common/Header';
+import * as Animatable from 'react-native-animatable';
 
 function LandingScreen(props) {
   const localStyle = useStyleProcessor(style, 'LandingScreen');
@@ -106,7 +107,7 @@ function LandingScreen(props) {
   ]);
 
   return (
-    <View style={localStyle.container}>
+    <Animatable.View style={localStyle.container} animation="slideInRight">
       {isNotOnboardingScreen ? (
         <Header testID={'onboarding_screen'} enableBackButton={true} />
       ) : null}
@@ -162,7 +163,7 @@ function LandingScreen(props) {
           )}
         </View>
       </View>
-    </View>
+    </Animatable.View>
   );
 }
 

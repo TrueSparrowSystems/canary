@@ -1,7 +1,8 @@
 import {ComponentWrapper} from '@plgworks/applogger';
 import React from 'react';
 import {Image, Text, View} from 'react-native';
-import {BackupImage} from '../../assets/common';
+import {isTablet} from 'react-native-device-info';
+import {BackupImage, BackupTabletImage} from '../../assets/common';
 import Header from '../../components/common/Header';
 import RoundedButton from '../../components/common/RoundedButton';
 import colors, {getColorWithOpacity} from '../../constants/colors';
@@ -28,7 +29,7 @@ function BackupIntroductionScreen() {
           on any device to restore your data.
         </Text>
         <Image
-          source={BackupImage}
+          source={isTablet() ? BackupTabletImage : BackupImage}
           style={localStyle.imageStyle}
           resizeMode={'contain'}
         />
@@ -87,7 +88,9 @@ const styles = {
   imageStyle: {
     maxHeight: layoutPtToPx(150),
     tablet: {
-      maxHeight: layoutPtToPx(250),
+      landscape: {
+        maxHeight: layoutPtToPx(200),
+      },
     },
     width: '100%',
     alignSelf: 'center',

@@ -11,6 +11,7 @@ import useImportListScreenData from './useImportListScreenData';
 import MiniListCard from '../../components/common/MiniListCard';
 import {isEmpty} from 'lodash';
 import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
+import * as Animatable from 'react-native-animatable';
 
 function ImportListScreen(props) {
   const data = props?.route?.params;
@@ -28,7 +29,7 @@ function ImportListScreen(props) {
   } = useImportListScreenData(data);
 
   return (
-    <View style={localStyle.container}>
+    <Animatable.View style={localStyle.container} animation="fadeInRightBig">
       <Header
         testID={'import_list_screen'}
         enableBackButton={true}
@@ -78,7 +79,7 @@ function ImportListScreen(props) {
           onButtonPress={fnNavigateToHomescreen}
         />
       )}
-    </View>
+    </Animatable.View>
   );
 }
 

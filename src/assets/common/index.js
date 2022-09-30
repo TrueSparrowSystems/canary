@@ -36,4 +36,5 @@ export const ShareAppIcon = require('./ShareAppIcon.png');
 export const ImportIcon = require('./import.png');
 export const DeleteIcon = require('./delete.png');
 export const BackupImage = require('./backup.png');
+export const BackupTabletImage = require('./BackupTablet.png');
 export const CopyIcon = require('./copy.png');

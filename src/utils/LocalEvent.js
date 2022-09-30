@@ -28,6 +28,7 @@ export const EventTypes = {
   UpdateList: 'event_types_update_list',
   LocationSelectionChanged: 'event_types_location_selection_changed',
   OpenImageViewer: 'open_image_viewer',
+  OpenVideoPlayer: 'open_video_player',
   AppState: {
     Active: 'app_state_active',
     InActive: 'app_state_inactive',

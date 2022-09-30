@@ -15,6 +15,7 @@ function useListCardData(props) {
     shouldShowAddButton,
     userName,
     onAddToListSuccess,
+    onListRemoved,
     onRemoveFromListSuccess,
     selectedListIds,
   } = props;
@@ -84,11 +85,11 @@ function useListCardData(props) {
     LocalEvent.emit(EventTypes.ShowDeleteConfirmationModal, {
       id: listId,
       text: `Are you sure you want to remove "${listName}" from lists?`,
-      onCollectionRemoved: () => {},
+      onListRemoved,
       type: Constants.ConfirmDeleteModalType.List,
       testID: 'remove_list',
     });
-  }, [hidePopover, listId, listName]);
+  }, [hidePopover, listId, listName, onListRemoved]);
 
   const getDescriptionText = useCallback(() => {
     if (userNames.length === 0) {

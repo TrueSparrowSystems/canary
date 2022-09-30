@@ -1,7 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TransitionPresets} from '@react-navigation/stack';
 import ScreenName from '../constants/ScreenName';
@@ -39,6 +38,11 @@ import BackupScreen from '../screens/BackupScreen';
 import BackupIntroductionScreen from '../screens/BackupIntroductionScreen';
 import RestoreScreen from '../screens/RestoreScreen';
 import InAppPdfViewerScreen from '../screens/InAppPdfViewerScreen';
+import {
+  getTabBarVisibilityForMobile,
+  getTabBarVisibilityForTablet,
+} from '../services/NavigationHelper';
+import NavigationService from '../services/NavigationService';
 
 // TODO: Please correct he screen names.
 const Navigation = props => {
@@ -213,28 +217,6 @@ const Navigation = props => {
     );
   }
 
-  const getTabBarVisibility = route => {
-    const routeName = getFocusedRouteNameFromRoute(route);
-
-    switch (routeName) {
-      case ScreenName.PreferenceScreen:
-      case ScreenName.ThreadScreen:
-      case ScreenName.ImageViewScreen:
-      case ScreenName.VideoPlayerScreen:
-      case ScreenName.LandingScreen:
-      case ScreenName.ImportListScreen:
-      case ScreenName.ImportArchiveScreen:
-      case ScreenName.SettingScreen:
-      case ScreenName.BackupIntroductionScreen:
-      case ScreenName.BackupScreen:
-      case ScreenName.RestoreScreen:
-      case ScreenName.InAppPdfViewerScreen:
-        return false;
-      default:
-        return true;
-    }
-  };
-
   const getBottomTabIconStyle = useCallback(
     isFocused => {
       return [
@@ -246,22 +228,21 @@ const Navigation = props => {
     },
     [localStyle.bottomTabIcons],
   );
-  const tabName = useMemo(() => ['Home', 'Search', 'Lists', 'Archives'], []);
-  const tabIcons = useMemo(
-    () => [HomeIcon, SearchIcon, BottomBarListIcon, CollectionsIcon],
-    [],
-  );
+
+  const currentRouteName = NavigationService.getCurrentRouteName();
+  const isTabBarVisible = getTabBarVisibilityForTablet(currentRouteName);
   const tabletOptions = useMemo(
     () => ({
       sceneContainerStyle: {
-        marginLeft: layoutPtToPx(90),
+        marginLeft: isTabBarVisible ? layoutPtToPx(90) : 0,
       },
       tabBar: prop => {
-        return <TabletNavBar {...prop} tabName={tabName} tabIcons={tabIcons} />;
+        return <TabletNavBar {...prop} />;
       },
     }),
-    [tabIcons, tabName],
+    [isTabBarVisible],
   );
+
   const tabNavigatorOptions = useMemo(() => {
     let options = {
       detachInactiveScreens: true,
@@ -274,135 +255,139 @@ const Navigation = props => {
       options = {...options, ...tabletOptions};
     }
     return options;
-  }, [tabletOptions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabletOptions, isTabBarVisible]);
 
-  const bottomStack = useCallback(bottomHeight => {
-    const tabbarStyle = {
-      height: isTablet() ? 0 : 60 + bottomHeight,
-      width: isTablet() ? layoutPtToPx(90) : '100%',
-    };
+  const bottomStack = useCallback(
+    bottomHeight => {
+      const tabbarStyle = {
+        height: isTablet() ? 0 : 60 + bottomHeight,
+        width: isTablet() ? layoutPtToPx(90) : '100%',
+      };
 
-    return (
-      <Tab.Navigator {...tabNavigatorOptions}>
-        <Tab.Screen
-          options={({route}) => {
-            return {
-              tabBarIcon: ({focused}) => {
-                return (
+      return (
+        <Tab.Navigator {...tabNavigatorOptions}>
+          <Tab.Screen
+            options={({route}) => {
+              return {
+                tabBarIcon: ({focused}) => {
+                  return (
+                    <View
+                      style={[
+                        localStyle.tabIconContainer,
+                        focused ? localStyle.selectedTabContainer : null,
+                      ]}>
+                      <Image
+                        source={HomeIcon}
+                        style={getBottomTabIconStyle(focused)}
+                      />
+                    </View>
+                  );
+                },
+
+                tabBarLabel: ({focused}) => (
+                  <BottomNavigationText focused={focused} text={'Home'} />
+                ),
+                tabBarStyle: getTabBarVisibilityForMobile(route)
+                  ? tabbarStyle
+                  : {display: 'none'},
+                headerShown: false,
+                lazy: false,
+              };
+            }}
+            name={ScreenName.TimelineTab}
+            component={TimelineTabStack}
+          />
+          <Tab.Screen
+            options={({route}) => {
+              return {
+                tabBarIcon: ({focused}) => (
                   <View
                     style={[
                       localStyle.tabIconContainer,
                       focused ? localStyle.selectedTabContainer : null,
                     ]}>
                     <Image
-                      source={HomeIcon}
+                      source={SearchIcon}
                       style={getBottomTabIconStyle(focused)}
                     />
                   </View>
-                );
-              },
-
-              tabBarLabel: ({focused}) => (
-                <BottomNavigationText focused={focused} text={'Home'} />
-              ),
-              tabBarStyle: getTabBarVisibility(route)
-                ? tabbarStyle
-                : {display: 'none'},
-              headerShown: false,
-              lazy: false,
-            };
-          }}
-          name={ScreenName.TimelineTab}
-          component={TimelineTabStack}
-        />
-        <Tab.Screen
-          options={({route}) => {
-            return {
-              tabBarIcon: ({focused}) => (
-                <View
-                  style={[
-                    localStyle.tabIconContainer,
-                    focused ? localStyle.selectedTabContainer : null,
-                  ]}>
-                  <Image
-                    source={SearchIcon}
-                    style={getBottomTabIconStyle(focused)}
-                  />
-                </View>
-              ),
-              tabBarLabel: ({focused}) => (
-                <BottomNavigationText focused={focused} text={'Search'} />
-              ),
-              tabBarStyle: getTabBarVisibility(route)
-                ? tabbarStyle
-                : {display: 'none'},
-              headerShown: false,
-              lazy: false,
-            };
-          }}
-          name={ScreenName.DiscoverTab}
-          component={DiscoverTabStack}
-        />
-        <Tab.Screen
-          options={({route}) => {
-            return {
-              tabBarIcon: ({focused}) => (
-                <View
-                  style={[
-                    localStyle.tabIconContainer,
-                    focused ? localStyle.selectedTabContainer : null,
-                  ]}>
-                  <Image
-                    source={BottomBarListIcon}
-                    style={getBottomTabIconStyle(focused)}
-                  />
-                </View>
-              ),
-              tabBarLabel: ({focused}) => (
-                <BottomNavigationText focused={focused} text={'Lists'} />
-              ),
-              tabBarStyle: getTabBarVisibility(route)
-                ? tabbarStyle
-                : {display: 'none'},
-              headerShown: false,
-              lazy: false,
-            };
-          }}
-          name={ScreenName.ListTab}
-          component={ListTabStack}
-        />
-        <Tab.Screen
-          options={({route}) => {
-            return {
-              tabBarIcon: ({focused}) => (
-                <View
-                  style={[
-                    localStyle.tabIconContainer,
-                    focused ? localStyle.selectedTabContainer : null,
-                  ]}>
-                  <Image
-                    source={CollectionsIcon}
-                    style={getBottomTabIconStyle(focused)}
-                  />
-                </View>
-              ),
-              tabBarLabel: ({focused}) => (
-                <BottomNavigationText focused={focused} text={'Archives'} />
-              ),
-              tabBarStyle: getTabBarVisibility(route)
-                ? tabbarStyle
-                : {display: 'none'},
-              headerShown: false,
-              lazy: false,
-            };
-          }}
-          name={ScreenName.CollectionTab}
-          component={CollectionTabStack}
-        />
-      </Tab.Navigator>
-    );
+                ),
+                tabBarLabel: ({focused}) => (
+                  <BottomNavigationText focused={focused} text={'Search'} />
+                ),
+                tabBarStyle: getTabBarVisibilityForMobile(route)
+                  ? tabbarStyle
+                  : {display: 'none'},
+                headerShown: false,
+                lazy: false,
+              };
+            }}
+            name={ScreenName.DiscoverTab}
+            component={DiscoverTabStack}
+          />
+          <Tab.Screen
+            options={({route}) => {
+              return {
+                tabBarIcon: ({focused}) => (
+                  <View
+                    style={[
+                      localStyle.tabIconContainer,
+                      focused ? localStyle.selectedTabContainer : null,
+                    ]}>
+                    <Image
+                      source={BottomBarListIcon}
+                      style={getBottomTabIconStyle(focused)}
+                    />
+                  </View>
+                ),
+                tabBarLabel: ({focused}) => (
+                  <BottomNavigationText focused={focused} text={'Lists'} />
+                ),
+                tabBarStyle: getTabBarVisibilityForMobile(route)
+                  ? tabbarStyle
+                  : {display: 'none'},
+                headerShown: false,
+                lazy: false,
+              };
+            }}
+            name={ScreenName.ListTab}
+            component={ListTabStack}
+          />
+          <Tab.Screen
+            options={({route}) => {
+              return {
+                tabBarIcon: ({focused}) => (
+                  <View
+                    style={[
+                      localStyle.tabIconContainer,
+                      focused ? localStyle.selectedTabContainer : null,
+                    ]}>
+                    <Image
+                      source={CollectionsIcon}
+                      style={getBottomTabIconStyle(focused)}
+                    />
+                  </View>
+                ),
+                tabBarLabel: ({focused}) => (
+                  <BottomNavigationText focused={focused} text={'Archives'} />
+                ),
+                tabBarStyle: getTabBarVisibilityForMobile(route)
+                  ? tabbarStyle
+                  : {display: 'none'},
+                headerShown: false,
+                lazy: false,
+              };
+            }}
+            name={ScreenName.CollectionTab}
+            component={CollectionTabStack}
+          />
+        </Tab.Navigator>
+      );
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    [isTabBarVisible],
+  );
 
   function DiscoverTabStack() {
     return (

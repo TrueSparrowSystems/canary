@@ -22,6 +22,9 @@ const CustomImageViewer = () => {
     };
 
     LocalEvent.on(EventTypes.OpenImageViewer, launchModal);
+    return () => {
+      LocalEvent.off(EventTypes.OpenImageViewer, launchModal);
+    };
   }, []);
 
   const images = [];

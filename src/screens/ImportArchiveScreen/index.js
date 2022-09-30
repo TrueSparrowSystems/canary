@@ -11,6 +11,7 @@ import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import useImportArchiveScreenData from './useImportArchiveScreenData';
 import ImportCollectionCard from '../../components/common/ImportCollectionCard';
 import CollectionTweetList from '../../components/CollectionTweetList';
+import * as Animatable from 'react-native-animatable';
 
 function ImportArchiveScreen(props) {
   const data = props?.route?.params;
@@ -29,7 +30,7 @@ function ImportArchiveScreen(props) {
   } = useImportArchiveScreenData(data);
 
   return (
-    <View style={localStyle.container}>
+    <Animatable.View style={localStyle.container} animation="fadeInRightBig">
       <Header
         testID={'import_archive_screen'}
         enableBackButton={true}
@@ -84,7 +85,7 @@ function ImportArchiveScreen(props) {
           onButtonPress={fnNavigateToHomescreen}
         />
       )}
-    </View>
+    </Animatable.View>
   );
 }
 

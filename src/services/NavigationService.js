@@ -4,6 +4,7 @@ class NavigationService {
 
   constructor() {
     this.setCurrentNavigator.bind(this);
+    this.getCurrentRouteName.bind(this);
   }
 
   /**
@@ -12,6 +13,10 @@ class NavigationService {
    */
   setCurrentNavigator(navigator) {
     this.currentNavigator = navigator;
+  }
+
+  getCurrentRouteName() {
+    return this.currentNavigator?.getCurrentRoute?.()?.name;
   }
 
   navigate(screenName, data) {

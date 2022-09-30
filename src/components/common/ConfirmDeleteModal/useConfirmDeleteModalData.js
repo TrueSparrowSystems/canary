@@ -42,10 +42,10 @@ function useConfirmDeleteModalData() {
         listService()
           .removeMultipleLists(modalData?.id)
           .then(() => {
-            modalData?.onCollectionRemoved?.();
+            modalData?.onListRemoved?.();
             Toast.show({
               type: ToastType.Success,
-              text1: 'Removed lists.',
+              text1: 'Removed selected lists.',
             });
           })
           .catch(() => {
@@ -61,10 +61,10 @@ function useConfirmDeleteModalData() {
         listService()
           .removeList(modalData?.id)
           .then(() => {
-            modalData?.onCollectionRemoved?.();
+            modalData?.onListRemoved?.();
             Toast.show({
               type: ToastType.Success,
-              text1: 'Removed lists.',
+              text1: 'Removed list.',
             });
           })
           .catch(() => {

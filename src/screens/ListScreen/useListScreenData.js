@@ -96,7 +96,7 @@ const useListScreenData = props => {
           selectedListIds.current.length > 1
             ? `Are you sure you want to remove these ${selectedListIds.current.length} selected lists?`
             : 'Are you sure you want to remove this selected list?',
-        onCollectionRemoved: reloadList,
+        onListRemoved: reloadList,
         type: Constants.ConfirmDeleteModalType.List,
         testID: 'remove_multiple_list',
       });

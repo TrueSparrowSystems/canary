@@ -208,6 +208,9 @@ const styles = {
     borderRadius: layoutPtToPx(8),
     padding: layoutPtToPx(12),
     flex: 1,
+    tablet: {
+      width: '100%',
+    },
   },
   userProfileContainer: {
     flex: 1,

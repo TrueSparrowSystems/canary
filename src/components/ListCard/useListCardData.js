@@ -165,13 +165,15 @@ function useListCardData(props) {
   }, [hidePopover, listId, listName]);
 
   const onShareListPress = useCallback(() => {
+    hidePopover();
+
     _listService
       .exportList([listId])
       .then(res => {
         Share.share({message: res});
       })
       .catch(() => {});
-  }, [_listService, listId]);
+  }, [_listService, hidePopover, listId]);
 
   return {
     bIsListSelected: isListSelected,

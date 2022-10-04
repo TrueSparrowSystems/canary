@@ -4,6 +4,7 @@ import {ScrollView, ActivityIndicator, View, Text, Image} from 'react-native';
 import {BinIcon, bookmarkIcon} from '../../assets/common';
 import colors, {getColorWithOpacity} from '../../constants/colors';
 import fonts from '../../constants/fonts';
+import {useOrientationState} from '../../hooks/useOrientation';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import EmptyScreenComponent from '../common/EmptyScreenComponent';
@@ -26,6 +27,7 @@ function CollectionTweetList(props) {
     fnOnBookmarkFavouriteTweetPress,
   } = useCollectionTweetListData(props);
   const localStyle = useStyleProcessor(styles, 'CollectionTweetList');
+  const {isPortrait} = useOrientationState();
 
   return bIsLoading ? (
     <ActivityIndicator animating={bIsLoading} color={colors.GoldenTainoi} />
@@ -45,7 +47,9 @@ function CollectionTweetList(props) {
     )
   ) : (
     <ScrollView
-      contentContainerStyle={contentContainerStyle}
+      contentContainerStyle={
+        contentContainerStyle || localStyle.contentContainer
+      }
       refreshControl={
         <RefreshControl
           testID={`collection_tweets_list_${collectionId}`}
@@ -75,7 +79,7 @@ function CollectionTweetList(props) {
         ) : (
           <TweetCard
             testID="collection_tweet_list"
-            key={data?.id}
+            key={`${data?.id}_${isPortrait}`}
             dataSource={data}
             showBookmarked={isImportMode}
             disablePointerEvents={isImportMode}
@@ -100,6 +104,9 @@ const styles = {
     marginBottom: layoutPtToPx(12),
     borderRadius: layoutPtToPx(8),
     flex: 1,
+  },
+  contentContainer: {
+    paddingHorizontal: layoutPtToPx(20),
   },
 
   descriptionTextStyle: {

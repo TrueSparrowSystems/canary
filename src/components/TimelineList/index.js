@@ -14,6 +14,7 @@ import fonts from '../../constants/fonts';
 import * as Animatable from 'react-native-animatable';
 import {Constants} from '../../constants/Constants';
 import {RefreshControl, TouchableOpacity} from '@plgworks/applogger';
+import {useOrientationState} from '../../hooks/useOrientation';
 
 const _isTablet = isTablet();
 const ITEM_WIDTH = 276;
@@ -52,6 +53,8 @@ function TimelineList({
   });
 
   const localStyle = useStyleProcessor(styles, 'TimelineList');
+
+  const {isPortrait} = useOrientationState();
 
   const ShareCard = useMemo(() => {
     return bShowCard ? (
@@ -118,9 +121,12 @@ function TimelineList({
     [ShareCard, disableTweetPress, shouldShowSearchContent, testID],
   );
 
-  const keyExtractor = useCallback(item => {
-    return item.id;
-  }, []);
+  const keyExtractor = useCallback(
+    item => {
+      return item.id + isPortrait;
+    },
+    [isPortrait],
+  );
 
   const loaderView = useMemo(() => {
     return (

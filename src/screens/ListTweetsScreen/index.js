@@ -13,6 +13,7 @@ import ScreenName from '../../constants/ScreenName';
 import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import {AddIcon, EditIcon, ShareAppIcon} from '../../assets/common';
+import {useOrientationState} from '../../hooks/useOrientation';
 
 function ListTweetsScreen(props) {
   const localStyle = useStyleProcessor(styles, 'ListTweetsScreen');
@@ -25,6 +26,7 @@ function ListTweetsScreen(props) {
   const newUserNameArray = useRef([]);
 
   const navigation = useNavigation();
+  useOrientationState();
 
   const initialiseDataSource = useCallback(userNameArray => {
     if (
@@ -113,19 +115,24 @@ function ListTweetsScreen(props) {
         }}
       />
 
-      {isLoading ? (
-        <ActivityIndicator animating={isLoading} color={colors.GoldenTainoi} />
-      ) : null}
-      {currentUserNameArray.current.length !== 0 ? (
-        <TimelineList
-          testID="list_tweet"
-          timelineListDataSource={listDataSource.current}
-          listEmptyComponent={ListEmptyComponent}
-          onRefresh={fetchData}
-        />
-      ) : (
-        ListEmptyComponent
-      )}
+      <View style={localStyle.contentContainer}>
+        {isLoading ? (
+          <ActivityIndicator
+            animating={isLoading}
+            color={colors.GoldenTainoi}
+          />
+        ) : null}
+        {currentUserNameArray.current.length !== 0 ? (
+          <TimelineList
+            testID="list_tweet"
+            timelineListDataSource={listDataSource.current}
+            listEmptyComponent={ListEmptyComponent}
+            onRefresh={fetchData}
+          />
+        ) : (
+          ListEmptyComponent
+        )}
+      </View>
     </View>
   );
 }
@@ -133,6 +140,16 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: colors.White,
+  },
+  contentContainer: {
+    width: '100%',
+    flex: 1,
+    alignSelf: 'center',
+    tablet: {
+      landscape: {
+        width: '70%',
+      },
+    },
   },
   descriptionTextStyle: {
     fontFamily: fonts.SoraRegular,

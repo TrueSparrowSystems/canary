@@ -58,6 +58,7 @@ function ThreadScreen(props) {
           listHeaderComponent={
             <TweetCard
               testID="thread_screen"
+              key={`thread_screen_tweet_card_${isPortrait}`}
               dataSource={tweetData}
               isDisabled={true}
               style={localStyle.cardStyle}

@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState, useRef, useEffect} from 'react';
+import React, {useCallback, useMemo, useState, useEffect} from 'react';
 import {Share, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionTweetList from '../../components/CollectionTweetList';
@@ -9,6 +9,7 @@ import {fontPtToPx, layoutPtToPx} from '../../utils/responsiveUI';
 import fonts from '../../constants/fonts';
 import {collectionService} from '../../services/CollectionService';
 import {ShareAppIcon} from '../../assets/common';
+import {useOrientationState} from '../../hooks/useOrientation';
 
 function CollectionTweetScreen(props) {
   const localStyle = useStyleProcessor(styles, 'CollectionTweetScreen');
@@ -16,6 +17,7 @@ function CollectionTweetScreen(props) {
   const [isCollectionEmpty, setIsCollectionEmpty] = useState(false);
 
   const _collectionService = collectionService();
+  useOrientationState();
 
   useEffect(() => {
     if (collectionId) {
@@ -59,7 +61,9 @@ function CollectionTweetScreen(props) {
       <View style={localStyle.container}>
         <Header testID={'collection_tweet_screen'} {...headerOptions} />
 
-        <CollectionTweetList collectionId={collectionId} />
+        <View style={localStyle.contentContainer}>
+          <CollectionTweetList collectionId={collectionId} />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -69,6 +73,16 @@ const styles = {
   container: {
     height: '100%',
     backgroundColor: colors.White,
+  },
+  contentContainer: {
+    width: '100%',
+    flex: 1,
+    alignSelf: 'center',
+    tablet: {
+      landscape: {
+        width: '70%',
+      },
+    },
   },
   headerTextStyle: {
     fontFamily: fonts.SoraSemiBold,

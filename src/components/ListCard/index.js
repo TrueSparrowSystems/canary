@@ -37,7 +37,7 @@ function ListCard(props) {
     fnOnShareListPress,
   } = useListCardData(props);
 
-  const listIntials = getInitialsFromName(listName);
+  const listInitials = getInitialsFromName(listName);
   const listIconStyle = useMemo(() => {
     let _colorCombination = colorCombination;
     if (!_colorCombination) {
@@ -82,11 +82,11 @@ function ListCard(props) {
                 </View>
               ) : null}
               <View style={listIconStyle.backgroundStyle}>
-                {listIntials?.length === 0 ? (
+                {listInitials?.length === 0 ? (
                   <Image source={ListIcon} style={listIconStyle.listIcon} />
                 ) : (
                   <Text style={listIconStyle.textStyle}>
-                    {listIntials?.substring(0, 2)}
+                    {listInitials?.substring(0, 2)}
                   </Text>
                 )}
               </View>
@@ -136,7 +136,7 @@ function ListCard(props) {
     listIconStyle.listIcon,
     listIconStyle.textStyle,
     listId,
-    listIntials,
+    listInitials,
     listName,
     localStyle.cardDetailContainer,
     localStyle.container,

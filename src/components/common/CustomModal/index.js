@@ -29,7 +29,7 @@ function CustomModal({
   // Opacity value for the container.
   const opacityOffset = React.useRef(new Animated.Value(0)).current;
 
-  const {orientation} = useOrientationState();
+  useOrientationState();
   const screenHeight = useMemo(() => Dimensions.get('screen').height, []);
   // Boolean variable to store if the modal is visible or not.
   const [visibility, setVisibility] = useState(visible);

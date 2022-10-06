@@ -5,11 +5,16 @@ import NavigationService from './NavigationService';
 import {getImportData} from './ShareHelper';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {firebase} from '@react-native-firebase/database';
+import Toast from 'react-native-toast-message';
+import {ToastType} from '../constants/ToastConstants';
 
 export const handleDynamicUrl = url => {
   const importData = getImportData(url);
   if (importData?.error) {
-    // TODO : handle
+    Toast.show({
+      text1: importData?.message,
+      type: ToastType.Error,
+    });
     return importData?.message;
   }
   const {pn: pageName, data} = importData;

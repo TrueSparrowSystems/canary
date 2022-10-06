@@ -143,7 +143,7 @@ const CollectionCard = props => {
           ref={sourceRef}
           disabled={disabled}
           onPress={enableDelete ? fnOnCollectionSelect : fnOnCollectionPress}
-          onLongPress={fnOnLongPress}>
+          onLongPress={enableDelete ? null : fnOnLongPress}>
           <Animatable.View
             ref={oViewRef}
             animation="fadeIn"

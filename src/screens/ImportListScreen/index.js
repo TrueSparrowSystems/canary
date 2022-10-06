@@ -43,7 +43,7 @@ function ImportListScreen(props) {
         textStyle={localStyle.headerText}
       />
       {!isEmpty(aData) ? (
-        <View>
+        <View style={localStyle.contentContainer}>
           <View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               {aData.map((item, index) => {
@@ -90,6 +90,7 @@ const styles = {
     flex: 1,
     backgroundColor: colors.White,
   },
+  contentContainer: {paddingBottom: layoutPtToPx(80)},
   separator: {
     borderBottomWidth: 1,
     marginHorizontal: 20,

@@ -1,3 +1,5 @@
+import {StackActions} from '@react-navigation/native';
+
 class NavigationService {
   // Current navigation object.
   currentNavigator = null;
@@ -20,7 +22,12 @@ class NavigationService {
   }
 
   navigate(screenName, data) {
-    this.currentNavigator.navigate(screenName, data);
+    const currentScreen = this.getCurrentRouteName();
+    if (currentScreen && screenName === currentScreen) {
+      this.currentNavigator.dispatch(StackActions.replace(screenName, data));
+    } else {
+      this.currentNavigator.navigate(screenName, data);
+    }
   }
 }
 

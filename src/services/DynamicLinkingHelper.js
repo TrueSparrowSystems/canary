@@ -17,11 +17,11 @@ export const handleDynamicUrl = url => {
 
   switch (pageName) {
     case Constants.PageName.Archive:
-      NavigationService.navigate(ScreenName.ImportArchiveScreen, data);
+      NavigationService.navigate(ScreenName.ImportArchiveScreen, {data});
 
       break;
     case Constants.PageName.List:
-      NavigationService.navigate(ScreenName.ImportListScreen, data);
+      NavigationService.navigate(ScreenName.ImportListScreen, {data});
       break;
     case Constants.PageName.Restore:
       dynamicLinks()

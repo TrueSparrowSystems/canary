@@ -278,6 +278,9 @@ const styles = {
     maxHeight: layoutPtToPx(20),
     marginTop: layoutPtToPx(3),
     fontStyle: 'italic',
+    // This is done to avoid cropping of emoji in italic style
+    borderRightColor: colors.Transparent,
+    borderRightWidth: 1,
   },
   rightActionContainer: {
     backgroundColor: colors.BitterSweet,

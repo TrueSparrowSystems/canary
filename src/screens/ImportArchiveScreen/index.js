@@ -14,7 +14,7 @@ import CollectionTweetList from '../../components/CollectionTweetList';
 import * as Animatable from 'react-native-animatable';
 
 function ImportArchiveScreen(props) {
-  const data = props?.route?.params;
+  const {data} = props?.route?.params;
 
   const localStyle = useStyleProcessor(styles, 'ImportArchiveScreen');
 

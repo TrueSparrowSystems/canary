@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {Modal, StatusBar, View} from 'react-native';
+import {BackHandler, Modal, StatusBar, View} from 'react-native';
 import Video from 'react-native-video';
 import {
   VideoPlayer,
@@ -41,6 +41,25 @@ function VideoPlayerScreen(props) {
     ],
     [aspectRatio, localStyle.video],
   );
+
+  /**
+   * Subscribe to back button press.
+   */
+  useEffect(() => {
+    if (isVisible) {
+      const onBackPress = () => {
+        setIsVisible(false);
+        return true;
+      };
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onBackPress,
+      );
+      return () => {
+        subscription.remove();
+      };
+    }
+  }, [isVisible]);
 
   return (
     <Modal visible={isVisible} animationType="slide" hardwareAccelerated={true}>

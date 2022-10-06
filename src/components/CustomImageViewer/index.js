@@ -1,4 +1,11 @@
-import {Image, Modal, SafeAreaView, StatusBar, View} from 'react-native';
+import {
+  BackHandler,
+  Image,
+  Modal,
+  SafeAreaView,
+  StatusBar,
+  View,
+} from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
@@ -31,6 +38,25 @@ const CustomImageViewer = () => {
   imagesArray.current.map(image => {
     images.push({url: image?.url});
   });
+
+  /**
+   * Subscribe to back button press.
+   */
+  useEffect(() => {
+    if (isVisible) {
+      const onBackPress = () => {
+        setIsVisible(false);
+        return true;
+      };
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onBackPress,
+      );
+      return () => {
+        subscription.remove();
+      };
+    }
+  }, [isVisible]);
 
   return (
     <Modal visible={isVisible} animationType="slide" hardwareAccelerated={true}>

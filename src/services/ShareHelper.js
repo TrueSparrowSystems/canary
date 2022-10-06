@@ -30,8 +30,15 @@ export function getImportData(importUrl) {
   const encodedImportData = decodeURIComponent(importUrl);
   const queryParams = URL.parse(encodedImportData, true)?.query;
   if (queryParams?.query) {
-    const importData = JSON.parse(queryParams?.query);
-    return importData;
+    try {
+      const importData = JSON.parse(queryParams?.query);
+      return importData;
+    } catch (e) {
+      return {
+        error: true,
+        message: 'Import Failed. Please try again with different URL',
+      };
+    }
   }
   return {
     error: true,

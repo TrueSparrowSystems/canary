@@ -106,7 +106,9 @@ const styles = {
     flex: 1,
   },
   contentContainer: {
-    paddingHorizontal: layoutPtToPx(20),
+    tablet: {
+      paddingHorizontal: layoutPtToPx(20),
+    },
   },
 
   descriptionTextStyle: {

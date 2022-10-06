@@ -62,19 +62,13 @@ function CollectionScreen(props) {
           data={item}
           animationDelay={index * 20}
           onCollectionRemoved={fnReloadList}
-          onLongPress={fnEnableCollectionDeleteOption}
           enableDelete={bIsEditMode}
           disabled={isEmpty(item) ? true : false}
           selectedCollectionIds={aSelectedCollectionIdsRef.current}
         />
       );
     },
-    [
-      aSelectedCollectionIdsRef,
-      bIsEditMode,
-      fnEnableCollectionDeleteOption,
-      fnReloadList,
-    ],
+    [aSelectedCollectionIdsRef, bIsEditMode, fnReloadList],
   );
 
   return (

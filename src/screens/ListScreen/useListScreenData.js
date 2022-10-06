@@ -1,7 +1,7 @@
 import {isEmpty} from 'lodash';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {Share} from 'react-native';
-import {Toast} from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 import {showPromotion} from '../../components/utils/ViewData';
 import {Constants} from '../../constants/Constants';
 import {ToastType} from '../../constants/ToastConstants';
@@ -76,7 +76,7 @@ const useListScreenData = props => {
   }, []);
 
   const onSharePress = useCallback(() => {
-    if (selectedListIds.current.length > 0) {
+    if (selectedListIds.current?.length > 0) {
       _listService.exportList(selectedListIds.current).then(url => {
         Share.share({message: `Checkout these lists from Canary ${url}`});
       });
@@ -89,7 +89,7 @@ const useListScreenData = props => {
   }, [_listService]);
 
   const onRemoveListsPress = useCallback(() => {
-    if (selectedListIds.current.length > 0) {
+    if (selectedListIds.current?.length > 0) {
       LocalEvent.emit(EventTypes.ShowDeleteConfirmationModal, {
         id: selectedListIds.current,
         text:

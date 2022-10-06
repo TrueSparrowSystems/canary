@@ -22,6 +22,7 @@ const useCollectionScreenData = props => {
   const collectionDataRef = useRef({});
   const selectedCollectionIds = useRef([]);
   const crossButtonRef = useRef(false);
+  const disableSharePress = useRef(false);
 
   const _collectionService = collectionService();
 
@@ -105,17 +106,26 @@ const useCollectionScreenData = props => {
   }, []);
 
   const onSharePress = useCallback(() => {
-    if (selectedCollectionIds.current.length > 0) {
-      _collectionService
-        .exportCollection(selectedCollectionIds.current)
-        .then(url => {
-          Share.share({message: `Checkout these archives from Canary ${url}`});
+    if (!disableSharePress.current) {
+      disableSharePress.current = true;
+      if (selectedCollectionIds.current.length > 0) {
+        _collectionService
+          .exportCollection(selectedCollectionIds.current)
+          .then(url => {
+            Share.share({
+              message: `Checkout these archives from Canary ${url}`,
+            });
+          })
+          .finally(() => {
+            disableSharePress.current = false;
+          });
+      } else {
+        disableSharePress.current = false;
+        Toast.show({
+          type: ToastType.Error,
+          text1: 'Select at least one archive to share',
         });
-    } else {
-      Toast.show({
-        type: ToastType.Error,
-        text1: 'Select at least one archive to share',
-      });
+      }
     }
   }, [_collectionService]);
 

@@ -24,6 +24,7 @@ function ListTweetsScreen(props) {
   const listDataSource = useRef(null);
   const currentUserNameArray = useRef([]);
   const newUserNameArray = useRef([]);
+  const disableSharePress = useRef(false);
 
   const navigation = useNavigation();
   useOrientationState();
@@ -82,12 +83,18 @@ function ListTweetsScreen(props) {
   ]);
 
   const onShareListPress = useCallback(() => {
-    _listService
-      .exportList([listId])
-      .then(res => {
-        Share.share({message: res});
-      })
-      .catch(() => {});
+    if (!disableSharePress.current) {
+      disableSharePress.current = true;
+      _listService
+        .exportList([listId])
+        .then(res => {
+          Share.share({message: res});
+        })
+        .catch(() => {})
+        .finally(() => {
+          disableSharePress.current = false;
+        });
+    }
   }, [_listService, listId]);
 
   return (

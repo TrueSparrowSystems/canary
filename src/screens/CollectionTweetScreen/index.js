@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState, useEffect} from 'react';
+import React, {useCallback, useMemo, useState, useEffect, useRef} from 'react';
 import {Share, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CollectionTweetList from '../../components/CollectionTweetList';
@@ -15,6 +15,7 @@ function CollectionTweetScreen(props) {
   const localStyle = useStyleProcessor(styles, 'CollectionTweetScreen');
   const {collectionId, collectionName} = props?.route?.params;
   const [isCollectionEmpty, setIsCollectionEmpty] = useState(false);
+  const disableSharePress = useRef(false);
 
   const _collectionService = collectionService();
   useOrientationState();
@@ -29,12 +30,18 @@ function CollectionTweetScreen(props) {
   }, [collectionId]);
 
   const onExportCollectionPress = useCallback(() => {
-    _collectionService
-      .exportCollection([collectionId])
-      .then(res => {
-        Share.share({message: res});
-      })
-      .catch(() => {});
+    if (!disableSharePress.current) {
+      disableSharePress.current = true;
+      _collectionService
+        .exportCollection([collectionId])
+        .then(res => {
+          Share.share({message: res});
+        })
+        .catch(() => {})
+        .finally(() => {
+          disableSharePress.current = false;
+        });
+    }
   }, [_collectionService, collectionId]);
 
   const headerOptions = useMemo(() => {

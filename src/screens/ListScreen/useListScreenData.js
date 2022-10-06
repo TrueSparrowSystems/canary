@@ -20,6 +20,7 @@ const useListScreenData = props => {
   const listDataRef = useRef({});
   const crossButtonRef = useRef(null);
   const selectedListIds = useRef([]);
+  const disableSharePress = useRef(false);
 
   const _listService = listService();
 
@@ -76,15 +77,24 @@ const useListScreenData = props => {
   }, []);
 
   const onSharePress = useCallback(() => {
-    if (selectedListIds.current?.length > 0) {
-      _listService.exportList(selectedListIds.current).then(url => {
-        Share.share({message: `Checkout these lists from Canary ${url}`});
-      });
-    } else {
-      Toast.show({
-        type: ToastType.Error,
-        text1: 'Select at least one list to share',
-      });
+    if (!disableSharePress.current) {
+      disableSharePress.current = true;
+      if (selectedListIds.current?.length > 0) {
+        _listService
+          .exportList(selectedListIds.current)
+          .then(url => {
+            Share.share({message: `Checkout these lists from Canary ${url}`});
+          })
+          .finally(() => {
+            disableSharePress.current = false;
+          });
+      } else {
+        disableSharePress.current = false;
+        Toast.show({
+          type: ToastType.Error,
+          text1: 'Select at least one list to share',
+        });
+      }
     }
   }, [_listService]);
 

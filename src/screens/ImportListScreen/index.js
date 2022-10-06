@@ -14,7 +14,7 @@ import EmptyScreenComponent from '../../components/common/EmptyScreenComponent';
 import * as Animatable from 'react-native-animatable';
 
 function ImportListScreen(props) {
-  const data = props?.route?.params;
+  const {data} = props?.route?.params;
 
   const localStyle = useStyleProcessor(styles, 'ImportListScreen');
 

@@ -91,4 +91,21 @@ export const Constants = {
   },
   //Todo: update pdf link when available
   Pdf: 'https://www.wto.org/english/thewto_e/procurement_e/terms_conditions_e.pdf',
+  TrackerAppIdentifier: {
+    Android: 'canary_mobile_android',
+    iOS: 'canary_mobile_ios',
+  },
+  TrackerEndpoint: 'http://px.moppypuppymonkey.com/pixel.png',
+  TrackerConstants: {
+    EventEntities: {
+      Screen: 'screen',
+      Video: 'video',
+      Image: 'image',
+    },
+    EventActions: {
+      Press: 'press',
+      Mount: 'mount',
+      Navigate: 'navigate',
+    },
+  },
 };

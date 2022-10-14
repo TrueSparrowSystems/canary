@@ -13,7 +13,7 @@ export async function getExportURL(exportData) {
           domainUriPrefix: Constants.DeepLinkUrl,
           android: {
             // TODO: See if we can get this using some function?
-            packageName: 'com.personalized_twitter',
+            packageName: 'com.plgworks.canary',
           },
         },
         firebase.dynamicLinks.ShortLinkType.DEFAULT,

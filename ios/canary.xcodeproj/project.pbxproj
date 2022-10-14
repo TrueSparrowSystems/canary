@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* personalized_twitterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* personalized_twitterTests.m */; };
+		00E356F31AD99517003FC87E /* canaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* canaryTests.m */; };
 		015615D928B4B2FF001D4F0F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 015615D828B4B2FF001D4F0F /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2DB1C00E9A8DAAA575782F5A /* Pods_personalized_twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3023BCB0DB37DA929577B75E /* Pods_personalized_twitter.framework */; };
+		2DB1C00E9A8DAAA575782F5A /* Pods_canary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3023BCB0DB37DA929577B75E /* Pods_canary.framework */; };
 		5FAA6B36E55D4027BA7CA71D /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FB7B251CC3AB458481DCAF0C /* Inter-Light.ttf */; };
-		7BC108F9AF11A7A5C2DBB64F /* Pods_personalized_twitter_personalized_twitterTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7B3862A4BB4DD4AC4F7929B /* Pods_personalized_twitter_personalized_twitterTests.framework */; };
+		7BC108F9AF11A7A5C2DBB64F /* Pods_canary_canaryTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7B3862A4BB4DD4AC4F7929B /* Pods_canary_canaryTests.framework */; };
 		804663332897C1FD00424DA5 /* Sora-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8046632B2897C1FD00424DA5 /* Sora-Bold.ttf */; };
 		804663342897C1FD00424DA5 /* Sora-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8046632C2897C1FD00424DA5 /* Sora-Regular.ttf */; };
 		804663352897C1FD00424DA5 /* Sora-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8046632D2897C1FD00424DA5 /* Sora-SemiBold.ttf */; };
@@ -32,25 +32,25 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = personalized_twitter;
+			remoteInfo = canary;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* personalized_twitterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = personalized_twitterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* canaryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = canaryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* personalized_twitterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = personalized_twitterTests.m; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* canaryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = canaryTests.m; sourceTree = "<group>"; };
 		015615D828B4B2FF001D4F0F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* personalized_twitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = personalized_twitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = personalized_twitter/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = personalized_twitter/AppDelegate.mm; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = personalized_twitter/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = personalized_twitter/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = personalized_twitter/main.m; sourceTree = "<group>"; };
-		3023BCB0DB37DA929577B75E /* Pods_personalized_twitter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_personalized_twitter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B4392A12AC88292D35C810B /* Pods-personalized_twitter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-personalized_twitter.debug.xcconfig"; path = "Target Support Files/Pods-personalized_twitter/Pods-personalized_twitter.debug.xcconfig"; sourceTree = "<group>"; };
-		5709B34CF0A7D63546082F79 /* Pods-personalized_twitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-personalized_twitter.release.xcconfig"; path = "Target Support Files/Pods-personalized_twitter/Pods-personalized_twitter.release.xcconfig"; sourceTree = "<group>"; };
-		5B7EB9410499542E8C5724F5 /* Pods-personalized_twitter-personalized_twitterTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-personalized_twitter-personalized_twitterTests.debug.xcconfig"; path = "Target Support Files/Pods-personalized_twitter-personalized_twitterTests/Pods-personalized_twitter-personalized_twitterTests.debug.xcconfig"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* canary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = canary.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = canary/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = canary/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = canary/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = canary/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = canary/main.m; sourceTree = "<group>"; };
+		3023BCB0DB37DA929577B75E /* Pods_canary.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_canary.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B4392A12AC88292D35C810B /* Pods-canary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-canary.debug.xcconfig"; path = "Target Support Files/Pods-canary/Pods-canary.debug.xcconfig"; sourceTree = "<group>"; };
+		5709B34CF0A7D63546082F79 /* Pods-canary.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-canary.release.xcconfig"; path = "Target Support Files/Pods-canary/Pods-canary.release.xcconfig"; sourceTree = "<group>"; };
+		5B7EB9410499542E8C5724F5 /* Pods-canary-canaryTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-canary-canaryTests.debug.xcconfig"; path = "Target Support Files/Pods-canary-canaryTests/Pods-canary-canaryTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8046632B2897C1FD00424DA5 /* Sora-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Sora-Bold.ttf"; path = "../src/assets/fonts/Sora-Bold.ttf"; sourceTree = "<group>"; };
 		8046632C2897C1FD00424DA5 /* Sora-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Sora-Regular.ttf"; path = "../src/assets/fonts/Sora-Regular.ttf"; sourceTree = "<group>"; };
 		8046632D2897C1FD00424DA5 /* Sora-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Sora-SemiBold.ttf"; path = "../src/assets/fonts/Sora-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -59,9 +59,9 @@
 		804663302897C1FD00424DA5 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Regular.ttf"; path = "../src/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
 		804663312897C1FD00424DA5 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-Bold.ttf"; path = "../src/assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; };
 		804663322897C1FD00424DA5 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-SemiBold.ttf"; path = "../src/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = personalized_twitter/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		89C6BE57DB24E9ADA2F236DE /* Pods-personalized_twitter-personalized_twitterTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-personalized_twitter-personalized_twitterTests.release.xcconfig"; path = "Target Support Files/Pods-personalized_twitter-personalized_twitterTests/Pods-personalized_twitter-personalized_twitterTests.release.xcconfig"; sourceTree = "<group>"; };
-		B7B3862A4BB4DD4AC4F7929B /* Pods_personalized_twitter_personalized_twitterTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_personalized_twitter_personalized_twitterTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = canary/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		89C6BE57DB24E9ADA2F236DE /* Pods-canary-canaryTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-canary-canaryTests.release.xcconfig"; path = "Target Support Files/Pods-canary-canaryTests/Pods-canary-canaryTests.release.xcconfig"; sourceTree = "<group>"; };
+		B7B3862A4BB4DD4AC4F7929B /* Pods_canary_canaryTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_canary_canaryTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FB7B251CC3AB458481DCAF0C /* Inter-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Light.ttf"; path = "../src/assets/fonts/Inter-Light.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -71,7 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7BC108F9AF11A7A5C2DBB64F /* Pods_personalized_twitter_personalized_twitterTests.framework in Frameworks */,
+				7BC108F9AF11A7A5C2DBB64F /* Pods_canary_canaryTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,20 +79,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DB1C00E9A8DAAA575782F5A /* Pods_personalized_twitter.framework in Frameworks */,
+				2DB1C00E9A8DAAA575782F5A /* Pods_canary.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* personalized_twitterTests */ = {
+		00E356EF1AD99517003FC87E /* canaryTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* personalized_twitterTests.m */,
+				00E356F21AD99517003FC87E /* canaryTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = personalized_twitterTests;
+			path = canaryTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -103,7 +103,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* personalized_twitter */ = {
+		13B07FAE1A68108700A75B9A /* canary */ = {
 			isa = PBXGroup;
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -113,7 +113,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = personalized_twitter;
+			name = canary;
 			sourceTree = "<group>";
 		};
 		1E91F4E66F0D403BBB29DEC7 /* Resources */ = {
@@ -128,8 +128,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				3023BCB0DB37DA929577B75E /* Pods_personalized_twitter.framework */,
-				B7B3862A4BB4DD4AC4F7929B /* Pods_personalized_twitter_personalized_twitterTests.framework */,
+				3023BCB0DB37DA929577B75E /* Pods_canary.framework */,
+				B7B3862A4BB4DD4AC4F7929B /* Pods_canary_canaryTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -153,9 +153,9 @@
 				8046632E2897C1FD00424DA5 /* Sora-Medium.ttf */,
 				8046632C2897C1FD00424DA5 /* Sora-Regular.ttf */,
 				8046632D2897C1FD00424DA5 /* Sora-SemiBold.ttf */,
-				13B07FAE1A68108700A75B9A /* personalized_twitter */,
+				13B07FAE1A68108700A75B9A /* canary */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* personalized_twitterTests */,
+				00E356EF1AD99517003FC87E /* canaryTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -169,8 +169,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* personalized_twitter.app */,
-				00E356EE1AD99517003FC87E /* personalized_twitterTests.xctest */,
+				13B07F961A680F5B00A75B9A /* canary.app */,
+				00E356EE1AD99517003FC87E /* canaryTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -178,10 +178,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3B4392A12AC88292D35C810B /* Pods-personalized_twitter.debug.xcconfig */,
-				5709B34CF0A7D63546082F79 /* Pods-personalized_twitter.release.xcconfig */,
-				5B7EB9410499542E8C5724F5 /* Pods-personalized_twitter-personalized_twitterTests.debug.xcconfig */,
-				89C6BE57DB24E9ADA2F236DE /* Pods-personalized_twitter-personalized_twitterTests.release.xcconfig */,
+				3B4392A12AC88292D35C810B /* Pods-canary.debug.xcconfig */,
+				5709B34CF0A7D63546082F79 /* Pods-canary.release.xcconfig */,
+				5B7EB9410499542E8C5724F5 /* Pods-canary-canaryTests.debug.xcconfig */,
+				89C6BE57DB24E9ADA2F236DE /* Pods-canary-canaryTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -189,9 +189,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* personalized_twitterTests */ = {
+		00E356ED1AD99517003FC87E /* canaryTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "personalized_twitterTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "canaryTests" */;
 			buildPhases = (
 				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -204,14 +204,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = personalized_twitterTests;
-			productName = personalized_twitterTests;
-			productReference = 00E356EE1AD99517003FC87E /* personalized_twitterTests.xctest */;
+			name = canaryTests;
+			productName = canaryTests;
+			productReference = 00E356EE1AD99517003FC87E /* canaryTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* personalized_twitter */ = {
+		13B07F861A680F5B00A75B9A /* canary */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "personalized_twitter" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "canary" */;
 			buildPhases = (
 				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -226,9 +226,9 @@
 			);
 			dependencies = (
 			);
-			name = personalized_twitter;
-			productName = personalized_twitter;
-			productReference = 13B07F961A680F5B00A75B9A /* personalized_twitter.app */;
+			name = canary;
+			productName = canary;
+			productReference = 13B07F961A680F5B00A75B9A /* canary.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -248,7 +248,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "personalized_twitter" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "canary" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -261,8 +261,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* personalized_twitter */,
-				00E356ED1AD99517003FC87E /* personalized_twitterTests */,
+				13B07F861A680F5B00A75B9A /* canary */,
+				00E356ED1AD99517003FC87E /* canaryTests */,
 			);
 		};
 /* End PBXProject section */
@@ -319,15 +319,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-personalized_twitter/Pods-personalized_twitter-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-canary/Pods-canary-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-personalized_twitter/Pods-personalized_twitter-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-canary/Pods-canary-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-personalized_twitter/Pods-personalized_twitter-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-canary/Pods-canary-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
@@ -345,7 +345,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-personalized_twitter-personalized_twitterTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-canary-canaryTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -380,7 +380,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-personalized_twitter-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-canary-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -393,15 +393,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-personalized_twitter-personalized_twitterTests/Pods-personalized_twitter-personalized_twitterTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-canary-canaryTests/Pods-canary-canaryTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-personalized_twitter-personalized_twitterTests/Pods-personalized_twitter-personalized_twitterTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-canary-canaryTests/Pods-canary-canaryTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-personalized_twitter-personalized_twitterTests/Pods-personalized_twitter-personalized_twitterTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-canary-canaryTests/Pods-canary-canaryTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -430,7 +430,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* personalized_twitterTests.m in Sources */,
+				00E356F31AD99517003FC87E /* canaryTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,7 +448,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* personalized_twitter */;
+			target = 13B07F861A680F5B00A75B9A /* canary */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -456,14 +456,14 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-personalized_twitter-personalized_twitterTests.debug.xcconfig */;
+			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-canary-canaryTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = personalized_twitterTests/Info.plist;
+				INFOPLIST_FILE = canaryTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -477,17 +477,17 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/personalized_twitter.app/personalized_twitter";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/canary.app/canary";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-personalized_twitter-personalized_twitterTests.release.xcconfig */;
+			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-canary-canaryTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = personalized_twitterTests/Info.plist;
+				INFOPLIST_FILE = canaryTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -501,32 +501,33 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/personalized_twitter.app/personalized_twitter";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/canary.app/canary";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-personalized_twitter.debug.xcconfig */;
+			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-canary.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = personalized_twitter/Info.plist;
+				INFOPLIST_FILE = canary/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = personalized_twitter;
+				PRODUCT_BUNDLE_IDENTIFIER = com.plgworks.canary;
+				PRODUCT_NAME = canary;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -535,25 +536,26 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-personalized_twitter.release.xcconfig */;
+			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-canary.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = personalized_twitter/Info.plist;
+				INFOPLIST_FILE = canary/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = personalized_twitter;
+				PRODUCT_BUNDLE_IDENTIFIER = com.plgworks.canary;
+				PRODUCT_NAME = canary;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -701,7 +703,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "personalized_twitterTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "canaryTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -710,7 +712,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "personalized_twitter" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "canary" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -719,7 +721,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "personalized_twitter" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "canary" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

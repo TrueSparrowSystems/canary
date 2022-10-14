@@ -5,7 +5,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '12.4'
 install! 'cocoapods', :deterministic_uuids => false
 
-target 'personalized_twitter' do
+target 'canary' do
   use_frameworks!
   config = use_native_modules!
 
@@ -21,7 +21,7 @@ target 'personalized_twitter' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'personalized_twitterTests' do
+  target 'canaryTests' do
     inherit! :complete
     # Pods for testing
   end

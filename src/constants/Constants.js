@@ -95,7 +95,7 @@ export const Constants = {
     Android: 'canary_mobile_android',
     iOS: 'canary_mobile_ios',
   },
-  TrackerEndpoint: 'http://px.moppypuppymonkey.com/pixel.png',
+  TrackerEndpoint: 'https://px.moppypuppymonkey.com/pixel.png',
   TrackerConstants: {
     EventEntities: {
       Screen: 'screen',

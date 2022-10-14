@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>28545152546-4d3ccaihge4domp98b9ojpr84qdpirtq.apps.googleusercontent.com</string>
+	<string>11787735223-cjghc8l6s3e4ln93b84nee4gnsdqb693.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.28545152546-4d3ccaihge4domp98b9ojpr84qdpirtq</string>
+	<string>com.googleusercontent.apps.11787735223-cjghc8l6s3e4ln93b84nee4gnsdqb693</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>28545152546-ep130chbqob2v0dda2rsk48907o424rq.apps.googleusercontent.com</string>
+	<string>11787735223-4bqee6bn0gpr82lekord6n5miour9o6m.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBgJGlO1kLfl3F_3kxcAb9XZLodorhRE3A</string>
+	<string>AIzaSyAoRZiq1Niy8Fv0Bl_WtJq4Qgi0XYUZ3sM</string>
 	<key>GCM_SENDER_ID</key>
-	<string>28545152546</string>
+	<string>11787735223</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.personalized-twitter</string>
+	<string>com.plgworks.canary</string>
 	<key>PROJECT_ID</key>
-	<string>canary-8ff4c</string>
+	<string>canary-3cb86</string>
 	<key>STORAGE_BUCKET</key>
-	<string>canary-8ff4c.appspot.com</string>
+	<string>canary-3cb86.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:28545152546:ios:b3cf06fa46aeecfa5bfc7b</string>
+	<string>1:11787735223:ios:2615ea967897f3569bfd32</string>
+	<key>DATABASE_URL</key>
+	<string>https://canary-3cb86-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

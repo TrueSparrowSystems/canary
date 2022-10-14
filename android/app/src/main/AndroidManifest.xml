@@ -25,8 +25,8 @@
           <action android:name="android.intent.action.VIEW"/>
           <category android:name="android.intent.category.DEFAULT"/>
           <category android:name="android.intent.category.BROWSABLE"/>
-          <data android:host="plgworkscanary.page.link" android:scheme="http"/>
-          <data android:host="plgworkscanary.page.link" android:scheme="https"/>
+          <data android:host="plgworks.page.link" android:scheme="http"/>
+          <data android:host="plgworks.page.link" android:scheme="https"/>
         </intent-filter>
       </activity>
         <meta-data

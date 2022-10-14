@@ -6,6 +6,7 @@ import URL from 'url';
 export async function getExportURL(exportData) {
   return new Promise((resolve, reject) => {
     const JsonData = JSON.stringify(exportData);
+
     dynamicLinks()
       .buildShortLink(
         {
@@ -14,6 +15,10 @@ export async function getExportURL(exportData) {
           android: {
             // TODO: See if we can get this using some function?
             packageName: 'com.plgworks.canary',
+          },
+          ios: {
+            // TODO: See if we can get this using some function?
+            bundleId: 'com.plgworks.canary',
           },
         },
         firebase.dynamicLinks.ShortLinkType.DEFAULT,

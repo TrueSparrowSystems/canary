@@ -1,81 +1,46 @@
 {
   "project_info": {
-    "project_number": "28545152546",
-    "project_id": "canary-8ff4c",
-    "storage_bucket": "canary-8ff4c.appspot.com"
+    "project_number": "11787735223",
+    "firebase_url": "https://canary-3cb86-default-rtdb.firebaseio.com",
+    "project_id": "canary-3cb86",
+    "storage_bucket": "canary-3cb86.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:28545152546:android:4d701c9da9f9224d5bfc7b",
-        "android_client_info": {
-          "package_name": "com.personalized_twitter"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "28545152546-tujvp37st762v6j9bovtg189jfngglnk.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDpN86SPgeRc7Vu_K5ZdMrnEa8Tzm9o-qY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "28545152546-tujvp37st762v6j9bovtg189jfngglnk.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "28545152546-38a7ausm245or1dae7cmuqp50oefgetb.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.plgworks.canary"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:28545152546:android:bc8bb873f67aa43f5bfc7b",
+        "mobilesdk_app_id": "1:11787735223:android:d126f187cc2efdd49bfd32",
         "android_client_info": {
           "package_name": "com.plgworks.canary"
         }
       },
       "oauth_client": [
         {
-          "client_id": "28545152546-ep130chbqob2v0dda2rsk48907o424rq.apps.googleusercontent.com",
+          "client_id": "11787735223-t0qr1rqsud77fip523orbgqq9udpenjg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.plgworks.canary",
-            "certificate_hash": "7b4a70fd63306f31acff59f5a9f2da1893b48f35"
+            "certificate_hash": "933a60e61d835f8e54b76c522514493fdd049c94"
           }
         },
         {
-          "client_id": "28545152546-tujvp37st762v6j9bovtg189jfngglnk.apps.googleusercontent.com",
+          "client_id": "11787735223-06kqqt9ctrv21tqu1hmbmpqm171qqtb0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDpN86SPgeRc7Vu_K5ZdMrnEa8Tzm9o-qY"
+          "current_key": "AIzaSyDDSqrXduLMi4gMkSp6YsR4P9vKHbSbJUk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "28545152546-tujvp37st762v6j9bovtg189jfngglnk.apps.googleusercontent.com",
+              "client_id": "11787735223-06kqqt9ctrv21tqu1hmbmpqm171qqtb0.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "28545152546-38a7ausm245or1dae7cmuqp50oefgetb.apps.googleusercontent.com",
+              "client_id": "11787735223-cjghc8l6s3e4ln93b84nee4gnsdqb693.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.plgworks.canary"

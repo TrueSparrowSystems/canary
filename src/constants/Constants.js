@@ -9,6 +9,8 @@ export const Constants = {
   FirebaseDatabaseUrl:
     'https://canary-3cb86-default-rtdb.us-central1.firebasedatabase.app',
   FirebaseDatabasePath: '/users/',
+  BundleId: 'com.plgworks.canary',
+  ShortLinkUrl: 'https://firebasedynamiclinks.googleapis.com/v1/shortLinks',
   ApiModes: {
     //Verified with relevency with context
     VerifiedRelevent: 'verified_relevent',

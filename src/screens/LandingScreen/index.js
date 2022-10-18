@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {FlatList, Image, Text, View} from 'react-native';
 import RoundedButton from '../../components/common/RoundedButton';
 import colors, {getColorWithOpacity} from '../../constants/colors';
@@ -10,6 +10,7 @@ import {Pagination as PaginationDots} from 'react-native-snap-carousel';
 import LottieView from 'lottie-react-native';
 import Header from '../../components/common/Header';
 import * as Animatable from 'react-native-animatable';
+import {useAppStateListener} from '../../hooks/useAppStateListener';
 
 function LandingScreen(props) {
   const localStyle = useStyleProcessor(style, 'LandingScreen');
@@ -39,6 +40,15 @@ function LandingScreen(props) {
     ];
   }, [localStyle.renderItemContainer, nWindowHeight, nWindowWidth]);
 
+  const {isAppInBackground} = useAppStateListener();
+  const animationRef = useRef(null);
+
+  useEffect(() => {
+    if (!isAppInBackground) {
+      animationRef.current?.play();
+    }
+  }, [isAppInBackground]);
+
   const renderItem = useCallback(
     ({item, index}) => {
       return (
@@ -47,6 +57,7 @@ function LandingScreen(props) {
             <Image source={item?.videoAsset} style={item?.animationStyle} />
           ) : item?.animationAsset ? (
             <LottieView
+              ref={animationRef}
               autoPlay
               loop
               source={item?.animationAsset}

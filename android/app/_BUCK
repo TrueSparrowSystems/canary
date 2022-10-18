@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.personalized_twitter",
+    package = "com.plgworks.canary",
 )
 
 android_resource(
     name = "res",
-    package = "com.personalized_twitter",
+    package = "com.plgworks.canary",
     res = "src/main/res",
 )
 

@@ -2,24 +2,30 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import firebase from '@react-native-firebase/app';
 import {Constants} from '../constants/Constants';
 import URL from 'url';
+import axios from 'axios';
 
 export async function getExportURL(exportData) {
   return new Promise((resolve, reject) => {
     const JsonData = JSON.stringify(exportData);
-    dynamicLinks()
-      .buildShortLink(
+
+    axios
+      .post(
+        `${Constants.ShortLinkUrl}?key=${firebase?.app?.()?.options?.apiKey}`,
         {
-          link: `${Constants.DeepLinkUrl}?query=${JsonData}`,
-          domainUriPrefix: Constants.DeepLinkUrl,
-          android: {
-            // TODO: See if we can get this using some function?
-            packageName: 'com.personalized_twitter',
+          dynamicLinkInfo: {
+            link: `${Constants.DeepLinkUrl}?query=${JsonData}`,
+            domainUriPrefix: Constants.DeepLinkUrl,
+            androidInfo: {
+              androidPackageName: Constants.BundleId,
+            },
+            iosInfo: {
+              iosBundleId: Constants.BundleId,
+            },
           },
         },
-        firebase.dynamicLinks.ShortLinkType.DEFAULT,
       )
-      .then(url => {
-        return resolve(url);
+      .then(res => {
+        return resolve(res.data.shortLink);
       })
       .catch(err => {
         return reject(err);

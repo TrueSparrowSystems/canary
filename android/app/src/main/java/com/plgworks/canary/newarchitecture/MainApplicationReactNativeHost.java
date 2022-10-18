@@ -1,4 +1,4 @@
-package com.personalized_twitter.newarchitecture;
+package com.plgworks.canary.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.personalized_twitter.BuildConfig;
-import com.personalized_twitter.newarchitecture.components.MainComponentsRegistry;
-import com.personalized_twitter.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.plgworks.canary.BuildConfig;
+import com.plgworks.canary.newarchitecture.components.MainComponentsRegistry;
+import com.plgworks.canary.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

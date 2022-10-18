@@ -1,6 +1,6 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React, {useEffect, useCallback, useRef} from 'react';
-import {SafeAreaView, StatusBar, LogBox} from 'react-native';
+import {SafeAreaView, StatusBar, LogBox, Platform} from 'react-native';
 import AddCollectionModal from './src/components/AddCollectionModal';
 import AddToCollectionModal from './src/components/AddToCollectionModal';
 import {useStyleProcessor} from './src/hooks/useStyleProcessor';
@@ -22,6 +22,8 @@ import AppStateManager from './src/services/AppStateManager';
 import {isTablet} from 'react-native-device-info';
 import {HelperMenu, useAppLogger} from '@plgworks/applogger';
 import VideoPlayerScreen from './src/screens/VideoPlayerScreen';
+import {Constants} from './src/constants/Constants';
+import AnalyticsService from './src/services/AnalyticsService';
 
 const ENABLE_YELLOW_BOX_IN_DEBUG_MODE = true;
 
@@ -45,6 +47,13 @@ function App() {
     },
   };
 
+  AnalyticsService.init(
+    Platform.OS === 'android'
+      ? Constants.TrackerAppIdentifier.Android
+      : Constants.TrackerAppIdentifier.iOS,
+    Constants.TrackerEndpoint,
+  );
+
   const {navigationRef: appLoggerNavigationRef, onNavigationStateChange} =
     useAppLogger(apploggerConfig);
 
@@ -64,12 +73,22 @@ function App() {
     LogBox.ignoreAllLogs(); //Ignore all log notifications
   }
 
+  const handleNavigationStateChange = useCallback(() => {
+    onNavigationStateChange();
+    AnalyticsService.track(
+      Constants.TrackerConstants.EventEntities.Screen +
+        '_' +
+        NavigationService.getCurrentRouteName(),
+      Constants.TrackerConstants.EventActions.Navigate,
+    );
+  }, [onNavigationStateChange]);
+
   return (
     <SafeAreaView style={localStyle.container}>
       <StatusBar barStyle={'dark-content'} backgroundColor={colors.White} />
       <NavigationContainer
         ref={setupNavigation}
-        onStateChange={onNavigationStateChange}>
+        onStateChange={handleNavigationStateChange}>
         <RootNavigation />
         <AppStateManager />
         <HelperMenu />

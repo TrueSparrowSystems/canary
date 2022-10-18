@@ -5,10 +5,12 @@ export const Constants = {
   PlgWorksLink: 'https://www.plgworks.com',
   GoogleDriveLink:
     'https://drive.google.com/drive/folders/1OCA8czAIVEaGfU-F6EUL8fMwdnRerKdP?usp=sharing',
-  DeepLinkUrl: 'https://plgworkscanary.page.link',
+  DeepLinkUrl: 'https://plgworks.page.link',
   FirebaseDatabaseUrl:
-    'https://canary-8ff4c-default-rtdb.us-central1.firebasedatabase.app',
+    'https://canary-3cb86-default-rtdb.us-central1.firebasedatabase.app',
   FirebaseDatabasePath: '/users/',
+  BundleId: 'com.plgworks.canary',
+  ShortLinkUrl: 'https://firebasedynamiclinks.googleapis.com/v1/shortLinks',
   ApiModes: {
     //Verified with relevency with context
     VerifiedRelevent: 'verified_relevent',
@@ -91,4 +93,21 @@ export const Constants = {
   },
   //Todo: update pdf link when available
   Pdf: 'https://www.wto.org/english/thewto_e/procurement_e/terms_conditions_e.pdf',
+  TrackerAppIdentifier: {
+    Android: 'canary_mobile_android',
+    iOS: 'canary_mobile_ios',
+  },
+  TrackerEndpoint: 'https://px.moppypuppymonkey.com/pixel.png',
+  TrackerConstants: {
+    EventEntities: {
+      Screen: 'screen',
+      Video: 'video',
+      Image: 'image',
+    },
+    EventActions: {
+      Press: 'press',
+      Mount: 'mount',
+      Navigate: 'navigate',
+    },
+  },
 };

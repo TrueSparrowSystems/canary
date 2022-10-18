@@ -10,6 +10,7 @@ import {Pagination as PaginationDots} from 'react-native-snap-carousel';
 import LottieView from 'lottie-react-native';
 import Header from '../../components/common/Header';
 import * as Animatable from 'react-native-animatable';
+import {useAppStateListener} from '../../hooks/useAppStateListener';
 
 function LandingScreen(props) {
   const localStyle = useStyleProcessor(style, 'LandingScreen');
@@ -39,10 +40,12 @@ function LandingScreen(props) {
     ];
   }, [localStyle.renderItemContainer, nWindowHeight, nWindowWidth]);
 
+  const {isAppInBackground} = useAppStateListener();
+
   const renderItem = useCallback(
     ({item, index}) => {
       return (
-        <View key={index} style={renderItemStyle}>
+        <View key={`${index}_${isAppInBackground}`} style={renderItemStyle}>
           {item?.videoAsset ? (
             <Image source={item?.videoAsset} style={item?.animationStyle} />
           ) : item?.animationAsset ? (
@@ -56,7 +59,7 @@ function LandingScreen(props) {
         </View>
       );
     },
-    [renderItemStyle],
+    [isAppInBackground, renderItemStyle],
   );
 
   const paginationOptionsObj = useMemo(

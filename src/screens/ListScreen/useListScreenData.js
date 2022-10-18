@@ -1,9 +1,12 @@
+import {useFocusEffect} from '@react-navigation/native';
 import {isEmpty} from 'lodash';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {Share} from 'react-native';
 import Toast from 'react-native-toast-message';
+import {PlgTracker} from 'tracker-react-native';
 import {showPromotion} from '../../components/utils/ViewData';
 import {Constants} from '../../constants/Constants';
+import ScreenName from '../../constants/ScreenName';
 import {ToastType} from '../../constants/ToastConstants';
 import AsyncStorage from '../../services/AsyncStorage';
 import {StoreKeys} from '../../services/AsyncStorage/StoreConstants';
@@ -38,6 +41,16 @@ const useListScreenData = props => {
       setIsLoading(false);
     });
   }, [_listService]);
+
+  useFocusEffect(() => {
+    PlgTracker.dropPixel({
+      eventEntity:
+        Constants.TrackerConstants.EventEntities.Screen +
+        '_' +
+        ScreenName.ListScreen,
+      eventAction: Constants.TrackerConstants.EventActions.Mount,
+    });
+  });
 
   useEffect(() => {
     LocalEvent.on(EventTypes.UpdateList, fetchData);

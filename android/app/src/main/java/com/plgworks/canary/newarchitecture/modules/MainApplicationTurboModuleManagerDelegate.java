@@ -1,4 +1,4 @@
-package com.personalized_twitter.newarchitecture.modules;
+package com.plgworks.canary.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

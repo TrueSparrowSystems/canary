@@ -1,4 +1,4 @@
-package com.personalized_twitter.newarchitecture.components;
+package com.plgworks.canary.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

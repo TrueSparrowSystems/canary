@@ -39,9 +39,12 @@ function BackupScreen() {
                 Last backup dated {sBackupTimeStamp}
               </Text>
               <View style={localStyle.copyBackupUrlContainer}>
-                <Text style={localStyle.backupUrlText}>{sBackupUrl}</Text>
+                <Text style={localStyle.backupUrlText} numberOfLines={1}>
+                  {sBackupUrl}
+                </Text>
                 <TouchableOpacity
                   onPress={fnOnCopyLinkPress}
+                  style={localStyle.copyIconContainer}
                   testID={'backup_screen_copy_button'}>
                   <Image style={localStyle.copyUrlIcon} source={CopyIcon} />
                 </TouchableOpacity>
@@ -130,6 +133,11 @@ const styles = {
     fontSize: fontPtToPx(14),
     lineHeight: layoutPtToPx(17),
     textDecorationLine: 'underline',
+    flexShrink: 1,
+  },
+  copyIconContainer: {
+    flexGrow: 1,
+    alignItems: 'flex-end',
   },
   copyUrlIcon: {
     height: layoutPtToPx(17),

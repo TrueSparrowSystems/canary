@@ -30,6 +30,12 @@ const useImportArchiveScreenData = data => {
   const onArchiveRemove = useCallback(index => {
     if (index < archivesDataRef.current.length && index >= 0) {
       archivesDataRef.current.splice(index, 1);
+      if (
+        index === archivesDataRef.current.length &&
+        archivesDataRef.current.length !== 0
+      ) {
+        setSelectedIndex(archivesDataRef.current.length - 1);
+      }
       setArchiveDataState([...archivesDataRef.current]);
     }
   }, []);

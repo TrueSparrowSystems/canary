@@ -5,10 +5,12 @@ export const Constants = {
   PlgWorksLink: 'https://www.plgworks.com',
   GoogleDriveLink:
     'https://drive.google.com/drive/folders/1OCA8czAIVEaGfU-F6EUL8fMwdnRerKdP?usp=sharing',
-  DeepLinkUrl: 'https://plgworkscanary.page.link',
+  DeepLinkUrl: 'https://plgworks.page.link',
   FirebaseDatabaseUrl:
-    'https://canary-8ff4c-default-rtdb.us-central1.firebasedatabase.app',
+    'https://canary-3cb86-default-rtdb.us-central1.firebasedatabase.app',
   FirebaseDatabasePath: '/users/',
+  BundleId: 'com.plgworks.canary',
+  ShortLinkUrl: 'https://firebasedynamiclinks.googleapis.com/v1/shortLinks',
   ApiModes: {
     //Verified with relevency with context
     VerifiedRelevent: 'verified_relevent',

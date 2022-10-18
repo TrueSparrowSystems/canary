@@ -42,7 +42,7 @@ function BackupIntroductionScreen() {
           underlayColor={colors.GoldenTainoi80}
         />
         <Text style={localStyle.footerText}>
-          Your data is complely secure and encrypted!
+          Your data is completely secure and encrypted!
         </Text>
         <ComponentWrapper>
           <Text

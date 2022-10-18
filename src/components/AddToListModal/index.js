@@ -177,6 +177,9 @@ const styles = {
     height: '60%',
     tablet: {
       width: '50%',
+      landscape: {
+        height: '70%',
+      },
     },
   },
   blur: {

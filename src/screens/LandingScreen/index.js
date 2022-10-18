@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {FlatList, Image, Text, View} from 'react-native';
 import RoundedButton from '../../components/common/RoundedButton';
 import colors, {getColorWithOpacity} from '../../constants/colors';
@@ -41,23 +41,15 @@ function LandingScreen(props) {
   }, [localStyle.renderItemContainer, nWindowHeight, nWindowWidth]);
 
   const {isAppInBackground} = useAppStateListener();
-  const animationRef = useRef(null);
-
-  useEffect(() => {
-    if (!isAppInBackground) {
-      animationRef.current?.play();
-    }
-  }, [isAppInBackground]);
 
   const renderItem = useCallback(
     ({item, index}) => {
       return (
-        <View key={index} style={renderItemStyle}>
+        <View key={`${index}_${isAppInBackground}`} style={renderItemStyle}>
           {item?.videoAsset ? (
             <Image source={item?.videoAsset} style={item?.animationStyle} />
           ) : item?.animationAsset ? (
             <LottieView
-              ref={animationRef}
               autoPlay
               loop
               source={item?.animationAsset}
@@ -67,7 +59,7 @@ function LandingScreen(props) {
         </View>
       );
     },
-    [renderItemStyle],
+    [isAppInBackground, renderItemStyle],
   );
 
   const paginationOptionsObj = useMemo(

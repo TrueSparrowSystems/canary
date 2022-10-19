@@ -93,7 +93,7 @@ class BackupRestoreHelper {
     LocalEvent.emit(EventTypes.ShowCommonConfirmationModal, {
       headerText: 'Are you sure you want to clear your data',
       primaryText:
-        'All your preferances, lists & archives will be cleared. \nThis will also restart the app.',
+        'All your preferences, lists & archives will be cleared. \nThis will also restart the app.',
       testID: 'clear',
       onSureButtonPress: () => {
         LocalEvent.emit(EventTypes.CommonLoader.Show);

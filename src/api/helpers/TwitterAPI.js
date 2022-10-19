@@ -151,7 +151,7 @@ class TwitterApi {
 
   multipleTweetLookup(ids) {
     if (ids.length === 0) {
-      return;
+      return Promise.reject();
     }
 
     const data = {

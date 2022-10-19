@@ -19,7 +19,7 @@ function useCollectionTweetListData(props) {
       TwitterAPI.multipleTweetLookup(ids)
         .then(apiResponse => {
           var array = [];
-          const {data} = apiResponse;
+          const data = apiResponse?.data || {};
           const newData = data?.data;
           const errors = data?.errors;
           if (errors) {
@@ -49,6 +49,7 @@ function useCollectionTweetListData(props) {
 
           listDataRef.current = array;
         })
+        .catch(() => {})
         .finally(() => {
           setIsLoading(false);
         });
@@ -76,7 +77,7 @@ function useCollectionTweetListData(props) {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tweetIds]);
+  }, [JSON.stringify(tweetIds)]);
 
   const onRefresh = useCallback(() => {
     fetchData();

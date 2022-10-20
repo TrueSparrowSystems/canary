@@ -10,6 +10,8 @@ import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {CrossIcon} from '../../assets/common';
 import colors from '../../constants/colors';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
+import AnalyticsService from '../../services/AnalyticsService';
+import {Constants} from '../../constants/Constants';
 
 function VideoPlayerScreen(props) {
   const localStyle = useStyleProcessor(styles, 'VideoPlayerScreen');
@@ -20,6 +22,13 @@ function VideoPlayerScreen(props) {
   useEffect(() => {
     const launchModal = payload => {
       setIsVisible(true);
+      AnalyticsService.track(
+        Constants.TrackerConstants.EventEntities.Screen +
+          '_' +
+          'VideoPlayerScreen',
+        Constants.TrackerConstants.EventActions.Mount,
+      );
+
       videoUrl.current = payload?.videoUrl;
       aspectRatio.current = payload?.aspectRatio;
     };

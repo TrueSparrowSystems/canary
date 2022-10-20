@@ -46,12 +46,12 @@ function ImportCollectionCard(props) {
 
   return (
     <TouchableOpacity
-      testID={`import_collection_card_${collectionName}`}
+      testID={`import_archive_card_${collectionName}`}
       onPress={onArchivePress}
       style={colorSchemeStyle.cardStyle}>
       <View style={localStyle.optionsView}>
         <TouchableOpacity
-          testID="import_collection_card_delete_icon"
+          testID="import_archive_card_delete_icon"
           activeOpacity={0.8}
           style={localStyle.binContainer}
           onPress={onArchiveRemove}>

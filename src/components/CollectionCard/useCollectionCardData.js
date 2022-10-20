@@ -3,6 +3,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {Share} from 'react-native';
 import {Constants} from '../../constants/Constants';
 import ScreenName from '../../constants/ScreenName';
+import AnalyticsService from '../../services/AnalyticsService';
 import {collectionService} from '../../services/CollectionService';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 
@@ -32,7 +33,7 @@ const useCollectionCardData = props => {
         });
       },
       type: Constants.ConfirmDeleteModalType.Archive,
-      testID: 'remove_collection',
+      testID: 'remove_archive',
     });
   }, [collectionId, collectionName, hidePopover, onCollectionRemoved]);
 
@@ -51,6 +52,11 @@ const useCollectionCardData = props => {
   }, [collectionId, selectedCollectionIds]);
 
   const onShareCollectionPress = useCallback(() => {
+    AnalyticsService.track(
+      Constants.TrackerConstants.EventEntities.Button + '_' + 'archive_share',
+      Constants.TrackerConstants.EventActions.Press,
+    );
+
     hidePopover();
     _collectionService
       .exportCollection([collectionId])

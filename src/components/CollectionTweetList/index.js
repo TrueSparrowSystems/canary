@@ -52,7 +52,7 @@ function CollectionTweetList(props) {
       }
       refreshControl={
         <RefreshControl
-          testID={`collection_tweets_list_${collectionId}`}
+          testID={`archive_tweets_list_${collectionId}`}
           refreshing={bIsLoading}
           onRefresh={fnOnRefresh}
         />
@@ -78,7 +78,7 @@ function CollectionTweetList(props) {
           </View>
         ) : (
           <TweetCard
-            testID="collection_tweet_list"
+            testID="archive_tweet_list"
             key={`${data?.id}_${isPortrait}`}
             dataSource={data}
             showBookmarked={isImportMode}

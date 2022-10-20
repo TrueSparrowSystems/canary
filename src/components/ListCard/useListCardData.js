@@ -3,6 +3,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {Share} from 'react-native';
 import {Constants} from '../../constants/Constants';
 import ScreenName from '../../constants/ScreenName';
+import AnalyticsService from '../../services/AnalyticsService';
 import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 import {listService} from '../../services/ListService';
@@ -166,6 +167,10 @@ function useListCardData(props) {
 
   const onShareListPress = useCallback(() => {
     hidePopover();
+    AnalyticsService.track(
+      Constants.TrackerConstants.EventEntities.Button + '_' + 'list_share',
+      Constants.TrackerConstants.EventActions.Press,
+    );
 
     _listService
       .exportList([listId])

@@ -3,6 +3,8 @@ import {listService} from '../../services/ListService';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import Toast from 'react-native-toast-message';
 import {ToastPosition, ToastType} from '../../constants/ToastConstants';
+import AnalyticsService from '../../services/AnalyticsService';
+import {Constants} from '../../constants/Constants';
 
 function useAddListModalData() {
   const [isVisible, setIsVisible] = useState(false);
@@ -12,6 +14,7 @@ function useAddListModalData() {
   const [charCount, setCharCount] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const _listService = listService();
+  const isEditMode = !!modalData?.id;
 
   useEffect(() => {
     const onShowModal = payload => {
@@ -59,6 +62,11 @@ function useAddListModalData() {
   }, []);
 
   const onCreateListPress = useCallback(() => {
+    AnalyticsService.track(
+      Constants.TrackerConstants.EventEntities.Button + '_' + 'create_list',
+      Constants.TrackerConstants.EventActions.Press,
+      {name: listNameRef.current},
+    );
     if (listNameRef.current.trim().length === 0) {
       Toast.show({
         type: ToastType.Error,
@@ -67,6 +75,7 @@ function useAddListModalData() {
       });
       return;
     }
+
     _listService
       .addList(listNameRef.current)
       .then(({listId}) => {
@@ -105,6 +114,12 @@ function useAddListModalData() {
   }, [_listService, closeModal, modalData]);
 
   const onEditListPress = useCallback(() => {
+    AnalyticsService.track(
+      Constants.TrackerConstants.EventEntities.Button + '_' + 'update_list',
+      Constants.TrackerConstants.EventActions.Press,
+      {name: listNameRef.current},
+    );
+
     if (listNameRef.current.trim().length === 0) {
       Toast.show({
         type: ToastType.Error,
@@ -137,7 +152,7 @@ function useAddListModalData() {
   }, [_listService, closeModal, modalData?.id, modalData?.name]);
 
   return {
-    bIsEditMode: !!modalData?.id,
+    bIsEditMode: isEditMode,
     sDefaultValue: modalData?.name,
     bIsVisible: isVisible,
     nCharacterCount: charCount,

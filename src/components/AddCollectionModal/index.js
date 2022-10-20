@@ -55,7 +55,7 @@ function AddCollectionModal() {
 
   return bIsVisible ? (
     <CustomModal
-      testID="add_collection"
+      testID={isEditMode ? 'update_archive_name' : 'add_archive'}
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}
@@ -70,7 +70,7 @@ function AddCollectionModal() {
             </View>
             <View style={localStyle.textInputContainer}>
               <TextInput
-                testID="add_collection_modal"
+                testID="add_archive_modal"
                 defaultValue={sDefaultValue}
                 autoFocus={true}
                 style={localStyle.inputStyle}
@@ -96,7 +96,7 @@ function AddCollectionModal() {
 
             {isEditMode ? (
               <RoundedButton
-                testID={'add_collection_modal_update'}
+                testID={'add_archive_modal_update'}
                 style={localStyle.createButton}
                 text={'Update'}
                 textStyle={localStyle.createButtonText}
@@ -106,7 +106,7 @@ function AddCollectionModal() {
               />
             ) : (
               <RoundedButton
-                testID={'add_collection_modal_create'}
+                testID={'add_archive_modal_create'}
                 style={localStyle.createButton}
                 text={'Create'}
                 textStyle={localStyle.createButtonText}

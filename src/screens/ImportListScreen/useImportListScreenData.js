@@ -28,6 +28,12 @@ const useImportListScreenData = data => {
   const onListRemove = useCallback(index => {
     if (index < listsDataRef.current.length && index >= 0) {
       listsDataRef.current.splice(index, 1);
+      if (
+        index === listsDataRef.current.length &&
+        listsDataRef.current.length !== 0
+      ) {
+        setSelectedIndex(listsDataRef.current.length - 1);
+      }
       setListDataState([...listsDataRef.current]);
     }
   }, []);

@@ -116,6 +116,7 @@ const useCollectionScreenData = props => {
               message: `Checkout these archives from Canary ${url}`,
             });
           })
+          .catch(() => {})
           .finally(() => {
             disableSharePress.current = false;
           });

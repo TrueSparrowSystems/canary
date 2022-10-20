@@ -11,7 +11,7 @@ const useEditUserListData = props => {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userNames]);
+  }, [JSON.stringify(userNames)]);
 
   const fetchData = useCallback(() => {
     setIsLoading(true);

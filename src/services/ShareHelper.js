@@ -13,7 +13,7 @@ export async function getExportURL(exportData) {
         `${Constants.ShortLinkUrl}?key=${firebase?.app?.()?.options?.apiKey}`,
         {
           dynamicLinkInfo: {
-            link: `${Constants.DeepLinkUrl}?query=${JsonData}`,
+            link: `${Constants.DeepLinkUrl}/?query=${JsonData}`,
             domainUriPrefix: Constants.DeepLinkUrl,
             androidInfo: {
               androidPackageName: Constants.BundleId,

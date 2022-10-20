@@ -1,5 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {useCallback, useRef, useState} from 'react';
+import {Constants} from '../../constants/Constants';
+import AnalyticsService from '../../services/AnalyticsService';
 import AsyncStorage from '../../services/AsyncStorage';
 import {StoreKeys} from '../../services/AsyncStorage/StoreConstants';
 import Cache from '../../services/Cache';
@@ -50,6 +52,18 @@ export function usePreferenceScreenData() {
   );
 
   const onDonePress = useCallback(() => {
+    AnalyticsService.track(
+      Constants.TrackerConstants.EventEntities.Button +
+        '_' +
+        'save_preferences',
+      Constants.TrackerConstants.EventActions.Press,
+      {
+        selected_topic_list: selectedItemsList.current,
+        verified_user_preference: isVerifiedUsersSelectedRef.current
+          ? 'Verified Users Only'
+          : 'All Users',
+      },
+    );
     const areInitialPrefsSet =
       PreferencesDataHelper.areInitialPreferencesSetInCache();
 

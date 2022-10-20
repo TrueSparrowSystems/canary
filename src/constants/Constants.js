@@ -101,8 +101,8 @@ export const Constants = {
   TrackerConstants: {
     EventEntities: {
       Screen: 'screen',
-      Video: 'video',
-      Image: 'image',
+      Modal: 'modal',
+      Button: 'button',
     },
     EventActions: {
       Press: 'press',

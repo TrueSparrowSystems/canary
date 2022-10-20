@@ -75,7 +75,7 @@ function CollectionScreen(props) {
     <SafeAreaView style={localStyle.container}>
       {isEmpty(oCollectionDataRef.current) ? null : (
         <Header
-          testID={'collection_screen'}
+          testID={'archive_screen'}
           text={'Archives'}
           textStyle={localStyle.headerTextStyle}
           enableRightButton={true}
@@ -106,7 +106,7 @@ function CollectionScreen(props) {
         bShowPromotionBanner && !isEmpty(oCollectionDataRef.current) ? (
           <Animatable.View ref={oCrossButtonRef}>
             <Banner
-              testID="collection_screen"
+              testID="archive_screen"
               headerImage={bookmarkedIcon}
               headerImageStyle={localStyle.headerImageStyle}
               headerText={'Archives lets you save your tweets privately'}

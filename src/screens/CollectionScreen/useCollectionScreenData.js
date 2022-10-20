@@ -13,6 +13,7 @@ import {ToastType} from '../../constants/ToastConstants';
 import Toast from 'react-native-toast-message';
 import {Share} from 'react-native';
 import {Constants} from '../../constants/Constants';
+import AnalyticsService from '../../services/AnalyticsService';
 
 const useCollectionScreenData = props => {
   const [isLoading, setIsLoading] = useState(true);
@@ -108,6 +109,11 @@ const useCollectionScreenData = props => {
   const onSharePress = useCallback(() => {
     if (!disableSharePress.current) {
       disableSharePress.current = true;
+      AnalyticsService.track(
+        Constants.TrackerConstants.EventEntities.Button + '_' + 'archive_share',
+        Constants.TrackerConstants.EventActions.Press,
+      );
+
       if (selectedCollectionIds.current.length > 0) {
         _collectionService
           .exportCollection(selectedCollectionIds.current)
@@ -140,7 +146,7 @@ const useCollectionScreenData = props => {
             : 'Are you sure you want to remove this selected archive?',
         onCollectionRemoved: reloadList,
         type: Constants.ConfirmDeleteModalType.Archive,
-        testID: 'remove_multiple_collection',
+        testID: 'remove_multiple_archives',
       });
     } else {
       Toast.show({

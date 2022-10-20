@@ -3,6 +3,7 @@ import {useState, useEffect, useCallback} from 'react';
 import Toast from 'react-native-toast-message';
 import {Constants} from '../../../constants/Constants';
 import {ToastType} from '../../../constants/ToastConstants';
+import AnalyticsService from '../../../services/AnalyticsService';
 import {collectionService} from '../../../services/CollectionService';
 import {listService} from '../../../services/ListService';
 import {EventTypes, LocalEvent} from '../../../utils/LocalEvent';
@@ -37,6 +38,12 @@ function useConfirmDeleteModalData() {
   }, [closeModal]);
 
   const onSureButtonPress = useCallback(() => {
+    AnalyticsService.track(
+      Constants.TrackerConstants.EventEntities.Button + '_' + modalData?.type,
+      Constants.TrackerConstants.EventActions.Press,
+      {id: modalData?.id},
+    );
+
     if (modalData?.type === Constants.ConfirmDeleteModalType.List) {
       if (isArray(modalData?.id)) {
         listService()

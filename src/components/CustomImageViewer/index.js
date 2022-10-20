@@ -14,6 +14,8 @@ import {layoutPtToPx} from '../../utils/responsiveUI';
 import {CrossIcon} from '../../assets/common';
 import {useStyleProcessor} from '../../hooks/useStyleProcessor';
 import {TouchableOpacity} from '@plgworks/applogger';
+import AnalyticsService from '../../services/AnalyticsService';
+import {Constants} from '../../constants/Constants';
 
 const CustomImageViewer = () => {
   const localStyle = useStyleProcessor(styles, 'CustomImageViewer');
@@ -24,6 +26,12 @@ const CustomImageViewer = () => {
   useEffect(() => {
     const launchModal = payload => {
       setIsVisible(true);
+      AnalyticsService.track(
+        Constants.TrackerConstants.EventEntities.Screen +
+          '_' +
+          'ImageViewerScreen',
+        Constants.TrackerConstants.EventActions.Mount,
+      );
       imagesArray.current = payload?.media;
       imageIndex.current = payload?.imageIndex;
     };

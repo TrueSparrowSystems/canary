@@ -56,7 +56,7 @@ function AddListModal() {
 
   return bIsVisible ? (
     <CustomModal
-      testID="add_list"
+      testID={bIsEditMode ? 'update_list_name' : 'add_list'}
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}

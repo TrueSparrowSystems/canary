@@ -8,6 +8,7 @@ import {showPromotion} from '../../components/utils/ViewData';
 import {Constants} from '../../constants/Constants';
 import ScreenName from '../../constants/ScreenName';
 import {ToastType} from '../../constants/ToastConstants';
+import AnalyticsService from '../../services/AnalyticsService';
 import AsyncStorage from '../../services/AsyncStorage';
 import {StoreKeys} from '../../services/AsyncStorage/StoreConstants';
 import Cache from '../../services/Cache';
@@ -90,6 +91,11 @@ const useListScreenData = props => {
   }, []);
 
   const onSharePress = useCallback(() => {
+    AnalyticsService.track(
+      Constants.TrackerConstants.EventEntities.Button + '_' + 'list_share',
+      Constants.TrackerConstants.EventActions.Press,
+    );
+
     if (!disableSharePress.current) {
       disableSharePress.current = true;
       if (selectedListIds.current?.length > 0) {
@@ -121,7 +127,7 @@ const useListScreenData = props => {
             : 'Are you sure you want to remove this selected list?',
         onListRemoved: reloadList,
         type: Constants.ConfirmDeleteModalType.List,
-        testID: 'remove_multiple_list',
+        testID: 'remove_multiple_lists',
       });
     } else {
       Toast.show({

@@ -3,6 +3,8 @@ import {collectionService} from '../../services/CollectionService';
 import {EventTypes, LocalEvent} from '../../utils/LocalEvent';
 import Toast from 'react-native-toast-message';
 import {ToastPosition, ToastType} from '../../constants/ToastConstants';
+import AnalyticsService from '../../services/AnalyticsService';
+import {Constants} from '../../constants/Constants';
 
 function useAddCollectionModalData() {
   const [isVisible, setIsVisible] = useState(false);
@@ -58,6 +60,12 @@ function useAddCollectionModalData() {
   }, []);
 
   const onCreateCollectionPress = useCallback(() => {
+    AnalyticsService.track(
+      Constants.TrackerConstants.EventEntities.Button + '_' + 'create_archive',
+      Constants.TrackerConstants.EventActions.Press,
+      {name: collectionNameRef.current},
+    );
+
     if (collectionNameRef.current.trim().length === 0) {
       Toast.show({
         type: ToastType.Error,
@@ -107,6 +115,12 @@ function useAddCollectionModalData() {
   }, [_collectionService, closeModal, modalData]);
 
   const onUpdateCollectionPress = useCallback(() => {
+    AnalyticsService.track(
+      Constants.TrackerConstants.EventEntities.Button + '_' + 'update_archive',
+      Constants.TrackerConstants.EventActions.Press,
+      {name: collectionNameRef.current},
+    );
+
     if (collectionNameRef.current.trim().length === 0) {
       Toast.show({
         type: ToastType.Error,

@@ -1,5 +1,6 @@
 import {useCallback, useRef, useState} from 'react';
 import {Constants} from '../../constants/Constants';
+import AnalyticsService from '../../services/AnalyticsService';
 
 import SearchResultListDataSource from './SearchResultListDataSource';
 
@@ -29,6 +30,19 @@ function useSearchResultScreenData({searchQuery = '', sortOrder}) {
   }, []);
 
   const toggleSortOrder = useCallback(() => {
+    AnalyticsService.track(
+      Constants.TrackerConstants.EventEntities.Button +
+        '_' +
+        'toggle_sort_order',
+      Constants.TrackerConstants.EventActions.Press,
+      {
+        sort_order:
+          _sortOrder.current === Constants.SortOrder.Recency
+            ? 'popular'
+            : 'new',
+      },
+    );
+
     _sortOrder.current =
       _sortOrder.current === Constants.SortOrder.Recency
         ? Constants.SortOrder.Relevancy

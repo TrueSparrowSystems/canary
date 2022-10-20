@@ -4,6 +4,8 @@ import {useOrientationState} from '../../../hooks/useOrientation';
 import {useStyleProcessor} from '../../../hooks/useStyleProcessor';
 import colors from '../../../constants/colors';
 import {TouchableOpacity} from '@plgworks/applogger';
+import AnalyticsService from '../../../services/AnalyticsService';
+import {Constants} from '../../../constants/Constants';
 
 /**
  * @param {Boolean} visible Boolean to indicate if the modal is open or not.
@@ -90,6 +92,10 @@ function CustomModal({
    */
   useEffect(() => {
     if (visible) {
+      AnalyticsService.track(
+        Constants.TrackerConstants.EventEntities.Modal + '_' + testID,
+        Constants.TrackerConstants.EventActions.Mount,
+      );
       setVisibility(true);
 
       startAnimation({newOpacity: 1, newInnerContainerOffset: 0});

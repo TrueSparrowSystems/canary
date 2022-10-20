@@ -3,6 +3,7 @@ import {useCallback} from 'react';
 import {Share} from 'react-native';
 import {Constants} from '../../constants/Constants';
 import ScreenName from '../../constants/ScreenName';
+import AnalyticsService from '../../services/AnalyticsService';
 import Cache from '../../services/Cache';
 import {CacheKey} from '../../services/Cache/CacheStoreConstants';
 
@@ -23,6 +24,11 @@ function useSettingScreenData() {
   }, [navigation]);
 
   const onShareAppPress = useCallback(() => {
+    AnalyticsService.track(
+      Constants.TrackerConstants.EventEntities.Button + '_' + 'share_app',
+      Constants.TrackerConstants.EventActions.Press,
+    );
+
     Share.share({
       message: `Check out Canary app - The incognito mode of Twitter.\n${Constants.GoogleDriveLink}`,
     });

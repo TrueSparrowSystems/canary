@@ -43,7 +43,7 @@ function AddToCollectionModal() {
 
   return bIsVisible ? (
     <CustomModal
-      testID="add_to_collection"
+      testID="add_to_archive"
       visible={bIsVisible}
       onHardwareBackButtonPress={fnOnBackdropPress}
       onBackDropPress={fnOnBackdropPress}
@@ -53,7 +53,7 @@ function AddToCollectionModal() {
           <View style={localStyle.view}>
             <View style={localStyle.headerStyle}>
               <TouchableOpacity
-                testID="add_to_collection_modal_new"
+                testID="add_to_archive_modal_new"
                 onPress={fnOnAddCollectionPress}
                 disabled={isEmpty(oCollectionList)}
                 style={addNewButtonStyleMemo}>
@@ -66,7 +66,7 @@ function AddToCollectionModal() {
                 <Text style={localStyle.titleText}>Add Tweets to Archives</Text>
               </View>
               <TouchableOpacity
-                testID="add_to_collection_modal_done"
+                testID="add_to_archive_modal_done"
                 style={localStyle.doneButtonContainer}
                 onPress={fnOnDonePress}>
                 <Text style={localStyle.headerTextStyle}>Done</Text>

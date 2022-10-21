@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import ScreenName from '../constants/ScreenName';
 import Navigation from '../Navigation';
@@ -22,12 +22,19 @@ function RootNavigation() {
   const [isAppLoaded, setAppLoaded] = useState(false);
   const [currentStack, setCurrentStack] = useState();
 
+  let isHandleUrlCalled = useRef(false);
   const _handleDynamicUrl = useCallback(url => {
     LocalEvent.emit(EventTypes.CommonLoader.Hide);
     if (url) {
-      // Handle dynamic linking
-
-      handleDynamicUrl(url.url);
+      if (!isHandleUrlCalled.current) {
+        isHandleUrlCalled.current = true;
+        // Handle dynamic linking
+        handleDynamicUrl(url.url);
+        setTimeout(() => {
+          //Added a 5 sec timeout to avoid flickering on multiple call
+          isHandleUrlCalled.current = false;
+        }, 5000);
+      }
     }
   }, []);
 

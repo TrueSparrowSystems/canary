@@ -1,4 +1,5 @@
 import {firebase} from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
 import moment from 'moment';
 import {Constants} from '../constants/Constants';
 import {EventTypes, LocalEvent} from '../utils/LocalEvent';
@@ -44,33 +45,37 @@ class BackupRestoreHelper {
         }
         this.encrypt(storeData, 'canary')
           .then(encryptedData => {
-            const reference = firebase
-              .app()
-              .database(Constants.FirebaseDatabaseUrl)
-              .ref(`${Constants.FirebaseDatabasePath}${canaryId}`);
-            reference
-              .set({
-                id: canaryId,
-                data: encryptedData,
-                timeStamp: moment.now(),
-              })
-              .then(() => {
-                Toast.show({
-                  type: ToastType.Success,
-                  text1: 'Data Backed Up Successfully',
+            const isFirebaseAuthenticated = Cache.getValue(
+              CacheKey.FirebaseAutheticatedSuccessfully,
+            );
+            if (isFirebaseAuthenticated) {
+              this.setDataToFirebase(canaryId, encryptedData, onBackupSuccess);
+            } else {
+              auth()
+                .signInAnonymously()
+                .then(() => {
+                  Cache.setValue(
+                    CacheKey.FirebaseAutheticatedSuccessfully,
+                    true,
+                  );
+                  this.setDataToFirebase(
+                    canaryId,
+                    encryptedData,
+                    onBackupSuccess,
+                  );
+                })
+                .catch(() => {
+                  LocalEvent.emit(EventTypes.CommonLoader.Hide);
+                  Toast.show({
+                    type: ToastType.Error,
+                    text1: 'Data Backup Failed. Please Try Again',
+                  });
+                  Cache.setValue(
+                    CacheKey.FirebaseAutheticatedSuccessfully,
+                    false,
+                  );
                 });
-                this.responseData = {};
-
-                LocalEvent.emit(EventTypes.CommonLoader.Hide);
-                onBackupSuccess?.();
-              })
-              .catch(() => {
-                LocalEvent.emit(EventTypes.CommonLoader.Hide);
-                Toast.show({
-                  type: ToastType.Error,
-                  text1: 'Data Backup Failed. Please Try Again',
-                });
-              });
+            }
           })
           .catch(() => {
             LocalEvent.emit(EventTypes.CommonLoader.Hide);
@@ -79,6 +84,36 @@ class BackupRestoreHelper {
               text1: 'Data Backup Failed. Please Try Again',
             });
           });
+      })
+      .catch(() => {
+        LocalEvent.emit(EventTypes.CommonLoader.Hide);
+        Toast.show({
+          type: ToastType.Error,
+          text1: 'Data Backup Failed. Please Try Again',
+        });
+      });
+  }
+
+  setDataToFirebase(canaryId, encryptedData, onBackupSuccess) {
+    const reference = firebase
+      .app()
+      .database(Constants.FirebaseDatabaseUrl)
+      .ref(`${Constants.FirebaseDatabasePath}${canaryId}`);
+    reference
+      .set({
+        id: canaryId,
+        data: encryptedData,
+        timeStamp: moment.now(),
+      })
+      .then(() => {
+        Toast.show({
+          type: ToastType.Success,
+          text1: 'Data Backed Up Successfully',
+        });
+        this.responseData = {};
+
+        LocalEvent.emit(EventTypes.CommonLoader.Hide);
+        onBackupSuccess?.();
       })
       .catch(() => {
         LocalEvent.emit(EventTypes.CommonLoader.Hide);
@@ -201,42 +236,70 @@ class BackupRestoreHelper {
       resolveAndGetImportData(backupUrl)
         .then(importData => {
           let canaryId = importData?.data?.canary_id || '';
-          this.getResponseDataFromFirebase(canaryId)
-            .then(() => {
-              this.decrypt(this.responseData?.[canaryId]?.data, 'canary')
-                .then(data => {
-                  AsyncStorage.multiSet(JSON.parse(data)).then(isDataSet => {
-                    if (isDataSet) {
-                      AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(
-                        () => {
-                          onRestoreSuccess?.();
-                          Toast.show({
-                            type: ToastType.Success,
-                            text1: 'Data Restored Successfully',
-                          });
-                          LocalEvent.emit(EventTypes.CommonLoader.Hide);
-                          RNRestart.Restart();
-                          return resolve();
-                        },
-                      );
-                    } else {
-                      LocalEvent.emit(EventTypes.CommonLoader.Hide);
-                      Toast.show({
-                        type: ToastType.Error,
-                        text1: 'Data Restore Failed. Please Try Again',
-                      });
-                      return reject();
-                    }
+          const isFirebaseAuthenticated = Cache.getValue(
+            CacheKey.FirebaseAutheticatedSuccessfully,
+          );
+          if (isFirebaseAuthenticated) {
+            return this.restoreDataFromFirebase(canaryId, onRestoreSuccess);
+          } else {
+            auth()
+              .signInAnonymously()
+              .then(() => {
+                Cache.setValue(CacheKey.FirebaseAutheticatedSuccessfully, true);
+                return this.restoreDataFromFirebase(canaryId, onRestoreSuccess);
+              })
+              .catch(() => {
+                LocalEvent.emit(EventTypes.CommonLoader.Hide);
+                Toast.show({
+                  type: ToastType.Error,
+                  text1: 'Data Restore Failed. Please Try Again',
+                });
+                Cache.setValue(
+                  CacheKey.FirebaseAutheticatedSuccessfully,
+                  false,
+                );
+                return reject();
+              });
+          }
+        })
+        .catch(() => {
+          LocalEvent.emit(EventTypes.CommonLoader.Hide);
+          Toast.show({
+            type: ToastType.Error,
+            text1: 'Data Restore Failed. Please Try Again',
+          });
+          return reject();
+        });
+    });
+  }
+
+  async restoreDataFromFirebase(canaryId, onRestoreSuccess) {
+    return new Promise((resolve, reject) => {
+      this.getResponseDataFromFirebase(canaryId)
+        .then(() => {
+          this.decrypt(this.responseData?.[canaryId]?.data, 'canary')
+            .then(data => {
+              AsyncStorage.multiSet(JSON.parse(data)).then(isDataSet => {
+                if (isDataSet) {
+                  AsyncStorage.set(StoreKeys.IsAppReloaded, true).then(() => {
+                    onRestoreSuccess?.();
+                    Toast.show({
+                      type: ToastType.Success,
+                      text1: 'Data Restored Successfully',
+                    });
+                    LocalEvent.emit(EventTypes.CommonLoader.Hide);
+                    RNRestart.Restart();
+                    return resolve();
                   });
-                })
-                .catch(() => {
+                } else {
+                  LocalEvent.emit(EventTypes.CommonLoader.Hide);
                   Toast.show({
                     type: ToastType.Error,
                     text1: 'Data Restore Failed. Please Try Again',
                   });
-                  LocalEvent.emit(EventTypes.CommonLoader.Hide);
                   return reject();
-                });
+                }
+              });
             })
             .catch(() => {
               Toast.show({
@@ -248,11 +311,11 @@ class BackupRestoreHelper {
             });
         })
         .catch(() => {
-          LocalEvent.emit(EventTypes.CommonLoader.Hide);
           Toast.show({
             type: ToastType.Error,
             text1: 'Data Restore Failed. Please Try Again',
           });
+          LocalEvent.emit(EventTypes.CommonLoader.Hide);
           return reject();
         });
     });

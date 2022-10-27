@@ -18,4 +18,5 @@ export const CacheKey = {
   IsRedirectModalHidden: 'cache_key_is_redirect_modal_hidden',
   DeviceCanaryId: 'cache_device_canary_id',
   DeviceBackupUrl: 'cache_device_backup_url',
+  FirebaseAutheticatedSuccessfully: 'firebase_autheticated_successfully',
 };

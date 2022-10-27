@@ -1,4 +1,5 @@
 import {setCountriesWoeidsInCache} from '../utils/CountryWoeidUtils';
+import auth from '@react-native-firebase/auth';
 import AsyncStorage from './AsyncStorage';
 import {StoreKeys} from './AsyncStorage/StoreConstants';
 import Cache from './Cache';
@@ -11,6 +12,14 @@ class BootService {
   initialize() {
     return new Promise(resolve => {
       networkConnection();
+      auth()
+        .signInAnonymously()
+        .then(() => {
+          Cache.setValue(CacheKey.FirebaseAutheticatedSuccessfully, true);
+        })
+        .catch(() => {
+          Cache.setValue(CacheKey.FirebaseAutheticatedSuccessfully, false);
+        });
 
       AsyncStorage.getItem(StoreKeys.AreInitialPreferencesSet).then(isSet => {
         setCountriesWoeidsInCache();

@@ -17,6 +17,7 @@
     "@react-native-community/netinfo": "9.3.0",
     "@react-native-community/slider": "4.2.4",
     "@react-native-firebase/app": "15.3.0",
+    "@react-native-firebase/auth": "15.3.0",
     "@react-native-firebase/database": "15.3.0",
     "@react-native-firebase/dynamic-links": "15.3.0",
     "@react-navigation/bottom-tabs": "6.3.2",

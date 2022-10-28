@@ -37,7 +37,7 @@ function useCollectionTweetListData(props) {
                       id: tweetId,
                       tweetErrorText:
                         error?.title === 'Not Found Error'
-                          ? 'The Tweet Is Deleted'
+                          ? 'This Tweet Is Deleted'
                           : 'This Tweet Is Not Accessible',
                     });
                   }

@@ -17,6 +17,7 @@ function VideoPlayerScreen(props) {
   const localStyle = useStyleProcessor(styles, 'VideoPlayerScreen');
 
   const [isVisible, setIsVisible] = useState(false);
+  const [showRestart, setShowRestart] = useState(false);
   const videoUrl = useRef('');
   const aspectRatio = useRef(null);
   useEffect(() => {
@@ -77,7 +78,7 @@ function VideoPlayerScreen(props) {
         <VideoPlayer
           autoStart={true}
           mainControl={args => (
-            <DefaultMainControl restartButton={true} {...args} />
+            <DefaultMainControl restartButton={showRestart} {...args} />
           )}
           onClose={() => {
             setIsVisible(false);
@@ -97,8 +98,18 @@ function VideoPlayerScreen(props) {
               source={{uri: videoUrl.current}}
               paused={args.videoPaused}
               onLoad={args.onLoad}
-              onProgress={args.onProgress}
-              onEnd={args.onEnd}
+              onProgress={progress => {
+                if (progress.currentTime === 0 && showRestart) {
+                  setShowRestart(false);
+                } else if (!showRestart) {
+                  setShowRestart(true);
+                }
+                args.onProgress(progress);
+              }}
+              onEnd={endProps => {
+                setShowRestart(false);
+                args.onEnd(endProps);
+              }}
             />
           )}
         </VideoPlayer>

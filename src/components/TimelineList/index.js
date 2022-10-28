@@ -198,7 +198,8 @@ const styles = {
     flexGrow: 1,
     paddingTop: layoutPtToPx(10),
     tablet: {
-      marginHorizontal: layoutPtToPx(20),
+      paddingLeft: layoutPtToPx(10),
+      paddingRight: layoutPtToPx(20),
     },
   },
   container: {

@@ -99,6 +99,9 @@ const styles = {
   tweetListContentContainer: {
     paddingBottom: layoutPtToPx(250),
     paddingTop: layoutPtToPx(10),
+    tablet: {
+      paddingRight: layoutPtToPx(20),
+    },
   },
   headerRightButtonImage: {
     tintColor: colors.GoldenTainoi,

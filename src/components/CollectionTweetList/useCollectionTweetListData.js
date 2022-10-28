@@ -26,12 +26,20 @@ function useCollectionTweetListData(props) {
             if (isImportMode) {
               errors.forEach(error => {
                 if (
-                  error?.title === 'Not Found Error' &&
+                  (error?.title === 'Not Found Error' ||
+                    error?.title === 'Authorization Error') &&
                   error?.parameter === 'ids'
                 ) {
                   const tweetId = error?.value;
                   if (tweetId) {
-                    array.push({isDeletedTweet: true, id: tweetId});
+                    array.push({
+                      isDeletedTweet: true,
+                      id: tweetId,
+                      tweetErrorText:
+                        error?.title === 'Not Found Error'
+                          ? 'The Tweet Is Deleted'
+                          : 'This Tweet Is Not Accessible',
+                    });
                   }
                 }
               });

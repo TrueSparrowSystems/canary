@@ -59,10 +59,10 @@ function CollectionTweetList(props) {
       }>
       {aDataSource?.map(data => {
         return data?.isDeletedTweet ? (
-          <View style={localStyle.cardContainer}>
+          <View style={localStyle.cardContainer} key={data?.tweetId}>
             <View style={localStyle.flexRow}>
               <Text style={localStyle.deletedTweetTextStyle}>
-                This Tweet is Deleted
+                {data?.tweetErrorText}
               </Text>
               <TouchableOpacity
                 testID={'deleted_tweet_card_delete_icon'}
@@ -104,6 +104,9 @@ const styles = {
     marginBottom: layoutPtToPx(12),
     borderRadius: layoutPtToPx(8),
     flex: 1,
+    tablet: {
+      marginRight: -8,
+    },
   },
   contentContainer: {
     tablet: {

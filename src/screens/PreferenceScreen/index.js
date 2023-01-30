@@ -147,7 +147,7 @@ function PreferenceScreen(props) {
           onPress={() => {
             Linking.openURL(Constants.PlgWorksLink);
           }}>
-          Made with 🖤 by PLG Works
+          Made with 🖤 by True Sparrow
         </Text>
       </View>
     </View>
